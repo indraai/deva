@@ -323,7 +323,8 @@ class Deva {
 
   // exit the deva then return the onExit function.
   exit() {
-    if (this.onExit) return this.onExit.call(this);
+    if (this.onExit) this.onExit.call(this);
+    return Promise.resolve();
   }
 
   // set the deva as done then return the oDone function.
