@@ -30,7 +30,7 @@ class Deva {
     this.askChr = '#';
     this.inherit = ["events", "config", "lib", "security", "client"];
     this.bind = ["listeners", "methods", "func", "lib", "security", "agent", "client"];
-    this.states = ["offline", "init", "error", "start", "stop", "enter", "exit", "done", "status", "question", "ask", "answer"];
+    this.states = ["question", "ask", "start", "stop", "status", "enter", "exit", "done"];
     this.messages = {
       offline: 'AGENT OFFLINE'
     }
@@ -67,12 +67,11 @@ class Deva {
   _assignListeners() {
     return new Promise((resolve, reject) => {
       try {
-        // start looping at index 3 to avoid first 3.
-        for (let x = 3; x < this.states; x++) {
-          this.events.on(`${this.agent.key}:${this.states[x]}`, packet => {
-            return this[this.states[x]](packet);
+        this.states.forEach(state => {
+          this.events.on(`${this.agent.key}:${state}`, packet => {
+            return this[state](packet);
           })
-        }
+        })
         for (let x in this.listeners) {
           this.events.on(x, packet => {
             return this.listeners[x](packet);
@@ -274,7 +273,7 @@ class Deva {
             client: this.client || false,
             meta: {
               key: isAsk || this.agent.key,
-              cmd: TEXT,
+              orig: TEXT,
               method,
               params,
             },
