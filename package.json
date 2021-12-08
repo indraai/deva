@@ -1,6 +1,6 @@
 {
   "name": "@indra.ai/deva",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Deva Architecture",
   "main": "index.js",
   "scripts": {
@@ -26,5 +26,5 @@
       "ecmaVersion": 6
     }
   },
-  "dependencies": {}  
+  "dependencies": {}
 }
