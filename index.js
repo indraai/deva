@@ -363,10 +363,10 @@ class Deva {
   // object. from this opts object the system is built. After the opts object is processed
   // the inherit is assigned and then bind then listners then
   // opts: The options object containing the necessary vaules to build a Deva.
-  init(opts) {
+  init(client=false) {
     this.events.setMaxListeners(this.maxListeners);
-    // set opts into this
-    for (let x in opts) this[x] = opts[x];
+    // set client
+    this.client = client;
 
     return this._assignInherit().then(() => {
       return this._assignBind();
