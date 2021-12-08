@@ -20,6 +20,8 @@ class Deva {
     this.func = opts.func || {};                        // local Functions
     this.methods = opts.methods || {};                  // local Methods
     this.maxListeners = opts.maxListenners || 0;        // set the local maxListeners
+
+    this.opts = {};
     for (var opt in opts) {
       if (!this[opt]) this.opts[opt] = opts[opt];       // set any remaining opts to this.opts.
     }
