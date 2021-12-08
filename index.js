@@ -305,7 +305,7 @@ class Deva {
   start() {
     if (this.active) return;
     this.active = Date.now();
-    if (this.onStart) this.onStart.call(this);
+    if (this.onStart) return this.onStart.call(this);
     return Promise.resolve('start');
   }
 
@@ -313,27 +313,27 @@ class Deva {
   stop() {
     if (!this.active) return;
     this.active = false;
-    if (this.onStop) this.onStop.call(this);
+    if (this.onStop) return this.onStop.call(this);
     return Promise.resolve('stop');
   }
 
   // enter the deva then return the onEnter function.
   enter() {
     if (!this.active) return false;
-    if (this.onEnter) this.onEnter.call(this);
+    if (this.onEnter) return this.onEnter.call(this);
     return Promise.resolve('enter');
   }
 
   // exit the deva then return the onExit function.
   exit() {
-    if (this.onExit) this.onExit.call(this);
+    if (this.onExit) return this.onExit.call(this);
     return Promise.resolve('exit');
   }
 
   // set the deva as done then return the oDone function.
   done() {
     if (!this.active) return;
-    if (this.onDone) this.onDone.call(this);
+    if (this.onDone) return this.onDone.call(this);
     return Promise.resolve('done');
   }
 
@@ -354,7 +354,7 @@ class Deva {
     });
     // call the onError if there is a logcal one.
     // if there is no local error return a promise reject.
-    if (this.onError) return this.onError.call(this, e, packet);
+    if (this.onError) this.onError.call(this, e, packet);
     return Promise.reject(e);
   }
 
@@ -373,7 +373,7 @@ class Deva {
     }).then(() => {
       return this._assignListeners();
     }).then(() => {
-      if (this.onInit) this.onInit.call(this, opts);
+      if (this.onInit) return this.onInit.call(this, opts);
       return Promise.resolve(true);
     }).catch(err => {
       return this.error(e, opts);
