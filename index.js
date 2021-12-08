@@ -425,14 +425,13 @@ class Deva {
   // initDeva interface is to initialize devas that this deva is a parent of.
   // This feature allows a Deva to be a parent of a parent of a parent etc....
   initDeva() {
-    this.prompt('✨ INIT: DEVAS');
     return new Promise((resolve, reject) => {
       const devas = [];
       for (let x in this.devas) {
-        devas.push(this.devas[x].init(this.client));
+        devas.push(this.devas[x].init());
       }
       Promise.all(devas).then(() => {
-        return resolve('✨ DEVAS LOADING');
+        return resolve(true);
       }).catch(reject);
     });
   }
