@@ -19,9 +19,9 @@ class Deva {
     this.modules = opts.modules || {};                  // 3rd Party Modules
     this.func = opts.func || {};                        // local Functions
     this.methods = opts.methods || {};                  // local Methods
-
+    this.maxListeners = opts.maxListenners || 0;        // set the local maxListeners
     for (var opt in opts) {
-      if (!this[opt]) this[opt] = opts[opt];
+      if (!this[opt]) this.opts[opt] = opts[opt];       // set any remaining opts to this.opts.
     }
 
     this.cmdChr = '!';
@@ -354,7 +354,7 @@ class Deva {
   // the inherit is assigned and then bind then listners then
   // opts: The options object containing the necessary vaules to build a Deva.
   init(opts) {
-    this.events.setMaxListeners(0);
+    this.events.setMaxListeners(this.maxListeners);
     // set opts into this
     for (let x in opts) this[x] = opts[x];
 
