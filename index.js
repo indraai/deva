@@ -157,7 +157,7 @@ class Deva {
 
   ask(packet) {
 
-    const packet.a ={
+    packet.a = {
       agent: this.agent,
       meta: {
         key: this.agent.key,
