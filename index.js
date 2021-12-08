@@ -5,8 +5,8 @@ const {EventEmitter} = require('events');
 class Deva {
   constructor(opts) {
     opts = opts || {};
-    this.uid = opts.uid || this.uid();
-    this.active = false;                                // the active state indicator.
+    this._uid = this.uid();                             // the unique id assigned to the agent at load
+    this.active = false;                                // the active/birth date.
     this.security = false;                              // inherited Security features.
     this.config = opts.config || {};                    // local Config Object
     this.events = opts.events || new EventEmitter({});  // Event Bus
@@ -305,32 +305,36 @@ class Deva {
   start() {
     if (this.active) return;
     this.active = Date.now();
-    if (this.onStart) return this.onStart.call(this);
+    if (this.onStart) this.onStart.call(this);
+    return Promise.resolve('start');
   }
 
   // stop teh deva then return the onStop function.
   stop() {
     if (!this.active) return;
     this.active = false;
-    if (this.onStop) return this.onStop.call(this);
+    if (this.onStop) this.onStop.call(this);
+    return Promise.resolve('stop');
   }
 
   // enter the deva then return the onEnter function.
   enter() {
     if (!this.active) return false;
-    if (this.onEnter) return this.onEnter.call(this);
+    if (this.onEnter) this.onEnter.call(this);
+    return Promise.resolve('enter');
   }
 
   // exit the deva then return the onExit function.
   exit() {
     if (this.onExit) this.onExit.call(this);
-    return Promise.resolve();
+    return Promise.resolve('exit');
   }
 
   // set the deva as done then return the oDone function.
   done() {
     if (!this.active) return;
-    if (this.onDone) return this.onDone.call(this);
+    if (this.onDone) this.onDone.call(this);
+    return Promise.resolve('done');
   }
 
   // Interface for unified error reporting within all devas.
@@ -369,8 +373,8 @@ class Deva {
     }).then(() => {
       return this._assignListeners();
     }).then(() => {
-      if (this.onInit) return this.onInit.call(this, opts);
-      else return Promise.resolve(true);
+      if (this.onInit) this.onInit.call(this, opts);
+      return Promise.resolve(true);
     }).catch(err => {
       return this.error(e, opts);
     });
