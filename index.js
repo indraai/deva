@@ -6,6 +6,7 @@ class Deva {
   constructor(opts) {
     opts = opts || {};
     this._uid = this.uid();                             // the unique id assigned to the agent at load
+    this.state = 'offline';                             // current state of agent.
     this.active = false;                                // the active/birth date.
     this.security = false;                              // inherited Security features.
     this.config = opts.config || {};                    // local Config Object
@@ -21,16 +22,15 @@ class Deva {
     this.methods = opts.methods || {};                  // local Methods
     this.maxListeners = opts.maxListenners || 0;        // set the local maxListeners
 
-    this.opts = {};
     for (var opt in opts) {
-      if (!this[opt]) this.opts[opt] = opts[opt];       // set any remaining opts to this.opts.
+      if (!this[opt]) this[opt] = opts[opt];            // set any remaining opts to this.
     }
 
     this.cmdChr = '!';
     this.askChr = '#';
     this.inherit = ["events", "config", "lib", "security", "client"];
     this.bind = ["listeners", "methods", "func", "lib", "security", "agent", "client"];
-    this.states = ["question", "ask", "start", "stop", "status", "enter", "exit", "done"];
+    this.states = ["offline", "init", "error", "start", "stop", "enter", "exit", "done", "status", "question", "ask", "answer"];
     this.messages = {
       offline: 'AGENT OFFLINE'
     }
@@ -39,50 +39,73 @@ class Deva {
   // Called from the init function to bind the elements defined in the this.bind variable.
   // the assign bind ensures that the *this* scope is available to child elements/functions.
   _assignBind() {
-    try {
-      this.bind.forEach(bind => {
-        for (let x in this[bind]) {
-            if (typeof this[bind][x] === 'function') this[bind][x] = this[bind][x].bind(this);
-        }
-      });
-
-      const translate = this.agent.translate && typeof this.agent.translate === 'function';
-      if (translate) this.agent.translate = this.agent.translate.bind(this);
-
-      const parse = this.agent.parse && typeof this.agent.parse === 'function';
-      if (parse) this.agent.parse = this.agent.parse.bind(this);
-      return Promise.resolve();
-    } catch (e) {
-      // this error is before the error reporting so just log to console.
-      console.error(e, bind);
-    }
+    return new Promise((resolve, reject) => {
+      try {
+        this.bind.forEach(bind => {
+          for (let x in this[bind]) {
+              if (typeof this[bind][x] === 'function') this[bind][x] = this[bind][x].bind(this);
+          }
+        });
+        // bind translate
+        const translate = this.agent && this.agent.translate && typeof this.agent.translate === 'function';
+        if (translate) this.agent.translate = this.agent.translate.bind(this);
+        // bind parser
+        const parse = this.agent && this.agent.parse && typeof this.agent.parse === 'function';
+        if (parse) this.agent.parse = this.agent.parse.bind(this);
+      }
+      catch (e) {
+        return reject(e);
+      }
+      finally {
+        return resolve();
+      }
+    });
   }
 
   // Called from the init function to assign the listeners to various states.
   // when the listener fires it will call the associated named function.
   _assignListeners() {
-    this.states.forEach(state => {
-      this.events.on(`${this.agent.key}:${state}`, packet => {
-        return this[state](packet);
-      })
-    })
-    for (let x in this.listeners) {
-      this.events.on(x, packet => {
-        return this.listeners[x](packet);
-      })
-    }
-    return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      try {
+        // start looping at index 3 to avoid first 3.
+        for (let x = 3; x < this.states; x++) {
+          this.events.on(`${this.agent.key}:${this.states[x]}`, packet => {
+            return this[this.states[x]](packet);
+          })
+        }
+        for (let x in this.listeners) {
+          this.events.on(x, packet => {
+            return this.listeners[x](packet);
+          })
+        }
+      }
+      catch (e) {
+        return reject(e);
+      }
+      finally {
+        return resolve();
+      }
+    });
   }
 
   // Some elements will inherit the data of the parent. this object will loop over
   // any children data that theis deva has and assign the inherited information.
   _assignInherit() {
-    for (let d in this.devas) {
-      this.inherit.forEach(inherit => {
-        this.devas[d][inherit] = this[inherit];
-      });
-    }
-    return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      try {
+        for (let d in this.devas) {
+          this.inherit.forEach(inherit => {
+            this.devas[d][inherit] = this[inherit];
+          });
+        }
+      }
+      catch (e) {
+        return reject(e);
+      }
+      finally {
+        return resolve();
+      }
+    });
   }
 
   // General handler for when a method is NOT found from a user command.
@@ -158,7 +181,9 @@ class Deva {
   // this is an event function that relies on talk/listen
 
   ask(packet) {
+    if (!this.active) return Promise.resolve(this.vars.messages.offline);
 
+    this.state = this.states[10];
     packet.a = {
       agent: this.agent,
       meta: {
@@ -193,7 +218,9 @@ class Deva {
         }
         // talk back to the once event with the ask key.
         this.talk(`${this.agent.key}:ask:${packet.id}`, packet);
+        this.state = this.states[11];
       }).catch(err => {
+        this.state = this.states[2];
         // If the ask method fails then a reject error is returned from the this.error
         // interface.
         this.talk(`${this.agent.key}:ask:${packet.id}`, {error:err.toString()});
@@ -201,6 +228,7 @@ class Deva {
       })
     }
     catch (e) {
+      this.state = this.states[2];
       // if any error is caught in the processing of the ask then it returns and
       // executes the this.error(*) interface.
       this.talk(`${this.agent.key}:ask:${packet.id}`, {error:e.toString()});
@@ -216,7 +244,11 @@ class Deva {
   // if the question is a data object
   // this.question('#*agent.key* *method* *properties*', {*data*});
   question(TEXT=false, DATA=false) {
+    if (!this.active) return Promise.resolve(this.vars.messages.offline);
+
+    this.state = this.states[9];
     const id = this.uid();
+
     return new Promise((resolve, reject) => {
       try {
         if (!TEXT) return reject('NO TEXT');
@@ -257,6 +289,7 @@ class Deva {
         // if the user asks a question to another deva '#' then issue the talk/once
         // event combination.
         if (isAsk) {
+          this.state = this.states[10];
           this.talk(`${isAsk}:ask`, packet);
           this.once(`${isAsk}:ask:${packet.id}`, answer => {
             return resolve(answer);
@@ -279,6 +312,7 @@ class Deva {
               data,
               created: Date.now(),
             };
+            this.state = this.states[11];
             return resolve(packet);
           }).catch(err => {
             return this.error(err, packet);
@@ -291,50 +325,27 @@ class Deva {
     });
   }
 
-  // interface to return the status of the current deva with the time/date requested.
-  status(addtl=false) {
-    const id = this.uid();
-    if (!this.active) return Promise.resolve(`${this.agent.name} is OFFLINE!`);
-    const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'medium' }).format(this.active);
-    let text = `${this.agent.name} is ONLINE since ${dateFormat}`;
-    if (addtl) text = text + `\n${addtl}`;
-    return Promise.resolve(text);
-  }
-
-  // start the deva then return the 'onStart' function.
-  start() {
-    if (this.active) return;
-    this.active = Date.now();
-    if (this.onStart) return this.onStart.call(this);
-    return Promise.resolve('start');
-  }
-
-  // stop teh deva then return the onStop function.
-  stop() {
-    if (!this.active) return;
-    this.active = false;
-    if (this.onStop) return this.onStop.call(this);
-    return Promise.resolve('stop');
-  }
-
-  // enter the deva then return the onEnter function.
-  enter() {
-    if (!this.active) return false;
-    if (this.onEnter) return this.onEnter.call(this);
-    return Promise.resolve('enter');
-  }
-
-  // exit the deva then return the onExit function.
-  exit() {
-    if (this.onExit) return this.onExit.call(this);
-    return Promise.resolve('exit');
-  }
-
-  // set the deva as done then return the oDone function.
-  done() {
-    if (!this.active) return;
-    if (this.onDone) return this.onDone.call(this);
-    return Promise.resolve('done');
+  // The main init interface where the chain begins.
+  // a set of options is passed into the init function which is the configuration
+  // object. from this opts object the system is built. After the opts object is processed
+  // the inherit is assigned and then bind then listners then
+  // opts: The options object containing the necessary vaules to build a Deva.
+  init(client=false) {
+    // set client
+    if (client) this.client = client;
+    this.state = this.states[1];
+    return new Promise((resolve, reject) => {
+      this.events.setMaxListeners(this.maxListeners);
+      return this._assignInherit().then(() => {
+        return this._assignBind();
+      }).then(() => {
+        return this._assignListeners();
+      }).then(() => {
+        if (this.onInit) return this.onInit.call(this);
+      }).catch(err => {
+        return this.error(err);
+      });
+    });
   }
 
   // Interface for unified error reporting within all devas.
@@ -342,6 +353,7 @@ class Deva {
   // e: is the error to pass into the interface.
   // packet: the packet that caused the error.
   error(e, packet=false) {
+    this.state = this.states[2];
     console.error(e);
     // broadcast a global uniform error event.
     this.talk('error', {
@@ -354,42 +366,73 @@ class Deva {
     });
     // call the onError if there is a logcal one.
     // if there is no local error return a promise reject.
-    if (this.onError) this.onError.call(this, e, packet);
+    if (this.onError) return this.onError.call(this,e, packet);
     return Promise.reject(e);
   }
 
-  // The main init interface where the chain begins.
-  // a set of options is passed into the init function which is the configuration
-  // object. from this opts object the system is built. After the opts object is processed
-  // the inherit is assigned and then bind then listners then
-  // opts: The options object containing the necessary vaules to build a Deva.
-  init(client=false) {
-    this.events.setMaxListeners(this.maxListeners);
-    // set client
-    this.client = client;
-
-    return this._assignInherit().then(() => {
-      return this._assignBind();
-    }).then(() => {
-      return this._assignListeners();
-    }).then(() => {
-      if (this.onInit) return this.onInit.call(this, opts);
-      return Promise.resolve(true);
-    }).catch(err => {
-      return this.error(e, opts);
-    });
+  // start the deva then return the 'onStart' function.
+  start() {
+    if (this.active) return;
+    this.active = Date.now();
+    this.state = this.states[3];
+    if (this.onStart) return this.onStart();
   }
 
+  // stop teh deva then return the onStop function.
+  stop() {
+    if (!this.active) return Promise.resolve(this.vars.messages.offline);
+    this.active = false;
+    this.state = this.states[4];
+    if (this.onStop) return this.onStop();
+  }
+
+  // enter the deva then return the onEnter function.
+  enter() {
+    if (!this.active) return Promise.resolve(this.vars.messages.offline);
+    this.state = this.states[5];
+    if (this.onEnter) return this.onEnter();
+  }
+
+  // exit the deva then return the onExit function.
+  exit() {
+    if (!this.active) return Promise.resolve(this.vars.messages.offline);
+    this.state = this.states[6];
+    if (this.onExit) return this.onExit();
+  }
+
+  // set the deva as done then return the oDone function.
+  done() {
+    if (!this.active) return Promise.resolve(this.vars.messages.offline);
+    this.state = this.states[7];
+    if (this.onDone) return this.onDone();
+  }
+
+  // interface to return the status of the current deva with the time/date requested.
+  status(addtl=false) {
+    if (!this.active) return Promise.resolve(this.vars.messages.offline);
+    this.state = this.states[8];
+    const id = this.uid();
+    const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'medium' }).format(this.active);
+    let text = `${this.agent.name} is ONLINE since ${dateFormat}`;
+    if (addtl) text = text + `\n${addtl}`;
+    return Promise.resolve(text);
+  }
+
+  // universal prompt emitter
+  prompt(text) {
+    this.talk('prompt', {text, prompt:this.agent.prompt});
+  }
   // initDeva interface is to initialize devas that this deva is a parent of.
   // This feature allows a Deva to be a parent of a parent of a parent etc....
   initDeva() {
+    this.prompt('✨ INIT: DEVAS');
     return new Promise((resolve, reject) => {
       const devas = [];
       for (let x in this.devas) {
-        devas.push(this.devas[x].init());
+        devas.push(this.devas[x].init(this.client));
       }
       Promise.all(devas).then(() => {
-        return resolve('✨ DEVAS LOADED');
+        return resolve('✨ DEVAS LOADING');
       }).catch(reject);
     });
   }
