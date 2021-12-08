@@ -153,8 +153,11 @@ class Deva {
   // this.askChr variable match. Then an answer packet is generated and the
   // deva is asked to process the question asked and return it's proper data set
   // from the requested method.
+  // this is an event function that relies on talk/listen
+
   ask(packet) {
-    // this is an event function that relies on talk/listen
+
+    const packet.a ={
       agent: this.agent,
       meta: {
         key: this.agent.key,
