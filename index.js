@@ -243,48 +243,66 @@ class Deva {
   // if the question is a data object
   // this.question('#*agent.key* *method* *properties*', {*data*});
   question(TEXT=false, DATA=false) {
-    if (!this.active) return Promise.resolve(this.vars.messages.offline);
-
     this.state = this.states[9];
+    if (!TEXT) return this.error('NOTEXT');
     const id = this.uid();
+    const t_split = TEXT.split(' ');
+    const isAsk = t_split[0].startsWith(this.askChr) ? t_split[0].substring(1) : false;
+    const isCmd = t_split[0].startsWith(this.cmdChr) ? t_split[0].substring(1) : false;
+    // Format the packet for return on the request.
+    const orig = TEXT;
+    const data = DATA;
+    const packet = {
+      id,
+      q: {},
+      a: {},
+      created: Date.now(),
+    };
+
+    let text = TEXT,
+        params = false,
+        method = 'question',
+        key = this.agent.key,
+
 
     return new Promise((resolve, reject) => {
       try {
-        if (!TEXT) return reject('NO TEXT');
-        if (!this.active && _method !== 'start') return reject(this.messages.offline);
+        if (!this.active) return reject(this.messages.offline);
 
-        let text,
-            t_params,
-            _deva = false,
-            _method = 'question';
 
-        const t_split = TEXT.split(' ');
-        const isCmd = t_split[0] && t_split[0].startsWith(this.cmdChr) ? t_split[0].substr(1) : false;
-        const isAsk = t_split[0] && t_split[0].startsWith(this.askChr) ? t_split[0].substr(1) : false;
-        const params = t_split[1] && (isCmd || isAsk) ? t_split[1].split(':') : false;
-        const method = isCmd ? isCmd : params ? params[0] : 'question';
-        text = isCmd || isAsk ? t_split.slice(2).join(' ').trim() : TEXT;
+        // *: send just a string of text
+        // !: send a command to the local agent
+        // #: ask another agent a question
+        // #agent method param:list:parse with text strings for proccessing
+        // !method param:list:parse for the local agent
+        // if is an ask then we format one way
+        if (isAsk) {
+          params = t_split[2].split(':') : false;
+          method = t_split[1];
+          text = t_split.slice(3).join(' ').trim();
+          key = isAsk;
+        }
+        else if (isCmd) {
+          params = t_split[1].split(':') : false;
+          method = isCmd;
+          text = t_split.slice(3).join(' ').trim()
+        }
 
-        // Format the packet for return on the request.
-        const packet = {
-          id,
-          q: {
+        packet.q = {
             agent: this.agent || false,
             client: this.client || false,
             meta: {
-              key: isAsk || this.agent.key,
-              orig: TEXT,
+              key,
+              orig,
               method,
               params,
             },
             text,
-            data: DATA,
+            data,
             created: Date.now(),
-          },
-          a: {},
-          created: Date.now(),
-        };
+        }
 
+        // if is a command then we format another way
         // if the user asks a question to another deva '#' then issue the talk/once
         // event combination.
         if (isAsk) {
@@ -294,21 +312,20 @@ class Deva {
             return resolve(answer);
           });
         }
-
         // if the user sends a local command '!' then it will ask of the self.
         else {
           if (typeof this.methods[method] !== 'function') return resolve(this._methodNotFound(packet));
           this.methods[method](packet).then(result => {
-            text = typeof result === 'object' ? result.text : result;
-            const data = typeof result === 'object' ? result.data : false;
+            const _text = typeof result === 'object' ? result.text : result;
+            const _data = typeof result === 'object' ? result.data : false;
             packet.a = {
               agent: this.agent,
               meta: {
                 key: this.agent.key,
                 method,
               },
-              text,
-              data,
+              text:_text,
+              data:_data,
               created: Date.now(),
             };
             this.state = this.states[11];
