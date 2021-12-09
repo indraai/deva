@@ -57,5 +57,5 @@ const HelloWorld = new Deva({
   onInit() {
     this.start();
   },
-
+});
 HelloWorld.init();

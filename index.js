@@ -264,7 +264,6 @@ class Deva {
         method = 'question',
         key = this.agent.key;
 
-
     return new Promise((resolve, reject) => {
       try {
         if (!this.active) return reject(this.messages.offline);
@@ -277,15 +276,15 @@ class Deva {
         // !method param:list:parse for the local agent
         // if is an ask then we format one way
         if (isAsk) {
-          params = t_split[2].split(':') : false;
+          params = t_split[2] ? t_split[2].split(':') : false;
           method = t_split[1];
           text = t_split.slice(3).join(' ').trim();
           key = isAsk;
         }
         else if (isCmd) {
-          params = t_split[1].split(':') : false;
+          params = t_split[1] ? t_split[1].split(':') : false;
           method = isCmd;
-          text = t_split.slice(3).join(' ').trim()
+          text = t_split.slice(2).join(' ').trim()
         }
 
         packet.q = {
