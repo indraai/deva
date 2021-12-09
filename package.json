@@ -1,7 +1,7 @@
 {
   "name": "@indra.ai/deva",
   "version": "1.0.14",
-  "description": "The Deva Architecture",
+  "description": "The Deva Core",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

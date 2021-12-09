@@ -2,6 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
 const {EventEmitter} = require('events');
+console.log('USING LOCAL DEVA');
 class Deva {
   constructor(opts) {
     opts = opts || {};
@@ -272,19 +273,19 @@ class Deva {
         // *: send just a string of text
         // !: send a command to the local agent
         // #: ask another agent a question
-        // #agent method param:list:parse with text strings for proccessing
+        // #agent method:param1:param2 with text strings for proccessing
         // !method param:list:parse for the local agent
         // if is an ask then we format one way
         if (isAsk) {
-          params = t_split[2] ? t_split[2].split(':') : false;
-          method = t_split[1];
-          text = t_split.slice(3).join(' ').trim();
+          params = t_split[1] ? t_split[1].split(':') : false;
+          method = params[0];
+          text = t_split.slice(2).join(' ').trim();
           key = isAsk;
         }
         else if (isCmd) {
           params = t_split[1] ? t_split[1].split(':') : false;
           method = isCmd;
-          text = t_split.slice(2).join(' ').trim()
+          text = t_split.slice(1).join(' ').trim()
         }
 
         packet.q = {
