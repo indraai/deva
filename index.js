@@ -262,7 +262,7 @@ class Deva {
     let text = TEXT,
         params = false,
         method = 'question',
-        key = this.agent.key,
+        key = this.agent.key;
 
 
     return new Promise((resolve, reject) => {
