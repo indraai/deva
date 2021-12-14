@@ -391,7 +391,7 @@ class Deva {
     if (this.active) return;
     this.active = Date.now();
     this.state = this.states[3];
-    if (this.onStart) return this.onStart();
+    if (this.onStart && typeof onStart === 'function') return this.onStart.call(this);
   }
 
   // stop teh deva then return the onStop function.
@@ -399,28 +399,28 @@ class Deva {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.active = false;
     this.state = this.states[4];
-    if (this.onStop) return this.onStop();
+    if (this.onStop && typeof onStop === 'function') return this.onStop.call(this);
   }
 
   // enter the deva then return the onEnter function.
   enter() {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.state = this.states[5];
-    if (this.onEnter) return this.onEnter();
+    if (this.onEnter && typeof onEnter === 'function') return this.onEnter.call(this);
   }
 
   // exit the deva then return the onExit function.
   exit() {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.state = this.states[6];
-    if (this.onExit) return this.onExit();
+    if (this.onExit && typeof onExit === 'function') return this.onExit.call(this);
   }
 
   // set the deva as done then return the oDone function.
   done() {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.state = this.states[7];
-    if (this.onDone) return this.onDone();
+    if (this.onDone && typeof onDone === 'function') return this.onDone.call(this);
   }
 
   // interface to return the status of the current deva with the time/date requested.
@@ -440,11 +440,22 @@ class Deva {
   }
   // initDeva interface is to initialize devas that this deva is a parent of.
   // This feature allows a Deva to be a parent of a parent of a parent etc....
-  initDeva() {
+  async initDevas() {
     return new Promise((resolve, reject) => {
       const devas = [];
       for (let x in this.devas) {
         devas.push(this.devas[x].init());
+      }
+      Promise.all(devas).then(() => {
+        return resolve(true);
+      }).catch(reject);
+    });
+  }
+  async stopDevas() {
+    return new Promise((resolve, reject) => {
+      const devas = [];
+      for (let x in this.devas) {
+        devas.push(this.devas[x].stop());
       }
       Promise.all(devas).then(() => {
         return resolve(true);
