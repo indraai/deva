@@ -400,7 +400,7 @@ class Deva {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.active = false;
     this.state = this.states[4];
-    if (this.onStop && typeof onStop === 'function') return this.onStop();
+    if (this.onStop) return this.onStop();
     return this.exit();
   }
 
@@ -408,7 +408,7 @@ class Deva {
   enter() {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.state = this.states[5];
-    if (this.onEnter && typeof onEnter === 'function') return this.onEnter();
+    if (this.onEnter) return this.onEnter();
     return this.done('enter')
   }
 
@@ -416,7 +416,7 @@ class Deva {
   exit() {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.state = this.states[6];
-    if (this.onExit && typeof onExit === 'function') return this.onExit();
+    if (this.onExit) return this.onExit();
     return this.done('exit')
   }
 
@@ -424,7 +424,7 @@ class Deva {
   done(msg='done') {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.state = this.states[7];
-    if (this.onDone && typeof onDone === 'function') return this.onDone();
+    if (this.onDone) return this.onDone();
     return Promise.resolve({msg,agent:this.agent})
   }
 
