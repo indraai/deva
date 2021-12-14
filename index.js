@@ -391,7 +391,8 @@ class Deva {
     if (this.active) return;
     this.active = Date.now();
     this.state = this.states[3];
-    if (this.onStart && typeof onStart === 'function') return this.onStart.call(this);
+    if (this.onStart && typeof onStart === 'function') return this.onStart();
+    return this.enter();
   }
 
   // stop teh deva then return the onStop function.
@@ -399,28 +400,32 @@ class Deva {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.active = false;
     this.state = this.states[4];
-    if (this.onStop && typeof onStop === 'function') return this.onStop.call(this);
+    if (this.onStop && typeof onStop === 'function') return this.onStop();
+    return this.exit();
   }
 
   // enter the deva then return the onEnter function.
   enter() {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.state = this.states[5];
-    if (this.onEnter && typeof onEnter === 'function') return this.onEnter.call(this);
+    if (this.onEnter && typeof onEnter === 'function') return this.onEnter();
+    return this.done('enter')
   }
 
   // exit the deva then return the onExit function.
   exit() {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.state = this.states[6];
-    if (this.onExit && typeof onExit === 'function') return this.onExit.call(this);
+    if (this.onExit && typeof onExit === 'function') return this.onExit();
+    return this.done('exit')
   }
 
   // set the deva as done then return the oDone function.
-  done() {
+  done(msg='done') {
     if (!this.active) return Promise.resolve(this.vars.messages.offline);
     this.state = this.states[7];
-    if (this.onDone && typeof onDone === 'function') return this.onDone.call(this);
+    if (this.onDone && typeof onDone === 'function') return this.onDone();
+    return Promise.resolve({msg,agent:this.agent})
   }
 
   // interface to return the status of the current deva with the time/date requested.
@@ -447,7 +452,7 @@ class Deva {
         devas.push(this.devas[x].init());
       }
       Promise.all(devas).then(() => {
-        return resolve(true);
+        return resolve('✨ DEVAS LOADED!');
       }).catch(reject);
     });
   }
@@ -458,7 +463,7 @@ class Deva {
         devas.push(this.devas[x].stop());
       }
       Promise.all(devas).then(() => {
-        return resolve(true);
+        return resolve('✨ DEVAS STOPPED!');
       }).catch(reject);
     });
   }
