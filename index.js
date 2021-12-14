@@ -391,7 +391,7 @@ class Deva {
     if (this.active) return;
     this.active = Date.now();
     this.state = this.states[3];
-    if (this.onStart && typeof onStart === 'function') return this.onStart();
+    if (this.onStart) return this.onStart();
     return this.enter();
   }
 
