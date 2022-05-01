@@ -420,7 +420,7 @@ class Deva {
     // call the onError if there is a logcal one.
     // if there is no local error return a promise reject.
     if (this.onError) return this.onError(err, packet);
-    return reject ? reject(err) : Promise.reject(err);
+    return reject ? reject(err) : false;
   }
 
   // start the deva then return the 'onStart' function.
