@@ -419,7 +419,7 @@ class Deva {
     });
     // call the onError if there is a logcal one.
     // if there is no local error return a promise reject.
-    if (this.onError) return this.onError(err, packet);
+    if (this.onError) return this.onError(err, packet, reject);
     return reject ? reject(err) : false;
   }
 
