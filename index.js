@@ -407,7 +407,6 @@ class Deva {
   // packet: the packet that caused the error.
   error(err,packet=false,reject=false) {
     this._state = 'error';
-    console.error(err);
     // broadcast a global uniform error event.
     this.talk('error', {
       id: this.uid(),
