@@ -26,7 +26,7 @@ class Deva {
       if (!this[opt]) this[opt] = opts[opt];            // set any remaining opts to this.
     }
 
-    this.cmdChr = '$';
+    this.cmdChr = '!';
     this.askChr = '#';
     this.inherit = ["events", "config", "lib", "security", "client"];
     this.bind = ["listeners", "methods", "func", "lib", "security", "agent", "client"];
