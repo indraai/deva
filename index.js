@@ -346,12 +346,13 @@ class Deva {
             return resolve(answer);
           });
         }
-        // if the user sends a local command '!' then it will ask of the self.
+        // if the user sends a local command '$' then it will ask of the self.
         else {
           if (typeof this.methods[method] !== 'function') return resolve(this._methodNotFound(packet));
           this.methods[method](packet).then(result => {
-            const _text = typeof result === 'object' ? result.text : result;
-            const _data = typeof result === 'object' ? result.data : false;
+            const text = typeof result === 'object' ? result.text : result;
+            const html = typeof result === 'object' ? result.html : result;
+            const data = typeof result === 'object' ? result.data : false;
             packet.a = {
               agent: this.agent || false,
               client: this.client || false,
@@ -359,8 +360,9 @@ class Deva {
                 key: this.agent.key,
                 method,
               },
-              text:_text,
-              data:_data,
+              text,
+              html,
+              data,
               created: Date.now(),
             };
             this._state = this.states.answer;
