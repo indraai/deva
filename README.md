@@ -3,13 +3,13 @@ Deva is a lightweight class object that provides events and object management wi
 
 ## Install
 ```bash
-$> npm i @indra.ai/deva
+$> npm i @feecting/deva
 ```
 
 ## Basic Structure
 ```javascript
 // include the main Deva class
-const Deva = require('@indra.ai/deva');
+const Deva = require('feecting/deva');
 
 // setup the Deva object
 const deva = new Deva({
