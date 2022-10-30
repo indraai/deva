@@ -1,4 +1,5 @@
-# DEVA
+# deva
+
 Deva is a class object that provides events and object management with inherited properties.
 
 [Back to indra.ai](https://indra.ai)
