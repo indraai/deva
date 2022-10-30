@@ -1,5 +1,7 @@
 # DEVA
-Deva is a lightweight class object that provides events and object management with inherited properties.
+Deva is a class object that provides events and object management with inherited properties.
+
+[Back to indra.ai](https://indra.ai)
 
 ## Install
 ```bash
@@ -387,5 +389,5 @@ The `init()` function will initialize the Deva and run the `onInit()` state func
 The `initDeva()` function will initialize the Deva located under the current Deva set. To be used in instances of a main Deva parent situation.
 
 -
-
+[Back to indra.ai](https://indra.ai)
 &copy;2021 Quinn Michaels; All Rights Reserved.
