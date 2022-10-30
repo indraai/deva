@@ -390,5 +390,5 @@ The `init()` function will initialize the Deva and run the `onInit()` state func
 The `initDeva()` function will initialize the Deva located under the current Deva set. To be used in instances of a main Deva parent situation.
 
 -
-[Back to indra.ai](https://indra.ai)
+[Back to indra.ai](https://indra.ai)  
 &copy;2021 Quinn Michaels; All Rights Reserved.
