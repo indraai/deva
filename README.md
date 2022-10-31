@@ -6,7 +6,7 @@ Deva is a class object that provides events and object management with inherited
 
 ## Install
 ```bash
-$> npm i @feecting/deva
+$ npm i @indra.ai/deva --save-dev
 ```
 
 ## Basic Structure
