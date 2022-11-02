@@ -3,9 +3,19 @@
 Deva is a class object that provides events and object management with inherited properties.
 
 ## contents
-- [install](#install)
-- [structure](#structure)
-- [breakdown](#breakdown)
+- [install](#install) - How to install the deva core.
+- [structure](#structure) - Basic structure of `deva`.
+- [agent](#agent) - The `agent` object stores the Agent Profile.
+- [vars](#vars) - Variables are stored in the `this.vars` object.
+- [listeners](#listeners) - Listeners are setup to allow a deva trigger events.
+- [listeners](#listeners) - Listeners are setup to allow a deva trigger events.
+- [devas](#listeners) - This is where sub-devas are loaded into the current deva.
+- [modules](#modules) - A `deva` can add modules to add to their functionality.
+- [func](#func) - A `deva` the internal functionality is written here.
+- [methods](#methods) - Methods expose the `deva` abilities to external commands/calls.
+- [states](#states) - There are various states that triger when a `deva` is doing things.
+
+- [utility](#utility) - Interal to a `deva` there are utility functions available to make actions easier like getting a unique id or status.
 
 [Back to indra.ai](https://indra.ai)
 
@@ -68,15 +78,14 @@ deva.init();
 
 ```
 
-## breakdown
+## agent
 
-### Agent
 ```javascript
 this.agent
 ```
 The "me" object contains the profile information for the DEVA.
 
-#### Data Attributes
+### Data Attributes
 - **uid:** The unique id for the Deva.
 - **key:** The unique key for the Deva.
 - **name:** The name of the Deva.
@@ -95,17 +104,18 @@ The "me" object contains the profile information for the DEVA.
   - **gender:** The gender of the Deva
   - **describe:** A short description of the deva 100 characters or less.
 
-### Vars
+## vars
+
 ```javascript
 this.vars
 ```
+
 The vars can be use to set local variables for the deva that need to be used in your program.
 
 There are no default variables, so the scope is for you and your imagination to figure out.
 
-##### Example
+### example
 ```javascript
-...
   vars: {
     foo: 'bar',
     steps: 10,
@@ -119,64 +129,64 @@ There are no default variables, so the scope is for you and your imagination to 
       'value 2',
     ]
   }
-...
-
 ```
-### Listeners
+
+## listeners
 Listeners are what you setup that allow your Deva to communicate with other Deva or parts of your application/system.
 
 ```javascript
 this.listeners
 ```
 
-#### Default Listeners
+### default
 
 Each Deva comes with a set of default listeners to provide basic functionality.
 
-##### Question
+#### question
 The question event is the functionality that exposes the methods to the outside world. When a deva asks a question the string is parsed into a question format so that commands to access various methods can be exposed.
 
 ```javascript
 const question = await this.question(`#*agent_key* *method*:*params* *question string*`);
 ```
 
-##### Start
+#### start
 This will trigger an event to start the Deva.
 
 ```javascript
 this.talk(`*agent_key*:start`);
 ```
 
-##### Stop
+#### stop
 This will trigger an event to stop the Deva.
 
 ```javascript
 this.talk(`*agent_key*:stop`);
 ```
 
-##### Status
+#### status
 This will trigger an event to broadcast the Deva status.
 
 ```javascript
 this.talk(`*agent_key*:status`);
 ```
 
-### Deva
+## devas
+
 ```javascript
-this.deva
+this.devas
 ```
 
 The main object for Deva that are bwlow this Deva.
 
-### Modules
+## modules
+
 The external modules that your Deva might require to function.
 
 ```javascript
 this.modules
 ```
 
-
-### Func
+## func
 The functions that your deva uses to operate. Functions are not exposed through
 the api to public access.
 
@@ -184,17 +194,18 @@ the api to public access.
 this.func
 ```
 
-### Methods
+### methods
 ```javascript
 this.methods
 ```
+
 The methods are exposed publicly through the question event that parses a string
 and sends a request to the question method that then interacts with functions, modules, and variables.
 
-### State Functions
+## states
 Provided are a set of state functions that trigger when a Deva is at various states of starting/stopping.
 
-#### onStart()
+### onStart()
 
 The `onStart()` function runs after the `start` function has completed.
 
@@ -204,7 +215,7 @@ this.onStart() {
 }
 ```
 
-#### onStop()
+### onStop()
 
 The `onStop()` function runs after the `stop` function has completed.
 
@@ -214,8 +225,7 @@ this.onStop() {
 }
 ```
 
-
-#### onEnter()
+### onEnter()
 
 The `onEnter()` function runs after the `enter` event has fired.
 
@@ -225,8 +235,7 @@ this.onEnter() {
 }
 ```
 
-
-#### onExit()
+### onExit()
 
 The `onExit()`function runs after the `exit` event has fired.
 
@@ -236,7 +245,7 @@ this.onExit() {
 }
 ```
 
-#### onDone()
+### onDone()
 
 The `onDone()`function runs after the `done` event has fired.
 
@@ -246,8 +255,7 @@ this.onDone() {
 }
 ```
 
-
-#### onInit()
+### onInit()
 
 The `onInit()` function runs after the `init()` function has completed.
 
@@ -257,14 +265,13 @@ this.onInit() {
 }
 ```
 
-## Utility Functions
+## utility
 
 ### uid()
 Generates a unique ID that is used in packet transfer and other various ways.
 
 ```javascript
 this.uid() // inside the object
-deva.uid() // outside the object
 
 // example
 this.vars.id = this.uid()
