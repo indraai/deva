@@ -1,13 +1,12 @@
 # deva
 
-Deva is a class object that provides events and object management with inherited properties.
+Deva is a class object that provides structure, events, and object management with inherited properties.
 
 ## contents
 - [install](#install) - How to install the deva core.
 - [structure](#structure) - Basic structure of `deva`.
 - [agent](#agent) - The `agent` object stores the Agent Profile.
 - [vars](#vars) - Variables are stored in the `this.vars` object.
-- [listeners](#listeners) - Listeners are setup to allow a deva trigger events.
 - [listeners](#listeners) - Listeners are setup to allow a deva trigger events.
 - [devas](#listeners) - This is where sub-devas are loaded into the current deva.
 - [modules](#modules) - A `deva` can add modules to add to their functionality.
@@ -139,28 +138,21 @@ this.listeners
 
 Each Deva comes with a set of default listeners to provide basic functionality.
 
-#### question
-The question event is the functionality that exposes the methods to the outside world. When a deva asks a question the string is parsed into a question format so that commands to access various methods can be exposed.
-
-```javascript
-const question = await this.question(`#*agent_key* *method*:*params* *question string*`);
-```
-
-#### start
+### start
 This will trigger an event to start the Deva.
 
 ```javascript
 this.talk(`*agent_key*:start`);
 ```
 
-#### stop
+### stop
 This will trigger an event to stop the Deva.
 
 ```javascript
 this.talk(`*agent_key*:stop`);
 ```
 
-#### status
+### status
 This will trigger an event to broadcast the Deva status.
 
 ```javascript
@@ -264,6 +256,29 @@ this.onInit() {
 
 ## utility
 
+### question
+
+The question event is the functionality that exposes the methods to the outside world. When a deva asks a question the string is parsed into a question format so that commands to access various methods can be exposed.
+
+The `question(packet)` function is a default function that allows the system to ask questions of itself or other Deva.
+
+The function checks the beginning of a string for a `#` to determine wether to issue a command to run a specific method.
+
+See [Question Listener](#question) for usage.
+
+
+```javascript
+// async await
+const question = await this.question('#*agent_key* *method*:*params* *question string*');
+
+// promises
+this.question('#*agent_key* *method*:*params* *question string*').then(response => {
+  ...
+}).catch(err => {
+  ...
+})
+```
+
 ### uid()
 Generates a unique ID that is used in packet transfer and other various ways.
 
@@ -345,13 +360,13 @@ this.func.listener = packet => {
 ```
 
 
-### Load(agent, opts)
+### load(agent, opts)
 
 To add a Deva dynamically use the `load()` function. This can be utilized to add Deva to an existing Deva after the object has already been created.
 
 ```javascript
 const opts = {
-  me: {...},
+  agent: {...},
   vars: {...},
   listeners: {...},
   deva: {...},
@@ -372,18 +387,6 @@ To delete a Deva for any reason use `unload()`. This will delete the Deva and al
 this.unload('deva-key');
 
 ```
-
-### question(packet)
-The `question(packet)` function is a default function that allows the system to ask questions of itself or other Deva.
-
-The function checks the beginning of a string for a `#` to determine wether to issue a command to run a specific method.
-
-See [Question Listener](#question) for usage.
-
-```bash
-#deva method:params message
-```
-
 
 ### status()
 The `status()` function will return the running status of the current Deva.
