@@ -17,8 +17,6 @@ Deva is a class object that provides events and object management with inherited
 
 - [utility](#utility) - Interal to a `deva` there are utility functions available to make actions easier like getting a unique id or status.
 
-[Back to indra.ai](https://indra.ai)
-
 ## install
 ```bash
 $ npm i @indra.ai/deva --save-dev
@@ -403,6 +401,8 @@ The `init()` function will initialize the Deva and run the `onInit()` state func
 ### initDeva()
 The `initDeva()` function will initialize the Deva located under the current Deva set. To be used in instances of a main Deva parent situation.
 
--
+---
+
+[Github Repo](https://github.com/indraai/deva)
 [Back to indra.ai](https://indra.ai)  
 &copy;2021 Quinn Michaels; All Rights Reserved.
