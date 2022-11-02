@@ -2,14 +2,19 @@
 
 Deva is a class object that provides events and object management with inherited properties.
 
+## contents
+- [install](#install)
+- [structure](#structure)
+- [breakdown](#breakdown)
+
 [Back to indra.ai](https://indra.ai)
 
-## Install
+## install
 ```bash
 $ npm i @indra.ai/deva --save-dev
 ```
 
-## Basic Structure
+## structure
 ```javascript
 // include the main Deva class
 const Deva = require('feecting/deva');
@@ -63,13 +68,15 @@ deva.init();
 
 ```
 
-## Breakdown
+## breakdown
+
 ### Agent
 ```javascript
 this.agent
 ```
 The "me" object contains the profile information for the DEVA.
-##### Data Attributes
+
+#### Data Attributes
 - **uid:** The unique id for the Deva.
 - **key:** The unique key for the Deva.
 - **name:** The name of the Deva.
