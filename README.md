@@ -14,7 +14,6 @@ Deva is a class object that provides events and object management with inherited
 - [func](#func) - A `deva` the internal functionality is written here.
 - [methods](#methods) - Methods expose the `deva` abilities to external commands/calls.
 - [states](#states) - There are various states that triger when a `deva` is doing things.
-
 - [utility](#utility) - Interal to a `deva` there are utility functions available to make actions easier like getting a unique id or status.
 
 ## install
