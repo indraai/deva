@@ -405,6 +405,6 @@ The `initDeva()` function will initialize the Deva located under the current Dev
 
 ---
 
-[Github Repo](https://github.com/indraai/deva)
+[Github Repo](https://github.com/indraai/deva)  
 [Back to indra.ai](https://indra.ai)  
 &copy;2021 Quinn Michaels; All Rights Reserved.
