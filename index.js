@@ -474,7 +474,7 @@ class Deva {
 
   // universal prompt emitter
   prompt(text) {
-    this.talk('prompt', {text, prompt:this.agent.prompt});
+    this.talk('prompt', {text, agent:this.agent});
   }
 
   // universal hash builder
