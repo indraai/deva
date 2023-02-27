@@ -472,12 +472,12 @@ class Deva {
     return Promise.resolve({text});
   }
 
-  // universal prompt emitter
+  // prompt emitter
   prompt(text) {
     this.talk('prompt', {text, agent:this.agent});
   }
 
-  // universal hash builder
+  // hash builder
   hash(packet) {
     if (!this.vars.hash) this.vars.hash = '0x';
     // setup basic hashing
@@ -500,9 +500,9 @@ class Deva {
       });
     });
   }
-  // initDeva interface is to initialize devas that this deva is a parent of.
+  // startDevas interface is to initialize devas that this deva is a parent of.
   // This feature allows a Deva to be a parent of a parent of a parent etc....
-  initDevas() {
+  startDevas() {
     return new Promise((resolve, reject) => {
       const devas = [];
       for (let x in this.devas) {
