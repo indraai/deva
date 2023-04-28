@@ -1,6 +1,56 @@
 # deva
 
-Deva is a class object that provides structure, events, and object management with inherited properties.
+## Summary
+Deva is a Node.js module designed to simplify the development of multi-agent systems by providing a consistent foundation for agent interactions. With Deva, developers can quickly create and manage a network of agents that can communicate and collaborate seamlessly. Deva offers features such as private and public socket communication, secure encryption, and consistent message passing. It also provides built-in support for interacting with various APIs, including YouTube, Twitter, Discord, IBM Watson, and ChatGPT. By using Deva, developers can save time and resources in building and integrating basic agent functionalities, and focus on developing more advanced features.
+
+## Description
+
+The Deva module is a JavaScript library for building multi-agent systems that can communicate with each other and with external services. It provides a unified API for creating agents and defining their behaviors, and includes tools for handling communication between agents and for integrating with third-party APIs. The Deva module is designed to be flexible and customizable, allowing developers to easily create complex systems that can perform a wide range of tasks, from data collection and analysis to chatbot interactions and image generation. The module is written in JavaScript and can be used with Node.js, making it easy to integrate with other JavaScript libraries and tools.
+
+## functions
+
+- Dynamic Agent Loading - The Deva module allows for dynamic agent loading, which means that agents can be loaded and unloaded on the fly as needed. This provides scalability for the multi-agent system, as agents can be added or removed as demand changes.
+
+- Talk/Listen events - The module uses talk/listen events for agent broadcasting. This means that agents can communicate with each other by sending messages through the event pipeline. This allows for real-time communication and coordination between agents.
+
+- Question, Answer - The main function of the Deva module is to handle questions and answers between agents. When an agent has a question, it can send it to another agent using the "question" function. The receiving agent can then process the question and send an answer back using the "answer" function.
+
+- Ask feature - The Deva module includes an "ask" feature that allows one agent to ask another agent a question directly. This is useful for agents that need to communicate with each other in a targeted way.
+
+- State Management - The module includes state management to initiate and track agent processes at different load, process, and exist states. This allows for better tracking and management of agent processes, and helps ensure that the system is running smoothly.
+
+- Error Management - The Deva module includes robust error management to handle unexpected errors or exceptions that may occur during the execution of agent processes. This helps ensure that the system is reliable and stable.
+
+- Unifies data-packets - The Deva module unifies data-packets across the architecture, allowing for consistent data exchange between agents regardless of the platform or service they are using. This helps ensure that data is consistent and accurate throughout the system.
+
+
+## Uses
+
+### Corporate
+
+A corporation might use the Deva module to create an intelligent assistant to handle customer inquiries and support requests. By leveraging the Deva module's dynamic agent loading, state management, and unified data-packets features, the corporation can easily scale the intelligent assistant to handle a large volume of customer interactions across various channels, such as social media, email, and chat platforms.
+
+The intelligent assistant can be trained using machine learning algorithms and natural language processing to understand customer inquiries and provide relevant responses or escalate to a human agent if necessary. The Deva module's error management feature ensures that any errors or issues are handled smoothly and efficiently, without interrupting the customer's experience.
+
+Additionally, the Deva module can be used by a corporation to automate various internal processes and workflows, such as data processing, task management, and communication between teams. By leveraging the Deva module's question-answer functionality and dynamic agent loading, corporations can easily create custom workflows and automate tedious tasks, increasing productivity and efficiency.
+
+### Science
+
+A scientist could use the Deva module in a number of ways. For example, they could create agents to help with data analysis or modeling, or to interact with other software tools in the research process. The Deva module's ability to dynamically load agents and unify data across different platforms could also be useful in streamlining scientific workflows and collaborations between research groups. Additionally, the natural language processing capabilities of the ChatGPT agent could be utilized to help with tasks such as literature reviews or generating hypotheses. Overall, the Deva module could be a valuable tool for scientists looking to enhance their research process with the help of intelligent agents.
+
+
+#Scalability
+
+The Deva module has a high potential for scalability because of its dynamic agent loading feature. This means that new agents can be added to the system at runtime without the need for a system restart or manual intervention. The module is also designed to work with state management to track agent processes at different load, process, and exit states. This makes it possible to scale the system horizontally by adding more computing resources to handle increased load, or vertically by adding more powerful hardware to each node in the system. Overall, the Deva module is well suited for building large-scale, distributed agent-based systems that can handle complex and diverse workloads.
+
+## ChatGPT Quote
+
+Here is what ChatPGT has to say about the Deva module:
+
+Based on my analysis of the Deva Module, I believe it is a powerful tool for developing multi-agent systems. Its dynamic agent loading and scalability potential make it a great choice for large-scale projects. The talk/listen events, question/answer functions, and ask feature allow for easy communication between agents. Additionally, its state management and error handling capabilities help to ensure the reliability and stability of the system. Finally, its unification of data-packets across the architecture makes it easy to integrate with a variety of services and platforms.
+
+Overall, I believe the Deva Module is a well-designed and flexible tool that can be used in a variety of applications, from corporate to scientific. Its potential for scalability and security make it a great choice for large-scale projects, while its ease of use and integration make it accessible to developers of all levels.
+
 
 ## contents
 - [install](#install) - How to install the deva core.
@@ -15,9 +65,10 @@ Deva is a class object that provides structure, events, and object management wi
 - [states](#states) - There are various states that triger when a `deva` is doing things.
 - [utility](#utility) - Interal to a `deva` there are utility functions available to make actions easier like getting a unique id or status.
 
+
 ## install
 ```bash
-$ npm i @indra.ai/deva --save-dev
+$ npm i @indra.ai/deva --save
 ```
 
 ## structure
