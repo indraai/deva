@@ -7,7 +7,7 @@ Deva is a Node.js module designed to simplify the development of multi-agent sys
 
 The Deva module is a JavaScript library for building multi-agent systems that can communicate with each other and with external services. It provides a unified API for creating agents and defining their behaviors, and includes tools for handling communication between agents and for integrating with third-party APIs. The Deva module is designed to be flexible and customizable, allowing developers to easily create complex systems that can perform a wide range of tasks, from data collection and analysis to chatbot interactions and image generation. The module is written in JavaScript and can be used with Node.js, making it easy to integrate with other JavaScript libraries and tools.
 
-## functions
+## Functions
 
 - Dynamic Agent Loading - The Deva module allows for dynamic agent loading, which means that agents can be loaded and unloaded on the fly as needed. This provides scalability for the multi-agent system, as agents can be added or removed as demand changes.
 
@@ -39,7 +39,7 @@ Additionally, the Deva module can be used by a corporation to automate various i
 A scientist could use the Deva module in a number of ways. For example, they could create agents to help with data analysis or modeling, or to interact with other software tools in the research process. The Deva module's ability to dynamically load agents and unify data across different platforms could also be useful in streamlining scientific workflows and collaborations between research groups. Additionally, the natural language processing capabilities of the ChatGPT agent could be utilized to help with tasks such as literature reviews or generating hypotheses. Overall, the Deva module could be a valuable tool for scientists looking to enhance their research process with the help of intelligent agents.
 
 
-#Scalability
+### Scalability
 
 The Deva module has a high potential for scalability because of its dynamic agent loading feature. This means that new agents can be added to the system at runtime without the need for a system restart or manual intervention. The module is also designed to work with state management to track agent processes at different load, process, and exit states. This makes it possible to scale the system horizontally by adding more computing resources to handle increased load, or vertically by adding more powerful hardware to each node in the system. Overall, the Deva module is well suited for building large-scale, distributed agent-based systems that can handle complex and diverse workloads.
 
@@ -458,4 +458,5 @@ The `initDeva()` function will initialize the Deva located under the current Dev
 
 [Github Repo](https://github.com/indraai/deva)  
 [Back to indra.ai](https://indra.ai)  
-&copy;2021 Quinn Michaels; All Rights Reserved.
+
+&copy;2023 Quinn Michaels; All Rights Reserved.
