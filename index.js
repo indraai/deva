@@ -31,6 +31,9 @@ class Deva {
       cmd: '📟 COMMAND',
       question: '🙋‍♂️ QUESTION',
       answer: '🔮 ANSWER',
+      answer_ask: '🔮 ANSWER ASK',
+      answer_cmd: '🔮 ANSWER CMD',
+      answer_question: '🔮 ANSWER QUESTION',
       talk: '🎙️ TALK',
       listen: '🎧 LISTEN',
       error: '❌ ERROR',
@@ -336,6 +339,7 @@ class Deva {
   ***************/
   ask(packet) {
     if (!this._active) return Promise.resolve(this.messages.offline);
+    this.state('ask');
 
     packet.a = {
       agent: this.agent || false,
@@ -371,7 +375,6 @@ class Deva {
           packet.a.text = result;
         }
         this.talk(`${this.agent.key}:ask:${packet.id}`, packet);
-        this.state('wait');
       }).catch(err => {
         this.talk(`${this.agent.key}:ask:${packet.id}`, {error:err.toString()});
         return this.error(err, packet);
@@ -402,10 +405,10 @@ class Deva {
     const t_split = TEXT.split(' ');
 
     // check to see if the string is an #ask string to talk to the other Deva.
-    const isAsk = t_split[0].startsWith(this.askChr) ? t_split[0].substring(1) : false;
+    const isAsk = t_split[0].startsWith(this.askChr);
 
     // check to see if the string is a command string to run a local method.
-    const isCmd = t_split[0].startsWith(this.cmdChr) ? t_split[0].substring(1) : false;
+    const isCmd = t_split[0].startsWith(this.cmdChr);
 
     // Format the packet for return on the request.
     const orig = TEXT;
@@ -433,19 +436,21 @@ class Deva {
         // #agent method:param1:param2 with text strings for proccessing
         // !method param:list:parse for the local agent
         // if is an ask then we format one way
+        let _state = 'answer_question';
         if (isAsk) {
-          this.state('ask');
+          _state = 'answer_ask'
+          key = t_split[0]substring(1);
           params = t_split[1] ? t_split[1].split(':') : false;
           method = params[0];
           text = t_split.slice(2).join(' ').trim();
-          key = isAsk;
         }
         else if (isCmd) {
-          this.state('cmd');
+          _state = 'answer_cmd'
           params = t_split[1] ? t_split[1].split(':') : false;
           method = isCmd;
           text = t_split.slice(1).join(' ').trim()
         }
+        this.state(_state);
 
         packet.q = {
             agent: this.agent || false,
@@ -466,15 +471,17 @@ class Deva {
 
         // If a question to another Deva with '#' then trigger events
         if (isAsk) {
-          this.talk(`${isAsk}:ask`, packet);
-          this.once(`${isAsk}:ask:${packet.id}`, answer => {
+          this.talk(`${key}:ask`, packet);
+          this.once(`${key}:ask:${packet.id}`, answer => {
             return resolve(answer);
           });
         }
         // if the user sends a local command '$' then it will ask of the self.
         else {
-          this.state('answer');
-          if (typeof this.methods[method] !== 'function') return resolve(this._methodNotFound(packet));
+          if (typeof this.methods[method] !== 'function') {
+            this.state('answer_cmd');
+            return resolve(this._methodNotFound(packet));
+          }
           this.methods[method](packet).then(result => {
             const text = typeof result === 'object' ? result.text : result;
             const html = typeof result === 'object' ? result.html : result;
@@ -497,7 +504,6 @@ class Deva {
             // create a hash for entire packet and insert into packet
             packet.hash = this.hash(JSON.stringify(packet));
 
-            this.talk(`log`, packet);
             return resolve(packet);
           }).catch(err => {
             return this.error(err, packet);
