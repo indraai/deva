@@ -39,6 +39,9 @@ const HelloWorld = new Deva({
   listeners: {
     '101:state'(st) {
       console.log(`current state: ${st}`);
+    },
+    'log'(packet) {
+      console.log('logger', packet);
     }
   },
   deva: {},

@@ -17,6 +17,8 @@ class Deva {
       enter: 'ENTER',
       exit: 'EXIT',
       done: 'DONE',
+      load: 'LOAD DEVAS',
+      unload: 'UNLOAD DEVAS',
       wait: 'WAITING',
       data: 'DATA',
       ask: 'ASK',
@@ -59,6 +61,7 @@ class Deva {
     this.bind = ["listeners", "methods", "func", "lib", "security", "agent", "client"];
     this.messages = {
       offline: 'AGENT OFFLINE',
+      loading: 'DEVAS LOADING',
       loaded: 'DEVAS LOADED',
       stopped: 'DEVAS STOPPED',
       notext: 'NO TEXT',
@@ -679,12 +682,15 @@ class Deva {
     Start Devas will initialize the Deva agents inside this curent Deva.
   ***************/
   startDevas() {
+    this.state('loading');
     return new Promise((resolve, reject) => {
+      this.prompt
       const devas = [];
       for (let x in this.devas) {
         devas.push(this.devas[x].init());
       }
       Promise.all(devas).then(() => {
+        this.state('done');
         return resolve(this.messages.loaded);
       }).catch(reject);
     });
