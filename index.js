@@ -7,18 +7,24 @@ const { createHash, randomUUID } = require('crypto');
 class Deva {
   constructor(opts) {
     opts = opts || {};
-    this._uid = this.uid();                             // the unique id assigned to the agent at load
+    this._id = randomUUID();                             // the unique id assigned to the agent at load
     this._state = 'OFFLINE';                             // current state of agent.
     this._states = {                                    // The available states to work with.
       offline: 'OFFLINE',
+      online: 'ONLINE',
       init: 'INIT',
       start: 'START',
-      stop: 'STOP',
       enter: 'ENTER',
+      stop: 'STOP',
       exit: 'EXIT',
       done: 'DONE',
-      loading: 'LOADING DEVAS',
-      unloading: 'UNLOADING DEVAS',
+      devas_start: 'DEVAS STARTING',
+      devas_ready: 'DEVAS READY',
+      devas_stop: 'DEVAS STOPPING',
+      devas_stopped: 'DEVAS STOPPED',
+      deva_load: 'DEVA LOAD',
+      deva_loaded: 'DEVA LOADED',
+      deva_unloaded: 'DEVA UNLOADED',
       wait: 'WAITING',
       data: 'DATA',
       ask: 'ASK',
@@ -61,8 +67,6 @@ class Deva {
     this.bind = ["listeners", "methods", "func", "lib", "security", "agent", "client"];
     this.messages = {
       offline: 'AGENT OFFLINE',
-      loading: 'DEVAS LOADING',
-      loaded: 'DEVAS LOADED',
       stopped: 'DEVAS STOPPED',
       notext: 'NO TEXT',
       notfound: 'NOT FOUND',
@@ -290,11 +294,13 @@ class Deva {
     This function will enable fast loading of Deva into a system.
   ***************/
   load(deva) {
+    this.state('deva_load');
     this.devas[deva.key] = deva;
     // inherit the data to the new deva.
     this.inherit.forEach(inherit => {
       this.devas[deva.key][inherit] = this[inherit];
     });
+    this.state('deva_loaded');
     return Promise.resolve();
   }
 
@@ -306,7 +312,9 @@ class Deva {
   describe:     Unload a currently loaded Deva.
   ***************/
   unload(deva) {
+    this.state('deva_unload');
     delete this.devas[deva];
+    this.state('deva_unloaded');
     return Promise.resolve(`unload:${deva} `);
   }
 
@@ -682,7 +690,7 @@ class Deva {
     Start Devas will initialize the Deva agents inside this curent Deva.
   ***************/
   startDevas() {
-    this.state('loading');
+    this.state('devas_start');
     return new Promise((resolve, reject) => {
       this.prompt
       const devas = [];
@@ -690,8 +698,8 @@ class Deva {
         devas.push(this.devas[x].init());
       }
       Promise.all(devas).then(() => {
-        this.state('done');
-        return resolve(this.messages.loaded);
+        this.state('devas_ready');
+        return resolve(this._state);
       }).catch(reject);
     });
   }
@@ -702,12 +710,14 @@ class Deva {
     stopDevas will stop all the devas running in the current Deva.
   ***************/
   stopDevas() {
+    this.state('devas_stop');
     return new Promise((resolve, reject) => {
       const devas = [];
       for (let x in this.devas) {
         devas.push(this.devas[x].stop());
       }
       Promise.all(devas).then(() => {
+        this.state('devas_stoped');
         return resolve(this.messages.stopped);
       }).catch(reject);
     });
