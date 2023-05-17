@@ -54,6 +54,7 @@ class Deva {
       ask: '🙋‍♀️ ASK',
       cmd: '📟 COMMAND',
       question: '🐵 QUESTION',
+      question_me: '🐵 QUESTION',
       question_ask: '🧙‍♂️ QUESTION ASK',
       question_cmd: '🪄 QUESTION CMD',
       question_answer: '🔮 QUESTION ANSWER',
@@ -462,7 +463,7 @@ class Deva {
         // #agent method:param1:param2 with text strings for proccessing
         // !method param:list:parse for the local agent
         // if is an ask then we format one way
-        let _state = 'question';
+        let _state = 'question_me';
         if (isAsk) {
           _state = 'question_ask'
           key = t_split[0].substring(1);
