@@ -9,43 +9,6 @@ class Deva {
     opts = opts || {};
     this._id = randomUUID();                             // the unique id assigned to the agent at load
     this._state = 'OFFLINE';                             // current state of agent.
-    this._states = {                                    // The available states to work with.
-      offline: '👻 OFFLINE',
-      online: '📡 ONLINE',
-      init: '🚀 INIT',
-      start: '🎬 START',
-      enter: '🎪 ENTER',
-      stop: '🛑 STOP',
-      exit: '🚪 EXIT',
-      done: '🤝 DONE',
-      devas_start: '✨ DEVAS START',
-      devas_ready: '📸 DEVAS READY',
-      devas_stop: '🙈 DEVAS STOP',
-      devas_stopped: '🛑 DEVAS STOPPED',
-      deva_load: '✅ DEVA LOAD',
-      deva_loaded: '✅ DEVA LOADED',
-      deva_unloaded: '✅ DEVA UNLOADED',
-      wait: '😵‍💫 WAITING',
-      data: '📀 DATA',
-      ask: '🙋‍♀️ ASK',
-      cmd: '📟 COMMAND',
-      question: '🤖 QUESTION',
-      question_ask: '🤖 SEND QUEATION TO ASK',
-      question_cmd: '🤖 SEND QUESTION TO CMD',
-      queation_answer: '🔮 ANSWER QUESTION',
-      ask_question: '🤖 ASK QUESTION',
-      ask_answer: '🔮 ASK ANSWER',
-      talk: '🎙️ TALK',
-      listen: '🎧 LISTEN',
-      error: '❌ ERROR',
-      story: '📓 STORY',
-      development: '👨‍💻 DEVELOPMENT',
-      security: '🚨 SECURITY',
-      support: '🎗️ SUPPORT',
-      services: '🎖️ SERVICES',
-      systems: '👽 SYSTEMS',
-      solutions: '🔬 SOLUTIONS',
-    };
     this._active = false;                               // the active/birth date.
     this.security = false;                              // inherited Security features.
     this.support = false;                               // inherited Support features.
@@ -70,11 +33,56 @@ class Deva {
     this.askChr = '#';
     this.inherit = ["events", "config", "lib", "security", "client"];
     this.bind = ["listeners", "methods", "func", "lib", "security", "agent", "client"];
-    this.messages = {
-      offline: 'AGENT OFFLINE',
-      stopped: 'DEVAS STOPPED',
-      notext: 'NO TEXT',
-      notfound: 'NOT FOUND',
+    this._states = {                                    // The available states to work with.
+      offline: '👻 OFFLINE',
+      online: '📡 ONLINE',
+      init: '🚀 INIT',
+      start: '🎬 START',
+      enter: '🎪 ENTER',
+      stop: '🛑 STOP',
+      exit: '🚪 EXIT',
+      done: '🤝 DONE',
+      devas_start: '✨ DEVAS START',
+      devas_ready: '📸 DEVAS READY',
+      devas_stop: '🙈 DEVAS STOP',
+      devas_stopped: '🛑 DEVAS STOPPED',
+      deva_load: '✅ DEVA LOAD',
+      deva_loaded: '✅ DEVA LOADED',
+      deva_unloaded: '✅ DEVA UNLOADED',
+      wait: '😵‍💫 WAITING',
+      data: '📀 DATA',
+      ask: '🙋‍♀️ ASK',
+      cmd: '📟 COMMAND',
+      question: '🐵 QUESTION',
+      question_ask: '🧙‍♂️ QUESTION ASK',
+      question_cmd: '🪄 QUESTION CMD',
+      question_answer: '🔮 QUESTION ANSWER',
+      ask_question: '👽 ASK QUESTION',
+      ask_answer: '🛸 ASK ANSWER',
+      method_not_found: '😩 METHOD NOT FOUND',
+      talk: '🎙️ TALK',
+      listen: '🎧 LISTEN',
+      error: '❌ ERROR',
+      story: '📓 STORY',
+      development: '👨‍💻 DEVELOPMENT',
+      security: '🚨 SECURITY',
+      support: '🎗️ SUPPORT',
+      services: '🎖️ SERVICES',
+      systems: '👽 SYSTEMS',
+      solutions: '🔬 SOLUTIONS',
+    };
+    this._messages = {
+      offline: '🙅‍♂️ DEVA OFFLINE',
+      init: '✅ DEVA INITIALIZED',
+      start: '✅ DEVA STARTED',
+      stop: '💥 DEVA STOPPED',
+      enter: '🖖 DEVA ENTERED',
+      exit: '🚪 DEVA EXITED',
+      done: '👍 DEVA DONE',
+      devas_started: '🤝 DEVAS STARTED',
+      devas_stopped: '🛑 DEVAS STOPPED',
+      notext: '❌ NO TEXT',
+      method_not_found: '❌ THAT IS NOT GONNA WORK!',
     }
   }
 
@@ -89,9 +97,23 @@ class Deva {
   describe
   ***************/
   state(st, data=false) {
+    if (!Object.keys(this._states).includes(st)) return;
     this._state = this._states[st];
-    this.prompt(this._state);
-    this.talk(`${this.agent.key}:state`, data);
+    const _data = {
+      id: this.uid(true),
+      client: this.client.id,
+      agent: this.agent.id,
+      st: st,
+      state: this._state,
+      data,
+      created: Date.now(),
+    };
+    this.talk(`${this.agent.key}:state`, _data);
+    return this._state;
+  }
+
+  states() {
+    return this._states;
   }
 
   // Called from the init function to bind the elements defined in the this.bind variable.
@@ -140,12 +162,6 @@ class Deva {
   _assignListeners() {
     return new Promise((resolve, reject) => {
       try {
-        // set the default listeners for the states of the agent.
-        for (let state in this._states) {
-          this.events.on(`${this.agent.key}:${state}`, packet => {
-            return this[state](packet);
-          })
-        }
         // set the assigned listeners for the agent.
         for (let listener in this.listeners) {
           this.events.on(listener, packet => {
@@ -208,13 +224,14 @@ class Deva {
     packet.a = {
       agent: this.agent || false,
       client: this.client || false,
-      text: `${packet.q.meta.method} ${this.messages.notfound}`,
+      text: `${this._messages.method_not_found} - ${packet.q.meta.method} `,
       meta: {
         key: this.agent.key,
         method: packet.q.meta.method,
       },
       created: Date.now(),
     };
+    this.state('method_not_found', packet);
     return packet;
   }
 
@@ -339,7 +356,7 @@ class Deva {
     so the event is specific to the talk.
   ***************/
   ask(packet) {
-    if (!this._active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('ask_question', packet);
 
     packet.a = {
@@ -400,7 +417,7 @@ class Deva {
   describe:
   ***************/
   question(TEXT=false, DATA=false) {
-    if (!this._active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this._messages.offline);
 
     const id = this.uid();                            // generate a unique transport id for the question.
     const t_split = TEXT.split(' ');
@@ -427,9 +444,9 @@ class Deva {
         key = this.agent.key;
 
     return new Promise((resolve, reject) => {
-      if (!TEXT) return reject(this.messages.notext);
+      if (!TEXT) return reject(this._messages.notext);
       try {
-        if (!this._active) return reject(this.messages.offline);
+        if (!this._active) return reject(this._messages.offline);
 
         // *: send just a string of text
         // !: send a command to the local agent
@@ -440,7 +457,7 @@ class Deva {
         let _state = 'question';
         if (isAsk) {
           _state = 'question_ask'
-          key = t_split[0]substring(1);
+          key = t_split[0].substring(1);
           params = t_split[1] ? t_split[1].split(':') : false;
           method = params[0];
           text = t_split.slice(2).join(' ').trim();
@@ -448,7 +465,7 @@ class Deva {
         else if (isCmd) {
           _state = 'question_cmd'
           params = t_split[1] ? t_split[1].split(':') : false;
-          method = isCmd;
+          method = t_split[0].substring(1);
           text = t_split.slice(1).join(' ').trim()
         }
 
@@ -503,6 +520,7 @@ class Deva {
 
             // create a hash for entire packet and insert into packet
             packet.hash = this.hash(JSON.stringify(packet));
+            this.state('question_answer', packet);
 
             return resolve(packet);
           }).catch(err => {
@@ -541,7 +559,7 @@ class Deva {
         return this._assignListeners();
       }).then(() => {
         this.state('init');
-        return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start(this._state);
+        return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start(this._messages.init);
       }).then(started => {
         return resolve(started)
       }).catch(err => {
@@ -556,7 +574,7 @@ class Deva {
   // packet: the packet that caused the error.
   error(err,packet=false,reject=false) {
     this.state('error', err);
-    if (this.onError && typeof this.onError === 'function') ? return this.onError(err, packet, reject);
+    if (this.onError && typeof this.onError === 'function') return this.onError(err, packet, reject);
     console.error(err)
     return reject ? reject(err) : err;
   }
@@ -572,7 +590,7 @@ class Deva {
   start() {
     if (!this._active) return;
     this.state('start');
-    return this.onStart && typeof this.onStart === 'function' ? this.onStart() : this.enter(this._state);
+    return this.onStart && typeof this.onStart === 'function' ? this.onStart() : this.enter(this._messages.start);
   }
 
   /**************
@@ -586,10 +604,10 @@ class Deva {
     If the deva is offline it will return the offline message.
   ***************/
   stop() {
-    if (!this._active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('stop');
     this._active = false;
-    return this.onStop && typeof this.onStop === 'function' ? this.onStop() : this.exit(this._state);
+    return this.onStop && typeof this.onStop === 'function' ? this.onStop() : this.exit(this._messages.stop);
   }
 
   /**************
@@ -602,9 +620,9 @@ class Deva {
     If the Deva is offline it will return the offline message.
   ***************/
   enter() {
-    if (!this._active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('enter');
-    return this.onEnter && typeof this.onEnter === 'function' ? this.onEnter() : this.done(this._state)
+    return this.onEnter && typeof this.onEnter === 'function' ? this.onEnter() : this.done(this._messages.enter)
   }
 
   /**************
@@ -620,10 +638,10 @@ class Deva {
     If the deva is offline it will return the offline message.
   ***************/
   exit() {
-    if (!this._active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('exit');
     this._active = false;
-    return this.onExit && typeof this.onExit === 'function' ? this.onExit() : Promise.resolve(this._state)
+    return this.onExit && typeof this.onExit === 'function' ? this.onExit() : Promise.resolve(this._messages.exit)
   }
 
   /**************
@@ -637,10 +655,10 @@ class Deva {
     If the deva is offline it will return the offline message.
   ***************/
   done(msg=false) {
-    if (!this._active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('done');
     msg = msg ? msg : this._state;
-    return this.onDone && typeof this.onDone === 'function' ? this.onDone() : Promise.resolve(this._state)
+    return this.onDone && typeof this.onDone === 'function' ? this.onDone() : Promise.resolve(this._messages.done)
   }
 
   /**************
@@ -654,7 +672,7 @@ class Deva {
     If the deva is offline it will return the offline message.
   ***************/
   status(addto=false) {
-    if (!this._active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this._messages.offline);
     const id = this.uid();
     const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'medium' }).format(this._active);
     let text = `${this.agent.name} is ONLINE since ${dateFormat}`;
@@ -697,14 +715,13 @@ class Deva {
   startDevas() {
     this.state('devas_start');
     return new Promise((resolve, reject) => {
-      this.prompt
       const devas = [];
       for (let x in this.devas) {
         devas.push(this.devas[x].init());
       }
       Promise.all(devas).then(() => {
         this.state('devas_ready');
-        return resolve(this._state);
+        return resolve(this._messages.devas_started);
       }).catch(reject);
     });
   }
@@ -723,7 +740,7 @@ class Deva {
       }
       Promise.all(devas).then(() => {
         this.state('devas_stoped');
-        return resolve(this.messages.stopped);
+        return resolve(this._messages.devas_stopped);
       }).catch(reject);
     });
   }

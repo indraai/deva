@@ -5,6 +5,7 @@ const Deva = require('../index');
 const HelloWorld = new Deva({
   client: {
     id: 100,
+    key: 'hello',
   },
   agent: {
     id: 101,
@@ -37,11 +38,11 @@ const HelloWorld = new Deva({
     hello: 'Hello World'
   },
   listeners: {
-    '101:state'(st) {
-      console.log(`current state: ${st}`);
+    'hello:state'(packet) {
+      console.log(packet.state);
     },
-    'log'(packet) {
-      console.log('logger', packet);
+    'prompt'(text) {
+      console.log(text);
     }
   },
   deva: {},
@@ -65,7 +66,8 @@ const HelloWorld = new Deva({
 HelloWorld.init().then(done => {
   return HelloWorld.question('/state how are you')
 }).then(answer => {
-  console.log('ANSWER', answer.a.text);
+  // console.log(answer);
+  console.log(answer.a.text);
 });
 
 
