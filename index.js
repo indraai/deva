@@ -323,7 +323,7 @@ class Deva {
     so the event is specific to the talk.
   ***************/
   ask(packet) {
-    if (!this.active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this.messages.offline);
 
     this.state('ask');
 
@@ -384,7 +384,7 @@ class Deva {
   describe:
   ***************/
   question(TEXT=false, DATA=false) {
-    if (!this.active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this.messages.offline);
 
     this.state('question');                 // set the state to question.
 
@@ -415,7 +415,7 @@ class Deva {
     return new Promise((resolve, reject) => {
       if (!TEXT) return reject(this.messages.notext);
       try {
-        if (!this.active) return reject(this.messages.offline);
+        if (!this._active) return reject(this.messages.offline);
 
         // *: send just a string of text
         // !: send a command to the local agent
@@ -515,7 +515,7 @@ class Deva {
     7. If there is an error the init function rejects the call.
   ***************/
   init() {
-    this.active = Date.now();
+    this._active = Date.now();
     // set client
     return new Promise((resolve, reject) => {
       this.events.setMaxListeners(this.maxListeners);
@@ -554,7 +554,7 @@ class Deva {
     function or running the system enter function.
   ***************/
   start() {
-    if (!this.active) return;
+    if (!this._active) return;
     this.state('start');
     return this.onStart && typeof this.onStart === 'function' ? this.onStart() : this.enter();
   }
@@ -570,9 +570,9 @@ class Deva {
     If the deva is offline it will return the offline message.
   ***************/
   stop() {
-    if (!this.active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this.messages.offline);
     this.state('stop');
-    this.active = false;
+    this._active = false;
     return this.onStop && typeof this.onStop === 'function' ? this.onStop() : this.exit();
   }
 
@@ -586,7 +586,7 @@ class Deva {
     If the Deva is offline it will return the offline message.
   ***************/
   enter() {
-    if (!this.active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this.messages.offline);
     this.state('enter');
     return this.onEnter && typeof this.onEnter === 'function' ? this.onEnter() : this.done(this.state)
   }
@@ -604,9 +604,9 @@ class Deva {
     If the deva is offline it will return the offline message.
   ***************/
   exit() {
-    if (!this.active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this.messages.offline);
     this.state('exit');
-    this.active = false;
+    this._active = false;
     return this.onExit && typeof this.onExit === 'function' ? this.onExit() : Promise.resolve(this._state)
   }
 
@@ -621,7 +621,7 @@ class Deva {
     If the deva is offline it will return the offline message.
   ***************/
   done(msg=false) {
-    if (!this.active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this.messages.offline);
     this.state('done');
     msg = msg ? msg : this._state;
     return this.onDone && typeof this.onDone === 'function' ? this.onDone() : Promise.resolve(this._state)
@@ -638,9 +638,9 @@ class Deva {
     If the deva is offline it will return the offline message.
   ***************/
   status(addto=false) {
-    if (!this.active) return Promise.resolve(this.messages.offline);
+    if (!this._active) return Promise.resolve(this.messages.offline);
     const id = this.uid();
-    const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'medium' }).format(this.active);
+    const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'medium' }).format(this._active);
     let text = `${this.agent.name} is ONLINE since ${dateFormat}`;
     if (addto) text = text + `\n${addto}`;
     return Promise.resolve({text});
