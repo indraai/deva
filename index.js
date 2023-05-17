@@ -605,7 +605,8 @@ class Deva {
   exit() {
     if (!this.active) return Promise.resolve(this.messages.offline);
     this.state('exit');
-    return this.onExit && typeof this.onExit === 'function' ? this.onExit() : this.done(this.state)
+    this.active = false;
+    return this.onExit && typeof this.onExit === 'function' ? this.onExit() : Promise.resolve(this._state)
   }
 
   /**************
@@ -622,7 +623,7 @@ class Deva {
     if (!this.active) return Promise.resolve(this.messages.offline);
     this.state('done');
     msg = msg ? msg : this._state;
-    return this.onDone && typeof this.onDone === 'function' ? this.onDone() : Promise.resolve({msg,agent:this.agent})
+    return this.onDone && typeof this.onDone === 'function' ? this.onDone() : Promise.resolve(this._state)
   }
 
   /**************
