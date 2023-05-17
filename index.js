@@ -560,7 +560,7 @@ class Deva {
         return this._assignListeners();
       }).then(() => {
         this.state('init');
-        return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start(this._messages.init);
+        return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start();
       }).then(started => {
         return resolve(started)
       }).catch(err => {
@@ -588,15 +588,15 @@ class Deva {
     the active to the current datetime and then checking for a custom onStart
     function or running the system enter function.
   ***************/
-  start() {
-    if (!this._active) return;
+  start(msg=false) {
+    if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('start');
     return this.onStart && typeof this.onStart === 'function' ? this.onStart() : this.enter(this._messages.start);
   }
 
   /**************
   func: stop
-  params: none
+  params: msg - hte message from the caller incase need to use in calls
   describe:
     The stop function will stop the Deva by setting the active status to false,
     and the state to stop. From here it will check for a custom onStop function
@@ -604,7 +604,7 @@ class Deva {
 
     If the deva is offline it will return the offline message.
   ***************/
-  stop() {
+  stop(msg=false) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('stop');
     this._active = false;
@@ -613,14 +613,14 @@ class Deva {
 
   /**************
   func: enter
-  params: none
+  params: msg - hte message from the caller incase need to use in calls
   describe:
     The ener function will check the actie status of the Deva and set it to
     offline or enter.
 
     If the Deva is offline it will return the offline message.
   ***************/
-  enter() {
+  enter(msg=false) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('enter');
     return this.onEnter && typeof this.onEnter === 'function' ? this.onEnter() : this.done(this._messages.enter)
@@ -628,7 +628,7 @@ class Deva {
 
   /**************
   func: exit
-  params: none
+  params: msg - hte message from the caller incase need to use in calls
   describe:
     The exit state function is triggered when the Deva is exiting it's online
     status and setting the state to exit for things like security check.
@@ -638,7 +638,7 @@ class Deva {
 
     If the deva is offline it will return the offline message.
   ***************/
-  exit() {
+  exit(msg=false) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('exit');
     this._active = false;
@@ -672,12 +672,12 @@ class Deva {
 
     If the deva is offline it will return the offline message.
   ***************/
-  status(addto=false) {
+  status(ammend=false) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     const id = this.uid();
     const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'medium' }).format(this._active);
     let text = `${this.agent.name} is ONLINE since ${dateFormat}`;
-    if (addto) text = text + `\n${addto}`;
+    if (ammend) text = text + `\n${ammend}`;
     return Promise.resolve({text});
   }
 
