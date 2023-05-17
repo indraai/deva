@@ -79,7 +79,7 @@ class Deva {
   state(st) {
     this._state = this._states[st];
     this.prompt(this._state);
-    this.talk(`${this.agent.id}:state`, this._state);
+    this.talk(`${this.agent.uid}:state`, this._state);
   }
 
   // Called from the init function to bind the elements defined in the this.bind variable.
@@ -488,7 +488,7 @@ class Deva {
             packet.hash = this.hash(JSON.stringify(packet));
 
             this.state('wait');
-            this.talk(`${this.agent.id}:log`, packet);
+            this.talk(`${this.agent.uid}:log`, packet);
             return resolve(packet);
           }).catch(err => {
             return this.error(err, packet);
