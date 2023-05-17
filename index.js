@@ -108,6 +108,7 @@ class Deva {
       data,
       created: Date.now(),
     };
+    this.prompt(this._state);
     this.talk(`${this.agent.key}:state`, _data);
     return this._state;
   }
