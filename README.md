@@ -9,20 +9,29 @@ The Deva module is a JavaScript library for building multi-agent systems that ca
 
 ## Functions
 
-- Dynamic Agent Loading - The Deva module allows for dynamic agent loading, which means that agents can be loaded and unloaded on the fly as needed. This provides scalability for the multi-agent system, as agents can be added or removed as demand changes.
+Here are some insights about the code you shared:
 
-- Talk/Listen events - The module uses talk/listen events for agent broadcasting. This means that agents can communicate with each other by sending messages through the event pipeline. This allows for real-time communication and coordination between agents.
+1. Class Structure: The code follows an object-oriented programming approach by defining a `Deva` class. This allows for encapsulation of properties and methods related to the agent.
 
-- Question, Answer - The main function of the Deva module is to handle questions and answers between agents. When an agent has a question, it can send it to another agent using the "question" function. The receiving agent can then process the question and send an answer back using the "answer" function.
+2. State Management: The `Deva` class has a state management system represented by the `_state` property and the `_states` object. It allows the agent to transition between different states and perform actions based on the current state.
 
-- Ask feature - The Deva module includes an "ask" feature that allows one agent to ask another agent a question directly. This is useful for agents that need to communicate with each other in a targeted way.
+3. Event System: The code utilizes an event system by extending the `EventEmitter` class and creating an `events` object. This enables communication and collaboration between different components of the agent and other entities in the system.
 
-- State Management - The module includes state management to initiate and track agent processes at different load, process, and exist states. This allows for better tracking and management of agent processes, and helps ensure that the system is running smoothly.
+4. Modularity and Inheritance: The code demonstrates modularity by separating functionalities into different objects such as `config`, `lib`, `methods`, and `listeners`. It also showcases inheritance by assigning inherited properties to child Deva instances.
 
-- Error Management - The Deva module includes robust error management to handle unexpected errors or exceptions that may occur during the execution of agent processes. This helps ensure that the system is reliable and stable.
+5. Error Handling: The code includes an error handling mechanism through the `error` method. It allows for uniform error reporting and the execution of custom error handling logic.
 
-- Unifies data-packets - The Deva module unifies data-packets across the architecture, allowing for consistent data exchange between agents regardless of the platform or service they are using. This helps ensure that data is consistent and accurate throughout the system.
+6. Promises: Promises are used in several asynchronous operations, such as initializing the agent, loading Deva models, and handling method calls. Promises ensure that the code can handle asynchronous operations in a structured and controlled manner.
 
+7. Event-driven Architecture: The code follows an event-driven architecture where different events trigger specific actions or callbacks. This enables loose coupling and flexibility in the agent's behavior and interactions with other components.
+
+8. Extensibility: The code provides hooks for custom logic through methods like `onInit`, `onStart`, `onStop`, `onEnter`, `onExit`, and `onDone`. These allow developers to extend the functionality of the agent by adding custom code at specific stages of its lifecycle.
+
+9. Messaging and Communication: The `talk` and `listen` methods facilitate messaging and communication between agents. Agents can ask questions (`ask` method) and receive responses, enabling interaction and collaboration.
+
+10. Utility Functions: The code includes utility functions like generating unique IDs (`uid` method), hashing data (`hash` method), and handling event listeners (`listen`, `once`, `ignore` methods).
+
+Overall, the code demonstrates the implementation of a flexible and extensible agent framework with state management, event-driven architecture, and various functionalities for communication, error handling, and lifecycle management.
 
 ## Uses
 

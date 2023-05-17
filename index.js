@@ -2,13 +2,40 @@
 // Distributed under the MIT software license, see the accompanying
 // file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
 const {EventEmitter} = require('events');
+const { createHash, randomUUID } = require('crypto');
+
 class Deva {
   constructor(opts) {
     opts = opts || {};
     this._uid = this.uid();                             // the unique id assigned to the agent at load
-    this.state = 'offline';                             // current state of agent.
-    this.active = false;                                // the active/birth date.
+    this._state = 'OFFLINE';                             // current state of agent.
+    this._states = {                                    // The available states to work with.
+      offline: 'OFFLINE',
+      init: 'INIT',
+      start: 'START',
+      stop: 'STOP',
+      enter: 'ENTER',
+      exit: 'EXIT',
+      done: 'DONE',
+      wait: 'WAITING',
+      data: 'DATA',
+      ask: 'ASK',
+      question: 'QUESTION',
+      answer: 'ANSWER',
+      talk: 'TALK',
+      listen: 'LISTEN',
+      error: 'ERROR',
+      story: 'STORY',
+      development: 'DEVELOPMENT',
+      security: 'SECURITY',
+      support: 'SUPPORT',
+      services: 'SERVICES',
+      systems: 'SYSTEMS',
+      solutions: 'SOLUTIONS',
+    };
+    this._active = false;                               // the active/birth date.
     this.security = false;                              // inherited Security features.
+    this.support = false;                               // inherited Support features.
     this.config = opts.config || {};                    // local Config Object
     this.events = opts.events || new EventEmitter({});  // Event Bus
     this.lib = opts.lib || {};                          // used for loading library functions
@@ -26,49 +53,44 @@ class Deva {
       if (!this[opt]) this[opt] = opts[opt];            // set any remaining opts to this.
     }
 
-    this.cmdChr = '!';
+    this.cmdChr = '/';
     this.askChr = '#';
     this.inherit = ["events", "config", "lib", "security", "client"];
     this.bind = ["listeners", "methods", "func", "lib", "security", "agent", "client"];
-    this.states = {
-      offline: 'OFFLINE',
-      init: 'INITIALIZE',
-      start: 'START',
-      stop: 'STOP',
-      enter: 'ENTER',
-      exit: 'EXIT',
-      done: 'DONE',
-      wait: 'WAITING',
-      ask: 'ASK',
-      question: 'QUESTION',
-      answer: 'ANSWER',
-      error: 'ERROR',
-      security: 'SECURITY',
-      medic: 'MEDICAL',
-    };
     this.messages = {
       offline: 'AGENT OFFLINE',
       loaded: 'DEVAS LOADED',
       stopped: 'DEVAS STOPPED',
       notext: 'NO TEXT',
+      notfound: 'NOT FOUND',
     }
   }
 
   // set the state of the agent with the passed value to match the valid keys.
   // this will also talk a global state event with the agent data and state.
   // then security can watch all the glorious state change events.
-  set _state(st) {
-    this.state = this.states[st];
-    this.talk(`state`,{
-      uid: this.uid(),
-      agent: this.agent,
-      state: this.state,
-      created: Date.now(),
-    });
-    this.prompt(this.state);
+
+  /**************
+  func: state
+  params:
+    - st: The state flag to set for the Deva that matches to this._states
+  describe
+  ***************/
+  state(st) {
+    this._state = this._states[st];
+    this.talk(`${this.agent.id}:state`, this._state);
   }
+
   // Called from the init function to bind the elements defined in the this.bind variable.
   // the assign bind ensures that the *this* scope is available to child elements/functions.
+
+  /**************
+  func: _assignBind
+  params: none
+  describe:
+    The assign bind function will bind the translate functions and parse functions
+    of the agent and bind their functionality to the state machine.
+  ***************/
   _assignBind() {
     return new Promise((resolve, reject) => {
       try {
@@ -95,13 +117,18 @@ class Deva {
     });
   }
 
-  // Called from the init function to assign the listeners to various states.
-  // when the listener fires it will call the associated named function.
+  /**************
+  func: _assignListeners
+  params: none
+  describe:
+    Assign listeners will take the this.lisners objects and assign the appropriate
+    lisnter values for the event bus.
+  ***************/
   _assignListeners() {
     return new Promise((resolve, reject) => {
       try {
         // set the default listeners for the states of the agent.
-        for (let state in this.states) {
+        for (let state in this._states) {
           this.events.on(`${this.agent.key}:${state}`, packet => {
             return this[state](packet);
           })
@@ -124,6 +151,13 @@ class Deva {
 
   // Some elements will inherit the data of the parent. this object will loop over
   // any children data that theis deva has and assign the inherited information.
+  /**************
+  func: _assignInherit
+  params: none
+  describe:
+    The assign inherit will make sure the Devas in the current Deva have all the
+    inherited properties all setup to collaborate efficiently.
+  ***************/
   _assignInherit() {
     return new Promise((resolve, reject) => {
       try {
@@ -143,11 +177,25 @@ class Deva {
   }
 
   // General handler for when a method is NOT found from a user command.
+  /**************
+  func: _methodNotFound
+  params:
+    - packet: The packet to relay when a method is not found.
+  describe:
+    The _methodNotFound function allows for additional security by firing
+    a specfici program functon every single time a interaction happens wehre a
+    method is not located. This assits in security and support by identifying
+    troubls or users who may be attemptng to explit features.
+
+    Then we talk a security event that watches all methods and return the packet.
+
+    This will return a not found text string preventing any furhter processing.
+  ***************/
   _methodNotFound(packet) {
     packet.a = {
       agent: this.agent || false,
       client: this.client || false,
-      text: `${packet.q.meta.method} is NOT a valid method.`,
+      text: `${packet.q.meta.method} ${this.messages.notfound}`,
       meta: {
         key: this.agent.key,
         method: packet.q.meta.method,
@@ -161,64 +209,123 @@ class Deva {
   // quite oftne have to key their transactions. This will provide all agents
   // with the same key generator which can also be modified to link into a remote
   // generator or some other solution if needed.
-  uid() {
+
+  /**************
+  func: uid
+  params:
+    - guid: This is a true false flag for generating a guid.
+  describe:
+    The uid function can create two types of id for you.
+    1. random GUID - this is good for when you need a uinique record id returned
+    2. transport id - The transport id is a number generated to provide a
+                      numerical number used for transporting records to places
+                      like social networks, email, other networks where informaton
+                      is shared.
+  ***************/
+  uid(guid=false) {
+    if (guid) return randomUUID()
     const min = Math.floor(Date.now() - (Date.now() / Math.PI));
     const max = Math.floor(Date.now() + (Date.now() * Math.PI));
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
-  // The talk interface binds to the events emitter to allow agents to perform a
-  // this.talk(*) feature.
+  /**************
+  func: talk
+  params:
+    - evt: The event the Deva is speaking to listen back for on a once event.
+    - resource: The payload resource to send with the talk event.
+  describe:
+    The talk event allows agents to broadcast events that other Deva can listen
+    to and make a response. talk events can be then returned with a talk even id
+    to create seamless collaboration between Devas.
+  ***************/
   talk(evt, resource=false) {
     return this.events.emit(evt, resource);
   }
 
-  // the listen interface binds to the event emitter to allow agents to listen
-  // this.listen(*) feature.
+  /**************
+  func: listen
+  params:
+    - evt:      The vent label to listen for
+    - callback: The callback function to run when the event fires.
+  describe:
+  ***************/
   listen(evt, callback) {
     return this.events.on(evt, callback);
   }
 
-  // Instances where listening for only one unique keyed event is required
-  // this interface is provided for the this.once(*) feature.
+  /**************
+  func: once
+  params:
+    - evt:      The event to listen to for a once call. These event are handy
+                when waiting for a key response one time.
+    - callback: The callback functoin to run when the event fires.
+  describe:
+  ***************/
   once(evt, callback) {
     return this.events.once(evt, callback);
   }
 
-  // where an agent needs to ignore events or remove a lisatener this interface
-  // serves the this.ignore(*) feature.
+  /**************
+  func: ignore
+  params:
+    - evt:      The event you'd like to ignore.
+    - callback: a callback function to execute after removing the event from listerns.
+  describe:
+    The ignore function allow the removal of events that are in the existing devas lister group.
+  ***************/
   ignore(evt, callback) {
     return this.events.removeListener(evt, callback);
   }
 
-  // Used when loading a Deva dynamically into the current set.
-  load(opts) {
-    this.devas[opts.key] = opts;
+  /**************
+  func: load
+  params:
+    -deva:      The Deva model to load.
+  describe:
+    This function will enable fast loading of Deva into a system.
+  ***************/
+  load(deva) {
+    this.devas[deva.key] = deva;
     // inherit the data to the new deva.
     this.inherit.forEach(inherit => {
-      this.devas[agent][inherit] = this[inherit];
+      this.devas[deva.key][inherit] = this[inherit];
     });
-
     return Promise.resolve();
   }
 
-  // Used when unloading a deva dynamically from the set.
-  unload(agent) {
-    delete this.devas[agent];
-    return Promise.resolve();
+
+  /**************
+  func: unload
+  params:
+    - deva:     The deva key to unload
+  describe:     Unload a currently loaded Deva.
+  ***************/
+  unload(deva) {
+    delete this.devas[deva];
+    return Promise.resolve(`unload:${deva} `);
   }
 
-  // Askign a question to another deva in the set besides itself. If the question
-  // interface detects the action is to ask another deva a question with
-  // this.askChr variable match. Then an answer packet is generated and the
-  // deva is asked to process the question asked and return it's proper data set
-  // from the requested method.
-  // this is an event function that relies on talk/listen
+  /**************
+  func: ask
+  params: packet
+  describe:
+    The ask function gives each agent the ability to ask question to other agents
+    in the system. When a question is asked the Agent with the question if it
+    detect an ask event it will trigger. Then if an Agent with the matching ask
+    event is listening they will respond. The question function uses this to
+    create integrated communication between itself and other Deva in it's library.
 
+    It can also be used in a custom manner to broadcast ask events inside other coe aswell.
+
+    When the talk has an answer it will respond with a talk event that has the packet id
+    so the event is specific to the talk.
+  ***************/
   ask(packet) {
     if (!this.active) return Promise.resolve(this.messages.offline);
 
-    this._state = this.states.ask;
+    this.state('ask');
+
     packet.a = {
       agent: this.agent || false,
       client: this.client || false,
@@ -252,38 +359,43 @@ class Deva {
         else {
           packet.a.text = result;
         }
-        // talk back to the once event with the ask key.
         this.talk(`${this.agent.key}:ask:${packet.id}`, packet);
+        this.state('wait');
       }).catch(err => {
-        this._state = this.states.error;
-        // If the ask method fails then a reject error is returned from the this.error
-        // interface.
         this.talk(`${this.agent.key}:ask:${packet.id}`, {error:err.toString()});
         return this.error(err, packet);
       })
     }
     catch (e) {
-      this._state = this.states.error;
-      // if any error is caught in the processing of the ask then it returns and
-      // executes the this.error(*) interface.
       this.talk(`${this.agent.key}:ask:${packet.id}`, {error:e.toString()});
       return this.error(e, packet)
     }
     // now when we ask the meta params[0] should be the method
   }
 
-  // general question interface.
-  // accepts two arguments a *TEXT* and *DATA* object.
-  // if the question being asked is a simple text command then
-  // this.question('#*agent.key *method* *text*')
-  // if the question is a data object
-  // this.question('#*agent.key* *method* *properties*', {*data*});
+  /**************
+  func: question
+  example: this.question('#*agent.key *method* *text*')
+  example: this.question('#*agent.key* *method* *properties*', {*data*})
+  params:
+    = TEXT: The text string is the question to process in the current state.
+    - DATA: The data is a data array or object that also can be passed to the question.
+  describe:
+  ***************/
   question(TEXT=false, DATA=false) {
-    this._state = this.states.question;
-    const id = this.uid();
+    if (!this.active) return Promise.resolve(this.messages.offline);
+
+    this.state('question');                 // set the state to question.
+
+    const id = this.uid();                            // generate a unique transport id for the question.
     const t_split = TEXT.split(' ');
+
+    // check to see if the string is an #ask string to talk to the other Deva.
     const isAsk = t_split[0].startsWith(this.askChr) ? t_split[0].substring(1) : false;
+
+    // check to see if the string is a command string to run a local method.
     const isCmd = t_split[0].startsWith(this.cmdChr) ? t_split[0].substring(1) : false;
+
     // Format the packet for return on the request.
     const orig = TEXT;
     const data = DATA;
@@ -336,11 +448,11 @@ class Deva {
             created: Date.now(),
         }
 
-        // if is a command then we format another way
-        // if the user asks a question to another deva '#' then issue the talk/once
-        // event combination.
+        // hash the packet and insert the hash into the packet meta object.
+        packet.q.meta.hash = this.hash(JSON.stringify(packet.q));
+
+        // If a question to another Deva with '#' then trigger events
         if (isAsk) {
-          this._state = this.states.ask;
           this.talk(`${isAsk}:ask`, packet);
           this.once(`${isAsk}:ask:${packet.id}`, answer => {
             return resolve(answer);
@@ -350,6 +462,9 @@ class Deva {
         else {
           if (typeof this.methods[method] !== 'function') return resolve(this._methodNotFound(packet));
           this.methods[method](packet).then(result => {
+
+            this.state('answer');
+
             const text = typeof result === 'object' ? result.text : result;
             const html = typeof result === 'object' ? result.html : result;
             const data = typeof result === 'object' ? result.data : false;
@@ -365,7 +480,13 @@ class Deva {
               data,
               created: Date.now(),
             };
-            this._state = this.states.answer;
+            // create a hash for the answer and insert into answer meta.
+            packet.a.meta.hash = this.hash(JSON.stringify(packet.a));
+
+            // create a hash for entire packet and insert into packet
+            packet.hash = this.hash(JSON.stringify(packet));
+
+            this.state('wait');
             return resolve(packet);
           }).catch(err => {
             return this.error(err, packet);
@@ -378,15 +499,23 @@ class Deva {
     });
   }
 
-
-  // The main init interface where the chain begins.
-  // a set of options is passed into the init function which is the configuration
-  // object. from this opts object the system is built. After the opts object is processed
-  // the inherit is assigned and then bind then listners then
-  // opts: The options object containing the necessary vaules to build a Deva.
+  /**************
+  func: init
+  params: none
+  describe:
+    The main init interface where the chain begins. Where the states fire for
+    each process of setting:
+    1. Set the Max listeners to control event memory buffer.
+    2. Assign the Interited Properties
+    3. Assign binding functions and methods to 'this' scoe.
+    4. Assign any listeners for additional functionality.
+    5. run the onInit custom function if preset or the system start function.
+    6. The system start function will create a chain reaction of states that load.
+    7. If there is an error the init function rejects the call.
+  ***************/
   init() {
+    this.active = Date.now();
     // set client
-    this._state = this.states.init;
     return new Promise((resolve, reject) => {
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -394,7 +523,8 @@ class Deva {
       }).then(() => {
         return this._assignListeners();
       }).then(() => {
-        return this.onInit ? this.onInit() : this.start();
+        this.state('init');
+        return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start();
       }).then(started => {
         return resolve(started)
       }).catch(err => {
@@ -408,100 +538,144 @@ class Deva {
   // e: is the error to pass into the interface.
   // packet: the packet that caused the error.
   error(err,packet=false,reject=false) {
-    this._state = 'error';
-    // broadcast a global uniform error event.
-    this.talk('error', {
-      id: this.uid(),
-      agent: this.agent,
-      client: this.client,
-      error: err.toString('utf8'),
-      data: packet,
-      created: Date.now(),
-    });
-    // call the onError if there is a logcal one.
-    // if there is no local error return a promise reject.
+    this.state('error');
+    console.error(err)
     if (this.onError) return this.onError(err, packet, reject);
     return reject ? reject(err) : false;
   }
 
-  // start the deva then return the 'onStart' function.
+  /**************
+  func: start
+  params: none
+  describe:
+    The start function begins the process by setting the state to start setting
+    the active to the current datetime and then checking for a custom onStart
+    function or running the system enter function.
+  ***************/
   start() {
-    if (this.active) return;
-    this._state = 'start';
-    this.active = Date.now();
-    return this.onStart ? this.onStart() : this.enter();
+    if (!this.active) return;
+    this.state('start');
+    return this.onStart && typeof this.onStart === 'function' ? this.onStart() : this.enter();
   }
 
-  // stop teh deva then return the onStop function.
+  /**************
+  func: stop
+  params: none
+  describe:
+    The stop function will stop the Deva by setting the active status to false,
+    and the state to stop. From here it will check for a custom onStop function
+    for anything to run, or run the system exit function.
+
+    If the deva is offline it will return the offline message.
+  ***************/
   stop() {
     if (!this.active) return Promise.resolve(this.messages.offline);
+    this.state('stop');
     this.active = false;
-    this._state = 'stop';
-    return this.onStop ? this.onStop() : this.exit();
+    return this.onStop && typeof this.onStop === 'function' ? this.onStop() : this.exit();
   }
 
-  // enter the deva then return the onEnter function.
+  /**************
+  func: enter
+  params: none
+  describe:
+    The ener function will check the actie status of the Deva and set it to
+    offline or enter.
+
+    If the Deva is offline it will return the offline message.
+  ***************/
   enter() {
     if (!this.active) return Promise.resolve(this.messages.offline);
-    this._state = 'enter';
-    return this.onEnter ? this.onEnter() : this.done(this.state)
+    this.state('enter');
+    return this.onEnter && typeof this.onEnter === 'function' ? this.onEnter() : this.done(this.state)
   }
 
-  // exit the deva then return the onExit function.
+  /**************
+  func: exit
+  params: none
+  describe:
+    The exit state function is triggered when the Deva is exiting it's online
+    status and setting the state to exit for things like security check.
+
+    The return will check for a custom onExit function or run the system done
+    function.
+
+    If the deva is offline it will return the offline message.
+  ***************/
   exit() {
     if (!this.active) return Promise.resolve(this.messages.offline);
-    this._state = 'exit';
-    return this.onExit ? this.onExit() : this.done(this.state)
+    this.state('exit');
+    return this.onExit && typeof this.onExit === 'function' ? this.onExit() : this.done(this.state)
   }
 
-  // set the deva as done then return the oDone function.
+  /**************
+  func: done
+  params:
+    - msg: The done message
+  describe:
+    When the done function is triggered the system will also set the state
+    of hte Deva to done.
+
+    If the deva is offline it will return the offline message.
+  ***************/
   done(msg=false) {
     if (!this.active) return Promise.resolve(this.messages.offline);
-    this._state = 'done';
-    msg = msg ? msg : this.state;
-    return this.onDone ? this.onDone() : Promise.resolve({msg,agent:this.agent})
+    this.state('done');
+    msg = msg ? msg : this._state;
+    return this.onDone && typeof this.onDone === 'function' ? this.onDone() : Promise.resolve({msg,agent:this.agent})
   }
 
-  // interface to return the status of the current deva with the time/date requested.
-  status(addtl=false) {
+  /**************
+  func: status
+  params:
+    - addto: The addto is any additonal string to append to the end of hte call.
+  describe:
+    The status function provides an easy way to get the current status of a Deva
+    and append custom status messages that may pertain to any custom status call.
+
+    If the deva is offline it will return the offline message.
+  ***************/
+  status(addto=false) {
     if (!this.active) return Promise.resolve(this.messages.offline);
     const id = this.uid();
     const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'medium' }).format(this.active);
     let text = `${this.agent.name} is ONLINE since ${dateFormat}`;
-    if (addtl) text = text + `\n${addtl}`;
+    if (addto) text = text + `\n${addto}`;
     return Promise.resolve({text});
   }
 
-  // prompt emitter
+  /**************
+  func: prompt
+  params:
+    - text: The text string to send to the prompt.
+  describe:-
+    The prompt function is used to broadcasat a global prompt event with a string. Thsi is handy when passing events between a cli and user interface for example.
+  ***************/
   prompt(text) {
-    this.talk('prompt', {text, agent:this.agent});
+    return this.talk('prompt', {text, agent:this.agent});
   }
 
-  // hash builder
-  hash(packet) {
-    if (!this.vars.hash) this.vars.hash = '0x';
-    // setup basic hashing
-    // what type of hash depends on param 1
-    return new Promise((resolve, reject) => {
-      if (!packet) return reject('NO PACKET');
-      const params = packet.q.text.split(' ');
-      const hashType = params[0] ? params[0] : 'view';
-      switch (hashType) {
-        case 'clear':
-          this.vars.hash = '0x';
-          break;
-        case 'add':
-          this.vars.hash = `${this.vars.hash}${params[1]}`;
-          break;
-      }
-      return resolve({
-        text:this.vars.hash,
-        html:`<div class="hash">${this.vars.hash}</div>`
-      });
-    });
+  /**************
+  func: hash
+  params:
+    - texts: The text string to create a hash value for.
+    - algo: The hashing algorithm to use for hashing. md5, sha256, or sha512
+
+  describe:
+    The hash algorithm will take a string of text and produce a hash.
+  ***************/
+  hash(text, algo='md5') {
+    const the_hash = createHash(algo);
+    the_hash.update(text);
+    return the_hash.digest('hex');
   }
-  // startDevas interface is to initialize devas that this deva is a parent of.
-  // This feature allows a Deva to be a parent of a parent of a parent etc....
+
+  /**************
+  func: startDevas
+  params: none
+  describe:
+    Start Devas will initialize the Deva agents inside this curent Deva.
+  ***************/
   startDevas() {
     return new Promise((resolve, reject) => {
       const devas = [];
@@ -513,6 +687,12 @@ class Deva {
       }).catch(reject);
     });
   }
+  /**************
+  func: stpDevas
+  params: none
+  describe:
+    stopDevas will stop all the devas running in the current Deva.
+  ***************/
   stopDevas() {
     return new Promise((resolve, reject) => {
       const devas = [];
