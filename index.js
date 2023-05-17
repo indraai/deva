@@ -488,6 +488,7 @@ class Deva {
             packet.hash = this.hash(JSON.stringify(packet));
 
             this.state('wait');
+            this.talk(`${this.agent.id}:log`, packet);
             return resolve(packet);
           }).catch(err => {
             return this.error(err, packet);
