@@ -29,11 +29,12 @@ class Deva {
       data: '📀 DATA',
       ask: '🙋‍♀️ ASK',
       cmd: '📟 COMMAND',
-      question: '🙋‍♂️ QUESTION',
-      answer: '🔮 ANSWER',
-      answer_ask: '🔮 ANSWER ASK',
-      answer_cmd: '🔮 ANSWER CMD',
-      answer_question: '🔮 ANSWER QUESTION',
+      question: '🤖 QUESTION',
+      question_ask: '🤖 SEND QUEATION TO ASK',
+      question_cmd: '🤖 SEND QUESTION TO CMD',
+      queation_answer: '🔮 ANSWER QUESTION',
+      ask_question: '🤖 ASK QUESTION',
+      ask_answer: '🔮 ASK ANSWER',
       talk: '🎙️ TALK',
       listen: '🎧 LISTEN',
       error: '❌ ERROR',
@@ -87,10 +88,10 @@ class Deva {
     - st: The state flag to set for the Deva that matches to this._states
   describe
   ***************/
-  state(st) {
+  state(st, data=false) {
     this._state = this._states[st];
     this.prompt(this._state);
-    this.talk(`${this.agent.id}:state`, this._state);
+    this.talk(`${this.agent.key}:state`, data);
   }
 
   // Called from the init function to bind the elements defined in the this.bind variable.
@@ -339,7 +340,7 @@ class Deva {
   ***************/
   ask(packet) {
     if (!this._active) return Promise.resolve(this.messages.offline);
-    this.state('ask');
+    this.state('ask_question', packet);
 
     packet.a = {
       agent: this.agent || false,
@@ -374,6 +375,8 @@ class Deva {
         else {
           packet.a.text = result;
         }
+
+        this.state('ask_answer', packet);
         this.talk(`${this.agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
         this.talk(`${this.agent.key}:ask:${packet.id}`, {error:err.toString()});
@@ -398,8 +401,6 @@ class Deva {
   ***************/
   question(TEXT=false, DATA=false) {
     if (!this._active) return Promise.resolve(this.messages.offline);
-
-    this.state('question');                 // set the state to question.
 
     const id = this.uid();                            // generate a unique transport id for the question.
     const t_split = TEXT.split(' ');
@@ -436,21 +437,20 @@ class Deva {
         // #agent method:param1:param2 with text strings for proccessing
         // !method param:list:parse for the local agent
         // if is an ask then we format one way
-        let _state = 'answer_question';
+        let _state = 'question';
         if (isAsk) {
-          _state = 'answer_ask'
+          _state = 'question_ask'
           key = t_split[0]substring(1);
           params = t_split[1] ? t_split[1].split(':') : false;
           method = params[0];
           text = t_split.slice(2).join(' ').trim();
         }
         else if (isCmd) {
-          _state = 'answer_cmd'
+          _state = 'question_cmd'
           params = t_split[1] ? t_split[1].split(':') : false;
           method = isCmd;
           text = t_split.slice(1).join(' ').trim()
         }
-        this.state(_state);
 
         packet.q = {
             agent: this.agent || false,
@@ -468,6 +468,7 @@ class Deva {
 
         // hash the packet and insert the hash into the packet meta object.
         packet.q.meta.hash = this.hash(JSON.stringify(packet.q));
+        this.state(_state, packet);
 
         // If a question to another Deva with '#' then trigger events
         if (isAsk) {
@@ -479,7 +480,6 @@ class Deva {
         // if the user sends a local command '$' then it will ask of the self.
         else {
           if (typeof this.methods[method] !== 'function') {
-            this.state('answer_cmd');
             return resolve(this._methodNotFound(packet));
           }
           this.methods[method](packet).then(result => {
@@ -541,7 +541,7 @@ class Deva {
         return this._assignListeners();
       }).then(() => {
         this.state('init');
-        return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start();
+        return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start(this._state);
       }).then(started => {
         return resolve(started)
       }).catch(err => {
@@ -555,10 +555,10 @@ class Deva {
   // e: is the error to pass into the interface.
   // packet: the packet that caused the error.
   error(err,packet=false,reject=false) {
-    this.state('error');
+    this.state('error', err);
+    if (this.onError && typeof this.onError === 'function') ? return this.onError(err, packet, reject);
     console.error(err)
-    if (this.onError) return this.onError(err, packet, reject);
-    return reject ? reject(err) : false;
+    return reject ? reject(err) : err;
   }
 
   /**************
@@ -572,7 +572,7 @@ class Deva {
   start() {
     if (!this._active) return;
     this.state('start');
-    return this.onStart && typeof this.onStart === 'function' ? this.onStart() : this.enter();
+    return this.onStart && typeof this.onStart === 'function' ? this.onStart() : this.enter(this._state);
   }
 
   /**************
@@ -589,7 +589,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this.messages.offline);
     this.state('stop');
     this._active = false;
-    return this.onStop && typeof this.onStop === 'function' ? this.onStop() : this.exit();
+    return this.onStop && typeof this.onStop === 'function' ? this.onStop() : this.exit(this._state);
   }
 
   /**************
@@ -604,7 +604,7 @@ class Deva {
   enter() {
     if (!this._active) return Promise.resolve(this.messages.offline);
     this.state('enter');
-    return this.onEnter && typeof this.onEnter === 'function' ? this.onEnter() : this.done(this.state)
+    return this.onEnter && typeof this.onEnter === 'function' ? this.onEnter() : this.done(this._state)
   }
 
   /**************
