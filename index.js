@@ -487,7 +487,6 @@ class Deva {
             // create a hash for entire packet and insert into packet
             packet.hash = this.hash(JSON.stringify(packet));
 
-            this.state('wait');
             this.talk(`log`, packet);
             return resolve(packet);
           }).catch(err => {
