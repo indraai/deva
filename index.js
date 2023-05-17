@@ -78,6 +78,7 @@ class Deva {
   ***************/
   state(st) {
     this._state = this._states[st];
+    this.prompt(this._state);
     this.talk(`${this.agent.id}:state`, this._state);
   }
 
