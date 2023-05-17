@@ -28,6 +28,7 @@ class Deva {
       wait: '😵‍💫 WAITING',
       data: '📀 DATA',
       ask: '🙋‍♀️ ASK',
+      cmd: '📟 COMMAND',
       question: '🙋‍♂️ QUESTION',
       answer: '🔮 ANSWER',
       talk: '🎙️ TALK',
@@ -336,8 +337,6 @@ class Deva {
   ask(packet) {
     if (!this._active) return Promise.resolve(this.messages.offline);
 
-    this.state('ask');
-
     packet.a = {
       agent: this.agent || false,
       client: this.client || false,
@@ -435,12 +434,14 @@ class Deva {
         // !method param:list:parse for the local agent
         // if is an ask then we format one way
         if (isAsk) {
+          this.state('ask');
           params = t_split[1] ? t_split[1].split(':') : false;
           method = params[0];
           text = t_split.slice(2).join(' ').trim();
           key = isAsk;
         }
         else if (isCmd) {
+          this.state('cmd');
           params = t_split[1] ? t_split[1].split(':') : false;
           method = isCmd;
           text = t_split.slice(1).join(' ').trim()
@@ -472,11 +473,9 @@ class Deva {
         }
         // if the user sends a local command '$' then it will ask of the self.
         else {
+          this.state('answer');
           if (typeof this.methods[method] !== 'function') return resolve(this._methodNotFound(packet));
           this.methods[method](packet).then(result => {
-
-            this.state('answer');
-
             const text = typeof result === 'object' ? result.text : result;
             const html = typeof result === 'object' ? result.html : result;
             const data = typeof result === 'object' ? result.data : false;
