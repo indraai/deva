@@ -190,6 +190,13 @@ class Deva {
   ***************/
   _assignInherit() {
     return new Promise((resolve, reject) => {
+      // set the default listeners for the states of the agent.
+      for (let state in this._states) {
+        this.events.on(`${this.agent.key}:${state}`, packet => {
+          return this[state](packet);
+        })
+      }
+
       try {
         for (let d in this.devas) {
           this.inherit.forEach(inherit => {
