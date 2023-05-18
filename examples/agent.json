@@ -1,0 +1,38 @@
+{
+  "name": "AGENT",
+  "describe": "AGENT FILE",
+  "copyright": "Copyright (c)2023 Quinn Michaels. All rights reserved.",
+  "DATA": {
+    "id": 5380514963421,
+    "key": "deva",
+    "name": "@Deva",
+    "describe": "The Deva interface into deva.world.",
+    "prompt": {
+      "emoji": "🍏",
+      "text": "deva",
+      "colors": {
+        "label": {
+          "R": 0,
+          "G": 150,
+          "B": 255
+        },
+        "text": {
+          "R": 101,
+          "G": 192,
+          "B": 255
+        }
+      }
+    },
+    "voice": {
+      "speech": "Alex",
+      "speed": 1
+    },
+    "profile": {
+      "emoji": "/public/devas/deva/emoji.png",
+      "avatar": "/public/devas/deva/avatar.png",
+      "background": "/public/devas/deva/background.png",
+      "describe": "The Deva Project",
+      "gender": "M"
+    }
+  }
+}

@@ -12,8 +12,6 @@ const HelloWorld = new Deva({
   agent: {
     id: 101,
     key: 'hello',
-    name: 'Hello World',
-    description: 'The most over complex Hello World in the Universe',
     prompt: {
       emoji: '🐶',
       text: 'hello',
@@ -24,6 +22,8 @@ const HelloWorld = new Deva({
       speed: 1
     },
     profile: {
+      name: 'Hello World',
+      description: 'The most over complex Hello World in the Universe',
       avatar: '',
       background: '',
       describe: 'Hello World Deva',
@@ -54,8 +54,33 @@ const HelloWorld = new Deva({
       return Promise.resolve(this._client);
     },
     state(packet) {
-      const ret = `${this._state} ${this.uid(true)} ${this.uid()} ${this.hash(JSON.stringify(packet), 'sha256')}`;
-      return Promise.resolve(ret);
+      const text = this._state
+      const id = this.uid();
+      const uuid = this.uid(true);
+
+      const created = this.formatDate(Date.now(), 'long', true)
+      const md5 = this.hash(JSON.stringify(packet));
+      const sha256 = this.hash(JSON.stringify(packet), 'sha256');
+      const sha512 = this.hash(JSON.stringify(packet), 'sha512');
+      const cipher = this.cipher(JSON.stringify(packet));
+      const decipher = this.decipher(cipher);
+
+      const data = {
+        id,
+        uuid,
+        hash: {
+          md5,
+          sha256,
+          sha512,
+          created,
+        },
+        cipher,
+        decipher
+      }
+      return Promise.resolve({
+        text: 'state return see data',
+        data,
+      });
     }
   },
   methods: {
@@ -75,8 +100,8 @@ HelloWorld.init(client.DATA).then(done => {
   // console.log(done);
   return HelloWorld.question('/state')
 }).then(answer => {
-  // console.log(HelloWorld.client());
   console.log(answer.a.text);
+  console.log(answer.a.data);
 });
 
 

@@ -5,9 +5,6 @@
   "DATA": {
     "id": 3123155399059,
     "key": "test",
-    "name": "Test User",
-    "eamil": "test@example.com",
-    "describe": "The Test User",
     "prompt": {
       "emoji": "🧪",
       "text": "test",
@@ -25,11 +22,12 @@
       }
     },
     "profile": {
+      "name": "Test User",
+      "eamil": "test@example.com",
+      "describe": "The Test User",
       "emoji": "/public/devas/test/avatar.png",
       "avatar": "/public/devas/test/avatar.png",
       "background": "/public/devas/test/background.png",
-      "name": "Test User",
-      "describe": "This is the Test for the Deva Examples in the Repository.",
       "gender": "splendid",
       "lang": "en",
       "locale": "en-US",
@@ -38,14 +36,24 @@
     "states": {},
     "messages": {},
     "security": {
+      "hash": "md5",
+      "cipher": {
+        "encrypt": true,
+        "algorithm": "aes-256-cbc",
+        "password": "generic password for encryption test"
+      },
       "concerns": [],
       "global": {},
-      "devas": {}
+      "devas": {
+        "hello": {}
+      }
     },
     "support": {
       "concerns": [],
       "global": {},
-      "devas": {}
+      "devas": {
+        "hello": {}
+      }
     },
     "services": {
       "concerns": [],
@@ -55,22 +63,30 @@
         "space": "https://deva.space",
         "cloud": "https://deva.cloud"
       },
-      "devas": {}
+      "devas": {
+        "hello": {}
+      }
     },
     "systems": {
       "concerns": [],
       "global": {},
-      "devas": {}
+      "devas": {
+        "hello": {}
+      }
     },
     "solutions": {
       "concerns": [],
       "global": {},
-      "devas": {}
+      "devas": {
+        "hello": {}
+      }
     },
     "development": {
       "concerns": [],
       "global": {},
-      "devas": {}
+      "devas": {
+        "hello": {}
+      }
     }
   }
 }

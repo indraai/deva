@@ -2,7 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
 const {EventEmitter} = require('events');
-const { createHash, randomUUID } = require('crypto');
+const { createHash, randomUUID, createCipheriv, createDecipheriv, randomBytes } = require('crypto');
 
 class Deva {
   constructor(opts) {
@@ -43,94 +43,103 @@ class Deva {
   }
 
   set States(opts) {
-    this._states = {                                    // The available states to work with.
-      uid: `👻 ${this._agent.name} is making a new #uid`,
-      offline: `👻 ${this._agent.name} is offline`,
-      online: `📡 ${this._agent.name} is online`,
-      config: `‍📀 ${this._agent.name} is checking the config`,
-      client: `👨‍💻 ${this._agent.name} opened the ${this._client.key} profile`,
-      agent: `👨‍💻 ${this._agent.name} is looking at ${this._agent.key} profile`,
-      init: `🚀 ${this._agent.name} is initializing`,
-      start: `🎬 ${this._agent.name} has started the process`,
-      enter: `🎪 ${this._agent.name} is entering the deva.world`,
-      stop: `🛑 ${this._agent.name} has stopped`,
-      exit: `🚪 ${this._agent.name} found the exit`,
-      done: `🤝 ${this._agent.name} is all done time for #offerings 🍫🍌`,
-      wait: `😵‍💫 ${this._agent.name} waiting for #stuff`,
-      data: `📀 ${this._agent.name} is receiving #data`,
-      ask: `🙋‍♀️ ${this._agent.name} is asking a #question`,
-      cmd: `📟 ${this._agent.name} is using a #command`,
-      question: `🐵 ${this._agent.name} is in #question mode`,
-      ask: `🐵 ${this._agent.name}  is in #ask mode`,
-      talk: `🎙️ ${this._agent.name} is in #talk mode`,
-      listen: `🎧 ${this._agent.name} is in #listening mode`,
-      error: `❌ Looks like ${this._agent.name} had an error. Let's have @Systems look into that.`,
-      story: `📓 ${this._agent.name} is creating an amazing #story`,
-      development: `👨‍💻 ${this._agent.name} called for @Development assistance`,
-      security: `🚨 ${this._agent.name} called for @Security assistance`,
-      support: `🎗️ ${this._agent.name} called for @Support assistance`,
-      services: `🎖️ ${this._agent.name} called for @Services assistance`,
-      systems: `👽 ${this._agent.name} called for @Systems assistance`,
-      solutions: `🔬 ${this._agent.name} called for @Solutions assistance`,
-      devas_start: `✨ Starting all the #Devas`,
-      devas_ready: `📸 The #Devas are #ready and #waiitng`,
-      devas_stop: `🙈 The #Devas are #stopping`,
-      devas_stopped: `🛑 #Devas have #stopped, and that means time for #offerings 🍎🍑🍍🧋`,
-      deva_load: `✅ ${this._agent.name} loading`,
-      deva_loaded: `✅ ${this._agent.name} loaded`,
-      deva_unloaded: `✅ ${this._agent.name} unloaded`,
-      question_me: `🐵 ${this._client.name} ask ${this._agent.name} a #question`,
-      question_default: `🧞‍♂️ ${this._client.id} sent ${this._agent.name} a #question`,
-      question_ask: `🧞 ${this._agent.name} is pondering what ${this._client.name} asked`,
-      question_asking: `🧞 ${this._agent.name} is asking another #Deva what ${this._client.name} asked`,
-      question_aswering: `🧞 ${this._agent.name} is answering the #question ${this._client.name} asked`,
-      question_answer: `🔮 #${this._agent.name} gave #${this._client.name} the #answer`,
-      question_command: `🧞‍♀️ ${this._agent.name} then ran a #command for #${this._client.name}`,
-      hash_question: `🔐 ${this._agent.name} created the #question #hash`,
-      hash_ask: `🔐 ${this._agent.name} created the #ask #hash`,
-      hash_answer: `🔐 ${this._agent.name} created the #answer #hash`,
-      hash_command: `🔐 ${this._agent.name} created the #command #hash`,
-      hash_packet: `🔐 ${this._agent.name} created the #packet #hash`,
-      ask_question: `👽 ${this._client.name} asked ${this._agent.name} a #question`,
-      ask_answer: `🛸 ${this._agent.name} answered the #question from ${this._client.name}`,
-      method_not_found: `😩 ${this._agent.name} used a faulty #command, and may needs @Solutions to assist`,
-      security_ready: `🚓 @Security is ready`,
-      support_ready: `🚑 @Support is ready`,
-      services_ready: `🚚 @Services is ready`,
+    console.log('CLIENT', this._client.profile.name);
+    const _states = {
+      uid: `👻 ${this._agent.profile.name} is making a new #uid`,
+      offline: `👻 ${this._agent.profile.name} is offline`,
+      online: `📡 ${this._agent.profile.name} is online`,
+      config: `‍📀 ${this._agent.profile.name} is checking the config`,
+      client: `👨‍💻 ${this._agent.profile.name} opened the ${this._client.key} profile`,
+      agent: `👨‍💻 ${this._agent.profile.name} is looking at ${this._agent.key} profile`,
+      init: `🚀 ${this._agent.profile.name} is initializing for ${this._client.profile.name}`,
+      start: `🎬 ${this._agent.profile.name} has started the process for ${this._client.profile.name}`,
+      enter: `🎪 ${this._agent.profile.name} is entering the deva.world with${this._client.profile.name}`,
+      stop: `🛑 ${this._agent.profile.name} has stopped for ${this._client.profile.name}`,
+      exit: `🚪 ${this._agent.profile.name} found the exit with ${this._client.profile.name}`,
+      done: `🤝 ${this._agent.profile.name} is all done time for #offerings 🍫🍌`,
+      wait: `😵‍💫 ${this._agent.profile.name} waiting for #stuff from ${this._client.profile.name}`,
+      data: `📀 ${this._agent.profile.name} is receiving #data for ${this._client.profile.name}`,
+      ask: `🙋‍♀️ ${this._agent.profile.name} is asking a #question from ${this._client.profile.name}`,
+      cmd: `📟 ${this._agent.profile.name} entered a #command from ${this._client.profile.name}`,
+      question: `🐵 ${this._agent.profile.name} is in #question mode ${this._client.profile.name}`,
+      ask: `🐵 ${this._agent.profile.name}  is in #ask mode ${this._client.profile.name}`,
+      talk: `🎙️ ${this._agent.profile.name} is in #talk mode with ${this._client.profile.name}`,
+      listen: `🎧 ${this._agent.profile.name} is in #listening mode with ${this._client.profile.name}`,
+      error: `❌ ${this._agent.profile.name} had an error. Let's have @Systems look into that.`,
+      uid: `🪪 ${this._client.profile.name} made a #uid with ${this._agent.profile.name}`,
+      hash: `🔑 ${this._client.profile.name} made a #hash with ${this._agent.profile.name}`,
+      cipher: `🔐 ${this._client.profile.name} locked a #cipher with ${this._agent.profile.name}`,
+      decipher: `🔓 ${this._client.profile.name} unlocked a #cipher with ${this._agent.profile.name}`,
+      story: `📓 ${this._agent.profile.name} is creating an amazing #story ${this._client.profile.name}`,
+      development: `👨‍💻 ${this._agent.profile.name} called for @Development assistance for ${this._client.profile.name}`,
+      security: `🚨 ${this._agent.profile.name} called for @Security assistance for ${this._client.profile.name}`,
+      support: `🎗️ ${this._agent.profile.name} called for @Support assistance for ${this._client.profile.name}`,
+      services: `🎖️ ${this._agent.profile.name} called for @Services assistance for ${this._client.profile.name}`,
+      systems: `👽 ${this._agent.profile.name} called for @Systems assistance for ${this._client.profile.name}`,
+      solutions: `🔬 ${this._agent.profile.name} called for @Solutions assistance for ${this._client.profile.name}`,
+      devas_start: `✨ Starting all the #Devas with ${this._client.profile.name}`,
+      devas_ready: `📸 The #Devas are #ready and #waiitng for ${this._client.profile.name}`,
+      devas_stop: `🙈 The #Devas are #stopping with ${this._client.profile.name}`,
+      devas_stopped: `🛑 #Devas and ${this._client.profile.name} have #stopped, and that means time for #offerings 🍎🍑🍍🧋`,
+      deva_load: `✅ ${this._agent.profile.name} loading for ${this._client.profile.name}`,
+      deva_loaded: `✅ ${this._agent.profile.name} loaded for ${this._client.profile.name}`,
+      deva_unloaded: `✅ ${this._agent.profile.name} unloaded for ${this._client.profile.name}`,
+      question_me: `🐵 ${this._client.profile.name} started with a great #question to ${this._agent.profile.name}`,
+      question_default: `🧞‍♂️ ${this._client.profile.name} asked a great #question to ${this._agent.profile.name}`,
+      question_ask: `🧞 ${this._agent.profile.name} is pondering what ${this._client.profile.name} asked`,
+      question_asking: `🧞 ${this._agent.profile.name} is asking another #Deva for ${this._client.profile.name}`,
+      question_aswering: `🧞 ${this._agent.profile.name} is answering the #question ${this._client.profile.name} asked`,
+      question_answer: `🔮 ${this._client.profile.name} received an #ansewr from ${this._agent.profile.name}`,
+      question_command: `🧞‍♀️ ${this._client.profile.name} issued a #command to ${this._agent.profile.name}`,
+      hash_question: `🔑 ${this._agent.profile.name} created the #question #hash for ${this._client.profile.name}`,
+      hash_ask: `🔑 ${this._agent.profile.name} created the #ask #hash for ${this._client.profile.name}`,
+      hash_answer: `🔑 ${this._agent.profile.name} #answer #hash with`,
+      hash_command: `🔑 ${this._client.profile.name} #command #hash with ${this._agent.profile.name}`,
+      hash_packet: `🔑 ${this._agent.profile.name} created the #packet #hash for ${this._client.profile.name}`,
+      ask_question: `👽 ${this._client.profile.name} asked ${this._agent.profile.name} a great #question`,
+      ask_answer: `🛸 ${this._client.profile.name} received a great #answer from ${this._agent.profile.name}`,
+      method_not_found: `😩 ${this._client.profile.name} used a faulty #command while working with ${this._agent.profile.name}, and may need @Support`,
+      ready_security: `🚓 @Security is ready`,
+      ready_support: `🚑 @Support is ready`,
+      ready_support: `🚑 @Support is ready`,
+      ready_services: `🚚 @Services is ready`,
+      ready_systems: `🏘️  @Systems is ready`,
+      ready_solutions: `🤓 @Solutions is ready`,
       alert_security: `🚨 #SECURITY ALERT`,
       alert_support: `🚨 #SUPPORT ALERT`,
       alert_services: `🚨 #SERVICES ALERT`,
       alert_solutions: `🚨 #SOLUTIONS ALERT`,
       alert_systems: `🚨 #SYSTEMS ALERT`,
       alert_development: `🚨 #SYSTEMS ALERT`,
-      setting_client: `⛄️ Setting the #client for ${this._agent.name}`,
-      setting_development: `🔬 ${this._agent.name} receiving @Development`,
-      setting_security: `👮‍♂️ ${this._agent.name} receiving @Security`,
-      setting_support: `👨‍⚕️ ${this._agent.name} receiving @Support`,
-      setting_services: `👷‍♂️ ${this._agent.name} receiving @Services`,
-      setting_systems: `🏘️  ${this._agent.name} receiving @Systems`,
-      setting_solutions: `🤓 ${this._agent.name} receiving @Solutions`,
-    };
+      setting_client: `⛄️ ${this._agent.profile.name} is setting the #client for ${this._client.profile.name} `,
+      setting_development: `🔬 ${this._client.profile.name} and ${this._agent.profile.name} are receiving @Development`,
+      setting_security: `👮‍♂️ ${this._client.profile.name} and ${this._agent.profile.name} are receiving @Security`,
+      setting_support: `👨‍⚕️ ${this._client.profile.name} and ${this._agent.profile.name} are receiving @Support`,
+      setting_services: `👷‍♂️ ${this._client.profile.name} and ${this._agent.profile.name} are receiving @Services`,
+      setting_systems: `🏘️  ${this._client.profile.name} and ${this._agent.profile.name} are receiving @Systems`,
+      setting_solutions: `🤓 ${this._client.profile.name} and ${this._agent.profile.name} are receiving @Solutions`,
+    }
+    this._states = _states;                                    // The available states to work with.
   }
 
   set Messages(opts) {
     this._messages = {
-      offline: `🙅‍♂️ ${this._agent.name} offline`,
-      init: `⚠️ ${this._agent.name} init`,
-      start: `✅ ${this._agent.name} start`,
-      stop: `💥 ${this._agent.name} stop.`,
-      enter: `🖖 ${this._agent.name} enter.`,
-      exit: `🚪 ${this._agent.name} exit.`,
-      done: `👍 ${this._agent.name} done.`,
+      offline: `🙅‍♂️ ${this._agent.profile.name} offline`,
+      init: `⚠️ ${this._agent.profile.name} init`,
+      start: `✅ ${this._agent.profile.name} start`,
+      stop: `💥 ${this._agent.profile.name} stop.`,
+      enter: `🖖 ${this._agent.profile.name} enter.`,
+      exit: `🚪 ${this._agent.profile.name} exit.`,
+      done: `👍 ${this._agent.profile.name} done.`,
       devas_started: '#Devas are #online and ready for #offerings 🍫🥛🍚🍯🧂',
       devas_stopped: '🛑 #Devas have stopped',
-      notext: `❌ ${this._client.name}, please provide with valid input.`,
-      method_not_found: `❌ ${this._client.name} you sure messed that up!`,
+      notext: `❌ ${this._client.profile.name}, please provide with valid input.`,
+      method_not_found: `❌ ${this._client.profile.name} you sure messed that up!`,
     }
   }
-  set Client(cl) {
+  set Client(client) {
     // copy the cl parameter into a local _client variable
-    const _client = this.copy(cl);
+    const _client = this.copy(client);
 
     // delete the keys used for other features.
     if (_client.states) delete _client.states;
@@ -146,117 +155,113 @@ class Deva {
     this._client = _client;
 
     // set the states and messages after the cleint is set.
-    this.States = cl.states;
-    this.Messages = cl.messages;
-  }
-
-  // setup the @Development feature.
-  set Development(opt=false) {
-    this.state('setting_development');
-    if (!opt) this._security = {};
-    else {
-      this._security = {
-        concerns: opt.concerns,
-        global: opt.global,
-        items: opt.devas[this._agent.key]
-      };
-    }
+    this.States = client.states;
+    this.Messages = client.messages;
   }
 
   // setup the @Security feature
-  set Security(opt=false) {
-    this.state('setting_security');
-    if (!opt) this._security = {};
+  set Security(client=false) {
+    if (!client) this._security = {};
     else {
+      this.state('setting_security');
+      const _client = this.copy(client);
       this._security = {
-        concerns: opt.concerns,
-        global: opt.global,
-        items: opt.devas[this._agent.key]
+        id: this.uid(true),
+        client_id: _client.id,
+        client_name: _client.profile.name,
+        hash: _client.security.hash,
+        cipher: _client.security.cipher,
+        concerns: _client.security.concerns,
+        global: _client.security.global,
+        personal: _client.security.devas[this._agent.key]
       };
     }
   }
 
   // setup the @Support feature
-  set Support(opt=false) {
-    this.state('setting_support');
-    if (!opt) this._support = {};
+  set Support(client=false) {
+    if (!client) this._support = {};
     else {
+      this.state('setting_support');
+      const _client = this.copy(client);
       this._support = {
-        concerns: opt.concerns,
-        global: opt.global,
-        items: opt.devas[this._agent.key]
+        id: this.uid(true),
+        client_id: _client.id,
+        client_name: _client.profile.name,
+        concerns: _client.support.concerns,
+        global: _client.support.global,
+        personal: _client.support.devas[this._agent.key]
       };
     }
   }
 
   // setup the @Services feature
-  set Services(opt=false) {
-    this.state('setting_services');
-    if (!opt) this._servcies = {};
+  set Services(client=false) {
+    if (!client) this._servcies = {};
     else {
+      this.state('setting_services');
+      const _client = this.copy(client);
       this._services = {
-        concerns: opt.concerns,
-        global: opt.global,
-        items: opt.devas[this._agent.key]
+        id: this.uid(true),
+        client_id: _client.id,
+        client_name: _client.profile.name,
+        concerns: _client.services.concerns,
+        global: _client.services.global,
+        personal: _client.services.devas[this._agent.key]
       };
     }
   }
 
   // setup the @Systems feature
-  set Systems(opt=false) {
-    this.state('setting_systems');
-    if (!opt) this._systems = {};
+  set Systems(client=false) {
+    if (!client) this._systems = {};
     else {
+      this.state('setting_systems');
+      const _client = this.copy(client);
       this._systems = {
-        concerns: opt.concerns,
-        global: opt.global,
-        items: opt.devas[this._agent.key]
+        id: this.uid(true),
+        client_id: _client.id,
+        client_name: _client.profile.name,
+        concerns: _client.systems.concerns,
+        global: _client.systems.global,
+        personal: _client.systems.devas[this._agent.key]
       };
     }
   }
 
   // setup the @Solutions feature
-  set Solutions(opt=false) {
-    this.state('setting_solutions');
-    if (!opt) this._solutions = {};
+  set Solutions(client=false) {
+    if (!client) this._solutions = {};
     else {
+      this.state('setting_solutions');
+      const _client = this.copy(client);
       this._solutions = {
-        concerns: opt.concerns,
-        global: opt.global,
-        items: opt.devas[this._agent.key]
+        id: this.uid(true),
+        client_id: _client.id,
+        client_name: _client.profile.name,
+        concerns: _client.solutions.concerns,
+        global: _client.solutions.global,
+        personal: _client.solutions.devas[this._agent.key]
       };
     }
   }
 
-  /**************
-  func: state
-  params:
-    - st: The state flag to set for the Deva that matches to this._states
-  describe
-  ***************/
-  state(st, data=false) {
-    if (!Object.keys(this._states).includes(st)) return;
-    this._state = `${this._states[st]} on ${this.fDate(Date.now(), 'short_month', true)}`;
-    const _data = {
-      id: this.uid(true),
-      client: this._client.id,
-      agent: this._agent.id,
-      st: st,
-      state: this._state,
-      data,
-      created: Date.now(),
-    };
-    this.prompt(this._state);
-    this.talk(`${this._agent.key}:state`, _data);
-    return this._state;
+  // setup the @Development feature.
+  set Development(client=false) {
+    if (!client) this._development = {};
+    else {
+      this.state('setting_development');
+      const _client = this.copy(client);
+      this._development = {
+        id: this.uid(true),
+        client_id: _client.id,
+        client_name: _client.profile.name,
+        concerns: _client.development.concerns,
+        global: _client.development.global,
+        personal: _client.development.devas[this._agent.key]
+      };
+    }
   }
-
-  states() {
-    return this._states;
-  }
-
-  // Called from the init function to bind the elements defined in the this.bind variable.
-  // the assign bind ensures that the *this* scope is available to child elements/functions.
 
   /**************
   func: _assignBind
@@ -384,6 +389,38 @@ class Deva {
   }
 
   /**************
+  func: states
+  params: none
+  describe: returns the avaiable staets values.
+  ***************/
+  states() {
+    return this._states;
+  }
+
+  /**************
+  func: state
+  params:
+    - st: The state flag to set for the Deva that matches to this._states
+  describe
+  ***************/
+  state(st, data=false) {
+    if (!Object.keys(this._states).includes(st)) return;
+    this._state = `${this._states[st]} on ${this.formatDate(Date.now(), 'short_month', true)}`;
+    const _data = {
+      id: this.uid(true),
+      client: this._client.id,
+      agent: this._agent.id,
+      st: st,
+      state: this._state,
+      data,
+      created: Date.now(),
+    };
+    this.prompt(this._state);
+    this.talk(`${this._agent.key}:state`, _data);
+    return this._state;
+  }
+
+  /**************
   func: uid
   params:
     - guid: This is a true false flag for generating a guid.
@@ -396,12 +433,90 @@ class Deva {
                       is shared.
   ***************/
   uid(guid=false) {
-    if (guid) return randomUUID()
-    const min = Math.floor(Date.now() - (Date.now() / Math.PI));
-    const max = Math.floor(Date.now() + (Date.now() * Math.PI));
-    return Math.floor(Math.random() * (max - min)) + min;
+    let id;
+    if (guid) {
+      id = randomUUID()
+    }
+    else {
+      const min = Math.floor(Date.now() - (Date.now() / Math.PI));
+      const max = Math.floor(Date.now() + (Date.now() * Math.PI));
+      id = Math.floor(Math.random() * (max - min)) + min;
+    }
+    return id;
   }
 
+  /**************
+  func: hash
+  params:
+    - texts: The text string to create a hash value for.
+    - algo: The hashing algorithm to use for hashing. md5, sha256, or sha512
+
+  describe:
+    The hash algorithm will take a string of text and produce a hash.
+  ***************/
+  hash(str) {
+    const algo = this._security.hash || 'md5';
+    const the_hash = createHash(algo);
+    the_hash.update(str);
+    const _digest = the_hash.digest('base64');
+    this.state('hash', {
+
+    })
+    return ;
+  }
+
+  /**************
+  func: cipher
+  params: str - string to encrypt
+  describe:
+    The encrypt function allows for the internal encryption of data based on the
+    defined client security settings.
+  ***************/
+  cipher(str) {
+    const security = this._security;
+    const {password, algorithm} = security.cipher;
+    const key = createHash('sha256').update(String(password)).digest('base64');
+    const key_in_bytes = Buffer.from(key, 'base64')
+    const iv = randomBytes(16);
+
+    // create a new cipher
+    const _cipher = createCipheriv(algorithm, key_in_bytes, iv);
+    const encrypted = _cipher.update(String(str), 'utf8', 'hex') + _cipher.final('hex');
+
+    this.state('cipher', {
+      id: this.uid(true),
+      iv,
+      key,
+      agent_id: this._agent.id,
+      client_id: this._client.id,
+      created: Date.now()
+    });
+
+    return {
+      iv: iv.toString('base64'),
+      key,
+      encrypted,
+    }
+  }
+  decipher(opt) {
+    const iv = Buffer.from(opt.iv, 'base64');
+    const encrypted = Buffer.from(opt.encrypted, 'hex');
+    const key_in_bytes = Buffer.from(opt.key, 'base64')
+    const security = this._security;
+    const {algorithm} = security.cipher;
+    const decipher = createDecipheriv( algorithm, key_in_bytes, iv);
+    const decrypted = decipher.update(encrypted);
+    const final = Buffer.concat([decrypted, decipher.final()]);
+    this.state('decipher', {
+      id: this.uid(true),
+      iv: opt.iv,
+      key: opt.key,
+      agent_id: this._agent.id,
+      client_id: this._client.id,
+      created: Date.now()
+    });
+    return final.toString();
+  }
 
   /**************
   func: copy
@@ -739,12 +854,12 @@ class Deva {
       }).then(() => {
         this.state('init');
 
-        this.Security = client.security;
-        this.Support = client.support;
-        this.Services = client.services;
-        this.Systems = client.systems;
-        this.Solutions = client.solutions;
-        this.Development = client.development;
+        this.Security = client;
+        this.Support = client;
+        this.Services = client;
+        this.Systems = client;
+        this.Solutions = client;
+        this.Development = client;
 
         return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start();
       }).then(started => {
@@ -862,7 +977,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.offline);
     const id = this.uid();
     const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'medium' }).format(this._active);
-    let text = `${this._agent.name} active since ${dateFormat}`;
+    let text = `${this._agent.profile.name} active since ${dateFormat}`;
     if (ammend) text = text + `\n${ammend}`;
     return Promise.resolve({text});
   }
@@ -876,21 +991,6 @@ class Deva {
   ***************/
   prompt(text) {
     return this.talk('prompt', {text, agent:this._agent});
-  }
-
-  /**************
-  func: hash
-  params:
-    - texts: The text string to create a hash value for.
-    - algo: The hashing algorithm to use for hashing. md5, sha256, or sha512
-
-  describe:
-    The hash algorithm will take a string of text and produce a hash.
-  ***************/
-  hash(text, algo='md5') {
-    const the_hash = createHash(algo);
-    the_hash.update(text);
-    return the_hash.digest('hex');
   }
 
   /**************
@@ -1026,7 +1126,7 @@ class Deva {
 
   // UTILITY FUNCTIONS
   /**************
-  func: fDate
+  func: formatDate
   params:
     - d: The date string to format.
     - format: the various formats that can be selected.
@@ -1037,7 +1137,7 @@ class Deva {
     FDate format ensures that consistent date formatting is used within the
     system based on the language and locale in the client profile.
   ***************/
-  fDate(d, format='long', time=false) {
+  formatDate(d, format='long', time=false) {
     if (!d) d = Date.now();
     d = new Date(d);
 
@@ -1052,42 +1152,42 @@ class Deva {
       log: { year: 'numeric', month: 'short', day: 'numeric' },
     };
     const theDate = d.toLocaleDateString(this._client.locale, formats[format]);
-    const theTime = this.fTime(d);
+    const theTime = this.formatTime(d);
     return !theTime ? theDate : `${theDate} - ${theTime}`;
   }
 
   /**************
-  func: fTime
+  func: formatTime
   params:
     - t: the time to format
   describe:
     The formatTime fucntion will return a consistent local time for the t
     parameter based on the locale setting in the client profile..
   ***************/
-  fTime(t) {
+  formatTime(t) {
     return t.toLocaleTimeString(this._client.locale);
   }
 
   /**************
-  func: fCurrency
+  func: formatCurrency
   params:
     - n: is the number that you want to return the currency of.
   describe:
-    The fCurrency function will format a currency value based on the setting
+    The formatCurrency function will format a currency value based on the setting
     in the client profile.
   ***************/
-  fCurrency(n) {
+  formatCurrency(n) {
     return new Intl.NumberFormat(this._client.locale, { style: 'currency', currency: this._client.currency }).format(n);
   }
 
   /**************
-  func: fPercent
+  func: formatPerdent
   params:
     - n: is the number that you want to format as a percent.
     - dec: is the number of decimal places to apply to the number.
   describe:
   ***************/
-  fPercent(n, dec=2) {
+  formatPerdent(n, dec=2) {
     return parseFloat(n).toFixed(dec) + '%';
   }
 
