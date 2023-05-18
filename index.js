@@ -892,7 +892,7 @@ class Deva {
       }
       Promise.all(devas).then(() => {
         this.state('devas_ready');
-        return resolve(this._messages.devas_started);
+        return resolve({text:this._messages.devas_started,prompt:this._agent.prompt});
       }).catch(reject);
     });
   }
