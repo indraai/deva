@@ -114,8 +114,8 @@ class Deva {
       enter: `🖖 ${this._agent.name} enter.`,
       exit: `🚪 ${this._agent.name} exit.`,
       done: `👍 ${this._agent.name} done.`,
-      devas_started: '🤝 Devas have started',
-      devas_stopped: '🛑 Devas have stopped',
+      devas_started: '🧞‍♂️🧞🧞‍♀️ #Devas are all doing their thing',
+      devas_stopped: '🛑 #Devas have stopped',
       notext: `❌ ${this._client.name}, please provide with valid input.`,
       method_not_found: `❌ ${this._client.name} you sure messed that up!`,
     }
