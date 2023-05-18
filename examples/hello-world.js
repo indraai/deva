@@ -1,6 +1,8 @@
 // Copyright (c)2023 Quinn Michaels
 // Distributed under the MIT software license, see the accompanying
 // file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
+const client = require('./client.json');
+
 const Deva = require('../index');
 const HelloWorld = new Deva({
   client: {
@@ -39,35 +41,41 @@ const HelloWorld = new Deva({
   },
   listeners: {
     'hello:state'(packet) {
-      console.log(packet.state);
+      // console.log(packet.state);
     },
-    'prompt'(text) {
-      console.log(text);
+    'prompt'(packet) {
+      console.log(packet.text);
     }
   },
   deva: {},
   modules: {},
   func: {
+    getclient(packet) {
+      return Promise.resolve(this._client);
+    },
     state(packet) {
       const ret = `${this._state} ${this.uid(true)} ${this.uid()} ${this.hash(JSON.stringify(packet), 'sha256')}`;
       return Promise.resolve(ret);
     }
   },
   methods: {
+    getclient(packet) {
+      return this._client;
+    },
     state(packet) {
       return this.func.state(packet);
     }
   },
   onError(e, packet) {
-    console.log('ERROR\n\n', e, packet);
+    console.log('ERROR\n\n', e);
   }
 });
 
-HelloWorld.init().then(done => {
-  return HelloWorld.question('/state how are you')
+HelloWorld.init(client.DATA).then(done => {
+  // console.log(done);
+  return HelloWorld.question('/state')
 }).then(answer => {
-  // console.log(answer);
-  console.log(answer.a.text);
+  console.log('THE ANSWER: ', answer.a.text);
 });
 
 

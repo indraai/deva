@@ -1,0 +1,59 @@
+{
+  "name": "CLIENT",
+  "describe": "CLIENT FILE",
+  "copyright": "Copyright ©2023 Quinn Michaels. All rights reserved.",
+  "DATA": {
+    "id": 3123155399059,
+    "key": "test",
+    "name": "Test User",
+    "eamil": "test@example.com",
+    "describe": "The Test User",
+    "prompt": {
+      "emoji": "🧪",
+      "text": "test",
+      "colors": {
+        "label": {
+          "R": 2,
+          "G": 229,
+          "B": 77
+        },
+        "text": {
+          "R": 2,
+          "G": 229,
+          "B": 77
+        }
+      }
+    },
+    "profile": {
+      "emoji": "https://quinnmichaels.com/assets/img/quinn/avatar.png",
+      "avatar": "https://quinnmichaels.com/assets/img/quinn/avatar.png",
+      "background": "https://quinnmichaels.com/assets/img/quinn/background.png",
+      "name": "Test User",
+      "describe": "This is the Test user for the Deva Examples in the Repository.",
+      "gender": "splendid",
+      "lang": "en"
+    },
+    "states": {},
+    "messages": {},
+    "services": {
+      "concerns": [],
+      "global": {
+        "indra": "https://indra.ai",
+        "world": "https://deva.world",
+        "space": "https://deva.space",
+        "cloud": "https://deva.cloud"
+      },
+      "devas": {}
+    },
+    "security": {
+      "concerns": [],
+      "global": {},
+      "devas": {}
+    },
+    "support": {
+      "concerns": [],
+      "global": {},
+      "devas": {}
+    }
+  }
+}

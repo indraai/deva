@@ -7,16 +7,18 @@ const { createHash, randomUUID } = require('crypto');
 class Deva {
   constructor(opts) {
     opts = opts || {};
+
     this._id = randomUUID();                             // the unique id assigned to the agent at load
+    this._config = opts.config || {};                    // local Config Object
+    this._agent = opts.agent || false;                   // Agent profile object
+    this._client = {};                                // this will be set on init.
     this._state = 'OFFLINE';                             // current state of agent.
     this._active = false;                               // the active/birth date.
-    this.security = false;                              // inherited Security features.
-    this.support = false;                               // inherited Support features.
-    this.config = opts.config || {};                    // local Config Object
+    this._security = {};                              // inherited Security features.
+    this._support = {};                               // inherited Support features.
+    this._services = {};                               // inherited Service features.
     this.events = opts.events || new EventEmitter({});  // Event Bus
     this.lib = opts.lib || {};                          // used for loading library functions
-    this.agent = opts.agent || false;                   // Agent profile object
-    this.client = opts.client || false;                 // Client profile object
     this.devas = opts.devas || {};                      // Devas which are loaded
     this.vars = opts.vars || {};                        // Variables object
     this.listeners = opts.listeners || {};              // local Listeners
@@ -33,64 +35,141 @@ class Deva {
     this.askChr = '#';
     this.inherit = ["events", "config", "lib", "security", "client"];
     this.bind = ["listeners", "methods", "func", "lib", "security", "agent", "client"];
+
+  }
+
+  set State(opt) {
+    this.state(opt);
+  }
+
+  set States(opts) {
     this._states = {                                    // The available states to work with.
-      offline: '👻 OFFLINE',
-      online: '📡 ONLINE',
-      init: '🚀 INIT',
-      start: '🎬 START',
-      enter: '🎪 ENTER',
-      stop: '🛑 STOP',
-      exit: '🚪 EXIT',
-      done: '🤝 DONE',
-      wait: '😵‍💫 WAITING',
-      data: '📀 DATA',
-      ask: '🙋‍♀️ ASK',
-      cmd: '📟 COMMAND',
-      question: '🐵 QUESTION',
-      ask: '🐵 ASK',
-      talk: '🎙️ TALK',
-      listen: '🎧 LISTEN',
-      error: '❌ ERROR',
-      story: '📓 STORY',
-      development: '👨‍💻 DEVELOPMENT',
-      security: '🚨 SECURITY',
-      support: '🎗️ SUPPORT',
-      services: '🎖️ SERVICES',
-      systems: '👽 SYSTEMS',
-      solutions: '🔬 SOLUTIONS',
-      devas_start: '✨ DEVAS START',
-      devas_ready: '📸 DEVAS READY',
-      devas_stop: '🙈 DEVAS STOP',
-      devas_stopped: '🛑 DEVAS STOPPED',
-      deva_load: '✅ DEVA LOAD',
-      deva_loaded: '✅ DEVA LOADED',
-      deva_unloaded: '✅ DEVA UNLOADED',
-      question_me: '🐵 QUESTION',
-      question_ask: '🧙‍♂️ QUESTION ASK',
-      question_cmd: '🪄  QUESTION CMD',
-      question_answer: '🔮 QUESTION ANSWER',
-      ask_question: '👽 ASK QUESTION',
-      ask_answer: '🛸 ASK ANSWER',
-      method_not_found: '😩 METHOD NOT FOUND',
+      uid: `👻 ${this._agent.name} is making a new #uid`,
+      offline: `👻 ${this._agent.name} is offline`,
+      online: `📡 ${this._agent.name} is online`,
+      config: `‍📀 ${this._agent.name} is checking the config`,
+      client: `👨‍💻 ${this._agent.name} opened the ${this._client.key} profile`,
+      agent: `👨‍💻 ${this._agent.name} is looking at ${this._agent.key} profile`,
+      init: `🚀 ${this._agent.name} is initializing`,
+      start: `🎬 ${this._agent.name} has started the process`,
+      enter: `🎪 ${this._agent.name} is entering the deva.world`,
+      stop: `🛑 ${this._agent.name} has stopped`,
+      exit: `🚪 ${this._agent.name} found the exit`,
+      done: `🤝 ${this._agent.name} is all done`,
+      wait: `😵‍💫 ${this._agent.name} waiting for something to do`,
+      data: `📀 ${this._agent.name} is receiving data`,
+      ask: `🙋‍♀️ ${this._agent.name} is asking a question`,
+      cmd: `📟 ${this._agent.name} is using a command`,
+      question: `🐵 ${this._agent.name} question`,
+      ask: `🐵 ${this._agent.name} asking`,
+      talk: `🎙️ ${this._agent.name} is talking`,
+      listen: `🎧 ${this._agent.name} is listening`,
+      error: `❌ ${this._agent.name} had an error`,
+      story: `📓 ${this._agent.name} telling a story`,
+      development: `👨‍💻 ${this._agent.name} needs @Development`,
+      security: `🚨 ${this._agent.name} needs @Security`,
+      support: `🎗️ ${this._agent.name} needs @Support`,
+      services: `🎖️ ${this._agent.name} needs @Services`,
+      systems: `👽 ${this._agent.name} needs @Systems`,
+      solutions: `🔬 ${this._agent.name} needs @Solutions`,
+      devas_start: `✨ Starting all the #Devas...`,
+      devas_ready: `📸 The #Devas are ready and waiitng`,
+      devas_stop: `🙈 The #Devas are stopping`,
+      devas_stopped: `🛑 #Devas have stopped`,
+      deva_load: `✅ ${this._agent.name} load`,
+      deva_loaded: `✅ ${this._agent.name} loaded`,
+      deva_unloaded: `✅ ${this._agent.name} unloaded`,
+      question_me: `🐵 ${this._client.name} ask ${this._agent.name} a #question`,
+      question_default: `🧞‍♂️ ${this._client.id} sent ${this._agent.name} a #question`,
+      question_ask: `🧞 ${this._agent.name} is pondering what ${this._client.name} asked`,
+      question_asking: `🧞 ${this._agent.name} is asking another #Deva what ${this._client.name} asked`,
+      question_aswering: `🧞 ${this._agent.name} is answering the #question ${this._client.name} asked`,
+      question_answer: `🔮 #${this._agent.name} gave #${this._client.name} the answer`,
+      question_cmd: `🧞‍♀️ ${this._agent.name} then ran a #command for #${this._client.name}`,
+      hash_question: `🔐 ${this._agent.name} created the #question hash`,
+      hash_answer: `🔐 ${this._agent.name} created the #answer hash`,
+      hash_answer: `🔐 ${this._agent.name} created the #packet hash`,
+      ask_question: `👽 ${this._client.name} asked ${this._agent.name} a #question`,
+      ask_answer: `🛸 ${this._agent.name} answered ${this._client.name}`,
+      method_not_found: `😩 ${this._agent.name} used a bad #command, and may need help.`,
+      security_ready: `🚓 @Security is ready`,
+      support_ready: `🚑 @Support is ready`,
+      services_ready: `🚚 @Services is ready`,
+      security_alert: `🚨 #SECURITY 🚨 SETTTINGS`,
+      support_alert: `🚨 #SUPPORT 🚨 SETTTINGS`,
+      services_alert: `🚨 #SERVICES 🚨 SETTTINGS`,
+      setting_client: `⛄️ Setting the #client for ${this._agent.name}`,
+      setting_security: `👮‍♂️ ${this._agent.name} given #security`,
+      setting_support: `👨‍⚕️ ${this._agent.name} given #support`,
+      setting_services: `👷‍♂️ ${this._agent.name} given #services`,
     };
+  }
+
+  set Messages(opts) {
     this._messages = {
-      offline: '🙅‍♂️ DEVA OFFLINE',
-      init: '✅ DEVA INITIALIZED',
-      start: '✅ DEVA STARTED',
-      stop: '💥 DEVA STOPPED',
-      enter: '🖖 DEVA ENTERED',
-      exit: '🚪 DEVA EXITED',
-      done: '👍 DEVA DONE',
-      devas_started: '🤝 DEVAS STARTED',
-      devas_stopped: '🛑 DEVAS STOPPED',
-      notext: '❌ NO TEXT',
-      method_not_found: '❌ THAT IS NOT GONNA WORK!',
+      offline: `🙅‍♂️ ${this._agent.name} offline`,
+      init: `⚠️ ${this._agent.name} init`,
+      start: `✅ ${this._agent.name} start`,
+      stop: `💥 ${this._agent.name} stop.`,
+      enter: `🖖 ${this._agent.name} enter.`,
+      exit: `🚪 ${this._agent.name} exit.`,
+      done: `👍 ${this._agent.name} done.`,
+      devas_started: '🤝 Devas have started',
+      devas_stopped: '🛑 Devas have stopped',
+      notext: `❌ ${this._client.name}, please provide with valid input.`,
+      method_not_found: `❌ ${this._client.name} you sure messed that up!`,
+    }
+  }
+  set Client(cl) {
+    // delete the services key to move and move to services.
+    const _client = this.copy(cl);
+    if (_client.states) delete _client.states;
+    if (_client.messages) delete _client.messages;
+    if (_client.security) delete _client.security;
+    if (_client.support) delete _client.support;
+    if (_client.services) delete _client.services;
+
+    this._client = cl;
+
+    this.States = _client.states;
+    this.Messages = _client.messages;
+  }
+
+  set Security(opt=false) {
+    this.state('setting_security');
+    if (!opt) this._security = {};
+    else {
+      this._security = {
+        concerns: opt.concerns,
+        global: opt.global,
+        things: opt.devas[this._agent.key]
+      };
     }
   }
 
-  // set the state of the agent with the passed value to match the valid keys.
-  // this will also talk a global state event with the agent data and state.
-  // then security can watch all the glorious state change events.
+  set Support(opt=false) {
+    this.state('setting_support');
+    if (!opt) this._support = {};
+    else {
+      this._support = {
+        concerns: opt.concerns,
+        global: opt.global,
+        things: opt.devas[this._agent.key]
+      };
+    }
+  }
+
+  set Services(opt=false) {
+    this.state('setting_services');
+    if (!opt) this._servcies = {};
+    else {
+      this._services = {
+        concerns: opt.concerns,
+        global: opt.global,
+        things: opt.devas[this._agent.key]
+      };
+    }
+  }
 
   /**************
   func: state
@@ -103,15 +182,15 @@ class Deva {
     this._state = this._states[st];
     const _data = {
       id: this.uid(true),
-      client: this.client.id,
-      agent: this.agent.id,
+      client: this._client.id,
+      agent: this._agent.id,
       st: st,
       state: this._state,
       data,
       created: Date.now(),
     };
     this.prompt(this._state);
-    this.talk(`${this.agent.key}:state`, _data);
+    this.talk(`${this._agent.key}:state`, _data);
     return this._state;
   }
 
@@ -140,11 +219,11 @@ class Deva {
           }
         });
         // bind translate
-        const translate = this.agent && this.agent.translate && typeof this.agent.translate === 'function';
-        if (translate) this.agent.translate = this.agent.translate.bind(this);
+        const translate = this._agent && this._agent.translate && typeof this._agent.translate === 'function';
+        if (translate) this._agent.translate = this._agent.translate.bind(this);
         // bind parser
-        const parse = this.agent && this.agent.parse && typeof this.agent.parse === 'function';
-        if (parse) this.agent.parse = this.agent.parse.bind(this);
+        const parse = this._agent && this._agent.parse && typeof this._agent.parse === 'function';
+        if (parse) this._agent.parse = this._agent.parse.bind(this);
       }
       catch (e) {
         return reject(e);
@@ -165,15 +244,17 @@ class Deva {
   _assignListeners() {
     return new Promise((resolve, reject) => {
       try {
+        // set the default listeners for the states of the agent.
+        for (let state in this._states) {
+          if (typeof this[state] === 'function') {
+            this.events.on(`${this._agent.key}:${state}`, packet => {
+              return this[state](packet);
+            });
+          }
+        }
+
         // set the assigned listeners for the agent.
         for (let listener in this.listeners) {
-          // set the default listeners for the states of the agent.
-          for (let state in this._states) {
-            this.events.on(`${this.agent.key}:${state}`, packet => {
-              return this[state](packet);
-            })
-          }
-
           this.events.on(listener, packet => {
             return this.listeners[listener](packet);
           })
@@ -232,11 +313,11 @@ class Deva {
   ***************/
   _methodNotFound(packet) {
     packet.a = {
-      agent: this.agent || false,
-      client: this.client || false,
+      agent: this._agent || false,
+      client: this._client || false,
       text: `${this._messages.method_not_found} - ${packet.q.meta.method} `,
       meta: {
-        key: this.agent.key,
+        key: this._agent.key,
         method: packet.q.meta.method,
       },
       created: Date.now(),
@@ -244,11 +325,6 @@ class Deva {
     this.state('method_not_found', packet);
     return packet;
   }
-
-  // A simple interface to generate a unique id for the agent. As agents will
-  // quite oftne have to key their transactions. This will provide all agents
-  // with the same key generator which can also be modified to link into a remote
-  // generator or some other solution if needed.
 
   /**************
   func: uid
@@ -269,6 +345,25 @@ class Deva {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
+
+  /**************
+  func: copy
+  params: obj
+  describe:
+    a simple copy object to create a memory clean copy of data to
+    prevent collisions when needed. Handles clean text, array, object copy.
+    it makes the assumption tha the user is submitting either an array or object
+    for copying.
+  ***************/
+  copy(obj) {
+    let v, key;
+    const output = Array.isArray(obj) ? [] : {};
+    for (key in obj) {
+        v = obj[key];
+        output[key] = (typeof v === "object") ? this.copy(v) : v;
+    }
+    return output;
+  }
   /**************
   func: talk
   params:
@@ -370,10 +465,10 @@ class Deva {
     this.state('ask_question', packet);
 
     packet.a = {
-      agent: this.agent || false,
-      client: this.client || false,
+      agent: this._agent || false,
+      client: this._client || false,
       meta: {
-        key: this.agent.key,
+        key: this._agent.key,
         method: packet.q.meta.method,
         params: packet.q.meta.params,
       },
@@ -387,7 +482,7 @@ class Deva {
       if (this.methods[packet.q.meta.method] === undefined) {
         return setImmediate(() => {
           packet.a.text = `INVALID METHOD (${packet.q.meta.method})`;
-          this.talk(`${this.agent.key}:ask:${packet.id}`, packet);
+          this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
         });
       }
 
@@ -404,14 +499,14 @@ class Deva {
         }
 
         this.state('ask_answer', packet);
-        this.talk(`${this.agent.key}:ask:${packet.id}`, packet);
+        this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
-        this.talk(`${this.agent.key}:ask:${packet.id}`, {error:err.toString()});
+        this.talk(`${this._agent.key}:ask:${packet.id}`, {error:err.toString()});
         return this.error(err, packet);
       })
     }
     catch (e) {
-      this.talk(`${this.agent.key}:ask:${packet.id}`, {error:e.toString()});
+      this.talk(`${this._agent.key}:ask:${packet.id}`, {error:e.toString()});
       return this.error(e, packet)
     }
     // now when we ask the meta params[0] should be the method
@@ -428,6 +523,7 @@ class Deva {
   ***************/
   question(TEXT=false, DATA=false) {
     if (!this._active) return Promise.resolve(this._messages.offline);
+    this.state('question_me', {text:TEXT, data:DATA});
 
     const id = this.uid();                            // generate a unique transport id for the question.
     const t_split = TEXT.split(' ');
@@ -451,7 +547,7 @@ class Deva {
     let text = TEXT,
         params = false,
         method = 'question',
-        key = this.agent.key;
+        key = this._agent.key;
 
     return new Promise((resolve, reject) => {
       if (!TEXT) return reject(this._messages.notext);
@@ -464,13 +560,14 @@ class Deva {
         // #agent method:param1:param2 with text strings for proccessing
         // !method param:list:parse for the local agent
         // if is an ask then we format one way
-        let _state = 'question_me';
+        let _state = 'question_default';
         if (isAsk) {
           _state = 'question_ask'
           key = t_split[0].substring(1);
           params = t_split[1] ? t_split[1].split(':') : false;
           method = params[0];
           text = t_split.slice(2).join(' ').trim();
+
         }
         else if (isCmd) {
           _state = 'question_cmd'
@@ -480,8 +577,8 @@ class Deva {
         }
 
         packet.q = {
-            agent: this.agent || false,
-            client: this.client || false,
+            agent: this._agent || false,
+            client: this._client || false,
             meta: {
               key,
               orig,
@@ -494,18 +591,24 @@ class Deva {
         }
 
         // hash the packet and insert the hash into the packet meta object.
+        this.state('hash_question');
         packet.q.meta.hash = this.hash(JSON.stringify(packet.q));
+
         this.state(_state, packet);
 
         // If a question to another Deva with '#' then trigger events
         if (isAsk) {
+          this.state('question_asking');
+          this.prompt(`sending key ${key}`);
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
             return resolve(answer);
           });
         }
+
         // if the user sends a local command '$' then it will ask of the self.
         else {
+          this.state('question_answering');
           if (typeof this.methods[method] !== 'function') {
             return resolve(this._methodNotFound(packet));
           }
@@ -514,10 +617,10 @@ class Deva {
             const html = typeof result === 'object' ? result.html : result;
             const data = typeof result === 'object' ? result.data : false;
             packet.a = {
-              agent: this.agent || false,
-              client: this.client || false,
+              agent: this._agent || false,
+              client: this._client || false,
               meta: {
-                key: this.agent.key,
+                key: this._agent.key,
                 method,
               },
               text,
@@ -526,10 +629,13 @@ class Deva {
               created: Date.now(),
             };
             // create a hash for the answer and insert into answer meta.
+            this.state('hash_answer');
             packet.a.meta.hash = this.hash(JSON.stringify(packet.a));
 
             // create a hash for entire packet and insert into packet
+            this.state('hash_packet');
             packet.hash = this.hash(JSON.stringify(packet));
+
             this.state('question_answer', packet);
 
             return resolve(packet);
@@ -546,7 +652,7 @@ class Deva {
 
   /**************
   func: init
-  params: none
+  params: client - the client data to use that is provided by the clients.
   describe:
     The main init interface where the chain begins. Where the states fire for
     each process of setting:
@@ -558,9 +664,12 @@ class Deva {
     6. The system start function will create a chain reaction of states that load.
     7. If there is an error the init function rejects the call.
   ***************/
-  init() {
-    this._active = Date.now();
+  init(client) {
     // set client
+    this.Client = client;
+
+
+    this._active = Date.now();
     return new Promise((resolve, reject) => {
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -569,6 +678,11 @@ class Deva {
         return this._assignListeners();
       }).then(() => {
         this.state('init');
+
+        this.Security = client.security;
+        this.Support = client.support;
+        this.Services = client.services;
+
         return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start();
       }).then(started => {
         return resolve(started)
@@ -685,7 +799,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.offline);
     const id = this.uid();
     const dateFormat = new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'medium' }).format(this._active);
-    let text = `${this.agent.name} is ONLINE since ${dateFormat}`;
+    let text = `${this._agent.name} active since ${dateFormat}`;
     if (ammend) text = text + `\n${ammend}`;
     return Promise.resolve({text});
   }
@@ -698,7 +812,7 @@ class Deva {
     The prompt function is used to broadcasat a global prompt event with a string. Thsi is handy when passing events between a cli and user interface for example.
   ***************/
   prompt(text) {
-    return this.talk('prompt', {text, agent:this.agent});
+    return this.talk('prompt', {text, agent:this._agent});
   }
 
   /**************
@@ -717,17 +831,64 @@ class Deva {
   }
 
   /**************
+  func: client
+  params: none
+  describe:
+    this function allows statement management for when client prfioe is
+    being accessed.
+  ***************/
+  client() {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.state('client');
+    return this._client;
+  }
+
+  /**************
+  func: agent
+  params: none
+  describe:
+    this function allows statement management for when client prfioe is
+    being accessed.
+  ***************/
+  agent() {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.state('agent');
+    return this._agent;
+  }
+
+  /**************
+  func: security
+  params: opts
+  describe: basic security features available in a Deva.
+  ***************/
+  security(opts) {}
+
+  /**************
+  func: security
+  params: opts
+  describe: basic support features available in a Deva.
+  ***************/
+  support(opts) {}
+
+  /**************
+  func: security
+  params: opts
+  describe: basic services features available in a Deva.
+  ***************/
+  services(opts) {}
+
+  /**************
   func: startDevas
   params: none
   describe:
     Start Devas will initialize the Deva agents inside this curent Deva.
   ***************/
-  startDevas() {
+  startDevas(client) {
     this.state('devas_start');
     return new Promise((resolve, reject) => {
       const devas = [];
       for (let x in this.devas) {
-        devas.push(this.devas[x].init());
+        devas.push(this.devas[x].init(client));
       }
       Promise.all(devas).then(() => {
         this.state('devas_ready');
