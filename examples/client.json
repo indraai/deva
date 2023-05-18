@@ -25,16 +25,28 @@
       }
     },
     "profile": {
-      "emoji": "https://quinnmichaels.com/assets/img/quinn/avatar.png",
-      "avatar": "https://quinnmichaels.com/assets/img/quinn/avatar.png",
-      "background": "https://quinnmichaels.com/assets/img/quinn/background.png",
+      "emoji": "/public/devas/test/avatar.png",
+      "avatar": "/public/devas/test/avatar.png",
+      "background": "/public/devas/test/background.png",
       "name": "Test User",
-      "describe": "This is the Test user for the Deva Examples in the Repository.",
+      "describe": "This is the Test for the Deva Examples in the Repository.",
       "gender": "splendid",
-      "lang": "en"
+      "lang": "en",
+      "locale": "en-US",
+      "currency": "USD"
     },
     "states": {},
     "messages": {},
+    "security": {
+      "concerns": [],
+      "global": {},
+      "devas": {}
+    },
+    "support": {
+      "concerns": [],
+      "global": {},
+      "devas": {}
+    },
     "services": {
       "concerns": [],
       "global": {
@@ -45,12 +57,17 @@
       },
       "devas": {}
     },
-    "security": {
+    "systems": {
       "concerns": [],
       "global": {},
       "devas": {}
     },
-    "support": {
+    "solutions": {
+      "concerns": [],
+      "global": {},
+      "devas": {}
+    },
+    "development": {
       "concerns": [],
       "global": {},
       "devas": {}

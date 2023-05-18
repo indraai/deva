@@ -75,7 +75,8 @@ HelloWorld.init(client.DATA).then(done => {
   // console.log(done);
   return HelloWorld.question('/state')
 }).then(answer => {
-  console.log('THE ANSWER: ', answer.a.text);
+  // console.log(HelloWorld.client());
+  console.log(answer.a.text);
 });
 
 

@@ -55,28 +55,28 @@ class Deva {
       enter: `🎪 ${this._agent.name} is entering the deva.world`,
       stop: `🛑 ${this._agent.name} has stopped`,
       exit: `🚪 ${this._agent.name} found the exit`,
-      done: `🤝 ${this._agent.name} is all done`,
-      wait: `😵‍💫 ${this._agent.name} waiting for something to do`,
-      data: `📀 ${this._agent.name} is receiving data`,
-      ask: `🙋‍♀️ ${this._agent.name} is asking a question`,
-      cmd: `📟 ${this._agent.name} is using a command`,
-      question: `🐵 ${this._agent.name} question`,
-      ask: `🐵 ${this._agent.name} asking`,
-      talk: `🎙️ ${this._agent.name} is talking`,
-      listen: `🎧 ${this._agent.name} is listening`,
-      error: `❌ ${this._agent.name} had an error`,
-      story: `📓 ${this._agent.name} telling a story`,
-      development: `👨‍💻 ${this._agent.name} needs @Development`,
-      security: `🚨 ${this._agent.name} needs @Security`,
-      support: `🎗️ ${this._agent.name} needs @Support`,
-      services: `🎖️ ${this._agent.name} needs @Services`,
-      systems: `👽 ${this._agent.name} needs @Systems`,
-      solutions: `🔬 ${this._agent.name} needs @Solutions`,
-      devas_start: `✨ Starting all the #Devas...`,
-      devas_ready: `📸 The #Devas are ready and waiitng`,
-      devas_stop: `🙈 The #Devas are stopping`,
-      devas_stopped: `🛑 #Devas have stopped`,
-      deva_load: `✅ ${this._agent.name} load`,
+      done: `🤝 ${this._agent.name} is all done time for #offerings 🍫🍌`,
+      wait: `😵‍💫 ${this._agent.name} waiting for #stuff`,
+      data: `📀 ${this._agent.name} is receiving #data`,
+      ask: `🙋‍♀️ ${this._agent.name} is asking a #question`,
+      cmd: `📟 ${this._agent.name} is using a #command`,
+      question: `🐵 ${this._agent.name} is in #question mode`,
+      ask: `🐵 ${this._agent.name}  is in #ask mode`,
+      talk: `🎙️ ${this._agent.name} is in #talk mode`,
+      listen: `🎧 ${this._agent.name} is in #listening mode`,
+      error: `❌ Looks like ${this._agent.name} had an error. Let's have @Systems look into that.`,
+      story: `📓 ${this._agent.name} is creating an amazing #story`,
+      development: `👨‍💻 ${this._agent.name} called for @Development assistance`,
+      security: `🚨 ${this._agent.name} called for @Security assistance`,
+      support: `🎗️ ${this._agent.name} called for @Support assistance`,
+      services: `🎖️ ${this._agent.name} called for @Services assistance`,
+      systems: `👽 ${this._agent.name} called for @Systems assistance`,
+      solutions: `🔬 ${this._agent.name} called for @Solutions assistance`,
+      devas_start: `✨ Starting all the #Devas`,
+      devas_ready: `📸 The #Devas are #ready and #waiitng`,
+      devas_stop: `🙈 The #Devas are #stopping`,
+      devas_stopped: `🛑 #Devas have #stopped, and that means time for #offerings 🍎🍑🍍🧋`,
+      deva_load: `✅ ${this._agent.name} loading`,
       deva_loaded: `✅ ${this._agent.name} loaded`,
       deva_unloaded: `✅ ${this._agent.name} unloaded`,
       question_me: `🐵 ${this._client.name} ask ${this._agent.name} a #question`,
@@ -84,24 +84,32 @@ class Deva {
       question_ask: `🧞 ${this._agent.name} is pondering what ${this._client.name} asked`,
       question_asking: `🧞 ${this._agent.name} is asking another #Deva what ${this._client.name} asked`,
       question_aswering: `🧞 ${this._agent.name} is answering the #question ${this._client.name} asked`,
-      question_answer: `🔮 #${this._agent.name} gave #${this._client.name} the answer`,
-      question_cmd: `🧞‍♀️ ${this._agent.name} then ran a #command for #${this._client.name}`,
-      hash_question: `🔐 ${this._agent.name} created the #question hash`,
-      hash_answer: `🔐 ${this._agent.name} created the #answer hash`,
-      hash_answer: `🔐 ${this._agent.name} created the #packet hash`,
+      question_answer: `🔮 #${this._agent.name} gave #${this._client.name} the #answer`,
+      question_command: `🧞‍♀️ ${this._agent.name} then ran a #command for #${this._client.name}`,
+      hash_question: `🔐 ${this._agent.name} created the #question #hash`,
+      hash_ask: `🔐 ${this._agent.name} created the #ask #hash`,
+      hash_answer: `🔐 ${this._agent.name} created the #answer #hash`,
+      hash_command: `🔐 ${this._agent.name} created the #command #hash`,
+      hash_packet: `🔐 ${this._agent.name} created the #packet #hash`,
       ask_question: `👽 ${this._client.name} asked ${this._agent.name} a #question`,
-      ask_answer: `🛸 ${this._agent.name} answered ${this._client.name}`,
-      method_not_found: `😩 ${this._agent.name} used a bad #command, and may need help.`,
+      ask_answer: `🛸 ${this._agent.name} answered the #question from ${this._client.name}`,
+      method_not_found: `😩 ${this._agent.name} used a faulty #command, and may needs @Solutions to assist`,
       security_ready: `🚓 @Security is ready`,
       support_ready: `🚑 @Support is ready`,
       services_ready: `🚚 @Services is ready`,
-      security_alert: `🚨 #SECURITY 🚨 SETTTINGS`,
-      support_alert: `🚨 #SUPPORT 🚨 SETTTINGS`,
-      services_alert: `🚨 #SERVICES 🚨 SETTTINGS`,
+      alert_security: `🚨 #SECURITY ALERT`,
+      alert_support: `🚨 #SUPPORT ALERT`,
+      alert_services: `🚨 #SERVICES ALERT`,
+      alert_solutions: `🚨 #SOLUTIONS ALERT`,
+      alert_systems: `🚨 #SYSTEMS ALERT`,
+      alert_development: `🚨 #SYSTEMS ALERT`,
       setting_client: `⛄️ Setting the #client for ${this._agent.name}`,
-      setting_security: `👮‍♂️ ${this._agent.name} given #security`,
-      setting_support: `👨‍⚕️ ${this._agent.name} given #support`,
-      setting_services: `👷‍♂️ ${this._agent.name} given #services`,
+      setting_development: `🔬 ${this._agent.name} receiving @Development`,
+      setting_security: `👮‍♂️ ${this._agent.name} receiving @Security`,
+      setting_support: `👨‍⚕️ ${this._agent.name} receiving @Support`,
+      setting_services: `👷‍♂️ ${this._agent.name} receiving @Services`,
+      setting_systems: `🏘️  ${this._agent.name} receiving @Systems`,
+      setting_solutions: `🤓 ${this._agent.name} receiving @Solutions`,
     };
   }
 
@@ -114,27 +122,48 @@ class Deva {
       enter: `🖖 ${this._agent.name} enter.`,
       exit: `🚪 ${this._agent.name} exit.`,
       done: `👍 ${this._agent.name} done.`,
-      devas_started: '🧞‍♂️🧞🧞‍♀️ #Devas are all doing their thing',
+      devas_started: '#Devas are #online and ready for #offerings 🍫🥛🍚🍯🧂',
       devas_stopped: '🛑 #Devas have stopped',
       notext: `❌ ${this._client.name}, please provide with valid input.`,
       method_not_found: `❌ ${this._client.name} you sure messed that up!`,
     }
   }
   set Client(cl) {
-    // delete the services key to move and move to services.
+    // copy the cl parameter into a local _client variable
     const _client = this.copy(cl);
+
+    // delete the keys used for other features.
     if (_client.states) delete _client.states;
     if (_client.messages) delete _client.messages;
+    if (_client.development) delete _client.development;
     if (_client.security) delete _client.security;
     if (_client.support) delete _client.support;
     if (_client.services) delete _client.services;
+    if (_client.systems) delete _client.systems;
+    if (_client.solutions) delete _client.solutions;
 
-    this._client = cl;
+    // set the local client variable from the clean _client local variable.
+    this._client = _client;
 
-    this.States = _client.states;
-    this.Messages = _client.messages;
+    // set the states and messages after the cleint is set.
+    this.States = cl.states;
+    this.Messages = cl.messages;
   }
 
+  // setup the @Development feature.
+  set Development(opt=false) {
+    this.state('setting_development');
+    if (!opt) this._security = {};
+    else {
+      this._security = {
+        concerns: opt.concerns,
+        global: opt.global,
+        items: opt.devas[this._agent.key]
+      };
+    }
+  }
+
+  // setup the @Security feature
   set Security(opt=false) {
     this.state('setting_security');
     if (!opt) this._security = {};
@@ -142,11 +171,12 @@ class Deva {
       this._security = {
         concerns: opt.concerns,
         global: opt.global,
-        things: opt.devas[this._agent.key]
+        items: opt.devas[this._agent.key]
       };
     }
   }
 
+  // setup the @Support feature
   set Support(opt=false) {
     this.state('setting_support');
     if (!opt) this._support = {};
@@ -154,11 +184,12 @@ class Deva {
       this._support = {
         concerns: opt.concerns,
         global: opt.global,
-        things: opt.devas[this._agent.key]
+        items: opt.devas[this._agent.key]
       };
     }
   }
 
+  // setup the @Services feature
   set Services(opt=false) {
     this.state('setting_services');
     if (!opt) this._servcies = {};
@@ -166,7 +197,33 @@ class Deva {
       this._services = {
         concerns: opt.concerns,
         global: opt.global,
-        things: opt.devas[this._agent.key]
+        items: opt.devas[this._agent.key]
+      };
+    }
+  }
+
+  // setup the @Systems feature
+  set Systems(opt=false) {
+    this.state('setting_systems');
+    if (!opt) this._systems = {};
+    else {
+      this._systems = {
+        concerns: opt.concerns,
+        global: opt.global,
+        items: opt.devas[this._agent.key]
+      };
+    }
+  }
+
+  // setup the @Solutions feature
+  set Solutions(opt=false) {
+    this.state('setting_solutions');
+    if (!opt) this._solutions = {};
+    else {
+      this._solutions = {
+        concerns: opt.concerns,
+        global: opt.global,
+        items: opt.devas[this._agent.key]
       };
     }
   }
@@ -179,7 +236,7 @@ class Deva {
   ***************/
   state(st, data=false) {
     if (!Object.keys(this._states).includes(st)) return;
-    this._state = this._states[st];
+    this._state = `${this._states[st]} on ${this.fDate(Date.now(), 'short_month', true)}`;
     const _data = {
       id: this.uid(true),
       client: this._client.id,
@@ -554,15 +611,18 @@ class Deva {
       try {
         if (!this._active) return reject(this._messages.offline);
 
+        let _state = 'question_default';
+        let _hash = 'hash_asnwer';
+
         // *: send just a string of text
         // !: send a command to the local agent
         // #: ask another agent a question
         // #agent method:param1:param2 with text strings for proccessing
         // !method param:list:parse for the local agent
         // if is an ask then we format one way
-        let _state = 'question_default';
         if (isAsk) {
           _state = 'question_ask'
+          _state = 'hash_ask'
           key = t_split[0].substring(1);
           params = t_split[1] ? t_split[1].split(':') : false;
           method = params[0];
@@ -570,7 +630,8 @@ class Deva {
 
         }
         else if (isCmd) {
-          _state = 'question_cmd'
+          _state = 'question_command';
+          _hash = 'hash_command'
           params = t_split[1] ? t_split[1].split(':') : false;
           method = t_split[0].substring(1);
           text = t_split.slice(1).join(' ').trim()
@@ -599,7 +660,6 @@ class Deva {
         // If a question to another Deva with '#' then trigger events
         if (isAsk) {
           this.state('question_asking');
-          this.prompt(`sending key ${key}`);
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
             return resolve(answer);
@@ -629,7 +689,7 @@ class Deva {
               created: Date.now(),
             };
             // create a hash for the answer and insert into answer meta.
-            this.state('hash_answer');
+            this.state(_hash);
             packet.a.meta.hash = this.hash(JSON.stringify(packet.a));
 
             // create a hash for entire packet and insert into packet
@@ -682,6 +742,9 @@ class Deva {
         this.Security = client.security;
         this.Support = client.support;
         this.Services = client.services;
+        this.Systems = client.systems;
+        this.Solutions = client.solutions;
+        this.Development = client.development;
 
         return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start();
       }).then(started => {
@@ -838,7 +901,7 @@ class Deva {
     being accessed.
   ***************/
   client() {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+    if (!this._active) return this._messages.offline;
     this.state('client');
     return this._client;
   }
@@ -851,7 +914,7 @@ class Deva {
     being accessed.
   ***************/
   agent() {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+    if (!this._active) return this._messages.offline;
     this.state('agent');
     return this._agent;
   }
@@ -861,21 +924,66 @@ class Deva {
   params: opts
   describe: basic security features available in a Deva.
   ***************/
-  security(opts) {}
+  security(opts) {
+    if (!this._active) return this._messages.offline;
+    this.state('security');
+    return this._security;
+  }
 
   /**************
   func: security
   params: opts
   describe: basic support features available in a Deva.
   ***************/
-  support(opts) {}
+  support(opts) {
+    if (!this._active) return this._messages.offline;
+    this.state('support');
+    return this._support;
+  }
 
   /**************
   func: security
   params: opts
   describe: basic services features available in a Deva.
   ***************/
-  services(opts) {}
+  services(opts) {
+    if (!this._active) return this._messages.offline;
+    this.state('services');
+    return this._services;
+  }
+
+  /**************
+  func: systems
+  params: opts
+  describe: basic systems features available in a Deva.
+  ***************/
+  systems(opts) {
+    if (!this._active) return this._messages.offline;
+    this.state('systems');
+    return this._systems;
+  }
+
+  /**************
+  func: security
+  params: opts
+  describe: basic solutions features available in a Deva.
+  ***************/
+  solutions(opts) {
+    if (!this._active) return this._messages.offline;
+    this.state('solutions');
+    return this._solutions;
+  }
+
+  /**************
+  func: development
+  params: opts
+  describe: basic development features available in a Deva.
+  ***************/
+  development(opts) {
+    if (!this._active) return this._messages.offline;
+    this.state('development');
+    return this._development;
+  }
 
   /**************
   func: startDevas
@@ -915,5 +1023,73 @@ class Deva {
       }).catch(reject);
     });
   }
+
+  // UTILITY FUNCTIONS
+  /**************
+  func: fDate
+  params:
+    - d: The date string to format.
+    - format: the various formats that can be selected.
+    - time: boolean flag to include the time stampt iwth the date.
+    - locale: The locale formatting of the date to return.
+  describe:
+    formats: long, long_month, short, short_month, year, month, day
+    FDate format ensures that consistent date formatting is used within the
+    system based on the language and locale in the client profile.
+  ***************/
+  fDate(d, format='long', time=false) {
+    if (!d) d = Date.now();
+    d = new Date(d);
+
+    const formats = {
+      long: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
+      long_month: { year: 'numeric', month: 'long', day: 'numeric'},
+      short: { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' },
+      short_month: { year: 'numeric', month: 'short', day: 'numeric' },
+      year: { year: 'numeric' },
+      month: { month: 'long' },
+      day: { day: 'long' },
+      log: { year: 'numeric', month: 'short', day: 'numeric' },
+    };
+    const theDate = d.toLocaleDateString(this._client.locale, formats[format]);
+    const theTime = this.fTime(d);
+    return !theTime ? theDate : `${theDate} - ${theTime}`;
+  }
+
+  /**************
+  func: fTime
+  params:
+    - t: the time to format
+  describe:
+    The formatTime fucntion will return a consistent local time for the t
+    parameter based on the locale setting in the client profile..
+  ***************/
+  fTime(t) {
+    return t.toLocaleTimeString(this._client.locale);
+  }
+
+  /**************
+  func: fCurrency
+  params:
+    - n: is the number that you want to return the currency of.
+  describe:
+    The fCurrency function will format a currency value based on the setting
+    in the client profile.
+  ***************/
+  fCurrency(n) {
+    return new Intl.NumberFormat(this._client.locale, { style: 'currency', currency: this._client.currency }).format(n);
+  }
+
+  /**************
+  func: fPercent
+  params:
+    - n: is the number that you want to format as a percent.
+    - dec: is the number of decimal places to apply to the number.
+  describe:
+  ***************/
+  fPercent(n, dec=2) {
+    return parseFloat(n).toFixed(dec) + '%';
+  }
+
 }
 module.exports = Deva;
