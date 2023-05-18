@@ -58,21 +58,18 @@ const HelloWorld = new Deva({
       const id = this.uid();
       const uuid = this.uid(true);
 
-      const created = this.formatDate(Date.now(), 'long', true)
-      const md5 = this.hash(JSON.stringify(packet));
-      const sha256 = this.hash(JSON.stringify(packet), 'sha256');
-      const sha512 = this.hash(JSON.stringify(packet), 'sha512');
       const cipher = this.cipher(JSON.stringify(packet));
       const decipher = this.decipher(cipher);
 
       const data = {
         id,
         uuid,
+        text,
         hash: {
-          md5,
-          sha256,
-          sha512,
-          created,
+          md5: this.hash(JSON.stringify(packet)),
+          sha256: this.hash(JSON.stringify(packet), 'sha256'),
+          sha512: this.hash(JSON.stringify(packet), 'sha512'),
+          created: this.formatDate(Date.now(), 'long'),
         },
         cipher,
         decipher

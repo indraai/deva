@@ -35,57 +35,80 @@
     },
     "states": {},
     "messages": {},
-    "security": {
-      "hash": "md5",
-      "cipher": {
-        "encrypt": true,
-        "algorithm": "aes-256-cbc",
-        "password": "generic password for encryption test"
+    "features": {
+      "security": {
+        "hash": "md5",
+        "cipher": {
+          "encrypt": true,
+          "algorithm": "aes-256-cbc",
+          "password": "generic password for encryption test"
+        },
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
       },
-      "concerns": [],
-      "global": {},
-      "devas": {
-        "hello": {}
-      }
-    },
-    "support": {
-      "concerns": [],
-      "global": {},
-      "devas": {
-        "hello": {}
-      }
-    },
-    "services": {
-      "concerns": [],
-      "global": {
-        "indra": "https://indra.ai",
-        "world": "https://deva.world",
-        "space": "https://deva.space",
-        "cloud": "https://deva.cloud"
+      "support": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
       },
-      "devas": {
-        "hello": {}
-      }
-    },
-    "systems": {
-      "concerns": [],
-      "global": {},
-      "devas": {
-        "hello": {}
-      }
-    },
-    "solutions": {
-      "concerns": [],
-      "global": {},
-      "devas": {
-        "hello": {}
-      }
-    },
-    "development": {
-      "concerns": [],
-      "global": {},
-      "devas": {
-        "hello": {}
+      "services": {
+        "concerns": [],
+        "global": {
+          "indra": "https://indra.ai",
+          "world": "https://deva.world",
+          "space": "https://deva.space",
+          "cloud": "https://deva.cloud"
+        },
+        "devas": {
+          "hello": {}
+        }
+      },
+      "systems": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "solutions": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "development": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "assistant": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "business": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "legal": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
       }
     }
   }
