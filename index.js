@@ -43,7 +43,6 @@ class Deva {
   }
 
   set States(opts) {
-    console.log('CLIENT', this._client.profile.name);
     const _states = {
       uid: `👻 ${this._agent.profile.name} is making a new #uid`,
       offline: `👻 ${this._agent.profile.name} is offline`,
@@ -93,7 +92,7 @@ class Deva {
       question_command: `🧞‍♀️ ${this._client.profile.name} issued a #command to ${this._agent.profile.name}`,
       hash_question: `🔑 ${this._agent.profile.name} created the #question #hash for ${this._client.profile.name}`,
       hash_ask: `🔑 ${this._agent.profile.name} created the #ask #hash for ${this._client.profile.name}`,
-      hash_answer: `🔑 ${this._agent.profile.name} #answer #hash with`,
+      hash_answer: `🔑 ${this._client.profile.name} #answer #hash with`,
       hash_command: `🔑 ${this._client.profile.name} #command #hash with ${this._agent.profile.name}`,
       hash_packet: `🔑 ${this._agent.profile.name} created the #packet #hash for ${this._client.profile.name}`,
       ask_question: `👽 ${this._client.profile.name} asked ${this._agent.profile.name} a great #question`,
