@@ -782,7 +782,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('done');
     msg = msg ? msg : this._state;
-    return this.onDone && typeof this.onDone === 'function' ? this.onDone() : Promise.resolve(this._messages.done)
+    return this.onDone && typeof this.onDone === 'function' ? this.onDone() : Promise.resolve({text:this._messages.done,prompt:this._agent.prompt})
   }
 
   /**************
