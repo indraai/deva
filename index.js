@@ -1428,6 +1428,10 @@ class Deva {
       this.state('deva_load');
       this.devas[key].init(client).then(loaded => {
         this.state('deva_loaded');
+        this.talk(`deva:load`, {
+          key,
+          created: Date.now(),
+        });
         return resolve();
       }).catch(err => {
         return this.error(err, deva, reject);
@@ -1442,10 +1446,14 @@ class Deva {
     - deva:     The deva key to unload
   describe:     Unload a currently loaded Deva.
   ***************/
-  unload(deva) {
+  unload(key) {
     this.state('deva_unload');
-    delete this.devas[deva];
+    delete this.devas[key];
     this.state('deva_unloaded');
+    this.talk(`deva:unload`, {
+      key,
+      created: Date.now(),
+    });
     return Promise.resolve(`unload:${deva} `);
   }
 
