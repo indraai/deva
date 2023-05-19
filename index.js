@@ -125,7 +125,6 @@ class Deva {
     const ap = this._agent.profile;
     const akey = this._agent.key;
 
-    console.log('AP NAME', ap);
     const _states = {
       uid: `${security.label}:UID ${cp.name} made a #uid with ${ap.name}`,
       hash: `${security.label}:HASH ${cp.name} made a #hash with ${ap.name}`,
