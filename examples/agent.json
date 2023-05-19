@@ -5,8 +5,6 @@
   "DATA": {
     "id": 5380514963421,
     "key": "deva",
-    "name": "@Deva",
-    "describe": "The Deva interface into deva.world.",
     "prompt": {
       "emoji": "🍏",
       "text": "deva",
@@ -28,11 +26,71 @@
       "speed": 1
     },
     "profile": {
+      "name": "Deva",
+      "describe": "The Deva interface into deva.world.",
       "emoji": "/public/devas/deva/emoji.png",
       "avatar": "/public/devas/deva/avatar.png",
       "background": "/public/devas/deva/background.png",
-      "describe": "The Deva Project",
       "gender": "M"
+    },
+    "features": {
+      "assistant": {
+        "label": "🤖ASSISTANT",
+        "name": "@ASSISTANT",
+        "tag": "#ASSISTANT",
+        "loc": "$ASSISTANT"
+      },
+      "business": {
+        "label": "💼BUSINESS",
+        "name": "@BUSINESS",
+        "tag": "#BUSINESS",
+        "loc": "$BUSINESS"
+      },
+      "legal": {
+        "label": "👨‍⚖️LEGAL",
+        "name": "@LEGAL",
+        "tag": "#LEGAL",
+        "loc": "$LEGAL"
+      },
+      "development": {
+        "label": "👨‍💻DEVELOPMENT",
+        "name": "@DEVELOPMENT",
+        "tag": "#DEVELOPMENT",
+        "loc": "$DEVELOPMENT"
+      },
+      "security": {
+        "label": "🚨SECURITY",
+        "name": "@SECURITY",
+        "tag": "#SECURITY",
+        "loc": "$SECURITY"
+      },
+      "support": {
+        "label": "🆘SUPPORT",
+        "name": "@SUPPORT",
+        "tag": "#SUPPORT",
+        "loc": "$SUPPORT"
+      },
+      "services": {
+        "label": "📞SERVICES",
+        "name": "@SERVICES",
+        "tag": "#SERVICES",
+        "loc": "$SERVICES"
+      },
+      "solutions": {
+        "label": "💡SOLUTIONS",
+        "name": "@SOLUTIONS",
+        "tag": "#SOLUTIONS",
+        "loc": "$SOLUTIONS"
+      },
+      "systems": {
+        "label": "🔧SYSTEMS",
+        "name": "@SOLUTIONS",
+        "tag": "#SOLUTIONS",
+        "loc": "$SOLUTIONS"
+      }
+    },
+    "vars": {
+      "hello": "Hellow World"
     }
   }
 }

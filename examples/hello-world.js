@@ -1,7 +1,8 @@
 // Copyright (c)2023 Quinn Michaels
 // Distributed under the MIT software license, see the accompanying
 // file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
-const client = require('./client.json');
+const client = require('./client.json').DATA;
+const agent = require('./agent.json').DATA;
 
 const Deva = require('../index');
 const HelloWorld = new Deva({
@@ -10,25 +11,12 @@ const HelloWorld = new Deva({
     key: 'hello',
   },
   agent: {
-    id: 101,
-    key: 'hello',
-    prompt: {
-      emoji: '🐶',
-      text: 'hello',
-      color: 'white',
-    },
-    voice: {
-      speech: 'Alex',
-      speed: 1
-    },
-    profile: {
-      name: 'Hello World',
-      description: 'The most over complex Hello World in the Universe',
-      avatar: '',
-      background: '',
-      describe: 'Hello World Deva',
-      gender: 'N',
-    },
+    id: agent.id,
+    key: agent.key,
+    prompt: agent.prompt,
+    voice: agent.voice,
+    profile: agent.profile,
+    features: agent.features,
     translate(input) {
       return input.trim();
     },
@@ -36,9 +24,7 @@ const HelloWorld = new Deva({
       return input.trim();
     }
   },
-  vars: {
-    hello: 'Hello World'
-  },
+  vars: agent.vars,
   listeners: {
     'hello:state'(packet) {
       // console.log(packet.state);
@@ -47,13 +33,10 @@ const HelloWorld = new Deva({
       console.log(packet.text);
     }
   },
-  deva: {},
+  devas: {},
   modules: {},
   func: {
-    getclient(packet) {
-      return Promise.resolve(this._client);
-    },
-    state(packet) {
+    test(packet) {
       const text = this._state
       const id = this.uid();
       const uuid = this.uid(true);
@@ -75,29 +58,22 @@ const HelloWorld = new Deva({
         decipher
       }
       return Promise.resolve({
-        text: 'state return see data',
+        text: packet.a.text,
         data,
       });
     }
   },
   methods: {
-    getclient(packet) {
-      return this._client;
-    },
-    state(packet) {
-      return this.func.state(packet);
+    test(packet) {
+      return this.func.test(packet);
     }
   },
-  onError(e, packet) {
-    console.log('ERROR\n\n', e);
-  }
 });
 
-HelloWorld.init(client.DATA).then(done => {
+HelloWorld.init(client).then(done => {
   // console.log(done);
-  return HelloWorld.question('/state')
+  return HelloWorld.question('/test')
 }).then(answer => {
-  console.log(answer.a.text);
   console.log(answer.a.data);
 });
 

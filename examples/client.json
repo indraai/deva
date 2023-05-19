@@ -33,8 +33,6 @@
       "locale": "en-US",
       "currency": "USD"
     },
-    "states": {},
-    "messages": {},
     "features": {
       "security": {
         "hash": "md5",
