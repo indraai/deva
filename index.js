@@ -125,6 +125,7 @@ class Deva {
     const ap = this._agent.profile;
     const akey = this._agent.key;
 
+    console.log('AP NAME', ap);
     const _states = {
       uid: `${security.label}:UID ${cp.name} made a #uid with ${ap.name}`,
       hash: `${security.label}:HASH ${cp.name} made a #hash with ${ap.name}`,
@@ -160,7 +161,7 @@ class Deva {
       legal: `${legal.label}: ${cp.name} and ${ap.name} need ${legal.name} assistance`,
       business: `${business.label}: ${cp.name} and ${ap.name} need ${business.name} assistance`,
       devas_start: `🧞‍♂️DEVAS: Starting all the #Devas with ${cp.name}`,
-      devas_ready: `🧞‍♂️DEVA:READY The #Devas are #ready and #waiitng for ${cp.name} using @${cp.key} #${cp.key} $${cp.key}`,
+      devas_ready: `🧞‍♂️DEVA:READY The #Devas are #ready and #waiitng for ${cp.name} using @${ckey} #${ckey} $${ckey}`,
       devas_stop: `🧞‍♂️DEVA:STOPPING The #Devas are #stopping with ${cp.name}`,
       devas_stopped: `🧞‍♂️DEVA:🛑STOP #Devas and ${cp.name} have #stopped, and that means time for #offerings 🍎🍑🍍🧋`,
       deva_load: `🧞‍♂️DEVA:LOADING ${ap.name} loading for ${cp.name}`,
