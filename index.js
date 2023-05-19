@@ -543,7 +543,7 @@ class Deva {
           global: assistant.global,                      // the global policies for client
           personal: assistant.devas[this._agent.key]     // Client personal features and rules.
         };
-        delete this._client.features.legal;
+        delete this._client.features.assistant;
         return this.Done();
       }
     } catch (e) {
@@ -558,6 +558,7 @@ class Deva {
   ***************/
   Done() {
     try {
+      delete this._client.features;               // delete the features key when done.
       this.state('setting_done');                 // set state to assistant setting
       return;
     } catch (e) {
@@ -678,7 +679,7 @@ class Deva {
     packet.a = {
       agent: this._agent || false,
       client: this._client || false,
-      text: `${this._messages.method_not_found} - ${packet.q.meta.method} `,
+      text: `${this._messages.method_not_found}`,
       meta: {
         key: this._agent.key,
         method: packet.q.meta.method,
@@ -924,7 +925,7 @@ class Deva {
     };
 
     try {
-      if (this.methods[packet.q.meta.method] === undefined) {
+      if (this.methods[packet.q.meta.method] !== 'function') {
         return setImmediate(() => {
           packet.a.text = `INVALID METHOD (${packet.q.meta.method})`;
           this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
@@ -1035,9 +1036,9 @@ class Deva {
             created: Date.now(),                          // timestamp the question
         }
 
-        this.state('hash_question');                      // set the has question state
         // hash the question
         packet.q.meta.hash = this.hash(JSON.stringify(packet.q));
+        this.state('hash_question');                      // set the has question state
 
         this.state(_state, packet);                       // set the state to teh _state variable
 
@@ -1078,13 +1079,15 @@ class Deva {
               created: Date.now(),
             };
             // create a hash for the answer and insert into answer meta.
-            this.state(_hash);
             packet.a.meta.hash = this.hash(JSON.stringify(packet.a));
+            this.state(_hash);
             // create a hash for entire packet and insert into packet
-            this.state('hash_packet');
             // hash the entire packet.
             packet.hash = this.hash(JSON.stringify(packet));
+            this.state('hash_packet');
+
             this.state('question_answer', packet);        // set the question answer state
+            this.talk(`${this._agent.key}:answer`, packet);        // set the question answer state
             return resolve(packet);                       // resolve the packet to the caller.
           }).catch(err => {                               // catch any errors in the method
             return this.error(err, packet, reject);       // return this.error with err, packet, reject
@@ -1147,11 +1150,18 @@ class Deva {
   error(err,data=false,reject=false) {
     this.state('error', {err, data});                           // set the state to error
     // check fo rthe custom onError function in the agent.
+    console.log('\n::BEGIN:ERROR\n');
+    console.log(err);
+    console.log('\n::END:ERROR\n');
+    if (data) {
+      console.log('::::::');
+      console.log('\n::BEGIN:DATA\n');
+      console.log(JSON.stringify(data, null, 2));
+      console.log('\n::END:DATA\n');
+    }
+
     if (this.onError && typeof this.onError === 'function') return this.onError(err, data, reject);
     else {
-      console.log('\n::BEGIN:ERROR\n');
-      console.log(err);
-      console.log('\n::END:ERROR\n');
       return reject ? reject(err) : err;
     }
   }
