@@ -11,14 +11,14 @@ class Deva {
     this._config = opts.config || {};                   // local Config Object
     this._agent = opts.agent || false;                  // Agent profile object
     this._client = {};                                  // this will be set on init.
-    this._state = 'OFFLINE';                            // current state of agent.
+    this._message = 'offline';                          // current state of agent.
     this._active = false;                               // the active/birth date.
     this._security = false;                             // inherited Security features.
     this._support = false;                              // inherited Support features.
     this._services = false;                             // inherited Service features.
     this._assistant = false;                            // inherited @Assistant features.
     this._business = false;                             // inherited @Business features.
-    this._development = false;                             // inherited @Business features.
+    this._development = false;                          // inherited @Business features.
     this._legal = false;                                // inherited @Legal features.
     this.events = opts.events || new EventEmitter({});  // Event Bus
     this.lib = opts.lib || {};                          // used for loading library functions
@@ -46,202 +46,200 @@ class Deva {
       "_agent"
     ];
 
+    this._state = 'offline';                            // current state of agent.
+    this._states = {
+      ask: 'ask',
+      question: 'question',
+
+      offline: 'offline',
+      online: 'online',
+
+      init: 'init',
+      start: 'start',
+      enter: 'enter',
+      stop: 'stop',
+      exit: 'exit',
+      error: 'error',
+      load: 'load',
+      unload: 'unload',
+      uid: 'uid',
+      hash: 'hash',
+      cipher: 'cipher',
+      decipher: 'deciper',
+
+      invalid: 'invalid',
+      done: 'done',
+      error: 'error',
+    };                                  // states object
+
+    this._zone = false;                            // current state of agent.
+    this._zones = {
+      config: 'config',
+      idle: 'idle',
+      train: 'training',
+      work: 'working',
+      invalid: 'invalid',
+      done: 'done',
+      error: 'error',
+    };                                  // states object
+
+    this._action = false;
+    this._actions = {
+      wait: 'wait',
+      question: 'question',
+      question_ask: 'question:ask',
+      question_ask_answer: 'question:ask:answer',
+      question_cmd: 'question:cmd',
+      question_method: 'question:method',
+      question_talk: 'quesiton:talk',
+      question_hash: 'question:hash',
+      question_answer: 'question:answer',
+      question_done: 'quesiton:done',
+      answer: 'answer',
+      answer_talk: 'asnwer:talk',
+      ask: 'ask',
+      ask_answer: 'ask:answer',
+      Features: 'Features',
+      Security: 'Security',
+      Support: 'Support',
+      Systems: 'Systems',
+      Services: 'Services',
+      Solutions: 'Solutions',
+      Development: 'Development',
+      Business: 'Business',
+      Legal: 'Legal',
+      Assistant: 'Assistant',
+      Story: 'Story',
+      Mind: 'Mind',
+      invalid: 'invalid',
+      error: 'error',
+      done: 'done',
+    }
+
+    this._feature = false;
     this._features = {
-      assistant: {
-        label: '👤ASSISTANT',
-        name: '@ASSISTANT',
-        tag: '#ASSISTANT',
-        loc: '$ASSISTANT',
-      },
-      business: {
-        label: '💼BUSINESS',
-        name: '@BUSINESS',
-        tag: '#BUSINESS',
-        loc: '$BUSINESS',
-      },
-      legal: {
-        label: '👨‍⚖️LEGAL',
-        name: '@LEGAL',
-        tag: '#LEGAL',
-        loc:' $LEGAL',
-      },
-      development: {
-        label: '👨‍💻DEVELOPMENT',
-        name: '@DEVELOPMENT',
-        tag: '#DEVELOPMENT',
-        loc: '$DEVELOPMENT',
-      },
-      security: {
-        label: '🚨SECURITY',
-        name: '@SECURITY',
-        tag: '#SECURITY',
-        loc: '$SECURITY',
-      },
-      support: {
-        label: '🆘SUPPORT',
-        name: '@SUPPORT',
-        tag: '#SUPPORT',
-        loc: '$SUPPORT',
-      },
-      services: {
-        label: '📞SERVICES',
-        name: '@SERVICES',
-        tag: '#SERVICES',
-        loc: '$SERVICES',
-      },
-      solutions: {
-        label: '💡SOLUTIONS',
-        name: '@SOLUTIONS',
-        tag: '#SOLUTIONS',
-        loc: '$SOLUTIONS',
-      },
-      systems: {
-        label: '🔧SYSTEMS',
-        name: '@SYSTEMS',
-        tag: '#SYSTEMS',
-        loc: '$SYSTEMS',
-      }
+      security: 'security',
+      Security: 'Security',
+      support: 'support',
+      Support: 'Support',
+      services: 'services',
+      Services: 'Services',
+      solutions: 'solutions',
+      Solutions: 'Solutions',
+      systems: 'systems',
+      Systems: 'Systems',
+      development: 'development',
+      Development: 'Development',
+      business: 'business',
+      Business: 'Business',
+      legal:'legal',
+      Legal:'legal',
+      assistant: 'assistant',
+      Assistant: 'Assistant',
+      story: 'story',
+      Story: 'Story',
+      mind: 'mind',
+      Mind: 'Mind',
+      error: 'error',
+      done: 'done',
     };
-    this._states = {};                                  // states object
-    this._messages = {};                                // messages object
+
+    this._messages = {
+      offline: `${this._agent.profile.name} is ofline`,
+      online: `${this._agent.profile.name} is online`,
+      states: {
+        ask: `:${this._state.ask}`,
+        question: `${this._states.quesiton}`,
+        offline: `${this._states.offline}`,
+        online: `${this._states.online}`,
+        init: `${this._states.init}`,
+        start: `${this._states.start}`,
+        enter: `${this._states.enter}`,
+        stop: `${this._states.stop}`,
+        exit: `${this._states.exit}`,
+        load: `${this._states.load}`,
+        unload: `${this._states.unload}`,
+        uid: `${this._states.uid}`,
+        hash: `${this._states.hash}`,
+        cipher: `${this._states.cipher}`,
+        decipher: `${this._states.decipher}`,
+        features: `${this._states.features}`,
+        feature: `${this._states.feature}`,
+        invalid: `${this._states.invalid}`,
+        done: `${this._states.done}`,
+        error: `${this._states.error}`,
+      },
+      zones: {
+        config: `${this._zones.config}`,
+        idle: `${this._zones.idle}`,
+        train: `${this._zones.train}`,
+        work: `${this._zones.work}`,
+        invalid: `${this._zones.invalid}`,
+        done: `${this._zones.done}`,
+        error: `${this._zones.error}`,
+      },
+      actions: {
+        wait: `${this._agent.profile.name} ${this._actions.wait}`,
+        question: `${this._agent.profile.name} ${this._actions.question}`,
+        question_ask: `${this._agent.profile.name} ${this._actions.question_ask}`,
+        question_ask_answer: `${this._agent.profile.name} ${this._actions.questoin_ask_answer}`,
+        question_cmd: `${this._agent.profile.name} ${this._actions.question_cmd}`,
+        question_method: `${this._agent.profile.name} ${this._actions.question_method}`,
+        question_talk: `${this._agent.profile.name} ${this._actions.question_talk}`,
+        question_hash: `${this._agent.profile.name} ${this._actions.question_hash}`,
+        question_answer: `${this._agent.profile.name} ${this._actions.question_answer}`,
+        question_done: `${this._agent.profile.name} ${this._actions.question_done}`,
+        answer: `${this._agent.profile.name} ${this._actions.answer}`,
+        answer_talk: `${this._agent.profile.name} ${this._actions.answer_talk}`,
+        ask: `${this._agent.profile.name} ${this._actions.ask}`,
+        ask_answer: `${this._agent.profile.name} ${this._actions.ask_answer}`,
+        Security: `${this._actions.Security}`,
+        Support: `${this._actions.Support}`,
+        Services: `${this._actions.Services}`,
+        Solutions: `${this._actions.Solutions}`,
+        Systems: `${this._actions.Systems}`,
+        Development: `${this._actions.Development}`,
+        Business: `${this._actions.Business}`,
+        Legal: `${this._actions.Legal}`,
+        Assistant: `${this._actions.Assistant}`,
+        Story: `${this._actions.Story}`,
+        Mind: `${this._actions.Mind}`,
+        feature: `${this._actions.feature}`,
+        features: `${this._actions.features}`,
+        invalid: `${this._actions.invalid}`,
+        done: `${this._actions.done}`,
+        error: `${this._action.error}`,
+      },
+      features: {
+        security: this._features.security,
+        Security: this._features.Security,
+        support: this._features.support,
+        Support: this._features.Support,
+        services: this._features.services,
+        Services: this._features.Services,
+        solutions: this._features.solutions,
+        Solutions: this._features.Solutions,
+        systems: this._features.systems,
+        Systems: this._features.Systems,
+        development: this._features.development,
+        Development: this._features.Development,
+        business: this._features.business,
+        Business: this._features.Business,
+        legal: this._features.legal,
+        Legal: this._features.Legal,
+        assistant: this._features.assistant,
+        Assistant: this._features.Assistant,
+        story: this._features.story,
+        Story: this._features.Story,
+        mind: this._features.story,
+        Mind: this._features.Mind,
+        invalid: this._features.invalid,
+        done: this._features.done,
+        error: this._features.error,
+      },
+    };                                // messages object
   }
 
-  /**************
-  func: States
-  params: none
-  describe:
-    The States function builds the list of states with the associated client and
-    agent variables in the place holders. This function runs after the Client
-    function to ensure that hte messages are personalized to the Client and AGent.
-  ***************/
-  States() {
-    const {
-            development, security, services, support,
-            systems, solutions, assistant, business, legal
-          } = this._features;
-
-    const cp = this._client.profile;
-    const ckey = this._client.key
-    const ap = this._agent.profile;
-    const akey = this._agent.key;
-
-    const _states = {
-      uid: `${security.label}:UID ${cp.name} made a #uid with ${ap.name}`,
-      hash: `${security.label}:HASH ${cp.name} made a #hash with ${ap.name}`,
-      cipher: `${security.label}:CIPHER ${cp.name} locked a #cipher with ${ap.name}`,
-      decipher: `${security.label}:DECIPHER ${cp.name} unlocked a #cipher with ${ap.name}`,
-      offline: `👻 ${ap.name} is offline`,
-      online: `📡 ${ap.name} is online`,
-      config: `‍📀 ${ap.name} is checking the config`,
-      client: `👨‍💻 ${ap.name} opened the ${ckey} profile`,
-      agent: `👨‍💻 ${ap.name} is looking at ${akey} profile`,
-      init: `🚀 ${ap.name} is initializing for ${cp.name}`,
-      start: `🎬 ${ap.name} has started the process for ${cp.name}`,
-      enter: `🎪 ${ap.name} is entering the deva.world with ${cp.name}`,
-      stop: `🛑 ${ap.name} has stopped for ${cp.name}`,
-      exit: `🚪 ${ap.name} found the exit with ${cp.name}`,
-      done: `🤝 ${ap.name} is all done time for #offerings 🍫🍌`,
-      wait: `😵‍💫 ${ap.name} waiting for #stuff from ${cp.name}`,
-      data: `📀 ${ap.name} is receiving #data for ${cp.name}`,
-      ask: `🙋‍♀️ ${ap.name} is asking a #question from ${cp.name}`,
-      cmd: `📟 ${ap.name} entered a #command from ${cp.name}`,
-      question: `🐵 ${ap.name} is in #question mode ${cp.name}`,
-      ask: `🐵 ${ap.name}  is in #ask mode ${cp.name}`,
-      talk: `🎙️ ${ap.name} is in #talk mode with ${cp.name}`,
-      listen: `🎧 ${ap.name} is in #listening mode with ${cp.name}`,
-      error: `❌ ${ap.name} had an error. Let's have @Systems look into that.`,
-      story: `📓STORY: ${cp.name} is creating an amazing #story ${cp.name}`,
-      development: `${development.label}: ${cp.name} and ${ap.name} need ${development.name} assistance`,
-      security: `${security.label}: ${cp.name} and ${ap.name} need ${security.name} assistance`,
-      support: `${support.label}: ${cp.name} and ${ap.name} need ${support.name} assistance`,
-      services: `${services.label}: ${cp.name} and ${ap.name} need ${services.name} assistance`,
-      systems: `${systems.label}: ${cp.name} and ${ap.name} need ${systems.name} assistance`,
-      solutions: `${development.label}: ${cp.name} and ${ap.name} need ${development.name} assistance`,
-      legal: `${legal.label}: ${cp.name} and ${ap.name} need ${legal.name} assistance`,
-      business: `${business.label}: ${cp.name} and ${ap.name} need ${business.name} assistance`,
-      devas_start: `🧞‍♂️DEVAS: Starting all the #Devas with ${cp.name}`,
-      devas_ready: `🧞‍♂️DEVA:READY The #Devas are #ready and #waiitng for ${cp.name} using @${ckey} #${ckey} $${ckey}`,
-      devas_stop: `🧞‍♂️DEVA:STOPPING The #Devas are #stopping with ${cp.name}`,
-      devas_stopped: `🧞‍♂️DEVA:🛑STOP #Devas and ${cp.name} have #stopped, and that means time for #offerings 🍎🍑🍍🧋`,
-      deva_load: `🧞‍♂️DEVA:LOADING ${ap.name} loading for ${cp.name}`,
-      deva_loaded: `🧞‍♂️DEVA:LOADED ${ap.name} loaded for ${cp.name}`,
-      deva_unloaded: `🧞‍♂️DEVAS:UNLOADED ${ap.name} unloaded for ${cp.name}`,
-      question_me: `❓QUESTION:START ${cp.name} started with a great #question to ${ap.name}`,
-      question_default: `🧞‍♂️QUESTION:ME ${cp.name} asked a great #question to ${ap.name}`,
-      question_ask: `🧞QUESTION:ASK ${ap.name} is pondering what ${cp.name} asked`,
-      question_asking: `🧞QUESTION:ASK:ANSWER ${ap.name} is asking another #Deva for ${cp.name}`,
-      question_aswering: `🧞QUESTION:ASK:ANSWERING ${ap.name} is answering the #question ${cp.name} asked`,
-      question_answer: `🔮QUESTION:ANSWER ${cp.name} received an #ansewr from ${ap.name}`,
-      question_command: `🧞‍♀️QUESTION:CMD ${cp.name} issued a #command to ${ap.name}`,
-      hash_question: `${security.label}:HASH:QUESTION ${ap.name} created the #question #hash for ${cp.name}`,
-      hash_ask: `${security.label}:HASH:ASK ${ap.name} created the #ask #hash for ${cp.name}`,
-      hash_answer: `${security.label}:HASH:ANSWER ${cp.name} #answer #hash with ${ap.name}`,
-      hash_command: `${security.label}:HASH:COMMAND ${cp.name} used a #command with ${ap.name}`,
-      hash_packet: `${security.label}:HASH:PACKET ${ap.name} created the #packet #hash for ${cp.name}`,
-      ask_question: `❓QUESTION: ${cp.name} asked ${ap.name} a great #question`,
-      ask_answer: `💡ANSWER: ${cp.name} received a great #answer from ${ap.name}`,
-      method_not_found: `${security.label}:ERROR:COMMAND ${cp.name} used a #command while working with ${ap.name}, and may need from ${security.name}`,
-
-      ready_security: `${security.label}:READY - ${security.name} is ready on ${security.tag} in ${security.loc}`,
-      ready_support: `${support.label}:READY - ${support.name} is ready on ${support.tag} in ${support.loc}`,
-      ready_services: `${services.label}:READY - ${services.name} is ready on ${services.tag} in ${services.loc}`,
-      ready_systems: `${systems.label}:READY - ${systems.name} is ready on ${systems.tag} in ${systems.loc}`,
-      ready_solutions: `${solutions.label}:READY - ${solutions.name} is ready on ${solutions.tag} in ${solutions.loc}`,
-      ready_development: `${development.label}:READY - ${development.name} is ready ${development.tag} in ${development.loc}`,
-      ready_legal: `${legal.label}:READY - ${legal.name} is ready on ${legal.tag} in ${legal.loc}`,
-      ready_business: `${business.label}:READY - ${business.name} is ready ${business.tag} in ${business.loc}`,
-      ready_assistant: `${assistant.label}:READY - ${assistant.name} is ready ${assistant.tag} in ${business.loc}`,
-
-      alert_security: `${security.label}:ALERT There is an #issue with ${cp.name} and ${ap.name}.`,
-      alert_support: `${support.label}:ALERT There is an #issue with ${cp.name} and ${ap.name}.`,
-      alert_services: `${services.label}:ALERT There is an #issue with ${cp.name} and ${ap.name}.`,
-      alert_solutions: `${solutions.label}:ALERT There is an #issue with ${cp.name} and ${ap.name}.`,
-      alert_systems: `${systems.label}:ALERT There is an #issue with ${cp.name} and ${ap.name}.`,
-      alert_development: `${development.label}:ALERT There is an #issue with ${cp.name} and ${ap.name}.`,
-      alert_assistant: `${assistant.label}:ALERT There is an #issue with ${cp.name} and ${ap.name}.`,
-      alert_legal: `${legal.label}:ALERT There is an #issue with ${cp.name} and ${ap.name}.`,
-      alert_business: `${business.label}:ALERT There is an #issue with ${cp.name} and ${ap.name}.`,
-
-      setting_client: `👨CLIENT: ${ap.name} is setting #${ckey} for ${cp.name} `,
-      setting_security: `${security.label}: ${cp.name} and ${ap.name} are receiving ${security.name} on ${security.tag} in ${security.loc}`,
-      setting_development: `${development.label}: ${cp.name} and ${ap.name} are receiving ${development.name} on ${development.tag} in ${development.loc}`,
-      setting_support: `${support.label}: ${cp.name} and ${ap.name} are receiving ${support.name} on ${development.tag} in ${development.loc}`,
-      setting_services: `${services.label}: ${cp.name} and ${ap.name} are receiving ${services.name} on ${services.tag} in ${services.loc}`,
-      setting_systems: `${systems.label}: ${cp.name} and ${ap.name} are receiving ${systems.name} on ${systems.tag} in ${systems.loc}`,
-      setting_solutions: `${solutions.label}: ${cp.name} and ${ap.name} are receiving ${solutions.name} on ${solutions.tag} in ${solutions.loc}`,
-      setting_assistant: `${assistant.label}: ${cp.name} and ${ap.name} are receiving ${assistant.name} on ${assistant.tag} in ${assistant.loc}`,
-      setting_legal: `${legal.label}: ${cp.name} and ${ap.name} are receiving ${legal.name} on ${legal.tag} in ${legal.loc}`,
-      setting_business: `${business.label}: ${cp.name} and ${ap.name} are receiving ${business.name} on ${business.tag} in ${business.loc}`,
-      setting_done: `✅DONE: FEATURE SETTINGS COMPLETE`,
-    }
-    this._states = _states;                             // The available states to work with.
-  }
-
-  /**************
-  func: Messages
-  params: none
-  describe:
-    The Messages function builds the system messages, and allows for the
-    reloading of system messages when client or agent data changes.
-  ***************/
-  Messages() {
-    // Default system messages
-    const _messages = {
-      offline: `🙅‍♂️ ${this._agent.profile.name} offline`,
-      init: `⚠️ ${this._agent.profile.name} init`,
-      start: `✅ ${this._agent.profile.name} start`,
-      stop: `💥 ${this._agent.profile.name} stop.`,
-      enter: `🖖 ${this._agent.profile.name} enter.`,
-      exit: `🚪 ${this._agent.profile.name} exit.`,
-      done: `👍 ${this._agent.profile.name} done.`,
-      devas_started: '🍪DEVAS: #online and ready for #offerings 🍫🥛🍚🍯🧂',
-      devas_stopped: '🛑DEVAS: have stopped',
-      notext: `❌ ${this._client.profile.name}, Invalid input.`,
-      deval_already_loaded: `That #DEVA is already loaded.`,
-      method_not_found: `❌ ${this._client.profile.name} you sure messed that up!`,
-    }
-    this._messages = this.copy(_messages);               // set a copy of _messages as this._messages;
-  }
 
   /**************
   func: Client
@@ -253,21 +251,11 @@ class Deva {
   usage:
     this.Client = {data}
   ***************/
-  set Client(client) {
+  Client(client) {
+    this.state('client_data');
     const _client = this.copy(client);                // copy the client parameter
     this._client = _client;                           // set local _client to this scope
-
-    this.States()                      // set the States after the Client
-    this.Messages()                  // set the Messages after the Client
-    // this.Support();
-    // this.Services();
-    // this.Systems();
-    // this.Solutions();
-    // this.Development();
-    // this.Assistant();
-    // this.Business();
-    // this.Legal();
-    // if (_client.featuers) delete _client.features;    // delete features key for client security
+    return Promise.resolve();
   }
 
   /**************
@@ -278,10 +266,11 @@ class Deva {
     client presented data.
   ***************/
   Security() {
+    this.feature('Security');
     try {
       if (!this._client.features.security) return this.Support();
       else {
-        this.state('setting_security');
+        this.action('Security');
         const {id, profile, features} = this._client;   // make a copy the clinet data.
         const {security} = features;                    // make a copy the clinet data.
         this._security = {                              // set this_security with data
@@ -298,6 +287,8 @@ class Deva {
         return this.Support();
       }
     } catch (e) {
+      this.action('error');
+      this.feature('error');
       return this.error(e)                             // run error handling if an error is caught
     }
   }
@@ -310,10 +301,11 @@ class Deva {
     client presented data.
   ***************/
   Support() {
+    this.feature('Support');                  // set state to support setting
     try {
       if (!this._client.features.support) return this.Services()
       else {
-        this.state('setting_support');                  // set state to support setting
+        this.action('Support');
         const {id, features, profile} = this._client;        // set the local consts from client copy
         const {support} = features;                     // set support from features const
         this._support = {                               // set this_support with data
@@ -328,6 +320,8 @@ class Deva {
         return this.Services();
       }
     } catch (e) {
+      this.action('error');
+      this.feature('error');
       return this.error(e)                             // run error handling if an error is caught
     }
   }
@@ -340,10 +334,11 @@ class Deva {
     client presented data.
   ***************/
   Services() {
+    this.feature('Services');                 // set state to security setting
     try {
       if (!this._client.features.services) return this.Systems();
       else {
-        this.state('setting_services');                 // set state to security setting
+        this.action('Services')
         const {id, features, profile} = this._client;   // set the local consts from client copy
         const {services} = features;                    // set services from features const
         this._services = {                              // set this_services with data
@@ -358,6 +353,8 @@ class Deva {
         return this.Systems()
       }
     } catch (e) {
+      this.action('error');
+      this.feature('error');
       return this.error(e)                             // run error handling if an error is caught
     }
   }
@@ -370,10 +367,11 @@ class Deva {
     client presented data.
   ***************/
   Systems() {
+    this.feature('Systems');                  // set state to systems setting
     try {
       if (!this._client.features.systems) return this.Solutions();
       else {
-        this.state('setting_systems');                  // set state to systems setting
+        this.action('Systems');
         const {id, features, profile} = this._client;   // set the local consts from client copy
         const {systems} = features;                     // set systems from features const
         this._systems = {                               // set this_systems with data
@@ -389,6 +387,8 @@ class Deva {
       }
     } catch (e) {
       // run error handling if an error is caught
+      this.action('error');
+      this.feature('error');
       return this.error(e)
     }
   }
@@ -401,10 +401,11 @@ class Deva {
     client presented data.
   ***************/
   Solutions() {
+    this.feature('Solutions');                // set state to solutions setting
     try {
       if (!this._client.features.solutions) return this.Development();
       else {
-        this.state('setting_solutions');                // set state to solutions setting
+        this.action('Solutions');
         const {id, features, profile} = this._client;   // set the local consts from client copy
         const {solutions} = features;                   // set solutions from features const
         this._solutions = {                             // set this_solutions with data
@@ -419,6 +420,8 @@ class Deva {
         return this.Development()
       }
     } catch (e) {
+      this.action('error');
+      this.feature('error');
       return this.error(e)                             // run error handling if an error is caught
     }
   }
@@ -431,18 +434,17 @@ class Deva {
     client presented data.
   ***************/
   Development() {
+    this.feature('Development');              // set state to development setting
     try {
       if (!this._client.features.development) return this.Business();
       else {
-        this.state('setting_development');              // set state to development setting
+        this.action('Development');
         const {id, features, profile} = this._client;   // set the local consts from client copy
         const {development} = features;                 // set development from features const
         this._development = {                           // set this_development with data
           id: this.uid(true),                           // uuid of the development feature
           client_id: id,                                // client id for reference
           client_name: profile.name,                    // client name for personalization
-          hash: development.hash,                       // client preferred hash algorithm
-          cipher: development.cipher,                   // client preferred cipher settings
           concerns: development.concerns,               // any concerns for client
           global: development.global,                   // the global policies for client
           personal: development.devas[this._agent.key]  // Client personal features and rules.
@@ -451,6 +453,8 @@ class Deva {
         return this.Business()
       }
     } catch (e) {
+      this.action('error');
+      this.feature('error');
       return this.error(e)                             // run error handling if an error is caught
     }
   }
@@ -463,18 +467,17 @@ class Deva {
     client presented data.
   ***************/
   Business(client=false) {
+    this.feature('Business');                 // set state to business setting
     try {
       if (!this._client.features.business) return this.Legal();
       else {
-        this.state('setting_business');                 // set state to business setting
+        this.action('Business');
         const {id, features, profile} = this._client;   // set the local consts from client copy
         const {business} = features;                    // set business from features const
         this._business = {                              // set this_business with data
           id: this.uid(true),                           // uuid of the business feature
           client_id: id,                                // client id for reference
           client_name: profile.name,                    // client name for personalization
-          hash: business.hash,                          // client preferred hash algorithm
-          cipher: business.cipher,                      // client preferred cipher settings
           concerns: business.concerns,                  // any concerns for client
           global: business.global,                      // the global policies for client
           personal: business.devas[this._agent.key]     // Client personal features and rules.
@@ -483,6 +486,8 @@ class Deva {
         return this.Legal();
     }
     } catch (e) {
+      this.action('error');
+      this.feature('error');
       return this.error(e)                             // run error handling if an error is caught
     }
   }
@@ -495,18 +500,17 @@ class Deva {
     client presented data.
   ***************/
   Legal() {
+    this.feature('Legal');                    // set state to legal setting
     try {
       if (!this._client.features.legal) this.Assistant();
       else {
-        this.state('setting_legal');                    // set state to legal setting
+        this.action('Legal');
         const {id, features, profile} = this._client;   // set the local consts from client copy
         const {legal} = features;                       // set legal from features const
         this._legal = {                                 // set this_legal with data
           id: this.uid(true),                           // uuid of the legal feature
           client_id: id,                                // client id for reference
           client_name: profile.name,                    // client name for personalization
-          hash: legal.hash,                             // client preferred hash algorithm
-          cipher: legal.cipher,                         // client preferred cipher settings
           concerns: legal.concerns,                     // any concerns for client
           global: legal.global,                         // the global policies for client
           personal: legal.devas[this._agent.key]        // Client personal features and rules.
@@ -527,26 +531,91 @@ class Deva {
     client presented data.
   ***************/
   Assistant(client=false) {
+    this.feature('Assistant');                 // set state to assistant setting
     try {
       if (!this._client.features.assistant) return this.Done();
       else {
-        this.state('setting_assistant');                 // set state to assistant setting
+        this.action('Assistant');
         const {id, features, profile} = this._client;        // set the local consts from client copy
         const {assistant} = features;                    // set assistant from features const
         this._assistant = {                              // set this_assistant with data
           id: this.uid(true),                           // uuid of the assistant feature
           client_id: id,                                // client id for reference
           client_name: profile.name,                    // client name for personalization
-          hash: assistant.hash,                          // client preferred hash algorithm
-          cipher: assistant.cipher,                      // client preferred cipher settings
           concerns: assistant.concerns,                  // any concerns for client
           global: assistant.global,                      // the global policies for client
           personal: assistant.devas[this._agent.key]     // Client personal features and rules.
         };
         delete this._client.features.assistant;
+        return this.Story();
+      }
+    } catch (e) {
+      return this.error(e)                             // run error handling if an error is caught
+    }
+  }
+
+  /**************
+  func: Story
+  params: client: false
+  describe:
+    The Story feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Story(client=false) {
+    this.feature('Story');                 // set state to story setting
+    try {
+      if (!this._client.features.story) return this.Mind();
+      else {
+        this.action('Story');
+        const {id, features, profile} = this._client;       // set the local consts from client copy
+        const {story} = features;                           // set story from features const
+        this._story = {                                     // set this_story with data
+          id: this.uid(true),                               // uuid of the story feature
+          client_id: id,                                    // client id for reference
+          client_name: profile.name,                        // client name for personalization
+          concerns: story.concerns,                         // any concerns for client
+          global: story.global,                             // the global policies for client
+          personal: story.devas[this._agent.key]            // Client personal features and rules.
+        };
+        delete this._client.features.story;
+        return this.Mind();
+      }
+    } catch (e) {
+      this.action('error');
+      this.feature('error');
+      return this.error(e)                             // run error handling if an error is caught
+    }
+  }
+
+  /**************
+  func: Mind
+  params: client: false
+  describe:
+    The Mind feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Mind(client=false) {
+    this.feature('Mind');                 // set state to story setting
+    try {
+      if (!this._client.features.mind) return this.Done();
+      else {
+        this.action('Mind');
+        const {id, features, profile} = this._client;       // set the local consts from client copy
+        const {mind} = features;                           // set mind from features const
+        this._mind = {                                     // set this_mind with data
+          id: this.uid(true),                               // uuid of the mind feature
+          client_id: id,                                    // client id for reference
+          client_name: profile.name,                        // client name for personalization
+          concerns: mind.concerns,                         // any concerns for client
+          global: mind.global,                             // the global policies for client
+          personal: mind.devas[this._agent.key]            // Client personal features and rules.
+        };
+        delete this._client.features.mind;
         return this.Done();
       }
     } catch (e) {
+      this.action('error');
+      this.feature('error');
       return this.error(e)                             // run error handling if an error is caught
     }
   }
@@ -557,13 +626,18 @@ class Deva {
   describe: The end of the workflow Client Feature Workflow
   ***************/
   Done() {
-    try {
-      delete this._client.features;               // delete the features key when done.
-      this.state('setting_done');                 // set state to assistant setting
-      return;
-    } catch (e) {
-      return this.error(e);
-    }
+    return new Promise((resolve, reject) => {
+      try {
+        delete this._client.features;               // delete the features key when done.
+        this.action('done');
+        this.feature('done');                 // set state to assistant setting
+        this.zone('done');
+        return resolve();
+      } catch (e) {
+        this.feature('error')
+        return this.error(e, false, reject);
+      }
+    });
   }
   /**************
   func: _assignBind
@@ -609,6 +683,7 @@ class Deva {
     return new Promise((resolve, reject) => {
       try {
         // set the default listeners for the states of the agent.
+
         for (let state in this._states) {
           if (typeof this[state] === 'function') {
             this.events.on(`${this._agent.key}:${state}`, packet => {
@@ -623,12 +698,10 @@ class Deva {
             return this.listeners[listener](packet);
           })
         }
+        return resolve();
       }
       catch (e) {
         return this.error(e, false, reject);
-      }
-      finally {
-        return resolve();
       }
     });
   }
@@ -650,12 +723,10 @@ class Deva {
             this.devas[d][inherit] = this[inherit];
           });
         }
+        return resolve();
       }
       catch (e) {
         return this.error(e, false, reject);
-      }
-      finally {
-        return resolve();
       }
     });
   }
@@ -700,28 +771,800 @@ class Deva {
   }
 
   /**************
+  func: talk
+  params:
+    - evt: The event the Deva is speaking to listen back for on a once event.
+    - resource: The payload resource to send with the talk event.
+  describe:
+    The talk event allows agents to broadcast events that other Deva can listen
+    to and make a response. talk events can be then returned with a talk even id
+    to create seamless collaboration between Devas.
+  ***************/
+  talk(evt, resource=false) {
+    return this.events.emit(evt, resource);
+  }
+
+  /**************
+  func: listen
+  params:
+    - evt:      The vent label to listen for
+    - callback: The callback function to run when the event fires.
+  describe:
+  ***************/
+  listen(evt, callback) {
+    this.listeners[evt] = callback;
+    return this.events.on(evt, packet => {
+      return this.listeners[evt](packet);
+    });
+  }
+
+  /**************
+  func: once
+  params:
+    - evt:      The event to listen to for a once call. These event are handy
+                when waiting for a key response one time.
+    - callback: The callback functoin to run when the event fires.
+  describe:
+  ***************/
+  once(evt, callback) {
+    return this.events.once(evt, callback);
+  }
+
+  /**************
+  func: ignore
+  params:
+    - evt:      The event you'd like to ignore.
+    - callback: a callback function to execute after removing the event from listerns.
+  describe:
+    The ignore function allow the removal of events that are in the existing devas lister group.
+  ***************/
+  ignore(evt, callback) {
+    return this.events.removeListener(evt, callback);
+  }
+
+  /**************
+  func: ask
+  params: packet
+  describe:
+    The ask function gives each agent the ability to ask question to other agents
+    in the system. When a question is asked the Agent with the question if it
+    detect an ask event it will trigger. Then if an Agent with the matching ask
+    event is listening they will respond. The question function uses this to
+    create integrated communication between itself and other Deva in it's library.
+
+    It can also be used in a custom manner to broadcast ask events inside other coe aswell.
+
+    When the talk has an answer it will respond with a talk event that has the packet id
+    so the event is specific to the talk.
+  ***************/
+  ask(packet) {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.action('question', packet);
+
+    packet.a = {
+      agent: this._agent || false,
+      client: this._client || false,
+      meta: {
+        key: this._agent.key,
+        method: packet.q.meta.method,
+        params: packet.q.meta.params,
+      },
+      text: false,
+      html: false,
+      data: false,
+      created: Date.now(),
+    };
+
+    try {
+      if (this.methods[packet.q.meta.method] !== 'function') {
+        return setImmediate(() => {
+          this.action('ask_invalid')
+          packet.a.text = `INVALID METHOD (${packet.q.meta.method})`;
+          this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
+        });
+      }
+
+      // The method is parsed and depending on what method is asked for it returns
+      // the response based on the passed through packet.
+      this.methods[packet.q.meta.method](packet).then(result => {
+        if (typeof result === 'object') {
+          packet.a.text = result.text || false;
+          packet.a.html = result.html || false;
+          packet.a.data = result.data || false;
+        }
+        else {
+          packet.a.text = result;
+        }
+        this.action('ask_answer', packet);
+        this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
+      }).catch(err => {
+        this.action('error', err);
+        this.talk(`${this._agent.key}:ask:${packet.id}`, {error:err.toString()});
+        return this.error(err, packet);
+      })
+    }
+    catch (e) {
+      this.action('error', err);
+      this.talk(`${this._agent.key}:ask:${packet.id}`, {error:e.toString()});
+      return this.error(e, packet)
+    }
+    // now when we ask the meta params[0] should be the method
+  }
+
+  answer(packet) {
+    this.action('answer', packet);        // set the question answer state
+
+    return new Promise((resolve, reject) => {
+      // check if method exists and is of type function
+      const {method} = packet.q.meta;
+      const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
+      if (!isMethod) {
+        this.action('invalid')
+        return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails
+      }
+      // Call the local method to process the question based the extracted parameters
+      return this.methods[method](packet).then(result => {
+        // check the result for the text, html, and data object.
+        // this is for when answers are returned from nested Devas.
+        const text = typeof result === 'object' ? result.text : result;
+        const html = typeof result === 'object' ? result.html : result;
+        // if the data passed is NOT an object it will FALSE
+        const data = typeof result === 'object' ? result.data : false;
+        packet.a = {                                  // setup the packet.a container
+          agent: this._agent || false,                // set the agent who answered the question
+          client: this._client || false,              // set the client asking the question
+          meta: {                                     // setup the answer meta container
+            key: this._agent.key,                     // set the agent key inot the meta
+            method,                                   // set the method into the meta
+            params,                                   // set the params into the meta
+          },
+          text,                                       // set answer text
+          html,
+          data,
+          created: Date.now(),
+        };
+        // create a hash for the answer and insert into answer meta.
+        this.action('hash_answer');
+        packet.a.meta.hash = this.hash(JSON.stringify(packet.a));
+        // create a hash for entire packet and insert into packet
+        // hash the entire packet.
+        this.action('hash_packet');
+        packet.hash = this.hash(JSON.stringify(packet));
+
+        this.action('answer_talk');
+        this.talk(`${this._agent.key}:answer`, packet);        // set the question answer state
+
+        this.action('done');
+        return resolve(packet);                       // resolve the packet to the caller.
+      }).catch(err => {                               // catch any errors in the method
+        this.action('error', err);
+        return this.error(err, packet, reject);       // return this.error with err, packet, reject
+      });
+    });
+  }
+
+  /**************
+  func: question
+  example: this.question('#*agent.key *method* *text*')
+  example: this.question('#*agent.key* *method* *properties*', {*data*})
+  params:
+    = TEXT: The text string is the question to process in the current state.
+    - DATA: The data is a data array or object that also can be passed to the question.
+  describe:
+  ***************/
+  question(TEXT=false, DATA=false) {
+    // check the active status
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    const id = this.uid();                                // generate a unique id for transport.
+    const t_split = TEXT.split(' ');                      // split the text on spaces to get words.
+    this.action('question', id);
+
+    // check to see if the string is an #ask string to talk to the other Deva.
+    const isAsk = t_split[0].startsWith(this.askChr);
+
+    // check to see if the string is a command string to run a local method.
+    const isCmd = t_split[0].startsWith(this.cmdChr);
+
+    // Format the packet for return on the request.
+    const orig = TEXT;                                    // set the TEXT to orig
+    const data = DATA;                                    // set the DATA to data
+    const packet = {                                      // create the base q/a packet
+      id,                                                 // set the id into packet
+      q: {},                                              // create empty q object in packet
+      a: {},                                              // create empty a object in packet
+      created: Date.now(),                                // timestamp the packet
+    };
+
+    let text = TEXT,                                      // let TEXT is text for a manipulation variable
+        params = false,                                   // params as false to build params string
+        method = 'question',                              // set the default method to question
+        key = this._agent.key;                            // set a temporary key from the agent key.
+
+    return new Promise((resolve, reject) => {
+      // resolve with the no text message if the client says nothing.
+      if (!TEXT) return resolve(this._messages.notext);
+      // reject question if Deva offline
+      if (!this._active) return resolve(this._messages.offline);
+      let _action = 'question_method'
+      try {                                               // try to answer the question
+        if (isAsk) {                                      // determine if hte question isAsk
+          key = t_split[0].substring(1);                  // if:isAsksplit the agent key and remove first command character
+          //if:isAsk use text split index 1 as the parameter block
+          params = t_split[1] ? t_split[1].split(':') : false;
+          method = params[0];                             // the method to check is then params index 0
+          text = t_split.slice(2).join(' ').trim();       // then rejoin the text with spaces.
+        }
+        else if (isCmd) {                                 // determine if the question is a command
+          _action = 'question_cmd';
+          //if:isCmd use text split index 1 as the parameter block
+          params = t_split[1] ? t_split[1].split(':') : false;
+          method = t_split[0].substring(1);               // if:isCmd use the 0 index as the command
+          text = t_split.slice(1).join(' ').trim();       // if:isCmd rejoin the string on the space after removing first index
+        }
+        else {
+          this.action('question_method');
+        }
+
+        packet.q = {                                      // build packet.q container
+            agent: this._agent || false,                  // set the agent
+            client: this._client || false,                // set the client
+            meta: {                                       // build the meta container
+              key,                                        // set the key variable
+              orig,                                       // set orig text to track chances
+              method,                                     // set method to track function use
+              params,                                     // set any params that are associated
+            },
+            text,                                         // set the text after it has been modified form orig
+            data,                                         // set the data object
+            created: Date.now(),                          // timestamp the question
+        }
+
+        // hash the question
+        this.action('question_hash');                      // set the has question state
+        packet.q.meta.hash = this.hash(JSON.stringify(packet.q));
+
+
+        if (isAsk) {                                      // isAsk check if the question isAsk and talk
+          this.action('question_ask');
+          this.talk(`${key}:ask`, packet);                // if:isAsk talk the event to theother Deva
+          // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
+          this.once(`${key}:ask:${packet.id}`, answer => {
+            this.action('question_ask_answer');
+            return resolve(answer);                       // if:isAsk resolve the answer from the call
+          });
+        }
+        else {                                            // else: answer tue question locally
+          this.action(_action);
+          return this.answer(packet);
+        }
+      }
+      catch(e) {                                          // try block error trap
+        this.action('error');
+        return this.error(e);                             // if a overall error happens this witll call this.error
+      }
+    });
+  }
+
+  /**************
+  func: init
+  params: client - the client data to use that is provided by the clients.
+  describe:
+    The main init interface where the chain begins. Where the states fire for
+    each process of setting:
+    1. Set the Max listeners to control event memory buffer.
+    2. Assign the Interited Properties
+    3. Assign binding functions and methods to 'this' scoe.
+    4. Assign any listeners for additional functionality.
+    5. run the onInit custom function if preset or the system start function.
+    6. The system start function will create a chain reaction of states that load.
+    7. If there is an error the init function rejects the call.
+  usage: this.init(client_object)
+  ***************/
+  init(client) {
+    // set client
+    this._active = Date.now();
+    return new Promise((resolve, reject) => {
+      this.events.setMaxListeners(this.maxListeners);
+      this._assignInherit().then(() => {
+        return this._assignBind();
+      }).then(() => {
+        return this._assignListeners();
+      }).then(() => {
+        this.state('init');
+        this.zone('config');
+        return this.Client(client);
+      }).then(() => {
+        this.action('features');
+        return this.Security();
+      }).then(() => {
+        return this.start(this._messages.deva_init);
+      }).catch(err => {
+        return this.error(err, client, reject);
+      });
+    });
+  }
+
+  /**************
+  func: error
+  params:
+    - err: The error to process
+    - data: Any additional data associated with the error
+    - reject: An associated promise reject if the caller requires.
+  describe:
+    The erro function rpovides the consistent error manage of the system.
+  usage: this.error(err, data, reject);
+  ***************/
+  error(err,data=false,reject=false) {
+    this.state('error', {err, data});                           // set the state to error
+    // check fo rthe custom onError function in the agent.
+    console.log('\n::BEGIN:ERROR\n');
+    console.log(err);
+    console.log('\n::END:ERROR\n');
+    if (data) {
+      console.log('::::::');
+      console.log('\n::BEGIN:DATA\n');
+      console.log(JSON.stringify(data, null, 2));
+      console.log('\n::END:DATA\n');
+    }
+
+    if (this.onError && typeof this.onError === 'function') return this.onError(err, data, reject);
+    else {
+      return reject ? reject(err) : err;
+    }
+  }
+
+  /**************
+  func: start
+  params:
+    - msg: the message for use when using custome flow logic to pass to onEnter
+  describe:
+    The start function begins the process by setting the state to start setting
+    the active to the current datetime and then checking for a custom onStart
+    function or running the system enter function.
+  usage: this.start('msg')
+  ***************/
+  start(text = false) {
+    this.state('start');
+    const msg = this._messages.deva_start;
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    const hasOnStart = this.onStart && typeof this.onStart === 'function';
+    return  hasOnStart? this.onStart(msg) : this.enter(msg)
+  }
+
+  /**************
+  func: stop
+  params:
+    - msg: hte message from the caller incase need to use in calls
+  describe:
+    The stop function will stop the Deva by setting the active status to false,
+    and the state to stop. From here it will check for a custom onStop function
+    for anything to run, or run the system exit function.
+
+    If the deva is offline it will return the offline message.
+  usage:
+    this.stop('msg')
+  ***************/
+  stop(text=false) {
+    this.state('stop');
+    const msg = this._messages.deva_stop;
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this._active = false;
+    const hasOnStop = this.onStop && typeof this.onStop === 'function';
+    return  hasOnStop? this.onStop(msg) : this.exit(msg)
+  }
+
+  /**************
+  func: enter
+  params:
+    - msg: hte message from the caller incase need to use in calls
+  describe:
+    The ener function will check the actie status of the Deva and set it to
+    offline or enter.
+
+    If the Deva is offline it will return the offline message.
+  usage: this.enter('msg')
+  ***************/
+  enter(text=false) {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.state('enter');
+    const msg = this._messages.deva_enter
+    const hasOnEnter = this.onEnter && typeof this.onEnter === 'function';
+    return  hasOnEnter? this.onEnter(msg) : this.done(msg)
+  }
+
+  /**************
+  func: exit
+  params:
+    - msg: hte message from the caller incase need to use in calls
+  describe:
+    The exit state function is triggered when the Deva is exiting it's online
+    status and setting the state to exit for things like security check.
+
+    The return will check for a custom onExit function or run the system done
+    function.
+
+    If the deva is offline it will return the offline message.
+  usage: this.exit('msg')
+  ***************/
+  exit(text=false) {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this._active = false;
+    this.state('exit');
+    const msg = this._messages.deva_exit
+    const hasOnExit = this.onExit && typeof this.onExit === 'function';
+    return hasOnExit ? this.onExit(msg) : Promise.resolve(msg)
+  }
+
+  /**************
+  func: done
+  params:
+  - msg: hte message from the caller incase need to use in calls
+  describe:
+    When the done function is triggered the system will also set the state
+    of hte Deva to done.
+
+    If the deva is offline it will return the offline message.
+  usage: this.done('msg')
+  ***************/
+  done(text=false) {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.state('done');
+    const msg = this._messages.deva_done;
+    const hasOnDone = this.onDone && typeof this.onDone === 'function';
+    return hasOnDone ? this.onDone(msg) : Promise.resolve(msg)
+  }
+
+  ////////////////////////////
+
+  /**************
   func: state
   params:
     - st: The state flag to set for the Deva that matches to this._states
   describe
   ***************/
-  state(st, data=false) {
-    if (!Object.keys(this._states).includes(st)) return;
-    this._state = `${this._states[st]} | ${this.formatDate(Date.now(), 'short_month', true)}`;
-    const _data = {
-      id: this.uid(true),
-      client: this._client.id,
-      agent: this._agent.id,
-      st: st,
-      state: this._state,
-      data,
-      created: Date.now(),
-    };
-    this.prompt(this._state);
-    this.talk(`${this._agent.key}:state`, _data);
-    return this._state;
+  state(state, data=false) {
+    try {
+      if (!this._states[state]) return;
+      this._state = state;
+      const msg = this._messages.states[state];
+      const _data = {
+        id: this.uid(),
+        agent: this._agent,
+        state,
+        msg,
+        data,
+        text: this._states[state],
+        created: Date.now(),
+      };
+      _data.hash = this.hash(JSON.stringify(_data));
+      this.talk('state', _data);
+    } catch (e) {
+      return this.error(e);
+    }
   }
 
+  /**************
+  func: zone
+  params:
+    - st: The zone flag to set for the Deva that matches to this._zones
+  describe
+  ***************/
+  zone(zone, data=false) {
+    try {
+      if (!this._zones[zone]) return;
+      this._zone = zone;
+      const msg = this._messages.zones[zone];
+      const _data = {
+        id: this.uid(),
+        agent: this._agent,
+        zone,
+        msg,
+        data,
+        text: this._zones[zone],
+        created: Date.now(),
+      };
+      _data.hash = this.hash(JSON.stringify(_data));
+      this.talk('zone', _data);
+    } catch (e) {
+      this.state('error');
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: action
+  params:
+    - st: The state flag to set for the Deva that matches to this._states
+  describe
+  ***************/
+  action(action, data=false) {
+    try {
+      if (!this._actions[action]) return;
+      this._action = action;
+      const msg = this._messages.actions[action];
+      const _data = {
+        id: this.uid(),
+        agent: this._agent,
+        action,
+        msg,
+        data,
+        text: this._actions[action],
+        created: Date.now(),
+      };
+      _data.hash = this.hash(JSON.stringify(_data));
+      this.talk('action', _data);
+    } catch (e) {
+      this.state('error');
+      return this.error(e)
+    }
+  }
+
+  /**************
+  func: feature
+  params:
+    - st: The state flag to set for the Deva that matches to this._states
+  describe
+  ***************/
+  feature(feature, data=false) {
+    try {
+      if (!this._features[feature]) return;
+      this._feature = feature;
+      const msg = this._messages.features[feature] ;
+      const _data = {
+        id: this.uid(),
+        agent: this._agent,
+        feature,
+        msg,
+        data,
+        text: this._features[feature],
+        created: Date.now(),
+      };
+      _data.hash = this.hash(JSON.stringify(_data));
+      this.talk('feature', _data);
+    } catch (e) {
+      this.state('error');
+      return this.error(e);
+    }
+  }
+
+
+  ///////////////////////////
+
+  /**************
+  func: client
+  params: none
+  describe:
+    this function allows state management for when client prfioe is
+    being accessed.
+  usage: this.client();
+  ***************/
+  client() {
+    if (!this._active) return this._messages.states.offline;    // check the active status
+    this.state('client_data');                                // set the client state
+    return this._client;                                 // return the client feature
+  }
+
+  /**************
+  func: agent
+  params: none
+  describe:
+    this function allows statement management for when client prfioe is
+    being accessed.
+  usage: this.agent()
+  ***************/
+  agent() {
+    if (!this._active) return this._messages.states.offline;
+    this.state('agent_data');
+    return this._agent;
+  }
+
+  // FEATURE FUNCTIONS
+  /**************
+  func: security
+  params: none
+  describe: basic security features available in a Deva.
+  usage: this.security()
+  ***************/
+  security() {
+    try {
+      if (!this._active) return this._messages.states.offline;    // check the active status
+      this.feature('security');                              // set the security state
+      return this._security;                               // return the security feature
+    } catch (e) {
+      this.feature('error');
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: support
+  params: none
+  describe: basic support features available in a Deva.
+  usage: this.support()
+  ***************/
+  support() {
+    try {
+      if (!this._active) return this._messages.states.offline;   // check the active status
+      this.feature('support');                              // set the support state
+      return this._support;                               // return the support feature
+    } catch (e) {
+      this.feature('error');
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: services
+  params: none
+  describe: basic services features available in a Deva.
+  usage: this.services()
+  ***************/
+  services(opts) {
+    try {
+      if (!this._active) return this._messages.states.offline;   // check the active status
+      this.feature('services');                             // set the services state
+      return this._services;                              // return the services feature
+    } catch (e) {
+      this.feature('error');
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: systems
+  params: opts
+  describe: basic systems features available in a Deva.
+  usage: this.systems()
+  ***************/
+  systems(opts) {
+    try {
+      if (!this._active) return this._messages.states.offline;   // check the active status
+      this.feature('systems');                              // set the systems state
+      return this._systems;                               // return the systems feature
+    } catch (e) {
+      this.feature('error');
+      return this.error('error')
+    }
+  }
+
+  /**************
+  func: solutions
+  params: opts
+  describe: basic solutions features available in a Deva.
+  usage: this.solutions()
+  ***************/
+  solutions(opts) {
+    try {
+      if (!this._active) return this._messages.states.offline;   // check the active status
+      this.feature('solutions');                            // set the solutions state
+      return this._solutions;                             // return the solutions feature
+    } catch (e) {
+      this.feature('error');
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: development
+  params: opts
+  describe: basic development features available in a Deva.
+  ***************/
+  development(opts) {
+    try {
+      if (!this._active) return this._messages.states.offline;   // chek the active status
+      this.feature('development');                          // set the development state
+      return this._development;                           // return development feature
+    } catch (e) {
+      this.feature('error');
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: assistant
+  params: opts
+  describe: basic assistant features available in a Deva.
+  ***************/
+  assistant(opts) {
+    try {
+      if (!this._active) return this._messages.states.offline;   // chek the active status
+      this.feature('assistant');                            // set the assistant state
+      return this._assistant;                             // return assistant feature
+    } catch (e) {
+      this.feature('error');
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: business
+  params: opts
+  describe: basic business features available in a Deva.
+  ***************/
+  business(opts) {
+    try {
+      if (!this._active) return this._messages.states.offline;   // chek the active status
+      this.feature('business');                             // set the business state
+      return this._business;                              // return business feature
+    } catch (e) {
+      this.feature('error');
+      return this.error('error');
+    }
+  }
+
+  /**************
+  func: legal
+  params: opts
+  describe: basic legal features available in a Deva.
+  ***************/
+  legal(opts) {
+    try {
+      if (!this._active) return this._messages.states.offline;   // chek the active status
+      this.feature('legal');                                // set the legal state
+      return this._legal;                                 // return legal feature
+    } catch (e) {
+      this.feature('error');
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: story
+  params: opts
+  describe: basic story features available in a Deva.
+  ***************/
+  story(opts) {
+    if (!this._active) return this._messages.states.offline;   // chek the active status
+    this.feature('story');                                // set the story state
+    return this._story;                                 // return story feature
+  }
+
+  /**************
+  func: load
+  params:
+    -deva:      The Deva model to load.
+  describe:
+    This function will enable fast loading of Deva into a system.
+  ***************/
+  load(key, client) {
+    return new Promise((resolve, reject) => {
+      this.state('load');
+      this.devas[key].init(client).then(loaded => {
+        this.talk(`deva:load`, {
+          key,
+          created: Date.now(),
+        });
+        return resolve(this._messages.states.load);
+      }).catch(err => {
+        return this.error(err, deva, reject);
+      })
+    });
+  }
+
+  /**************
+  func: unload
+  params:
+    - deva:     The deva key to unload
+  describe:     Unload a currently loaded Deva.
+  ***************/
+  unload(key) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.state('uload');
+        delete this.devas[key];
+        this.talk(`deva:unload`, {
+          key,
+          created: Date.now(),
+        });
+        return resolve(this._messages.states.unload);
+      } catch (e) {
+        return reject(e, this.devas[key], reject)
+      }
+    });
+  }
+
+
+  // UTILITY FUNCTIONS
   /**************
   func: uid
   params:
@@ -761,13 +1604,6 @@ class Deva {
     const the_hash = createHash(algo);
     the_hash.update(str);
     const _digest = the_hash.digest('base64');
-    this.state('hash', {
-      id: this.uid(true),
-      value: _digest,
-      client_id: this._client.id,
-      agent_id: this._agent.id,
-      created: Date.now(),
-    });
     return _digest;
   }
 
@@ -825,440 +1661,6 @@ class Deva {
   }
 
   /**************
-  func: copy
-  params: obj
-  describe:
-    a simple copy object to create a memory clean copy of data to
-    prevent collisions when needed. Handles clean text, array, object copy.
-    it makes the assumption tha the user is submitting either an array or object
-    for copying.
-  ***************/
-  copy(obj) {
-    let v, key;
-    const output = Array.isArray(obj) ? [] : {};
-    for (key in obj) {
-        v = obj[key];
-        output[key] = (typeof v === "object") ? this.copy(v) : v;
-    }
-    return output;
-  }
-  /**************
-  func: talk
-  params:
-    - evt: The event the Deva is speaking to listen back for on a once event.
-    - resource: The payload resource to send with the talk event.
-  describe:
-    The talk event allows agents to broadcast events that other Deva can listen
-    to and make a response. talk events can be then returned with a talk even id
-    to create seamless collaboration between Devas.
-  ***************/
-  talk(evt, resource=false) {
-    return this.events.emit(evt, resource);
-  }
-
-  /**************
-  func: listen
-  params:
-    - evt:      The vent label to listen for
-    - callback: The callback function to run when the event fires.
-  describe:
-  ***************/
-  listen(evt, callback) {
-    return this.events.on(evt, callback);
-  }
-
-  /**************
-  func: once
-  params:
-    - evt:      The event to listen to for a once call. These event are handy
-                when waiting for a key response one time.
-    - callback: The callback functoin to run when the event fires.
-  describe:
-  ***************/
-  once(evt, callback) {
-    return this.events.once(evt, callback);
-  }
-
-  /**************
-  func: ignore
-  params:
-    - evt:      The event you'd like to ignore.
-    - callback: a callback function to execute after removing the event from listerns.
-  describe:
-    The ignore function allow the removal of events that are in the existing devas lister group.
-  ***************/
-  ignore(evt, callback) {
-    return this.events.removeListener(evt, callback);
-  }
-
-  /**************
-  func: ask
-  params: packet
-  describe:
-    The ask function gives each agent the ability to ask question to other agents
-    in the system. When a question is asked the Agent with the question if it
-    detect an ask event it will trigger. Then if an Agent with the matching ask
-    event is listening they will respond. The question function uses this to
-    create integrated communication between itself and other Deva in it's library.
-
-    It can also be used in a custom manner to broadcast ask events inside other coe aswell.
-
-    When the talk has an answer it will respond with a talk event that has the packet id
-    so the event is specific to the talk.
-  ***************/
-  ask(packet) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('ask_question', packet);
-
-    packet.a = {
-      agent: this._agent || false,
-      client: this._client || false,
-      meta: {
-        key: this._agent.key,
-        method: packet.q.meta.method,
-        params: packet.q.meta.params,
-      },
-      text: false,
-      html: false,
-      data: false,
-      created: Date.now(),
-    };
-
-    try {
-      if (this.methods[packet.q.meta.method] !== 'function') {
-        return setImmediate(() => {
-          packet.a.text = `INVALID METHOD (${packet.q.meta.method})`;
-          this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
-        });
-      }
-
-      // The method is parsed and depending on what method is asked for it returns
-      // the response based on the passed through packet.
-      this.methods[packet.q.meta.method](packet).then(result => {
-        if (typeof result === 'object') {
-          packet.a.text = result.text || false;
-          packet.a.html = result.html || false;
-          packet.a.data = result.data || false;
-        }
-        else {
-          packet.a.text = result;
-        }
-
-        this.state('ask_answer', packet);
-        this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
-      }).catch(err => {
-        this.talk(`${this._agent.key}:ask:${packet.id}`, {error:err.toString()});
-        return this.error(err, packet);
-      })
-    }
-    catch (e) {
-      this.talk(`${this._agent.key}:ask:${packet.id}`, {error:e.toString()});
-      return this.error(e, packet)
-    }
-    // now when we ask the meta params[0] should be the method
-  }
-
-  /**************
-  func: question
-  example: this.question('#*agent.key *method* *text*')
-  example: this.question('#*agent.key* *method* *properties*', {*data*})
-  params:
-    = TEXT: The text string is the question to process in the current state.
-    - DATA: The data is a data array or object that also can be passed to the question.
-  describe:
-  ***************/
-  question(TEXT=false, DATA=false) {
-    // check the active status
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('question_me', {text:TEXT, data:DATA});    // set the question me state text TEXT & DATA passed in.
-    const id = this.uid();                                // generate a unique id for transport.
-    const t_split = TEXT.split(' ');                      // split the text on spaces to get words.
-
-    // check to see if the string is an #ask string to talk to the other Deva.
-    const isAsk = t_split[0].startsWith(this.askChr);
-
-    // check to see if the string is a command string to run a local method.
-    const isCmd = t_split[0].startsWith(this.cmdChr);
-
-    // Format the packet for return on the request.
-    const orig = TEXT;                                    // set the TEXT to orig
-    const data = DATA;                                    // set the DATA to data
-    const packet = {                                      // create the base q/a packet
-      id,                                                 // set the id into packet
-      q: {},                                              // create empty q object in packet
-      a: {},                                              // create empty a object in packet
-      created: Date.now(),                                // timestamp the packet
-    };
-
-    let text = TEXT,                                      // let TEXT is text for a manipulation variable
-        params = false,                                   // params as false to build params string
-        method = 'question',                              // set the default method to question
-        key = this._agent.key;                            // set a temporary key from the agent key.
-
-    return new Promise((resolve, reject) => {
-      // resolve with the no text message if the client says nothing.
-      if (!TEXT) return resolve(this._messages.notext);
-      // reject question if Deva offline
-      if (!this._active) return resolve(this._messages.offline);
-
-      try {                                               // try to answer the question
-        let _state = 'question_default';                  // set temporary question state variable
-        let _hash = 'hash_asnwer';                        // set emporary hash state variable
-        if (isAsk) {                                      // determine if hte question isAsk
-          _state = 'question_ask'                         // if:isAk then set question state
-          _state = 'hash_ask'                             // if:isAsk then set hash state
-          key = t_split[0].substring(1);                  // if:isAsksplit the agent key and remove first command character
-          //if:isAsk use text split index 1 as the parameter block
-          params = t_split[1] ? t_split[1].split(':') : false;
-          method = params[0];                             // the method to check is then params index 0
-          text = t_split.slice(2).join(' ').trim();       // then rejoin the text with spaces.
-        }
-        else if (isCmd) {                                 // determine if the question is a command
-          _state = 'question_command';                    // if:isCmd set question state
-          _hash = 'hash_command'                          // if:isCmd set hash state
-          //if:isCmd use text split index 1 as the parameter block
-          params = t_split[1] ? t_split[1].split(':') : false;
-          method = t_split[0].substring(1);               // if:isCmd use the 0 index as the command
-          text = t_split.slice(1).join(' ').trim();       // if:isCmd rejoin the string on the space after removing first index
-        }
-
-        packet.q = {                                      // build packet.q container
-            agent: this._agent || false,                  // set the agent
-            client: this._client || false,                // set the client
-            meta: {                                       // build the meta container
-              key,                                        // set the key variable
-              orig,                                       // set orig text to track chances
-              method,                                     // set method to track function use
-              params,                                     // set any params that are associated
-            },
-            text,                                         // set the text after it has been modified form orig
-            data,                                         // set the data object
-            created: Date.now(),                          // timestamp the question
-        }
-
-        // hash the question
-        packet.q.meta.hash = this.hash(JSON.stringify(packet.q));
-        this.state('hash_question');                      // set the has question state
-
-        this.state(_state, packet);                       // set the state to teh _state variable
-
-        if (isAsk) {                                      // isAsk check if the question isAsk and talk
-          this.state('question_asking');                  // if:isAsk set state to question asking
-          this.talk(`${key}:ask`, packet);                // if:isAsk talk the event to theother Deva
-          // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
-          this.once(`${key}:ask:${packet.id}`, answer => {
-            return resolve(answer);                       // if:isAsk resolve the answer from the call
-          });
-        }
-
-        else {                                            // else: answer tue question locally
-          this.state('question_answering');
-          // check if method exists and is of type function
-          if (this.methods[method] && typeof this.methods[method] !== 'function') {
-            return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails
-          }
-          // Call the local method to process the question based the extracted parameters
-          return this.methods[method](packet).then(result => {
-            // check the result for the text, html, and data object.
-            // this is for when answers are returned from nested Devas.
-            const text = typeof result === 'object' ? result.text : result;
-            const html = typeof result === 'object' ? result.html : result;
-            // if the data passed is NOT an object it will FALSE
-            const data = typeof result === 'object' ? result.data : false;
-            packet.a = {                                  // setup the packet.a container
-              agent: this._agent || false,                // set the agent who answered the question
-              client: this._client || false,              // set the client asking the question
-              meta: {                                     // setup the answer meta container
-                key: this._agent.key,                     // set the agent key inot the meta
-                method,                                   // set the method into the meta
-                params,                                   // set the params into the meta
-              },
-              text,                                       // set answer text
-              html,
-              data,
-              created: Date.now(),
-            };
-            // create a hash for the answer and insert into answer meta.
-            packet.a.meta.hash = this.hash(JSON.stringify(packet.a));
-            this.state(_hash);
-            // create a hash for entire packet and insert into packet
-            // hash the entire packet.
-            packet.hash = this.hash(JSON.stringify(packet));
-            this.state('hash_packet');
-
-            this.state('question_answer', packet);        // set the question answer state
-            this.talk(`${this._agent.key}:answer`, packet);        // set the question answer state
-            return resolve(packet);                       // resolve the packet to the caller.
-          }).catch(err => {                               // catch any errors in the method
-            return this.error(err, packet, reject);       // return this.error with err, packet, reject
-          });
-        }
-      }
-      catch(e) {                                          // try block error trap
-        return this.error(e);                             // if a overall error happens this witll call this.error
-      }
-    });
-  }
-
-  /**************
-  func: init
-  params: client - the client data to use that is provided by the clients.
-  describe:
-    The main init interface where the chain begins. Where the states fire for
-    each process of setting:
-    1. Set the Max listeners to control event memory buffer.
-    2. Assign the Interited Properties
-    3. Assign binding functions and methods to 'this' scoe.
-    4. Assign any listeners for additional functionality.
-    5. run the onInit custom function if preset or the system start function.
-    6. The system start function will create a chain reaction of states that load.
-    7. If there is an error the init function rejects the call.
-  usage: this.init(client_object)
-  ***************/
-  init(client) {
-    // set client
-    this.Client = client;
-    this._active = Date.now();
-    return new Promise((resolve, reject) => {
-      this.events.setMaxListeners(this.maxListeners);
-      this._assignInherit().then(() => {
-        return this._assignBind();
-      }).then(() => {
-        return this._assignListeners();
-      }).then(() => {
-        this.state('init');
-        this.Security();
-        return this.onInit && typeof this.onInit === 'function' ? this.onInit() : this.start();
-      }).then(started => {
-        return resolve(started)
-      }).catch(err => {
-        return this.error(err, client, reject);
-      });
-    });
-  }
-
-  /**************
-  func: error
-  params:
-    - err: The error to process
-    - data: Any additional data associated with the error
-    - reject: An associated promise reject if the caller requires.
-  describe:
-    The erro function rpovides the consistent error manage of the system.
-  usage: this.error(err, data, reject);
-  ***************/
-  error(err,data=false,reject=false) {
-    this.state('error', {err, data});                           // set the state to error
-    // check fo rthe custom onError function in the agent.
-    console.log('\n::BEGIN:ERROR\n');
-    console.log(err);
-    console.log('\n::END:ERROR\n');
-    if (data) {
-      console.log('::::::');
-      console.log('\n::BEGIN:DATA\n');
-      console.log(JSON.stringify(data, null, 2));
-      console.log('\n::END:DATA\n');
-    }
-
-    if (this.onError && typeof this.onError === 'function') return this.onError(err, data, reject);
-    else {
-      return reject ? reject(err) : err;
-    }
-  }
-
-  /**************
-  func: start
-  params:
-    - msg: the message for use when using custome flow logic to pass to onEnter
-  describe:
-    The start function begins the process by setting the state to start setting
-    the active to the current datetime and then checking for a custom onStart
-    function or running the system enter function.
-  usage: this.start('msg')
-  ***************/
-  start(msg=false) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('start');
-    return this.onStart && typeof this.onStart === 'function' ? this.onStart() : this.enter(this._messages.start);
-  }
-
-  /**************
-  func: stop
-  params:
-    - msg: hte message from the caller incase need to use in calls
-  describe:
-    The stop function will stop the Deva by setting the active status to false,
-    and the state to stop. From here it will check for a custom onStop function
-    for anything to run, or run the system exit function.
-
-    If the deva is offline it will return the offline message.
-  usage:
-    this.stop('msg')
-  ***************/
-  stop(msg=false) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('stop');
-    this._active = false;
-    return this.onStop && typeof this.onStop === 'function' ? this.onStop() : this.exit(this._messages.stop);
-  }
-
-  /**************
-  func: enter
-  params:
-    - msg: hte message from the caller incase need to use in calls
-  describe:
-    The ener function will check the actie status of the Deva and set it to
-    offline or enter.
-
-    If the Deva is offline it will return the offline message.
-  usage: this.enter('msg')
-  ***************/
-  enter(msg=false) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('enter');
-    return this.onEnter && typeof this.onEnter === 'function' ? this.onEnter() : this.done(this._messages.enter)
-  }
-
-  /**************
-  func: exit
-  params:
-    - msg: hte message from the caller incase need to use in calls
-  describe:
-    The exit state function is triggered when the Deva is exiting it's online
-    status and setting the state to exit for things like security check.
-
-    The return will check for a custom onExit function or run the system done
-    function.
-
-    If the deva is offline it will return the offline message.
-  usage: this.exit('msg')
-  ***************/
-  exit(msg=false) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('exit');
-    this._active = false;
-    return this.onExit && typeof this.onExit === 'function' ? this.onExit() : Promise.resolve(this._messages.exit)
-  }
-
-  /**************
-  func: done
-  params:
-  - msg: hte message from the caller incase need to use in calls
-  describe:
-    When the done function is triggered the system will also set the state
-    of hte Deva to done.
-
-    If the deva is offline it will return the offline message.
-  usage: this.done('msg')
-  ***************/
-  done(msg=false) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('done');
-    msg = msg ? msg : this._state;
-    return this.onDone && typeof this.onDone === 'function' ? this.onDone() : Promise.resolve({text:this._messages.done,prompt:this._agent.prompt})
-  }
-
-  /**************
   func: status
   params:
     - msg: The msg is any additonal string to append to the end of hte call.
@@ -1277,7 +1679,7 @@ class Deva {
     // create the text msg string
     let text = `${this._features.systems.label}:STATUS ${this._agent.profile.name} active since ${dateFormat}`;
     if (msg) text = text + `\n${msg}`;                      // append the msg string if msg true.
-    return text;                                            // return final text string
+    return Promise.resolve(text);                           // return final text string
   }
 
   /**************
@@ -1290,234 +1692,31 @@ class Deva {
   usage: this.prompt('text')
   ***************/
   prompt(text) {
+    // console.log('PROMPT', text);
     // Talk a global prompt event for the client
-    return this.talk(`prompt`, {text, agent:this._agent});
+    return this.talk('prompt', {id: this.uid(), text, agent:this._agent});
   }
 
+
   /**************
-  func: client
-  params: none
+  func: copy
+  params: obj
   describe:
-    this function allows state management for when client prfioe is
-    being accessed.
-  usage: this.client();
+    a simple copy object to create a memory clean copy of data to
+    prevent collisions when needed. Handles clean text, array, object copy.
+    it makes the assumption tha the user is submitting either an array or object
+    for copying.
   ***************/
-  client() {
-    if (!this._active) return this._messages.offline;    // check the active status
-    this.state('client');                                // set the client state
-    return this._client;                                 // return the client feature
+  copy(obj) {
+    let v, key;
+    const output = Array.isArray(obj) ? [] : {};
+    for (key in obj) {
+        v = obj[key];
+        output[key] = (typeof v === "object") ? this.copy(v) : v;
+    }
+    return output;
   }
 
-  /**************
-  func: agent
-  params: none
-  describe:
-    this function allows statement management for when client prfioe is
-    being accessed.
-  usage: this.agent()
-  ***************/
-  agent() {
-    if (!this._active) return this._messages.offline;
-    this.state('agent');
-    return this._agent;
-  }
-
-  /**************
-  func: security
-  params: none
-  describe: basic security features available in a Deva.
-  usage: this.security()
-  ***************/
-  security() {
-    if (!this._active) return this._messages.offline;    // check the active status
-    this.state('security');                              // set the security state
-    return this._security;                               // return the security feature
-  }
-
-  /**************
-  func: support
-  params: none
-  describe: basic support features available in a Deva.
-  usage: this.support()
-  ***************/
-  support() {
-    if (!this._active) return this._messages.offline;   // check the active status
-    this.state('support');                              // set the support state
-    return this._support;                               // return the support feature
-  }
-
-  /**************
-  func: services
-  params: none
-  describe: basic services features available in a Deva.
-  usage: this.services()
-  ***************/
-  services(opts) {
-    if (!this._active) return this._messages.offline;   // check the active status
-    this.state('services');                             // set the services state
-    return this._services;                              // return the services feature
-  }
-
-  /**************
-  func: systems
-  params: opts
-  describe: basic systems features available in a Deva.
-  usage: this.systems()
-  ***************/
-  systems(opts) {
-    if (!this._active) return this._messages.offline;   // check the active status
-    this.state('systems');                              // set the systems state
-    return this._systems;                               // return the systems feature
-  }
-
-  /**************
-  func: solutions
-  params: opts
-  describe: basic solutions features available in a Deva.
-  usage: this.solutions()
-  ***************/
-  solutions(opts) {
-    if (!this._active) return this._messages.offline;   // check the active status
-    this.state('solutions');                            // set the solutions state
-    return this._solutions;                             // return the solutions feature
-  }
-
-  /**************
-  func: development
-  params: opts
-  describe: basic development features available in a Deva.
-  ***************/
-  development(opts) {
-    if (!this._active) return this._messages.offline;   // chek the active status
-    this.state('development');                          // set the development state
-    return this._development;                           // return development feature
-  }
-
-  /**************
-  func: assistant
-  params: opts
-  describe: basic assistant features available in a Deva.
-  ***************/
-  assistant(opts) {
-    if (!this._active) return this._messages.offline;   // chek the active status
-    this.state('assistant');                            // set the assistant state
-    return this._assistant;                             // return assistant feature
-  }
-
-  /**************
-  func: business
-  params: opts
-  describe: basic business features available in a Deva.
-  ***************/
-  business(opts) {
-    if (!this._active) return this._messages.offline;   // chek the active status
-    this.state('business');                             // set the business state
-    return this._business;                              // return business feature
-  }
-
-  /**************
-  func: legal
-  params: opts
-  describe: basic legal features available in a Deva.
-  ***************/
-  legal(opts) {
-    if (!this._active) return this._messages.offline;   // chek the active status
-    this.state('legal');                                // set the legal state
-    return this._legal;                                 // return legal feature
-  }
-
-  /**************
-  func: load
-  params:
-    -deva:      The Deva model to load.
-  describe:
-    This function will enable fast loading of Deva into a system.
-  ***************/
-  load(key, client) {
-    return new Promise((resolve, reject) => {
-      this.state('deva_load');
-      this.devas[key].init(client).then(loaded => {
-        this.state('deva_loaded');
-        this.talk(`deva:load`, {
-          key,
-          created: Date.now(),
-        });
-        return resolve();
-      }).catch(err => {
-        return this.error(err, deva, reject);
-      })
-    });
-  }
-
-
-  /**************
-  func: unload
-  params:
-    - deva:     The deva key to unload
-  describe:     Unload a currently loaded Deva.
-  ***************/
-  unload(key) {
-    this.state('deva_unload');
-    delete this.devas[key];
-    this.state('deva_unloaded');
-    this.talk(`deva:unload`, {
-      key,
-      created: Date.now(),
-    });
-    return Promise.resolve(`unload:${deva} `);
-  }
-
-  /**************
-  func: startDevas
-  params: none
-  describe:
-    Start Devas will initialize the Deva agents inside this curent Deva.
-  ***************/
-  startDevas(client) {
-    this.state('devas_start');                          // set the devas start state
-    return new Promise((resolve, reject) => {
-      const loading = [];
-      const _client = this.copy(client);
-      for (let x in this.devas) {
-        loading.push(this.load(x, client));
-      }
-      Promise.all(loading).then(() => {
-        this.state('devas_ready');                      // set to ready state
-        return resolve({                                // return the response
-          text:this._messages.devas_started,            // include started state message
-          prompt:this._agent.prompt,                    // include agent prompt settings
-        });
-      }).catch(err => {                                 // catch any errors
-        return this.error(err, client, reject);         // send to error handler.
-      });
-    });
-  }
-  /**************
-  func: stpDevas
-  params: none
-  describe:
-    stopDevas will stop all the devas running in the current Deva.
-  ***************/
-  stopDevas() {
-    this.state('devas_stop');                           // set the  devas stop state
-    return new Promise((resolve, reject) => {
-      const devas = [];                                 // create empty devas index
-      for (let x in this.devas) {
-        devas.push(this.devas[x].stop());               // push the deva to devas index
-      }
-      Promise.all(devas).then(() => {
-        this.state('devas_stoped');                     // set the deva stopped state
-        return resolve({
-          text: this._messages.devas_stopped,           // include stopped state message
-          prompt: this._agent.prompt,                   // include agent prompt settings
-        });
-      }).catch(err => {                                 // catch any errors
-        return this.error(err, false, reject);          // send to error handler
-      });
-    });
-  }
-
-  // UTILITY FUNCTIONS
   /**************
   func: formatDate
   params:

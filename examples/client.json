@@ -107,6 +107,20 @@
         "devas": {
           "hello": {}
         }
+      },
+      "story": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "mind": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
       }
     }
   }

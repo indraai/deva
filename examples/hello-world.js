@@ -26,12 +26,21 @@ const HelloWorld = new Deva({
   },
   vars: agent.vars,
   listeners: {
-    'hello:state'(packet) {
-      // console.log(packet.state);
-    },
     'prompt'(packet) {
-      console.log(packet.text);
-    }
+      console.log(`p: @${packet.agent.key}:${packet.msg}`);
+    },
+    'state'(packet) {
+      console.log(`🍪 state > ${packet.agent.key}:${packet.msg}`);
+    },
+    'zone'(packet) {
+      console.log(`🗺️  zone > ${packet.agent.key}:${packet.msg}`);
+    },
+    'action'(packet) {
+      console.log(`💥 action > ${packet.agent.key}:${packet.msg}`);
+    },
+    'feature'(packet) {
+      console.log(`🍿 feature > ${packet.agent.key}:${packet.msg}`);
+    },
   },
   devas: {},
   modules: {},
@@ -73,8 +82,6 @@ const HelloWorld = new Deva({
 HelloWorld.init(client).then(done => {
   // console.log(done);
   return HelloWorld.question('/test')
-}).then(answer => {
-  console.log(answer.a.data);
 });
 
 
