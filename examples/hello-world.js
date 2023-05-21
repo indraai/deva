@@ -27,19 +27,19 @@ const HelloWorld = new Deva({
   vars: agent.vars,
   listeners: {
     'prompt'(packet) {
-      console.log(`p: @${packet.agent.key}:${packet.msg}`);
+      console.log(`p: @${packet.agent.key}:${packet.text}`);
     },
     'state'(packet) {
-      console.log(`🍪 state > ${packet.agent.key}:${packet.msg}`);
+      console.log(`🍪 state > ${packet.text}`);
     },
     'zone'(packet) {
-      console.log(`🗺️  zone > ${packet.agent.key}:${packet.msg}`);
+      console.log(`🗺️  zone > ${packet.agent.profile.name} is in the ${packet.text} zone`);
     },
     'action'(packet) {
-      console.log(`💥 action > ${packet.agent.key}:${packet.msg}`);
+      console.log(`💥 action > ${packet.agent.profile.name} get ${packet.text}`);
     },
     'feature'(packet) {
-      console.log(`🍿 feature > ${packet.agent.key}:${packet.msg}`);
+      console.log(`🍿 feature > ${packet.agent.profile.name} ${packet.text}`);
     },
   },
   devas: {},
