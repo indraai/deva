@@ -54,7 +54,7 @@ class Deva {
       offline: 'offline',
       online: 'online',
 
-      init: 'init',
+      init: 'initialize',
       start: 'start',
       enter: 'enter',
       stop: 'stop',
@@ -74,15 +74,15 @@ class Deva {
 
     this._zone = false;                            // current state of agent.
     this._zones = {
-      deva: 'deva',
-      config: 'config',
-      features: 'features',
-      idle: 'idle',
-      train: 'training',
-      work: 'working',
-      invalid: 'invalid',
-      done: 'done',
-      error: 'error',
+      deva: 'deva.world',
+      config: 'Configuration Zone',
+      features: 'Features Zone',
+      idle: 'Idle Zone',
+      train: 'Training Zone',
+      work: 'Working Zone',
+      invalid: 'Invalid Zone',
+      done: 'Done Zone',
+      error: 'Error Zone',
     };                                  // states object
 
     this._action = false;
@@ -132,64 +132,64 @@ class Deva {
     this._feature = false;
     this._features = {
       security: 'security',
-      Security: '@SECURITY',
+      Security: 'SECURITY FEATURE',
       support: 'support',
-      Support: '@SUPPORT',
+      Support: 'SUPPORT FEATURE',
       services: 'services',
-      Services: '@SERVICES',
+      Services: 'SERVICES FEATURE',
       solutions: 'solutions',
-      Solutions: '@SOLUTIONS',
+      Solutions: 'SOLUTIONS FEATURE',
       systems: 'systems',
-      Systems: '@SYSTEMS',
+      Systems: 'SYSTEMS FEATURE',
       development: 'development',
-      Development: '@DEVELOPMENT',
+      Development: 'DEVELOPMENT FEATURE',
       business: 'business',
-      Business: '@BUSINESS',
+      Business: 'BUSINESS FEATURE',
       legal:'legal',
-      Legal:'@LEGAL',
+      Legal:'LEGAL FEATURE',
       assistant: 'assistant',
-      Assistant: '@ASSISTANT',
+      Assistant: 'ASSISTANT FEATURE',
       story: 'story',
-      Story: '@STORY',
+      Story: 'STORY FEATURE',
       mind: 'mind',
-      Mind: '@MIND',
+      Mind: 'MIND FEATURE',
       error: 'error',
       done: 'done',
     };
 
     this._messages = {
       states: {
-        offline: `${this._agent.profile.name} ofline`,
-        online: `${this._agent.profile.name} online`,
-        ask: `:${this._state.ask}`,
-        question: `${this._states.quesiton}`,
-        offline: `${this._states.offline}`,
-        online: `${this._states.online}`,
-        init: `${this._agent.profile.name} initialize`,
-        start: `${this._agent.profile.name} start`,
-        enter: `${this._agent.profile.name} enter`,
-        stop: `${this._agent.profile.name} stop`,
-        exit: `${this._agent.profile.name} exit`,
-        load: `${this._agent.profile.name} load`,
-        unload: `${this._agent.profile.name} unload`,
-        uid: `${this._states.uid}`,
-        hash: `${this._states.hash}`,
-        cipher: `${this._states.cipher}`,
-        decipher: `${this._states.decipher}`,
-        invalid: `${this._states.invalid}`,
-        done: `${this._agent.profile.name} is Done`,
+        offline: `${this._agent.profile.name} ${this._states.offline}`,
+        online: `${this._agent.profile.name} ${this._states.online}`,
+        ask: `${this._agent.profile.name} ${this._state.ask}`,
+        question: `${this._agent.profile.name} ${this._states.quesiton}`,
+        offline: `${this._agent.profile.name} ${this._states.offline}`,
+        online: `${this._agent.profile.name} ${this._states.online}`,
+        init: `${this._agent.profile.name} ${this._states.init}`,
+        start: `${this._agent.profile.name} ${this._states.start}`,
+        enter: `${this._agent.profile.name} ${this._states.enter}`,
+        stop: `${this._agent.profile.name} ${this._states.stop}`,
+        exit: `${this._agent.profile.name} ${this._states.exit}`,
+        load: `${this._agent.profile.name} ${this._states.load}`,
+        unload: `${this._agent.profile.name} ${this._states.unload}`,
+        uid: `${this._agent.profile.name} ${this._states.uid}`,
+        hash: `${this._agent.profile.name} ${this._states.hash}`,
+        cipher: `${this._agent.profile.name} ${this._states.cipher}`,
+        decipher: `${this._agent.profile.name} ${this._states.decipher}`,
+        invalid: `${this._agent.profile.name} ${this._states.invalid}`,
+        done: `${this._agent.profile.name} ${this._states.done}`,
         error: `${this._states.error}`,
       },
       zones: {
-        deva: 'Deva',
-        config: 'Configuration',
-        features: 'Features',
-        idle: 'Idle',
-        train: `${this._zones.train}`,
-        work: `${this._zones.work}`,
-        invalid: `${this._zones.invalid}`,
-        done: `${this._zones.done}`,
-        error: `${this._zones.error}`,
+        deva: `${this._agent.profile.name} enter ${this._zones.deva}`,
+        config: `${this._agent.profile.name} ${this._zones.config}`,
+        features: `${this._agent.profile.name} ${this._zones.features}`,
+        idle: `${this._agent.profile.name} ${this._zones.idle}`,
+        train: `${this._agent.profile.name} ${this._zones.train}`,
+        work: `${this._agent.profile.name} ${this._zones.work}`,
+        invalid: `${this._agent.profile.name} ${this._zones.invalid}`,
+        done: `${this._agent.profile.name} ${this._zones.done}`,
+        error: `${this._agent.profile.name} ${this._zones.error}`,
       },
       actions: {
         wait: `${this._agent.profile.name} ${this._actions.wait}`,
@@ -207,28 +207,28 @@ class Deva {
         ask: `${this._agent.profile.name} ${this._actions.ask}`,
         ask_answer: `${this._agent.profile.name} ${this._actions.ask_answer}`,
         security: `${this._actions.security} is responding`,
-        Security: `${this._actions.Security} is guarding`,
+        Security: `${this._actions.Security} is ready`,
         support: `${this._actions.support} is responding`,
-        Support: `${this._actions.Support} is caring`,
+        Support: `${this._actions.Support} is ready`,
         services: `${this._actions.Services} is responding`,
-        Services: `${this._actions.Services} is servicing`,
+        Services: `${this._actions.Services} is ready`,
         solutions: `${this._actions.solutions} is responding`,
-        Solutions: `${this._actions.Solutions} is providing`,
+        Solutions: `${this._actions.Solutions} is ready`,
         solutions: `${this._actions.Systems} is responding`,
-        Systems: `${this._actions.Systems} is delivering`,
+        Systems: `${this._actions.Systems} is ready`,
         development: `${this._actions.Development} is responding`,
-        Development: `${this._actions.Development} is building`,
+        Development: `${this._actions.Development} is ready`,
         business: `${this._actions.Business} is responding`,
-        Business: `${this._actions.Business} is successful`,
+        Business: `${this._actions.Business} is ready`,
         legal: `${this._actions.Legal} is responding`,
-        Legal: `${this._actions.Legal} is doing their job`,
+        Legal: `${this._actions.Legal} is ready`,
         assistant: `${this._actions.Assistant} is responding`,
-        Assistant: `${this._actions.Assistant} is helping`,
+        Assistant: `${this._actions.Assistant} is ready`,
         story: `${this._actions.Story} is responding`,
-        Story: `${this._actions.Story} is inspiring`,
+        Story: `${this._actions.Story} is ready`,
         mind: `${this._actions.Mind} is responding`,
-        Mind: `${this._actions.Mind} is thinking and pondering`,
-        client_data: `Client Data`,
+        Mind: `${this._actions.Mind} is ready`,
+        client_data: `${this._agent.profile.name} setting Client Data`,
         invalid: `${this._actions.invalid}`,
         done: `${this._actions.done}`,
         error: `${this._action.error}`,
@@ -291,7 +291,7 @@ class Deva {
   Security() {
     this.feature('Security');
     try {
-      if (!this._client.features.security) return this.Support();
+      if (this._client.features.security) return this.Support();
       else {
         this.action('Security');
         const {id, profile, features} = this._client;   // make a copy the clinet data.
@@ -1082,6 +1082,16 @@ class Deva {
   usage: this.init(client_object)
   ***************/
   init(client) {
+    const _data = {
+      id: this.uid(),
+      key: 'init',
+      value: 'init',
+      agent: this._agent,
+      client: this.copy(client),
+      text: this._messages.states.start,
+      created: Date.now(),
+    }
+
     // set client
     this._active = Date.now();
     return new Promise((resolve, reject) => {
@@ -1100,7 +1110,10 @@ class Deva {
         return this.Security();
       }).then(() => {
         this.zone('deva');
-        return this.start(this._messages.deva_init);
+
+        _data.hash = this.hash(JSON.stringify(_data));
+        const hasOnInit = this.onInit && typeof this.onInit === 'function';
+        return hasOnInit ? this.onInit(_data) : this.start(_data)
       }).catch(err => {
         return this.error(err, client, reject);
       });
@@ -1145,7 +1158,7 @@ class Deva {
     function or running the system enter function.
   usage: this.start('msg')
   ***************/
-  start(text = false) {
+  start(data=false) {
     this.state('start');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     const _data = {
@@ -1153,12 +1166,13 @@ class Deva {
       key: 'start',
       value: 'start',
       agent: this._agent,
+      client: data.client || this._client,
       text: this._messages.states.start,
       created: Date.now(),
     }
     _data.hash = this.hash(JSON.stringify(_data));
-    const hasOnExit = this.onExit && typeof this.onExit === 'function';
-    return hasOnExit ? this.onExit(_data) : Promise.resolve(_data)
+    const hasOnStart = this.onStart && typeof this.onStart === 'function';
+    return hasOnStart ? this.onStart(_data) : this.enter(_data)
   }
 
   /**************
@@ -1174,7 +1188,7 @@ class Deva {
   usage:
     this.stop('msg')
   ***************/
-  stop(text=false) {
+  stop(data=false) {
     this.state('stop');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     const _data = {
@@ -1182,6 +1196,7 @@ class Deva {
       key: 'stop',
       value: 'stop',
       agent: this._agent,
+      client: data.client || this._client,
       text: this._messages.states.stop,
       created: Date.now(),
     }
@@ -1201,7 +1216,7 @@ class Deva {
     If the Deva is offline it will return the offline message.
   usage: this.enter('msg')
   ***************/
-  enter(text=false) {
+  enter(data=false) {
     this.state('enter');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     const _data = {
@@ -1209,12 +1224,13 @@ class Deva {
       type: 'enter',
       value: 'enter',
       agent: this._agent,
+      client: data.client || this._client,
       text: this._messages.states.enter,
       created: Date.now(),
     }
     _data.hash = this.hash(JSON.stringify(_data));
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function';
-    return hasOnEnter ? this.onExit(_data) : Promise.resolve(_data)
+    return hasOnEnter ? this.onEnter(_data) : this.done(_data)
   }
 
   /**************
@@ -1231,7 +1247,7 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.exit('msg')
   ***************/
-  exit(text=false) {
+  exit(data=false) {
     this.state('exit');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     this._active = false;
@@ -1240,6 +1256,7 @@ class Deva {
       key: 'exit',
       value: 'exit',
       agent: this._agent,
+      client: this._client || this._client,
       text: this._messages.states.exit,
       created: Date.now(),
     }
@@ -1259,7 +1276,7 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.done('msg')
   ***************/
-  done(text=false) {
+  done(data=false) {
     this.state('done');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     this._active = false;
@@ -1268,6 +1285,7 @@ class Deva {
       key: 'done',
       value: 'done',
       agent: this._agent,
+      client: data.client || this._client,
       text: this._messages.states.exit,
       created: Date.now(),
     }
