@@ -196,16 +196,16 @@ class Deva {
         question: `${this._agent.profile.name} ${this._actions.question}`,
         question_ask: `${this._agent.profile.name} ${this._actions.question_ask}`,
         question_ask_answer: `${this._agent.profile.name} ${this._actions.questoin_ask_answer}`,
-        question_cmd: `${this._agent.profile.name} ${this._actions.question_cmd}`,
+        question_cmd: `${this._agent.profile.name} issued a command`,
         question_method: `${this._agent.profile.name} ${this._actions.question_method}`,
         question_talk: `${this._agent.profile.name} ${this._actions.question_talk}`,
-        question_hash: `${this._agent.profile.name} ${this._actions.question_hash}`,
+        question_hash: `${this._agent.profile.name} is hashing a question`,
         question_answer: `${this._agent.profile.name} ${this._actions.question_answer}`,
         question_done: `${this._agent.profile.name} ${this._actions.question_done}`,
         answer: `${this._agent.profile.name} ${this._actions.answer}`,
-        answer_talk: `${this._agent.profile.name} ${this._actions.answer_talk}`,
-        ask: `${this._agent.profile.name} ${this._actions.ask}`,
-        ask_answer: `${this._agent.profile.name} ${this._actions.ask_answer}`,
+        answer_talk: `${this._agent.profile.name} talking the ansnwer for anyone listening `,
+        ask: `${this._agent.profile.name} is asking another deva`,
+        ask_answer: `${this._agent.profile.name} is answering the ask`,
         security: `${this._actions.security} is responding`,
         Security: `${this._actions.Security} is ready`,
         support: `${this._actions.support} is responding`,
@@ -778,7 +778,7 @@ class Deva {
       },
       created: Date.now(),
     };
-    this.state('method_not_found', packet);
+    this.state('method_not_found');
     return packet;
   }
 
@@ -1302,7 +1302,7 @@ class Deva {
     - st: The state flag to set for the Deva that matches to this._states
   describe
   ***************/
-  state(state, data=false) {
+  state(state) {
     try {
       if (!this._states[state]) return;
       this._state = state;
@@ -1312,8 +1312,8 @@ class Deva {
         key: 'state',
         value: state,
         agent: this._agent,
+        client: this._client.id,
         text,
-        data,
         created: Date.now(),
       };
       _data.hash = this.hash(JSON.stringify(_data));
@@ -1736,14 +1736,7 @@ class Deva {
     const decipher = createDecipheriv( algorithm, key_in_bytes, iv);
     const decrypted = decipher.update(encrypted);
     const final = Buffer.concat([decrypted, decipher.final()]);
-    this.state('decipher', {
-      id: this.uid(true),
-      iv: opt.iv,
-      key: opt.key,
-      agent_id: this._agent.id,
-      client_id: this._client.id,
-      created: Date.now()
-    });
+    this.state('decipher');
     return final.toString();
   }
 
