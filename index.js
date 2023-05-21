@@ -101,32 +101,32 @@ class Deva {
       answer_talk: 'answer:talk',
       ask: 'ask',
       ask_answer: 'ask:answer',
-      security: '#security',
-      Security: '@SECURITY',
-      support: '#support',
-      Support: '@SUPPORT',
-      systems: '#systems',
-      Systems: '@SYSTEMS',
-      services: '#services',
-      Services: '@SERVICES',
-      solutions: '#solutions',
-      Solutions: '@SOLUTIONS',
-      development: '#development',
-      Development: '@DEVELOPMENT',
-      business: '#business',
-      Business: '@Business',
-      legal: '#legal',
-      Legal: '@LEGAL',
-      assistant: '#assistant',
-      Assistant: '@ASSISTANT',
-      story: '#story',
-      Story: '@STORY',
-      mind: '#mind',
-      Mind: '@MIND',
-      client_data: 'client:data',
-      invalid: 'invalid',
-      error: 'error',
-      done: 'done',
+      security: 'security',
+      Security: 'SECURITY',
+      support: 'support',
+      Support: 'SUPPORT',
+      systems: 'systems',
+      Systems: 'SYSTEMS',
+      services: 'services',
+      Services: 'SERVICES',
+      solutions: 'solutions',
+      Solutions: 'SOLUTIONS',
+      development: 'development',
+      Development: 'DEVELOPMENT',
+      business: 'business',
+      Business: 'Business',
+      legal: 'legal',
+      Legal: 'LEGAL',
+      assistant: 'assistant',
+      Assistant: 'ASSISTANT',
+      story: 'story',
+      Story: 'STORY',
+      mind: 'mind',
+      Mind: 'MIND',
+      client_data: 'Client Data',
+      invalid: 'Actin Invalid',
+      error: 'Action Error',
+      done: 'Action Done',
     }
 
     this._feature = false;
@@ -954,7 +954,7 @@ class Deva {
       packet.hash = this.hash(JSON.stringify(packet));
 
       this.action('answer_talk');
-      this.talk(`${this._agent.key}:answer`, packet);        // set the question answer state
+      this.talk('answer', packet);                  // talk the global answer event
 
       this.action('done');
       return resolve(packet);                                // resolve the packet to the caller.
@@ -1043,6 +1043,7 @@ class Deva {
         // hash the question
         this.action('question_hash');                      // set the has question state
         packet.q.meta.hash = this.hash(JSON.stringify(packet.q));
+        this.talk('question', packet);                    // talk the global question event.
 
 
         if (isAsk) {                                      // isAsk check if the question isAsk and talk
@@ -1163,7 +1164,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     const _data = {
       id: this.uid(),
-      key: 'start',
+      key: 'return',
       value: 'start',
       agent: this._agent,
       client: data.client || this._client,
@@ -1193,7 +1194,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     const _data = {
       id: this.uid(),
-      key: 'stop',
+      key: 'return',
       value: 'stop',
       agent: this._agent,
       client: data.client || this._client,
@@ -1221,7 +1222,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     const _data = {
       id: this.uid(),
-      type: 'enter',
+      key: 'return',
       value: 'enter',
       agent: this._agent,
       client: data.client || this._client,
@@ -1253,7 +1254,7 @@ class Deva {
     this._active = false;
     const _data = {
       id: this.uid(),
-      key: 'exit',
+      key: 'return',
       value: 'exit',
       agent: this._agent,
       client: this._client || this._client,
@@ -1281,7 +1282,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     const _data = {
       id: this.uid(),
-      key: 'done',
+      key: 'return',
       value: 'done',
       agent: this._agent,
       client: data.client || this._client,
@@ -1638,7 +1639,7 @@ class Deva {
       try {
         this.state('uload');
         delete this.devas[key];
-        this.talk(`deva:unload`, {
+        this.talk(`unload`, {
           key,
           created: Date.now(),
         });
@@ -1806,6 +1807,25 @@ class Deva {
         output[key] = (typeof v === "object") ? this.copy(v) : v;
     }
     return output;
+  }
+
+  /**************
+  func: getToday
+  params:
+    - d: The date string to get the day of..
+  describe:
+    a date can be passed in or generated to produce a date string for the day
+    where time is 0. This feature is useful for logging for getting a date
+    with no time value for the current day.
+  ***************/
+  getToday(d) {
+    d = d ? d : Date.now();
+    const today = new Date(d);
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+    return today.getTime();
   }
 
   /**************
