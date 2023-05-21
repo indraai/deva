@@ -1279,7 +1279,6 @@ class Deva {
   done(data=false) {
     this.state('done');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
-    this._active = false;
     const _data = {
       id: this.uid(),
       key: 'done',
