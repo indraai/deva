@@ -1272,8 +1272,8 @@ class Deva {
       created: Date.now(),
     }
     _data.hash = this.hash(JSON.stringify(_data));
-    const hasOnExit = this.onExit && typeof this.onExit === 'function';
-    return hasOnExit ? this.onExit(_data) : Promise.resolve(_data)
+    const hasOnDone = this.onDone && typeof this.onDone === 'function';
+    return hasOnDone ? this.onDone(_data) : Promise.resolve(_data)
   }
 
   ////////////////////////////
