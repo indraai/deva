@@ -16,10 +16,10 @@ class Deva {
     this._security = false;                             // inherited Security features.
     this._support = false;                              // inherited Support features.
     this._services = false;                             // inherited Service features.
-    this._assistant = false;                            // inherited Assistant features.
     this._business = false;                             // inherited Business features.
     this._development = false;                          // inherited Business features.
     this._legal = false;                                // inherited Legal features.
+    this._story = false;                            // inherited Assistant features.
     this.events = opts.events || new EventEmitter({});  // Event Bus
     this.lib = opts.lib || {};                          // used for loading library functions
     this.devas = opts.devas || {};                      // Devas which are loaded
@@ -30,8 +30,9 @@ class Deva {
     this.methods = opts.methods || {};                  // local Methods
     this.maxListeners = opts.maxListenners || 0;        // set the local maxListeners
 
+    // prevent overwriting existing functions and variables with same name
     for (var opt in opts) {
-      if (!this[opt]) this[opt] = opts[opt];            // set any remaining opts to this.
+      if (!this[opt] || !this[`_${opt}`]) this[opt] = opts[opt];
     }
 
     this.cmdChr = '/';                                  // the trigger for local commands
@@ -48,40 +49,35 @@ class Deva {
 
     this._state = 'offline';                            // current state of agent.
     this._states = {
-      ask: 'ask',
-      question: 'question',
-      answer: 'answer',
+      ask: `asked another Deva`,
+      question: `was asked a question`,
+      answer: `offered an answer`,
 
-      offline: 'offline',
-      online: 'online',
+      offline: `is Offline`,
+      online: `is Online`,
 
-      init: 'initialize',
-      start: 'start',
-      enter: 'enter',
-      stop: 'stop',
-      exit: 'exit',
-      error: 'error',
-      load: 'load',
-      unload: 'unload',
-      uid: 'uid',
-      hash: 'hash',
-      cipher: 'cipher',
-      decipher: 'deciper',
+      init: `Initialize`,
+      start: `start your journey`,
+      enter: `enter deva.world`,
+      stop: `stop what you are doing`,
+      exit: 'exit deva.world',
+      load: 'load Deva',
+      unload: 'unload Deva',
 
-      invalid: 'invalid',
-      done: 'done',
-      error: 'error',
+      invalid: 'State Invalid',
+      done: 'State Done',
+      error: 'State Error',
     };                                  // states object
 
     this._zone = false;                            // current state of agent.
     this._zones = {
-      deva: 'deva.world',
+      deva: 'Deva Zone',
       config: 'Configuration Zone',
-      features: 'Features Zone',
+      features: 'Feature Zone',
       idle: 'Idle Zone',
       train: 'Training Zone',
       work: 'Working Zone',
-      invalid: 'Invalid Zone',
+      invalid: 'Invalid Invalid',
       done: 'Done Zone',
       error: 'Error Zone',
     };                                  // states object
@@ -91,39 +87,40 @@ class Deva {
       wait: 'wait',
       question: 'question',
       question_ask: 'question:ask',
-      question_ask_answer: 'question:ask:answer',
+      question_ask_answer: 'returned with an answer',
       question_cmd: 'question:cmd',
       question_method: 'question:method',
-      question_talk: 'quesiton:talk',
+      question_talk: 'question:talk',
       question_hash: 'question:hash',
       question_answer: 'question:answer',
-      question_done: 'quesiton:done',
+      question_done: 'question:done',
       answer: 'answer',
-      answer_talk: 'answer:talk',
-      ask: 'ask',
-      ask_answer: 'ask:answer',
+      answer_hash: 'hashing the answer',
+      answer_talk: 'sharing the answer',
+      ask: 'asking',
+      ask_answer: 'answering',
       security: 'security',
-      Security: 'SECURITY',
+      Security: 'Security Feature',
       support: 'support',
-      Support: 'SUPPORT',
+      Support: 'Support Feature',
       systems: 'systems',
-      Systems: 'SYSTEMS',
+      Systems: 'Systems Feature',
       services: 'services',
-      Services: 'SERVICES',
+      Services: 'Services Feature',
       solutions: 'solutions',
-      Solutions: 'SOLUTIONS',
+      Solutions: 'Solutions Feature',
       development: 'development',
-      Development: 'DEVELOPMENT',
+      Development: 'Development Feature',
       business: 'business',
-      Business: 'Business',
+      Business: 'Business Feature',
       legal: 'legal',
-      Legal: 'LEGAL',
+      Legal: 'Legal Feature',
       assistant: 'assistant',
-      Assistant: 'ASSISTANT',
+      Assistant: 'Assistant Feature',
       story: 'story',
-      Story: 'STORY',
+      Story: 'Story Feature',
       mind: 'mind',
-      Mind: 'MIND',
+      Mind: 'Mind Feature',
       client_data: 'Client Data',
       invalid: 'Actin Invalid',
       error: 'Action Error',
@@ -133,81 +130,82 @@ class Deva {
     this._feature = false;
     this._features = {
       security: 'security',
-      Security: 'SECURITY FEATURE',
+      Security: 'Security Feature',
       support: 'support',
-      Support: 'SUPPORT FEATURE',
+      Support: 'Support Feature',
       services: 'services',
-      Services: 'SERVICES FEATURE',
+      Services: 'Servicees Feature',
       solutions: 'solutions',
-      Solutions: 'SOLUTIONS FEATURE',
+      Solutions: 'Solutions Feature',
       systems: 'systems',
-      Systems: 'SYSTEMS FEATURE',
+      Systems: 'Systems Feature',
       development: 'development',
-      Development: 'DEVELOPMENT FEATURE',
+      Development: 'Development Feature',
       business: 'business',
-      Business: 'BUSINESS FEATURE',
+      Business: 'Business Feature',
       legal:'legal',
-      Legal:'LEGAL FEATURE',
+      Legal:'Legal Feature',
       assistant: 'assistant',
-      Assistant: 'ASSISTANT FEATURE',
+      Assistant: 'Assistant Feature',
       story: 'story',
-      Story: 'STORY FEATURE',
+      Story: 'Story Feature',
       mind: 'mind',
-      Mind: 'MIND FEATURE',
-      error: 'error',
-      done: 'done',
+      Mind: 'Mind Feature',
+      error: 'Feature Error',
+      done: 'Feature Done',
     };
 
     this._messages = {
       states: {
         offline: `${this._agent.profile.name} ${this._states.offline}`,
         online: `${this._agent.profile.name} ${this._states.online}`,
-        ask: `${this._agent.profile.name} ${this._state.ask}`,
-        question: `${this._agent.profile.name} ${this._states.quesiton}`,
-        answer: `${this._agent.profile.name} ${this._states.answer}`,
+        ask: `😎 ${this._agent.profile.name} ${this._states.ask}`,
+        question: `🎙️ ${this._agent.profile.name} ${this._states.question}`,
+        answer: `🎟️  ${this._agent.profile.name} ${this._states.answer}`,
         offline: `${this._agent.profile.name} ${this._states.offline}`,
         online: `${this._agent.profile.name} ${this._states.online}`,
-        init: `${this._agent.profile.name} ${this._states.init}`,
-        start: `${this._agent.profile.name} ${this._states.start}`,
-        enter: `${this._agent.profile.name} ${this._states.enter}`,
-        stop: `${this._agent.profile.name} ${this._states.stop}`,
-        exit: `${this._agent.profile.name} ${this._states.exit}`,
-        load: `${this._agent.profile.name} ${this._states.load}`,
-        unload: `${this._agent.profile.name} ${this._states.unload}`,
+        init: `🚀 ${this._agent.profile.name} ${this._states.init}`,
+        start: `🎬 ${this._agent.profile.name} ${this._states.start}`,
+        enter: `📲 ${this._agent.profile.name} ${this._states.enter}`,
+        stop: `✋ ${this._agent.profile.name} ${this._states.stop}`,
+        exit: `🚪 ${this._agent.profile.name} ${this._states.exit}`,
+        load: `📫 ${this._agent.profile.name} ${this._states.load}`,
+        unload: `📭 ${this._agent.profile.name} ${this._states.unload}`,
         uid: `${this._agent.profile.name} ${this._states.uid}`,
         hash: `${this._agent.profile.name} ${this._states.hash}`,
         cipher: `${this._agent.profile.name} ${this._states.cipher}`,
         decipher: `${this._agent.profile.name} ${this._states.decipher}`,
-        invalid: `${this._agent.profile.name} ${this._states.invalid}`,
-        done: `${this._agent.profile.name} ${this._states.done}`,
-        error: `${this._states.error}`,
+        invalid: `⚠️ ${this._agent.profile.name} ${this._states.invalid}`,
+        done: `✅ ${this._agent.profile.name} ${this._states.done}`,
+        error: `❌ ${this._states.error}`,
       },
       zones: {
-        deva: `${this._agent.profile.name} enter ${this._zones.deva}`,
-        config: `${this._agent.profile.name} ${this._zones.config}`,
-        features: `${this._agent.profile.name} ${this._zones.features}`,
-        idle: `${this._agent.profile.name} ${this._zones.idle}`,
-        train: `${this._agent.profile.name} ${this._zones.train}`,
-        work: `${this._agent.profile.name} ${this._zones.work}`,
-        invalid: `${this._agent.profile.name} ${this._zones.invalid}`,
-        done: `${this._agent.profile.name} ${this._zones.done}`,
-        error: `${this._agent.profile.name} ${this._zones.error}`,
+        deva: `🎉 ${this._agent.profile.name} entered the ${this._zones.deva}`,
+        config: `💪 ${this._agent.profile.name} is in the ${this._zones.config}`,
+        features: `🍿 ${this._agent.profile.name} entered the ${this._zones.features}`,
+        idle: `🥱 ${this._agent.profile.name} is stuck in the ${this._zones.idle}`,
+        train: `👨‍🎓 ${this._agent.profile.name} is learning in the ${this._zones.train}`,
+        work: `😓 ${this._agent.profile.name} is handling things in the ${this._zones.work}`,
+        invalid: `⚠️ ${this._agent.profile.name} fell into the ${this._zones.invalid}`,
+        done: `✅ ${this._agent.profile.name} and here we are in the ${this._zones.done}`,
+        error: `❌ ${this._agent.profile.name} fell into the ${this._zones.error}`,
       },
       actions: {
-        wait: `${this._agent.profile.name} ${this._actions.wait}`,
-        question: `${this._agent.profile.name} ${this._actions.question}`,
-        question_ask: `${this._agent.profile.name} ${this._actions.question_ask}`,
-        question_ask_answer: `${this._agent.profile.name} ${this._actions.questoin_ask_answer}`,
-        question_cmd: `${this._agent.profile.name} issued a command`,
-        question_method: `${this._agent.profile.name} ${this._actions.question_method}`,
-        question_talk: `${this._agent.profile.name} ${this._actions.question_talk}`,
-        question_hash: `${this._agent.profile.name} is hashing a question`,
-        question_answer: `${this._agent.profile.name} ${this._actions.question_answer}`,
-        question_done: `${this._agent.profile.name} ${this._actions.question_done}`,
-        answer: `${this._agent.profile.name} ${this._actions.answer}`,
-        answer_talk: `${this._agent.profile.name} talking the ansnwer for anyone listening `,
-        ask: `${this._agent.profile.name} is asking another deva`,
-        ask_answer: `${this._agent.profile.name} is answering the ask`,
+        wait: `😵‍💫 ${this._agent.profile.name} ${this._actions.wait}`,
+        question: `👀 ${this._agent.profile.name} ${this._actions.question}`,
+        question_ask: `👥 ${this._agent.profile.name} ${this._actions.question_ask}`,
+        question_ask_answer: `📣 ${this._agent.profile.name} ${this._actions.question_ask_answer}`,
+        question_cmd: `🎮 ${this._agent.profile.name} issued a command`,
+        question_method: `🏄‍♂️ ${this._agent.profile.name} ${this._actions.question_method}`,
+        question_talk: `📢 ${this._agent.profile.name} ${this._actions.question_talk}`,
+        question_hash: `#️⃣  ${this._agent.profile.name} is hashing a question`,
+        question_answer: `🎙️ ${this._agent.profile.name} ${this._actions.question_answer}`,
+        question_done: `👍 ${this._agent.profile.name} ${this._actions.question_done}`,
+        answer: `🎟️  ${this._agent.profile.name} shared the ${this._actions.answer}`,
+        answer_talk: `🎟️  ${this._agent.profile.name} is talking the ansnwer for anyone listening `,
+        ask: `👥 ${this._agent.profile.name} is asking`,
+        ask_answer: `🎟️  ${this._agent.profile.name} is answering the ask`,
+
         security: `${this._actions.security} is responding`,
         Security: `${this._actions.Security} is ready`,
         support: `${this._actions.support} is responding`,
@@ -230,37 +228,37 @@ class Deva {
         Story: `${this._actions.Story} is ready`,
         mind: `${this._actions.Mind} is responding`,
         Mind: `${this._actions.Mind} is ready`,
-        client_data: `${this._agent.profile.name} setting Client Data`,
+        client_data: `📂 ${this._agent.profile.name} setting Client Data`,
         invalid: `${this._actions.invalid}`,
-        done: `${this._actions.done}`,
+        done: `✅ ${this._actions.done}`,
         error: `${this._action.error}`,
       },
       features: {
         security: `${this._features.security} is protecting`,
-        Security: `${this._features.Security} is configuring`,
+        Security: `${this._features.Security} loading...`,
         support: `${this._features.support} is caring`,
-        Support: `${this._features.Support} is configuring`,
+        Support: `${this._features.Support} loading...`,
         services: `${this._features.services} is servicing`,
-        Services: `${this._features.Services} is configuring`,
+        Services: `${this._features.Services} loading...`,
         solutions: `${this._features.solutions} is solving`,
-        Solutions: `${this._features.Solutions} is configuring`,
+        Solutions: `${this._features.Solutions} loading...`,
         systems: `${this._features.systems} is mantaining`,
-        Systems: `${this._features.Systems} is configuring`,
+        Systems: `${this._features.Systems} loading...`,
         development: `${this._features.development} is developing`,
-        Development: `${this._features.Development} is working on ideas`,
+        Development: `${this._features.Development} loading...`,
         business: `${this._features.business} is successful`,
-        Business: `${this._features.Business} is configuring`,
+        Business: `${this._features.Business} loading...`,
         legal: `${this._features.legal} is upholding the law`,
-        Legal: `${this._features.Legal} is configuring`,
+        Legal: `${this._features.Legal} loading...`,
         assistant: `${this._features.assistant} is assisting`,
-        Assistant: `${this._features.Assistant} is configuring`,
+        Assistant: `${this._features.Assistant} loading...`,
         story: `${this._features.story} is creating`,
-        Story: `${this._features.Story} is configuring`,
+        Story: `${this._features.Story} loading...`,
         mind: `${this._features.story} is thinking and pondering`,
-        Mind: `${this._features.Mind} is configuring`,
-        invalid: this._features.invalid,
-        done: this._features.done,
-        error: this._features.error,
+        Mind: `${this._features.Mind} loading...`,
+        invalid: `⚠️ ${this._features.invalid}`,
+        done: `✅ ${this._features.done}`,
+        error: `❌ ${this._features.error}`,
       },
     };                                // messages object
   }
@@ -669,6 +667,7 @@ class Deva {
     return new Promise((resolve, reject) => {
       try {
         delete this._client.features;               // delete the features key when done.
+        this.action('done');                 // set state to assistant setting
         this.feature('done');                 // set state to assistant setting
         return resolve();
       } catch (e) {
@@ -786,8 +785,8 @@ class Deva {
   ***************/
   _methodNotFound(packet) {
     packet.a = {
-      agent: this._agent || false,
-      client: this._client || false,
+      agent: this.agent() || false,
+      client: this.client() || false,
       text: `${this._messages.method_not_found}`,
       meta: {
         key: this._agent.key,
@@ -906,6 +905,7 @@ class Deva {
       let _action = 'question_method'
       try {                                               // try to answer the question
         if (isAsk) {                                      // determine if hte question isAsk
+          _action = 'question_ask';
           key = t_split[0].substring(1);                  // if:isAsksplit the agent key and remove first command character
           //if:isAsk use text split index 1 as the parameter block
           params = t_split[1] ? t_split[1].split(':') : false;
@@ -920,13 +920,12 @@ class Deva {
           text = t_split.slice(1).join(' ').trim();       // if:isCmd rejoin the string on the space after removing first index
         }
         else {
-          this.action('question_method');
         }
 
         packet.q = {                                      // build packet.q container
             id: this.uid(),
-            agent: this._agent || false,                  // set the agent
-            client: this._client || false,                // set the client
+            agent: this.agent() || false,                  // set the agent
+            client: this.client() || false,                // set the client
             meta: {                                       // build the meta container
               key,                                        // set the key variable
               orig,                                       // set orig text to track chances
@@ -942,20 +941,20 @@ class Deva {
         this.action('question_hash');                      // set the has question state
         packet.q.meta.hash = this.hash(JSON.stringify(packet.q));
 
-        this.talk('question', this.copy(packet));         // global question event make sure to copy data.
+        this.action(_action);
+        this.talk('devacore:question', this.copy(packet));         // global question event make sure to copy data.
 
         if (isAsk) {                                      // isAsk check if the question isAsk and talk
           this.state('ask');
-          this.action('question_ask');
-          this.talk(`${key}:ask`, packet);                // if:isAsk talk the event to theother Deva
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
+          this.talk(`${key}:ask`, this.copy(packet));
           this.once(`${key}:ask:${packet.id}`, answer => {
             this.action('question_ask_answer');
             return resolve(answer);                       // if:isAsk resolve the answer from the call
           });
         }
         else {                                            // else: answer tue question locally
-          this.action(_action);
+          this.action('ask_answer');
           return this.answer(packet, resolve, reject);
         }
       }
@@ -980,7 +979,6 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
 
     this.state('answer');
-    this.action('answer', packet);        // set the question answer state
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
     const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
@@ -990,6 +988,7 @@ class Deva {
     }
     // Call the local method to process the question based the extracted parameters
     return this.methods[method](packet).then(result => {
+      this.action('answer');
       // check the result for the text, html, and data object.
       // this is for when answers are returned from nested Devas.
       const text = typeof result === 'object' ? result.text : result;
@@ -997,36 +996,37 @@ class Deva {
       // if the data passed is NOT an object it will FALSE
       const data = typeof result === 'object' ? result.data : false;
 
+      const agent = this.agent() || false;
+      const client = this.client() || false;
       packet.a = {                                  // setup the packet.a container
         id: this.uid(),
-        agent: this._agent || false,                // set the agent who answered the question
-        client: this._client || false,              // set the client asking the question
+        agent,                                      // set the agent who answered the question
+        client,                                     // set the client asking the question
         meta: {                                     // setup the answer meta container
-          key: this._agent.key,                     // set the agent key inot the meta
+          key: agent.key,                           // set the agent key inot the meta
           method,                                   // set the method into the meta
           params,                                   // set the params into the meta
         },
         text,                                       // set answer text
-        html,
-        data,
+        html,                                       // set the answer html
+        data,                                       // set the answer data
         created: Date.now(),
       };
 
       // create a hash for the answer and insert into answer meta.
-      this.action('hash_answer');
+      this.action('answer_hash');
       packet.a.meta.hash = this.hash(JSON.stringify(packet.a));
 
-      this.action('hash_packet');
+      this.action('packet_hash');
       packet.hash = this.hash(JSON.stringify(packet));     // hash the entire packet.
 
 
       this.action('answer_talk');
-      this.talk('answer', this.copy(packet));             // talk the answer with a copy of the data
+      this.talk('devacore:answer', this.copy(packet));             // talk the answer with a copy of the data
 
-      this.action('done');
       return resolve(packet);                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
-      this.action('error', err);
+      this.action('error');
       return this.error(err, packet, reject);             // return this.error with err, packet, reject
     });
   }
@@ -1049,14 +1049,16 @@ class Deva {
   ask(packet) {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     this.state('ask');
-    this.action('ask', packet);
+    this.action('ask');
 
+    const agent = this.agent() || false;
+    const client = this.client() || false;
     // build the answer packet from this model
     packet.a = {
-      agent: this._agent || false,
-      client: this._client || false,
+      agent,
+      client,
       meta: {
-        key: this._agent.key,
+        key: agent.key,
         method: packet.q.meta.method,
         params: packet.q.meta.params,
       },
@@ -1067,7 +1069,7 @@ class Deva {
     };
 
     try {
-      if (this.methods[packet.q.meta.method] !== 'function') {
+      if (typeof this.methods[packet.q.meta.method] !== 'function') {
         return setImmediate(() => {
           this.action('invalid')
           packet.a.text = `INVALID METHOD (${packet.q.meta.method})`;
@@ -1086,16 +1088,16 @@ class Deva {
         else {
           packet.a.text = result;
         }
-        this.action('ask_answer', packet);
+        this.action('ask_answer');
         this.talk(`${this._agent.key}:ask:${packet.id}`, this.copy(packet));
       }).catch(err => {
-        this.action('error', err);
+        this.action('error');
         this.talk(`${this._agent.key}:ask:${packet.id}`, {error:err.toString()});
         return this.error(err, packet);
       })
     }
     catch (e) {
-      this.action('error', err);
+      this.action('error');
       this.talk(`${this._agent.key}:ask:${packet.id}`, {error:e.toString()});
       return this.error(e, packet)
     }
@@ -1120,7 +1122,7 @@ class Deva {
   ***************/
   init(client) {
     const _data = {
-      id: this.uid(),
+      id: this.uid(true),
       key: 'return',
       value: 'init',
       agent: this._agent,
@@ -1172,6 +1174,12 @@ class Deva {
     data.value = 'start';
     delete data.hash;
     data.hash = this.hash(JSON.stringify(data));
+
+    if (this.info) {
+      const _info = JSON.stringify(this.info, null, 2).replace(/\{/g, '::BEGIN:INFO')
+                        .replace(/\"|\,/g, '').replace(/\}/g, '::END:INFO').trim()
+      this.prompt(_info);
+    }
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
     return hasOnStart ? this.onStart(data) : this.enter(data)
   }
@@ -1215,7 +1223,7 @@ class Deva {
     delete data.hash;
     data.hash = this.hash(JSON.stringify(data));
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
-    return hasOnDone ? this.onDone(data) : Promise.resolve(data)
+    return hasOnDone ? this.onDone(data) : Promise.resolve(data);
   }
 
   /**************
@@ -1231,15 +1239,15 @@ class Deva {
   usage:
     this.stop('msg')
   ***************/
-  stop(data=false) {
+  stop() {
     this.state('stop');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     const _data = {
-      id: this.uid(),
+      id: this.uid(true),
       key: 'return',
       value: 'stop',
-      agent: this._agent,
-      client: data.client || this._client,
+      agent: this.agent(),
+      client: this.client(),
       text: this._messages.states.stop,
       created: Date.now(),
     }
@@ -1265,20 +1273,24 @@ class Deva {
   ***************/
   exit(data=false) {
     this.state('exit');
-    if (!this._active) return Promise.resolve(this._messages.states.offline);
     this._active = false;
-    const _data = {
-      id: this.uid(),
-      key: 'return',
-      value: 'exit',
-      agent: this._agent,
-      client: this._client || this._client,
-      text: this._messages.states.exit,
-      created: Date.now(),
-    }
-    _data.hash = this.hash(JSON.stringify(_data));
+    data.value = 'exit';
+    delete data.hash;
+    data.hash = this.hash(JSON.stringify(data));
+
+    // clear memory
+    this._active = false;
+    this._client = false;
+    this._security = false;
+    this._support = false;
+    this._services = false;
+    this._business = false;
+    this._development = false;
+    this._legal = false;
+    this._story = false;
+
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
-    return hasOnExit ? this.onExit(_data) : Promise.resolve(_data)
+    return hasOnExit ? this.onExit(data) : Promise.resolve(data)
   }
 
 
@@ -1296,7 +1308,7 @@ class Deva {
       this._state = state;
       const text = this._messages.states[state];
       const _data = {
-        id: this.uid(),
+        id: this.uid(true),
         key: 'state',
         value: state,
         agent: this.agent(),
@@ -1305,7 +1317,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(JSON.stringify(_data));
-      this.talk('state', this.copy(_data));
+      this.talk('devacore:state', this.copy(_data));
     } catch (e) {
       return this.error(e);
     }
@@ -1323,7 +1335,7 @@ class Deva {
       this._zone = zone;
       const text = this._messages.zones[zone];
       const _data = {
-        id: this.uid(),
+        id: this.uid(true),
         key: 'zone',
         value: zone,
         agent: this._agent,
@@ -1344,22 +1356,22 @@ class Deva {
     - st: The state flag to set for the Deva that matches to this._states
   describe
   ***************/
-  action(action, data=false) {
+  action(action) {
     try {
       if (!this._actions[action]) return;
       this._action = action;
       const text = this._messages.actions[action];
       const _data = {
-        id: this.uid(),
+        id: this.uid(true),
         key: 'action',
         value: action,
-        agent: this._agent,
+        agent: this.agent(),
+        client: this.client(),
         text,
-        data,
         created: Date.now(),
       };
       _data.hash = this.hash(JSON.stringify(_data));
-      this.talk('action', _data);
+      this.talk('devacore:action', this.copy(_data));
     } catch (e) {
       return this.error(e)
     }
@@ -1377,7 +1389,7 @@ class Deva {
       this._feature = feature;
       const text = this._messages.features[feature] ;
       const _data = {
-        id: this.uid(),
+        id: this.uid(true),
         key: 'feature',
         value: feature,
         agent: this._agent,
@@ -1766,13 +1778,15 @@ class Deva {
   usage: this.prompt('text')
   ***************/
   prompt(text) {
-    // console.log('PROMPT', text);
     // Talk a global prompt event for the client
-    return this.talk('prompt', {
+    return this.talk('devacore:prompt', {
       id: this.uid(),
+      key: 'return',
+      value: 'prompt',
+      agent: this.agent(),
+      client: this.client(),
       text,
-      agent:this._agent,
-      created: Date.Now(),
+      created: Date.now(),
     });
   }
 
@@ -1895,6 +1909,7 @@ class Deva {
   usage: this.error(err, data, reject);
   ***************/
   error(err,data=false,reject=false) {
+    this.state('error');
     // check fo rthe custom onError function in the agent.
     console.log('\n::BEGIN:ERROR\n');
     console.log(err);
@@ -1905,6 +1920,18 @@ class Deva {
       console.log(JSON.stringify(data, null, 2));
       console.log('\n::END:DATA\n');
     }
+
+    this.talk('devacore:error', {
+      id: this.uid(true),
+      key: 'return',
+      value: 'error',
+      agent: this.agent(),
+      client: this.client(),
+      text: err.toString(),
+      data,
+      created: Date.now(),
+    });
+
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
     if (hasOnError) return this.onError(err, data, reject);
     else {
