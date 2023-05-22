@@ -50,6 +50,7 @@ class Deva {
     this._states = {
       ask: 'ask',
       question: 'question',
+      answer: 'answer',
 
       offline: 'offline',
       online: 'online',
@@ -163,6 +164,7 @@ class Deva {
         online: `${this._agent.profile.name} ${this._states.online}`,
         ask: `${this._agent.profile.name} ${this._state.ask}`,
         question: `${this._agent.profile.name} ${this._states.quesiton}`,
+        answer: `${this._agent.profile.name} ${this._states.answer}`,
         offline: `${this._agent.profile.name} ${this._states.offline}`,
         online: `${this._agent.profile.name} ${this._states.online}`,
         init: `${this._agent.profile.name} ${this._states.init}`,
@@ -872,6 +874,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     const id = this.uid();                                // generate a unique id for transport.
     const t_split = TEXT.split(' ');                      // split the text on spaces to get words.
+    this.state('question');
     this.action('question', id);
 
     // check to see if the string is an #ask string to talk to the other Deva.
@@ -942,6 +945,7 @@ class Deva {
         this.talk('question', this.copy(packet));         // global question event make sure to copy data.
 
         if (isAsk) {                                      // isAsk check if the question isAsk and talk
+          this.state('ask');
           this.action('question_ask');
           this.talk(`${key}:ask`, packet);                // if:isAsk talk the event to theother Deva
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
@@ -973,6 +977,9 @@ class Deva {
     from the agent from the pre-determined method.
   ***************/
   answer(packet, resolve, reject) {
+    if (!this._active) return Promise.resolve(this._messages.states.offline);
+
+    this.state('answer');
     this.action('answer', packet);        // set the question answer state
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
@@ -1041,6 +1048,7 @@ class Deva {
   ***************/
   ask(packet) {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
+    this.state('ask');
     this.action('ask', packet);
 
     // build the answer packet from this model
