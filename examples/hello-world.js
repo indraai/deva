@@ -66,6 +66,7 @@ const HelloWorld = new Deva({
         cipher,
         decipher
       }
+      console.log(data)
       return Promise.resolve({
         text: packet.a.text,
         data,
@@ -79,10 +80,7 @@ const HelloWorld = new Deva({
   },
 });
 
-HelloWorld.init(client).then(done => {
-  // console.log(done);
-  return HelloWorld.question('/test')
-});
+HelloWorld.init(client);
 
 
 // HelloWorld.question('/hello hello there').then(hello => {

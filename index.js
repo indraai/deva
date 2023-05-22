@@ -290,11 +290,12 @@ class Deva {
   ***************/
   Security() {
     this.feature('Security');
+    const _cl = this.client();
     try {
-      if (this._client.features.security) return this.Support();
+      if (!_cl.features.security) return this.Support();
       else {
         this.action('Security');
-        const {id, profile, features} = this._client;   // make a copy the clinet data.
+        const {id, profile, features} = _cl;            // make a copy the clinet data.
         const {security} = features;                    // make a copy the clinet data.
         this._security = {                              // set this_security with data
           id: this.uid(true),                           // uuid of the security feature
@@ -325,11 +326,12 @@ class Deva {
   ***************/
   Support() {
     this.feature('Support');                  // set state to support setting
+    const _cl = this.client();
     try {
-      if (!this._client.features.support) return this.Services()
+      if (!_cl.features.support) return this.Services()
       else {
         this.action('Support');
-        const {id, features, profile} = this._client;        // set the local consts from client copy
+        const {id, features, profile} = _cl;            // set the local consts from client copy
         const {support} = features;                     // set support from features const
         this._support = {                               // set this_support with data
           id: this.uid(true),                           // uuid of the support feature
@@ -358,11 +360,12 @@ class Deva {
   ***************/
   Services() {
     this.feature('Services');                 // set state to security setting
+    const _cl = this.client();
     try {
-      if (!this._client.features.services) return this.Systems();
+      if (!_cl.features.services) return this.Systems();
       else {
         this.action('Services')
-        const {id, features, profile} = this._client;   // set the local consts from client copy
+        const {id, features, profile} = _cl;   // set the local consts from client copy
         const {services} = features;                    // set services from features const
         this._services = {                              // set this_services with data
           id: this.uid(true),                           // uuid of the services feature
@@ -391,11 +394,12 @@ class Deva {
   ***************/
   Systems() {
     this.feature('Systems');                  // set state to systems setting
+    const _cl = this.client();
     try {
-      if (!this._client.features.systems) return this.Solutions();
+      if (!_cl.features.systems) return this.Solutions();
       else {
         this.action('Systems');
-        const {id, features, profile} = this._client;   // set the local consts from client copy
+        const {id, features, profile} = _cl;   // set the local consts from client copy
         const {systems} = features;                     // set systems from features const
         this._systems = {                               // set this_systems with data
           id: this.uid(true),                           // uuid of the systems feature
@@ -425,11 +429,12 @@ class Deva {
   ***************/
   Solutions() {
     this.feature('Solutions');                // set state to solutions setting
+    const _cl = this.client();
     try {
-      if (!this._client.features.solutions) return this.Development();
+      if (!_cl.features.solutions) return this.Development();
       else {
         this.action('Solutions');
-        const {id, features, profile} = this._client;   // set the local consts from client copy
+        const {id, features, profile} = _cl;   // set the local consts from client copy
         const {solutions} = features;                   // set solutions from features const
         this._solutions = {                             // set this_solutions with data
           id: this.uid(true),                           // uuid of the solutions feature
@@ -458,11 +463,12 @@ class Deva {
   ***************/
   Development() {
     this.feature('Development');              // set state to development setting
+    const _cl = this.client();
     try {
-      if (!this._client.features.development) return this.Business();
+      if (!_cl.features.development) return this.Business();
       else {
         this.action('Development');
-        const {id, features, profile} = this._client;   // set the local consts from client copy
+        const {id, features, profile} = _cl;   // set the local consts from client copy
         const {development} = features;                 // set development from features const
         this._development = {                           // set this_development with data
           id: this.uid(true),                           // uuid of the development feature
@@ -491,11 +497,12 @@ class Deva {
   ***************/
   Business(client=false) {
     this.feature('Business');                 // set state to business setting
+    const _cl = this.client();
     try {
-      if (!this._client.features.business) return this.Legal();
+      if (!_cl.features.business) return this.Legal();
       else {
         this.action('Business');
-        const {id, features, profile} = this._client;   // set the local consts from client copy
+        const {id, features, profile} = _cl;   // set the local consts from client copy
         const {business} = features;                    // set business from features const
         this._business = {                              // set this_business with data
           id: this.uid(true),                           // uuid of the business feature
@@ -524,11 +531,12 @@ class Deva {
   ***************/
   Legal() {
     this.feature('Legal');                    // set state to legal setting
+    const _cl = this.client();
     try {
-      if (!this._client.features.legal) this.Assistant();
+      if (!_cl.features.legal) this.Assistant();
       else {
         this.action('Legal');
-        const {id, features, profile} = this._client;   // set the local consts from client copy
+        const {id, features, profile} = _cl;   // set the local consts from client copy
         const {legal} = features;                       // set legal from features const
         this._legal = {                                 // set this_legal with data
           id: this.uid(true),                           // uuid of the legal feature
@@ -542,6 +550,8 @@ class Deva {
         return this.Assistant();
       }
     } catch (e) {
+      this.action('error');
+      this.feature('error');
       return this.error(e)                             // run error handling if an error is caught
     }
   }
@@ -555,11 +565,12 @@ class Deva {
   ***************/
   Assistant(client=false) {
     this.feature('Assistant');                 // set state to assistant setting
+    const _cl = this.client();
     try {
-      if (!this._client.features.assistant) return this.Done();
+      if (!_cl.features.assistant) return this.Done();
       else {
         this.action('Assistant');
-        const {id, features, profile} = this._client;        // set the local consts from client copy
+        const {id, features, profile} = _cl;        // set the local consts from client copy
         const {assistant} = features;                    // set assistant from features const
         this._assistant = {                              // set this_assistant with data
           id: this.uid(true),                           // uuid of the assistant feature
@@ -573,6 +584,8 @@ class Deva {
         return this.Story();
       }
     } catch (e) {
+      this.action('error');
+      this.feature('error');
       return this.error(e)                             // run error handling if an error is caught
     }
   }
@@ -586,6 +599,7 @@ class Deva {
   ***************/
   Story(client=false) {
     this.feature('Story');                 // set state to story setting
+    const _cl = this.client();
     try {
       if (!this._client.features.story) return this.Mind();
       else {
@@ -619,11 +633,12 @@ class Deva {
   ***************/
   Mind(client=false) {
     this.feature('Mind');                 // set state to story setting
+    const _cl = this.client();
     try {
-      if (!this._client.features.mind) return this.Done();
+      if (!_cl.features.mind) return this.Done();
       else {
         this.action('Mind');
-        const {id, features, profile} = this._client;       // set the local consts from client copy
+        const {id, features, profile} = _cl;       // set the local consts from client copy
         const {mind} = features;                           // set mind from features const
         this._mind = {                                     // set this_mind with data
           id: this.uid(true),                               // uuid of the mind feature
@@ -913,6 +928,8 @@ class Deva {
   }
 
   answer(packet, resolve, reject) {
+    console.log('PACKET Q-A', packet.q);
+
     this.action('answer', packet);        // set the question answer state
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
@@ -930,8 +947,9 @@ class Deva {
       // if the data passed is NOT an object it will FALSE
       const data = typeof result === 'object' ? result.data : false;
 
-
+      console.log('ANSWER', packet.q);
       packet.a = {                                  // setup the packet.a container
+        id: this.uid(),
         agent: this._agent || false,                // set the agent who answered the question
         client: this._client || false,              // set the client asking the question
         meta: {                                     // setup the answer meta container
@@ -1027,6 +1045,7 @@ class Deva {
         }
 
         packet.q = {                                      // build packet.q container
+            id: this.uid(),
             agent: this._agent || false,                  // set the agent
             client: this._client || false,                // set the client
             meta: {                                       // build the meta container
@@ -1043,12 +1062,13 @@ class Deva {
         // hash the question
         this.action('question_hash');                      // set the has question state
         packet.q.meta.hash = this.hash(JSON.stringify(packet.q));
-        this.talk('question', packet);                    // talk the global question event.
+        console.log('PACKET Q', packet.q);
 
+        this.talk('question', this.copy(packet));                    // talk the global question event.
 
         if (isAsk) {                                      // isAsk check if the question isAsk and talk
           this.action('question_ask');
-          this.talk(`${key}:ask`, packet);                // if:isAsk talk the event to theother Deva
+          this.talk(`${key}:ask`, this.copy(packet));                // if:isAsk talk the event to theother Deva
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
           this.once(`${key}:ask:${packet.id}`, answer => {
             this.action('question_ask_answer');
@@ -1085,13 +1105,14 @@ class Deva {
   init(client) {
     const _data = {
       id: this.uid(),
-      key: 'init',
+      key: 'return',
       value: 'init',
       agent: this._agent,
       client: this.copy(client),
       text: this._messages.states.start,
       created: Date.now(),
     }
+    _data.hash = this.hash(JSON.stringify(_data));
 
     // set client
     this._active = Date.now();
@@ -1111,42 +1132,12 @@ class Deva {
         return this.Security();
       }).then(() => {
         this.zone('deva');
-
-        _data.hash = this.hash(JSON.stringify(_data));
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
         return hasOnInit ? this.onInit(_data) : this.start(_data)
       }).catch(err => {
         return this.error(err, client, reject);
       });
     });
-  }
-
-  /**************
-  func: error
-  params:
-    - err: The error to process
-    - data: Any additional data associated with the error
-    - reject: An associated promise reject if the caller requires.
-  describe:
-    The erro function rpovides the consistent error manage of the system.
-  usage: this.error(err, data, reject);
-  ***************/
-  error(err,data=false,reject=false) {
-    // check fo rthe custom onError function in the agent.
-    console.log('\n::BEGIN:ERROR\n');
-    console.log(err);
-    console.log('\n::END:ERROR\n');
-    if (data) {
-      console.log('::::::');
-      console.log('\n::BEGIN:DATA\n');
-      console.log(JSON.stringify(data, null, 2));
-      console.log('\n::END:DATA\n');
-    }
-
-    if (this.onError && typeof this.onError === 'function') return this.onError(err, data, reject);
-    else {
-      return reject ? reject(err) : err;
-    }
   }
 
   /**************
@@ -1162,18 +1153,53 @@ class Deva {
   start(data=false) {
     this.state('start');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
-    const _data = {
-      id: this.uid(),
-      key: 'return',
-      value: 'start',
-      agent: this._agent,
-      client: data.client || this._client,
-      text: this._messages.states.start,
-      created: Date.now(),
-    }
-    _data.hash = this.hash(JSON.stringify(_data));
-    const hasOnStart = this.onStart && typeof this.onStart === 'function';
-    return hasOnStart ? this.onStart(_data) : this.enter(_data)
+    data.value = 'start';
+    delete data.hash;
+    data.hash = this.hash(JSON.stringify(data));
+    const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
+    return hasOnStart ? this.onStart(data) : this.enter(data)
+  }
+
+  /**************
+  func: enter
+  params:
+    - msg: hte message from the caller incase need to use in calls
+  describe:
+    The ener function will check the actie status of the Deva and set it to
+    offline or enter.
+
+    If the Deva is offline it will return the offline message.
+  usage: this.enter('msg')
+  ***************/
+  enter(data=false) {
+    this.state('enter');
+    if (!this._active) return Promise.resolve(this._messages.states.offline);
+    data.value = 'enter';
+    delete data.hash;
+    data.hash = this.hash(JSON.stringify(data));
+    const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
+    return hasOnEnter ? this.onEnter(_data) : this.done(data)
+  }
+
+  /**************
+  func: done
+  params:
+  - msg: hte message from the caller incase need to use in calls
+  describe:
+    When the done function is triggered the system will also set the state
+    of hte Deva to done.
+
+    If the deva is offline it will return the offline message.
+  usage: this.done('msg')
+  ***************/
+  done(data=false) {
+    this.state('done');
+    if (!this._active) return Promise.resolve(this._messages.states.offline);
+    data.value = 'done';
+    delete data.hash;
+    data.hash = this.hash(JSON.stringify(data));
+    const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
+    return hasOnDone ? this.onDone(data) : Promise.resolve(data)
   }
 
   /**************
@@ -1206,33 +1232,6 @@ class Deva {
     return hasOnStop ? this.onStop(_data) : this.exit(_data)
   }
 
-  /**************
-  func: enter
-  params:
-    - msg: hte message from the caller incase need to use in calls
-  describe:
-    The ener function will check the actie status of the Deva and set it to
-    offline or enter.
-
-    If the Deva is offline it will return the offline message.
-  usage: this.enter('msg')
-  ***************/
-  enter(data=false) {
-    this.state('enter');
-    if (!this._active) return Promise.resolve(this._messages.states.offline);
-    const _data = {
-      id: this.uid(),
-      key: 'return',
-      value: 'enter',
-      agent: this._agent,
-      client: data.client || this._client,
-      text: this._messages.states.enter,
-      created: Date.now(),
-    }
-    _data.hash = this.hash(JSON.stringify(_data));
-    const hasOnEnter = this.onEnter && typeof this.onEnter === 'function';
-    return hasOnEnter ? this.onEnter(_data) : this.done(_data)
-  }
 
   /**************
   func: exit
@@ -1266,33 +1265,6 @@ class Deva {
     return hasOnExit ? this.onExit(_data) : Promise.resolve(_data)
   }
 
-  /**************
-  func: done
-  params:
-  - msg: hte message from the caller incase need to use in calls
-  describe:
-    When the done function is triggered the system will also set the state
-    of hte Deva to done.
-
-    If the deva is offline it will return the offline message.
-  usage: this.done('msg')
-  ***************/
-  done(data=false) {
-    this.state('done');
-    if (!this._active) return Promise.resolve(this._messages.states.offline);
-    const _data = {
-      id: this.uid(),
-      key: 'return',
-      value: 'done',
-      agent: this._agent,
-      client: data.client || this._client,
-      text: this._messages.states.exit,
-      created: Date.now(),
-    }
-    _data.hash = this.hash(JSON.stringify(_data));
-    const hasOnDone = this.onDone && typeof this.onDone === 'function';
-    return hasOnDone ? this.onDone(_data) : Promise.resolve(_data)
-  }
 
   ////////////////////////////
 
@@ -1418,7 +1390,10 @@ class Deva {
   client() {
     this.state('client_data');                                // set the client state
     if (!this._active) return this._messages.states.offline;    // check the active status
-    return this._client;                                 // return the client feature
+    const client_copy = this.copy(this._client);
+    // delete client_copy.parse;
+    // delete client_copy.translate;
+    return client_copy;                                 // return the client feature
   }
 
   /**************
@@ -1432,6 +1407,8 @@ class Deva {
   agent() {
     this.state('agent_data');
     if (!this._active) return this._messages.states.offline;
+    const agent_copy = this.copy(this._agent);
+    console.log(agent);
     return this._agent;
   }
 
@@ -1796,8 +1773,8 @@ class Deva {
     let v, key;
     const output = Array.isArray(obj) ? [] : {};
     for (key in obj) {
-        v = obj[key];
-        output[key] = (typeof v === "object") ? this.copy(v) : v;
+      v = obj[key];
+      output[key] = (typeof v === "object") ? this.copy(v) : v;
     }
     return output;
   }
@@ -1888,6 +1865,34 @@ class Deva {
   ***************/
   formatPerdent(n, dec=2) {
     return parseFloat(n).toFixed(dec) + '%';
+  }
+
+  /**************
+  func: error
+  params:
+    - err: The error to process
+    - data: Any additional data associated with the error
+    - reject: An associated promise reject if the caller requires.
+  describe:
+    The erro function rpovides the consistent error manage of the system.
+  usage: this.error(err, data, reject);
+  ***************/
+  error(err,data=false,reject=false) {
+    // check fo rthe custom onError function in the agent.
+    console.log('\n::BEGIN:ERROR\n');
+    console.log(err);
+    console.log('\n::END:ERROR\n');
+    if (data) {
+      console.log('::::::');
+      console.log('\n::BEGIN:DATA\n');
+      console.log(JSON.stringify(data, null, 2));
+      console.log('\n::END:DATA\n');
+    }
+    const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
+    if (hasOnError) return this.onError(err, data, reject);
+    else {
+      return reject ? reject(err) : err;
+    }
   }
 
 }
