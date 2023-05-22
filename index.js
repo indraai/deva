@@ -201,7 +201,7 @@ class Deva {
         question_hash: `#️⃣  ${this._agent.profile.name} is hashing a question`,
         question_answer: `🎙️ ${this._agent.profile.name} ${this._actions.question_answer}`,
         question_done: `👍 ${this._agent.profile.name} ${this._actions.question_done}`,
-        answer: `🎟️  ${this._agent.profile.name} shared the ${this._actions.answer}`,
+        answer: `🎟️  ${this._agent.profile.name} gave an ${this._actions.answer}`,
         answer_talk: `🎟️  ${this._agent.profile.name} is talking the ansnwer for anyone listening `,
         ask: `👥 ${this._agent.profile.name} is asking`,
         ask_answer: `🎟️  ${this._agent.profile.name} is answering the ask`,
@@ -1180,6 +1180,7 @@ class Deva {
                         .replace(/\"|\,/g, '').replace(/\}/g, '::END:INFO').trim()
       this.prompt(_info);
     }
+
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
     return hasOnStart ? this.onStart(data) : this.enter(data)
   }
