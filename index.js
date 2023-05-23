@@ -8,6 +8,7 @@ class Deva {
   constructor(opts) {
     opts = opts || {};
     this._id = randomUUID();                            // the unique id assigned to the agent at load
+    this._info = opts.info || false;                    // the deva information from the package file.
     this._config = opts.config || {};                   // local Config Object
     this._agent = opts.agent || false;                  // Agent profile object
     this._client = {};                                  // this will be set on init.
@@ -919,8 +920,6 @@ class Deva {
           method = t_split[0].substring(1);               // if:isCmd use the 0 index as the command
           text = t_split.slice(1).join(' ').trim();       // if:isCmd rejoin the string on the space after removing first index
         }
-        else {
-        }
 
         packet.q = {                                      // build packet.q container
             id: this.uid(),
@@ -1158,6 +1157,25 @@ class Deva {
     });
   }
 
+  info(id=false) {
+    id = id || this._id;
+    const agent = this.agent();
+    if (this._info) {
+      const _info = [
+        `::begin:info:${id}`,
+        `## ${this._agent.profile.name} (#${agent.key})`,
+      ];
+      for (let x in this._info) {
+        _info.push(`- ${x}: ${this._info[x]}`);
+      }
+      _info.push(`::end:info:${this.hash(JSON.stringify(this._info))}`);
+      return _info.join('\n');
+    }
+    else {
+      return '';
+    }
+  }
+
   /**************
   func: start
   params:
@@ -1176,8 +1194,7 @@ class Deva {
     data.hash = this.hash(JSON.stringify(data));
 
     if (this.info) {
-      const _info = JSON.stringify(this.info, null, 2).replace(/\{/g, '::BEGIN:INFO')
-                        .replace(/\"|\,/g, '').replace(/\}/g, '::END:INFO').trim()
+      const _info = this.info(data.id);
       this.prompt(_info);
     }
 
@@ -1698,7 +1715,7 @@ class Deva {
     const the_hash = createHash(algo);
     the_hash.update(str);
     const _digest = the_hash.digest('base64');
-    return _digest;
+    return `${algo}:${_digest}`;
   }
 
   /**************
