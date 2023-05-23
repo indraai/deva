@@ -997,7 +997,7 @@ class Deva {
 
       const agent = this.agent() || false;
       const client = this.client() || false;
-      packet.a = {                                  // setup the packet.a container
+      const packet_answer = {                                  // setup the packet.a container
         id: this.uid(),
         agent,                                      // set the agent who answered the question
         client,                                     // set the client asking the question
@@ -1014,14 +1014,15 @@ class Deva {
 
       // create a hash for the answer and insert into answer meta.
       this.action('answer_hash');
-      packet.a.meta.hash = this.hash(JSON.stringify(packet.a));
+      packet_answer.meta.hash = this.hash(JSON.stringify(packet_answer));
 
+      packet.a = this.copy(packet_answer);
       this.action('packet_hash');
       packet.hash = this.hash(JSON.stringify(packet));     // hash the entire packet.
 
 
       this.action('answer_talk');
-      this.talk('devacore:answer', this.copy(packet));             // talk the answer with a copy of the data
+      this.talk('devacore:answer', packet);             // talk the answer with a copy of the data
 
       return resolve(packet);                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
@@ -1416,7 +1417,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(JSON.stringify(_data));
-      this.talk('feature', _data);
+      this.talk('devacore:feature', _data);
     } catch (e) {
       return this.error(e);
     }
@@ -1641,7 +1642,7 @@ class Deva {
     return new Promise((resolve, reject) => {
       this.state('load');
       this.devas[key].init(client).then(loaded => {
-        this.talk(`deva:load`, {
+        this.talk(`devacore:load`, {
           key,
           created: Date.now(),
         });
@@ -1663,7 +1664,7 @@ class Deva {
       try {
         this.state('uload');
         delete this.devas[key];
-        this.talk(`unload`, {
+        this.talk(`devacore:unload`, {
           key,
           created: Date.now(),
         });
