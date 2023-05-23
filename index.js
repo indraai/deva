@@ -1022,7 +1022,7 @@ class Deva {
 
 
       this.action('answer_talk');
-      this.talk('devacore:answer', packet);             // talk the answer with a copy of the data
+      this.talk('devacore:answer', this.copy(packet));             // talk the answer with a copy of the data
 
       return resolve(packet);                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
@@ -1073,7 +1073,7 @@ class Deva {
         return setImmediate(() => {
           this.action('invalid')
           packet.a.text = `INVALID METHOD (${packet.q.meta.method})`;
-          this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
+          this.talk(`${this._agent.key}:ask:${packet.id}`, this.copy(packet));
         });
       }
 
@@ -1092,13 +1092,13 @@ class Deva {
         this.talk(`${this._agent.key}:ask:${packet.id}`, this.copy(packet));
       }).catch(err => {
         this.action('error');
-        this.talk(`${this._agent.key}:ask:${packet.id}`, {error:err.toString()});
+        this.talk(`${this._agent.key}:ask:${packet.id}`, {error:err});
         return this.error(err, packet);
       })
     }
     catch (e) {
       this.action('error');
-      this.talk(`${this._agent.key}:ask:${packet.id}`, {error:e.toString()});
+      this.talk(`${this._agent.key}:ask:${packet.id}`, {error:e});
       return this.error(e, packet)
     }
     // now when we ask the meta params[0] should be the method
@@ -1363,7 +1363,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(JSON.stringify(_data));
-      this.talk('zone', _data);
+      this.talk('devacore:zone', this.copy(_data));
     } catch (e) {
       return this.error(e);
     }
@@ -1417,7 +1417,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(JSON.stringify(_data));
-      this.talk('devacore:feature', _data);
+      this.talk('devacore:feature', this.copy(_data));
     } catch (e) {
       return this.error(e);
     }
@@ -1643,6 +1643,7 @@ class Deva {
       this.state('load');
       this.devas[key].init(client).then(loaded => {
         this.talk(`devacore:load`, {
+          id:this.uid(true),
           key,
           created: Date.now(),
         });
@@ -1663,14 +1664,17 @@ class Deva {
     return new Promise((resolve, reject) => {
       try {
         this.state('uload');
-        delete this.devas[key];
-        this.talk(`devacore:unload`, {
-          key,
-          created: Date.now(),
+        this.devas[key].stop().then(exit => {
+          delete this.devas[key];
+          this.talk(`devacore:unload`, {
+            id:this.uid(true),
+            key,
+            created: Date.now(),
+          });
         });
         return resolve(this._messages.states.unload);
       } catch (e) {
-        return reject(e, this.devas[key], reject)
+        return this.error(e, this.devas[key], reject)
       }
     });
   }
@@ -1798,15 +1802,16 @@ class Deva {
   ***************/
   prompt(text) {
     // Talk a global prompt event for the client
-    return this.talk('devacore:prompt', {
-      id: this.uid(),
+    const _data = {
+      id: this.uid(true),
       key: 'return',
       value: 'prompt',
       agent: this.agent(),
       client: this.client(),
       text,
       created: Date.now(),
-    });
+    }
+    return this.talk('devacore:prompt', this.copy(_data));
   }
 
 
@@ -1940,22 +1945,21 @@ class Deva {
       console.log('\n::END:DATA\n');
     }
 
-    this.talk('devacore:error', {
+    const _data = {
       id: this.uid(true),
       key: 'return',
       value: 'error',
       agent: this.agent(),
       client: this.client(),
-      text: err.toString(),
+      error: err,
       data,
       created: Date.now(),
-    });
+    }
+    this.talk('devacore:error', this.copy(_data));
 
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
     if (hasOnError) return this.onError(err, data, reject);
-    else {
-      return reject ? reject(err) : err;
-    }
+    else return reject ? reject(err) : err;
   }
 
 }
