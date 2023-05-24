@@ -76,8 +76,12 @@ class Deva {
       config: 'Configuration Zone',
       features: 'Feature Zone',
       idle: 'Idle Zone',
-      train: 'Training Zone',
-      work: 'Working Zone',
+      training: 'Training Zone',
+      school: 'School Zone',
+      work: 'Work Zone',
+      fun: 'Fun Zone',
+      adventure: 'Adventure Zone',
+      party: 'Party Zone',
       invalid: 'Invalid Invalid',
       done: 'Done Zone',
       error: 'Error Zone',
@@ -92,14 +96,16 @@ class Deva {
       question_cmd: 'question:cmd',
       question_method: 'question:method',
       question_talk: 'question:talk',
-      question_hash: 'question:hash',
       question_answer: 'question:answer',
       question_done: 'question:done',
       answer: 'answer',
-      answer_hash: 'hashing the answer',
       answer_talk: 'sharing the answer',
       ask: 'asking',
       ask_answer: 'answering',
+      uid: 'create unique id',
+      hash: 'create hash',
+      cipher: 'encrypt data',
+      decipher: 'dencrypt data',
       security: 'SECURITY',
       Security: 'Security Feature',
       support: 'SUPPORT',
@@ -130,63 +136,61 @@ class Deva {
 
     this._feature = false;
     this._features = {
-      security: '🔐 SECURITY',
-      Security: '🔐 SECURITY Feature',
-      support: '💼 SUPPORT',
-      Support: '💼 SUPPORT Feature',
-      services: '🛠️  SERVICES',
-      Services: '🛠️  SERVICES',
-      solutions: '💡 SOLUTIONS',
-      Solutions: '💡 SOLUTIONS Feature',
-      systems: '🖥️  SYSTEMS',
-      Systems: '🖥️  SYSTEMS Feature',
-      development: '🔧 DEVELOPMENT',
-      Development: '🔧 DEVELOPMENT Feature',
-      business: '📊 BUSINESS',
-      Business: '📊 BUSINESS Feature',
-      legal:'⚖️ LEGAL',
-      Legal:'⚖️ LEGAL Feature',
-      assistant: '🤝 ASSISTANT',
-      Assistant: '🤝 ASSISTANT Feature',
-      story: '📚 STORY',
-      Story: '📚 STORY Feature',
-      mind: '🧠 MIND',
-      Mind: '🧠 MIND Feature',
+      security: 'Security',
+      Security: 'SECURITY Feature',
+      support: 'Support',
+      Support: 'SUPPORT Feature',
+      services: 'Services',
+      Services: 'SERVICES',
+      solutions: 'Solutions',
+      Solutions: 'SOLUTIONS Feature',
+      systems: 'Systems',
+      Systems: 'SYSTEMS Feature',
+      research: 'Research',
+      Research: 'RESEARCH Feature',
+      development: 'Development',
+      Development: 'DEVELOPMENT Feature',
+      business: 'Business',
+      Business: 'BUSINESS Feature',
+      legal:'Legal',
+      Legal:'LEGAL Feature',
+      assistant: 'Assistant',
+      Assistant: 'ASSISTANT Feature',
+      story: 'Story',
+      Story: 'STORY Feature',
+      mind: 'Story',
+      Mind: 'MIND Feature',
       error: 'Feature Error',
-      done: 'Feature Done',
+      done: 'Features Done',
     };
 
     this._messages = {
       states: {
-        offline: `${this._agent.profile.name} ${this._states.offline}`,
-        online: `${this._agent.profile.name} ${this._states.online}`,
+        offline: `🛌 ${this._agent.profile.name} ${this._states.offline}`,
+        online: `🌞 ${this._agent.profile.name} ${this._states.online}`,
         ask: `😎 ${this._agent.profile.name} ${this._states.ask}`,
         question: `🎙️ ${this._agent.profile.name} ${this._states.question}`,
         answer: `🎟️  ${this._agent.profile.name} ${this._states.answer}`,
-        offline: `${this._agent.profile.name} ${this._states.offline}`,
-        online: `${this._agent.profile.name} ${this._states.online}`,
         init: `🚀 ${this._agent.profile.name} ${this._states.init}`,
-        start: `🎬 ${this._agent.profile.name} ${this._states.start}`,
-        enter: `📲 ${this._agent.profile.name} ${this._states.enter}`,
+        start: `🚙 ${this._agent.profile.name} ${this._states.start}`,
+        enter: `🪐 ${this._agent.profile.name} ${this._states.enter}`,
         stop: `✋ ${this._agent.profile.name} ${this._states.stop}`,
         exit: `🚪 ${this._agent.profile.name} ${this._states.exit}`,
         load: `📫 ${this._agent.profile.name} is ${this._states.load}`,
         unload: `📭 ${this._agent.profile.name} is ${this._states.unload}`,
-        uid: `${this._agent.profile.name} ${this._states.uid}`,
-        hash: `${this._agent.profile.name} ${this._states.hash}`,
-        cipher: `${this._agent.profile.name} ${this._states.cipher}`,
-        decipher: `${this._agent.profile.name} ${this._states.decipher}`,
+        uid: `🔑 ${this._agent.profile.name} ${this._states.uid}`,
         invalid: `⚠️ ${this._agent.profile.name} ${this._states.invalid}`,
         done: `✅ ${this._agent.profile.name} ${this._states.done}`,
         error: `❌ ${this._states.error}`,
       },
       zones: {
         deva: `🎉 ${this._agent.profile.name} ${this._zones.deva}`,
-        config: `💪 ${this._agent.profile.name} ${this._zones.config}`,
+        config: `🦾 ${this._agent.profile.name} ${this._zones.config}`,
         features: `🍿 ${this._agent.profile.name} ${this._zones.features}`,
-        idle: `🥱 ${this._agent.profile.name} ${this._zones.idle}`,
-        train: `👨‍🎓 ${this._agent.profile.name} ${this._zones.train}`,
-        work: `😓 ${this._agent.profile.name} ${this._zones.work}`,
+        idle: `😜 ${this._agent.profile.name} ${this._zones.idle}`,
+        training: `🥋 ${this._agent.profile.name} ${this._zones.train}`,
+        school: `👨‍🏫 ${this._agent.profile.name} ${this._zones.work}`,
+        work: `‍🗂️ ${this._agent.profile.name} ${this._zones.work}`,
         invalid: `⚠️ ${this._agent.profile.name} ${this._zones.invalid}`,
         done: `✅ ${this._agent.profile.name} ${this._zones.done}`,
         error: `❌ ${this._agent.profile.name} ${this._zones.error}`,
@@ -199,7 +203,6 @@ class Deva {
         question_cmd: `🎮 ${this._agent.profile.name} issue command`,
         question_method: `🏄‍♂️ ${this._agent.profile.name} ${this._actions.question_method}`,
         question_talk: `📢 ${this._agent.profile.name} ${this._actions.question_talk}`,
-        question_hash: `#️⃣  ${this._agent.profile.name} hash question`,
         question_answer: `🎙️ ${this._agent.profile.name} ${this._actions.question_answer}`,
         question_done: `👍 ${this._agent.profile.name} ${this._actions.question_done}`,
         answer: `🎟️  ${this._agent.profile.name} gave an ${this._actions.answer}`,
@@ -207,28 +210,34 @@ class Deva {
         ask: `👥 ${this._agent.profile.name} asking`,
         ask_answer: `🎟️  ${this._agent.profile.name} answering ask`,
 
+        uid: `🆔 ${this._agent.profile.name} ${this._actions.uid}`,
+        hash: `🔏 ${this._agent.profile.name} ${this._actions.hash}`,
+        cipher: `🔒 ${this._agent.profile.name} ${this._actions.cipher}`,
+        decipher: `🔓 ${this._agent.profile.name} ${this._actions.decipher}`,
+
         security: `${this._features.security} action`,
         Security: `${this._features.Security} ready`,
         support: `${this._features.support} action`,
         Support: `${this._features.Support} ready`,
-        services: `${this._features.Services} action`,
+        services: `${this._features.services} action`,
         Services: `${this._features.Services} ready`,
         solutions: `${this._features.solutions} action`,
         Solutions: `${this._features.Solutions} ready`,
-        solutions: `${this._features.Systems} action`,
-        systems: `${this._features.Systems} action`,
+        systems: `${this._features.systems} action`,
         Systems: `${this._features.Systems} ready`,
+        research: `${this._features.research} action`,
+        Research: `${this._features.Research} ready`,
         development: `${this._features.Development} action`,
         Development: `${this._features.Development} ready`,
-        business: `${this._features.Business} action`,
+        business: `${this._features.business} action`,
         Business: `${this._features.Business} ready`,
-        legal: `${this._features.Legal} action`,
+        legal: `${this._features.legal} action`,
         Legal: `${this._features.Legal} ready`,
-        assistant: `${this._features.Assistant} action`,
+        assistant: `${this._features.assistant} action`,
         Assistant: `${this._features.Assistant} ready`,
-        story: `${this._features.Story} action`,
+        story: `${this._features.story} action`,
         Story: `${this._features.Story} ready`,
-        mind: `${this._features.Mind} action`,
+        mind: `${this._features.mind} action`,
         Mind: `${this._features.Mind} ready`,
         client_data: `📂 ${this._agent.profile.name} configure`,
         invalid: `${this._actions.invalid}`,
@@ -236,27 +245,29 @@ class Deva {
         error: `${this._action.error}`,
       },
       features: {
-        security: `${this._features.security} feature`,
-        Security: `${this._features.Security} configure`,
-        support: `${this._features.support} feature`,
-        Support: `${this._features.Support} configure`,
-        services: `${this._features.services} feature state`,
-        Services: `${this._features.Services} configure`,
-        solutions: `${this._features.solutions} is solving`,
-        Solutions: `${this._features.Solutions} configure`,
-        systems: `${this._features.systems} is mantaining`,
-        Systems: `${this._features.Systems} configure`,
-        development: `${this._features.development} is developing`,
-        Development: `${this._features.Development} configure`,
-        business: `${this._features.business} is successful`,
-        Business: `${this._features.Business} configure`,
-        legal: `${this._features.legal} is upholding the law`,
-        Legal: `${this._features.Legal} configure`,
-        assistant: `${this._features.assistant} is assisting`,
-        Assistant: `${this._features.Assistant} configure`,
-        story: `${this._features.story} is creating`,
-        Story: `${this._features.Story} configure`,
-        mind: `${this._features.story} is thinking and pondering`,
+        security: `🔐 ${this._features.security} feature`,
+        Security: `🔐 ${this._features.Security} configure`,
+        support: `💼 ${this._features.support} feature`,
+        Support: `💼 ${this._features.Support} configure`,
+        services: `🛠️  ${this._features.services} feature`,
+        Services: `🛠️  ${this._features.Services} configure`,
+        solutions: `💡 ${this._features.solutions} feature`,
+        Solutions: `💡 ${this._features.Solutions} configure`,
+        systems: `🖥️  ${this._features.systems} feature`,
+        Systems: `🖥️  ${this._features.Systems} configure`,
+        research: `🔍 ${this._features.research} feature`,
+        Research: `🔍 ${this._features.Research} configure`,
+        development: `🔧 ${this._features.development} feature`,
+        Development: `🔧 ${this._features.Development} configure`,
+        business: `📊 ${this._features.business} feature`,
+        Business: `📊 ${this._features.Business} configure`,
+        legal: `⚖️ ${this._features.legal} feature`,
+        Legal: `⚖️ ${this._features.Legal} configure`,
+        assistant: `👤 ${this._features.assistant} feature`,
+        Assistant: `👤 ${this._features.Assistant} configure`,
+        story: `📚 ${this._features.story} feature`,
+        Story: `📚 ${this._features.Story} configure`,
+        mind: `${this._features.story} feature`,
         Mind: `${this._features.Mind} configure`,
         invalid: `⚠️ ${this._features.invalid}`,
         done: `✅ ${this._features.done}`,
@@ -411,7 +422,6 @@ class Deva {
           global: systems.global,                       // the global policies for client
           personal: systems.devas[this._agent.key]      // Client personal features and rules.
         };
-        console.log('SYSTEMS FEATURE SETUP', this._systems);
         delete this._client.features.systems
         return this.Solutions()
       }
@@ -939,7 +949,6 @@ class Deva {
         }
 
         // hash the question
-        this.action('question_hash');                      // set the has question state
         packet.q.meta.hash = this.hash(JSON.stringify(packet.q));
 
         this.action(_action);
@@ -1015,11 +1024,9 @@ class Deva {
       };
 
       // create a hash for the answer and insert into answer meta.
-      this.action('answer_hash');
       packet_answer.meta.hash = this.hash(JSON.stringify(packet_answer));
 
       packet.a = this.copy(packet_answer);
-      this.action('packet_hash');
       packet.hash = this.hash(JSON.stringify(packet));     // hash the entire packet.
 
 
@@ -1696,6 +1703,7 @@ class Deva {
                       is shared.
   ***************/
   uid(guid=false) {
+    this.action('uid');
     let id;
     if (guid) {
       id = randomUUID()
@@ -1718,6 +1726,7 @@ class Deva {
     The hash algorithm will take a string of text and produce a hash.
   ***************/
   hash(str, algo=false) {
+    this.action('hash');
     algo = algo || this._security.hash || 'md5';
     const the_hash = createHash(algo);
     the_hash.update(str);
@@ -1733,6 +1742,7 @@ class Deva {
     defined client security settings.
   ***************/
   cipher(str) {
+    this.action('cipher');
     const security = this._security;
     const {password, algorithm} = security.cipher;
     const key = createHash('sha256').update(String(password)).digest('base64');
@@ -1743,14 +1753,6 @@ class Deva {
     const _cipher = createCipheriv(algorithm, key_in_bytes, iv);
     const encrypted = _cipher.update(String(str), 'utf8', 'hex') + _cipher.final('hex');
 
-    this.state('cipher', {
-      id: this.uid(true),
-      iv,
-      key,
-      agent_id: this._agent.id,
-      client_id: this._client.id,
-      created: Date.now()
-    });
 
     return {
       iv: iv.toString('base64'),
@@ -1759,6 +1761,7 @@ class Deva {
     }
   }
   decipher(opt) {
+    this.action('decipher');
     const iv = Buffer.from(opt.iv, 'base64');
     const encrypted = Buffer.from(opt.encrypted, 'hex');
     const key_in_bytes = Buffer.from(opt.key, 'base64')
@@ -1767,7 +1770,6 @@ class Deva {
     const decipher = createDecipheriv( algorithm, key_in_bytes, iv);
     const decrypted = decipher.update(encrypted);
     const final = Buffer.concat([decrypted, decipher.final()]);
-    this.state('decipher');
     return final.toString();
   }
 
