@@ -1026,7 +1026,7 @@ class Deva {
       // create a hash for the answer and insert into answer meta.
       packet_answer.meta.hash = this.hash(packet_answer, 'sha256');
 
-      packet.a = this.copy(packet_answer);
+      packet.a = packet_answer;
       packet.hash = this.hash(packet, 'sha256');     // hash the entire packet.
 
 
