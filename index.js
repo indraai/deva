@@ -1843,9 +1843,9 @@ class Deva {
     for copying.
   ***************/
   copy(obj) {
+    const output = Array.isArray(obj) ? [] : {};
     try {
       let v, key;
-      const output = Array.isArray(obj) ? [] : {};
       for (key in obj) {
         v = obj[key];
         output[key] = (typeof v === "object") ? this.copy(v) : v;
@@ -1853,7 +1853,7 @@ class Deva {
     } catch (e) {
       return this.error(e, obj)
     } finally {
-      return output;      
+      return output;
     }
   }
 
