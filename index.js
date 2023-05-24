@@ -1426,7 +1426,6 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(_data, 'sha256');
-      console.log('fature --------');
       this.talk('devacore:feature', _data);
     } catch (e) {
       return this.error(e);
