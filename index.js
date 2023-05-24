@@ -227,7 +227,7 @@ class Deva {
         Systems: `👷‍♂️ ${this._features.Systems} ready`,
         research: `👩‍🔬 ${this._features.research} action`,
         Research: `👨‍🔬 ${this._features.Research} ready`,
-        development: `👩‍💻 ${this._features.Development} action`,
+        development: `👩‍💻 ${this._features.development} action`,
         Development: `👨‍💻 ${this._features.Development} ready`,
         business: `👩‍💼 ${this._features.business} action`,
         Business: `👨‍💼 ${this._features.Business} ready`,
@@ -1571,11 +1571,13 @@ class Deva {
   describe: basic development features available in a Deva.
   ***************/
   development(opts) {
+    this.feature('development');                          // set the development state
     try {
       if (!this._active) return this._messages.states.offline;   // chek the active status
-      this.feature('development');                          // set the development state
+      this.action('development');                          // set the development state
       return this._development;                           // return development feature
     } catch (e) {
+      this.action('error');
       this.feature('error');
       return this.error(e);
     }
@@ -1587,11 +1589,13 @@ class Deva {
   describe: basic assistant features available in a Deva.
   ***************/
   assistant(opts) {
+    this.feature('assistant');                            // set the assistant state
     try {
       if (!this._active) return this._messages.states.offline;   // chek the active status
-      this.feature('assistant');                            // set the assistant state
+      this.action('assistant');                            // set the assistant state
       return this._assistant;                             // return assistant feature
     } catch (e) {
+      this.action('error');
       this.feature('error');
       return this.error(e);
     }
@@ -1603,11 +1607,13 @@ class Deva {
   describe: basic business features available in a Deva.
   ***************/
   business(opts) {
+    this.feature('business');                             // set the business state
     try {
       if (!this._active) return this._messages.states.offline;   // chek the active status
-      this.feature('business');                             // set the business state
+      this.action('business');
       return this._business;                              // return business feature
     } catch (e) {
+      this.action('error');
       this.feature('error');
       return this.error('error');
     }
@@ -1619,11 +1625,13 @@ class Deva {
   describe: basic legal features available in a Deva.
   ***************/
   legal(opts) {
+    this.feature('legal');                                // set the legal state
     try {
       if (!this._active) return this._messages.states.offline;   // chek the active status
-      this.feature('legal');                                // set the legal state
+      this.action('legal');
       return this._legal;                                 // return legal feature
     } catch (e) {
+      this.action('error');
       this.feature('error');
       return this.error(e);
     }
@@ -1635,9 +1643,16 @@ class Deva {
   describe: basic story features available in a Deva.
   ***************/
   story(opts) {
-    if (!this._active) return this._messages.states.offline;   // chek the active status
     this.feature('story');                                // set the story state
-    return this._story;                                 // return story feature
+    try {
+      if (!this._active) return this._messages.states.offline;   // chek the active status
+      this.action('story');
+      return this._story;                                 // return story feature
+    } catch (e) {
+      this.action('error');
+      this.feature('error');
+      return this.error(e);
+    }
   }
 
   /**************
