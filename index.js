@@ -410,6 +410,7 @@ class Deva {
           global: systems.global,                       // the global policies for client
           personal: systems.devas[this._agent.key]      // Client personal features and rules.
         };
+        console.log('SYSTEMS FEATURE SETUP', this._systems);
         delete this._client.features.systems
         return this.Solutions()
       }
