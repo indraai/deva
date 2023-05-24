@@ -1398,7 +1398,7 @@ class Deva {
         text,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data, 'sha256'));
+      _data.hash = this.hash(_data, 'sha256');
       this.talk('devacore:action', this.copy(_data));
     } catch (e) {
       return this.error(e)
@@ -1743,7 +1743,7 @@ class Deva {
     // this.action('hash');
     algo = algo || this._security.hash || 'md5';
     const the_hash = createHash(algo);
-    the_hash.update(this.str.toString());
+    the_hash.update(str.toString());
     const _digest = the_hash.digest('base64');
     return `${algo}:${_digest}`;
   }
