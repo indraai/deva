@@ -952,12 +952,12 @@ class Deva {
         packet.q.meta.hash = this.hash(packet.q, 'sha256');
 
         this.action(_action);
-        this.talk('devacore:question', this.copy(packet));         // global question event make sure to copy data.
+        this.talk('devacore:question', packet);         // global question event make sure to copy data.
 
         if (isAsk) {                                      // isAsk check if the question isAsk and talk
           this.state('ask');
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
-          this.talk(`${key}:ask`, this.copy(packet));
+          this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
             this.action('question_ask_answer');
             return resolve(answer);                       // if:isAsk resolve the answer from the call
@@ -1031,7 +1031,7 @@ class Deva {
 
 
       this.action('answer_talk');
-      this.talk('devacore:answer', this.copy(packet));             // talk the answer with a copy of the data
+      this.talk('devacore:answer', packet);             // talk the answer with a copy of the data
 
       return resolve(packet);                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
@@ -1082,7 +1082,7 @@ class Deva {
         return setImmediate(() => {
           this.action('invalid')
           packet.a.text = `INVALID METHOD (${packet.q.meta.method})`;
-          this.talk(`${this._agent.key}:ask:${packet.id}`, this.copy(packet));
+          this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
         });
       }
 
@@ -1098,7 +1098,7 @@ class Deva {
           packet.a.text = result;
         }
         this.action('ask_answer');
-        this.talk(`${this._agent.key}:ask:${packet.id}`, this.copy(packet));
+        this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
         this.action('error');
         this.talk(`${this._agent.key}:ask:${packet.id}`, {error:err});
@@ -1345,7 +1345,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(_data, 'sha256');
-      this.talk('devacore:state', this.copy(_data));
+      this.talk('devacore:state', _data);
     } catch (e) {
       return this.error(e);
     }
@@ -1372,7 +1372,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(_data, 'sha256');
-      this.talk('devacore:zone', this.copy(_data));
+      this.talk('devacore:zone', _data);
     } catch (e) {
       return this.error(e);
     }
@@ -1399,7 +1399,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(_data, 'sha256');
-      this.talk('devacore:action', this.copy(_data));
+      this.talk('devacore:action', _data);
     } catch (e) {
       return this.error(e)
     }
@@ -1426,7 +1426,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(_data, 'sha256');
-      this.talk('devacore:feature', this.copy(_data));
+      this.talk('devacore:feature', _data);
     } catch (e) {
       return this.error(e);
     }
@@ -1829,7 +1829,7 @@ class Deva {
       text,
       created: Date.now(),
     }
-    return this.talk('devacore:prompt', this.copy(_data));
+    return this.talk('devacore:prompt', _data);
   }
 
 
@@ -1967,7 +1967,7 @@ class Deva {
       data,
       created: Date.now(),
     }
-    this.talk('devacore:error', this.copy(_data));
+    this.talk('devacore:error', _data);
 
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
     if (hasOnError) return this.onError(err, data, reject);
