@@ -169,7 +169,7 @@ class Deva {
         offline: `🛌 ${this._agent.profile.name} ${this._states.offline}`,
         online: `🌞 ${this._agent.profile.name} ${this._states.online}`,
         ask: `😎 ${this._agent.profile.name} ${this._states.ask}`,
-        question: `🎙️ ${this._agent.profile.name} ${this._states.question}`,
+        question: `🎙️  ${this._agent.profile.name} ${this._states.question}`,
         answer: `🎟️  ${this._agent.profile.name} ${this._states.answer}`,
         init: `🚀 ${this._agent.profile.name} ${this._states.init}`,
         start: `🚙 ${this._agent.profile.name} ${this._states.start}`,
