@@ -1843,15 +1843,7 @@ class Deva {
     for copying.
   ***************/
   copy(obj) {
-    function walkData(data) {
-      const output = Array.isArray(data) ? [] : {};
-      let v, key;
-      for (key in data) {
-        v = obj[key];
-        output[key] = (typeof v === "object") ? walkData(v) : v;
-      }
-    }
-    return walkData(obj);
+    return JSON.parse(JSON.stringify(obj));
   }
 
   /**************
