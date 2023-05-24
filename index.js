@@ -1649,7 +1649,7 @@ class Deva {
   ***************/
   load(key, client) {
     return new Promise((resolve, reject) => {
-      this.state('load');
+      this.state('load', key);
       this.devas[key].init(client).then(loaded => {
         this.talk(`devacore:load`, {
           id:this.uid(true),
