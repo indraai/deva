@@ -1130,6 +1130,7 @@ class Deva {
   usage: this.init(client_object)
   ***************/
   init(client) {
+    console.log('INIT');
     const _data = {
       id: this.uid(true),
       key: 'return',
@@ -1703,7 +1704,6 @@ class Deva {
                       is shared.
   ***************/
   uid(guid=false) {
-    this.action('uid');
     let id;
     if (guid) {
       id = randomUUID()
@@ -1726,7 +1726,7 @@ class Deva {
     The hash algorithm will take a string of text and produce a hash.
   ***************/
   hash(str, algo=false) {
-    this.action('hash');
+    // this.action('hash');
     algo = algo || this._security.hash || 'md5';
     const the_hash = createHash(algo);
     the_hash.update(str);
@@ -1742,7 +1742,7 @@ class Deva {
     defined client security settings.
   ***************/
   cipher(str) {
-    this.action('cipher');
+    // this.action('cipher');
     const security = this._security;
     const {password, algorithm} = security.cipher;
     const key = createHash('sha256').update(String(password)).digest('base64');
@@ -1761,7 +1761,7 @@ class Deva {
     }
   }
   decipher(opt) {
-    this.action('decipher');
+    // this.action('decipher');
     const iv = Buffer.from(opt.iv, 'base64');
     const encrypted = Buffer.from(opt.encrypted, 'hex');
     const key_in_bytes = Buffer.from(opt.key, 'base64')

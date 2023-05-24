@@ -81,6 +81,9 @@ const HelloWorld = new Deva({
       return this.func.test(packet);
     }
   },
+  onError(e) {
+    console.log(e);
+  }
 });
 
 HelloWorld.init(client);
