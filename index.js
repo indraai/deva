@@ -267,8 +267,8 @@ class Deva {
         Assistant: `👤 ${this._features.Assistant} configure`,
         story: `📚 ${this._features.story} feature`,
         Story: `📚 ${this._features.Story} configure`,
-        mind: `${this._features.story} feature`,
-        Mind: `${this._features.Mind} configure`,
+        mind: `🧠 ${this._features.story} feature`,
+        Mind: `🧠 ${this._features.Mind} configure`,
         invalid: `⚠️ ${this._features.invalid}`,
         done: `✅ ${this._features.done}`,
         error: `❌ ${this._features.error}`,
@@ -1130,7 +1130,6 @@ class Deva {
   usage: this.init(client_object)
   ***************/
   init(client) {
-    console.log('INIT');
     const _data = {
       id: this.uid(true),
       key: 'return',
