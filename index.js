@@ -207,27 +207,27 @@ class Deva {
         ask: `👥 ${this._agent.profile.name} is asking`,
         ask_answer: `🎟️  ${this._agent.profile.name} is answering the ask`,
 
-        security: `${this._features.security} is responding`,
+        security: `${this._features.security} feature action`,
         Security: `${this._features.Security} is ready`,
-        support: `${this._features.support} is responding`,
+        support: `${this._features.support} feature action`,
         Support: `${this._features.Support} is ready`,
-        services: `${this._features.Services} is responding`,
+        services: `${this._features.Services} feature action`,
         Services: `${this._features.Services} is ready`,
-        solutions: `${this._features.solutions} is responding`,
+        solutions: `${this._features.solutions} feature action`,
         Solutions: `${this._features.Solutions} is ready`,
-        solutions: `${this._features.Systems} is responding`,
+        solutions: `${this._features.Systems} feature action`,
         Systems: `${this._features.Systems} is ready`,
-        development: `${this._features.Development} is responding`,
+        development: `${this._features.Development} feature action`,
         Development: `${this._features.Development} is ready`,
-        business: `${this._features.Business} is responding`,
+        business: `${this._features.Business} feature action`,
         Business: `${this._features.Business} is ready`,
-        legal: `${this._features.Legal} is responding`,
+        legal: `${this._features.Legal} feature action`,
         Legal: `${this._features.Legal} is ready`,
-        assistant: `${this._features.Assistant} is responding`,
+        assistant: `${this._features.Assistant} feature action`,
         Assistant: `${this._features.Assistant} is ready`,
-        story: `${this._features.Story} is responding`,
+        story: `${this._features.Story} feature action`,
         Story: `${this._features.Story} is ready`,
-        mind: `${this._features.Mind} is responding`,
+        mind: `${this._features.Mind} feature action`,
         Mind: `${this._features.Mind} is ready`,
         client_data: `📂 ${this._agent.profile.name} setting Client Data`,
         invalid: `${this._actions.invalid}`,
@@ -235,11 +235,11 @@ class Deva {
         error: `${this._action.error}`,
       },
       features: {
-        security: `${this._features.security} is protecting`,
+        security: `${this._features.security} feature state`,
         Security: `${this._features.Security} loading...`,
-        support: `${this._features.support} is caring`,
+        support: `${this._features.support} feature state`,
         Support: `${this._features.Support} loading...`,
-        services: `${this._features.services} is servicing`,
+        services: `${this._features.services} feature state`,
         Services: `${this._features.Services} loading...`,
         solutions: `${this._features.solutions} is solving`,
         Solutions: `${this._features.Solutions} loading...`,
@@ -1472,7 +1472,7 @@ class Deva {
     try {
       if (!this._active) return this._messages.states.offline;    // check the active status
       this.action('security');                              // set the security state
-      return this._security;                               // return the security feature
+      return this.copy(this._security);                               // return the security feature
     } catch (e) {
       this.action('error');                              // set the security state
       this.feature('error');
@@ -1490,8 +1490,9 @@ class Deva {
     this.feature('support');                              // set the support state
     try {
       if (!this._active) return this._messages.states.offline;   // check the active status
-      this.action('support');                              // set the support state
-      return this._support;                               // return the support feature
+      this.action('support');
+      console.log(this.copy(this._support));                             // set the support state
+      return this.copy(this._support);                               // return the support feature
     } catch (e) {
       this.action('error');                             // set the services state
       this.feature('error');
