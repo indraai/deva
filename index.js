@@ -1491,7 +1491,6 @@ class Deva {
     try {
       if (!this._active) return this._messages.states.offline;   // check the active status
       this.action('support');
-      console.log(this.copy(this._support));                             // set the support state
       return this.copy(this._support);                               // return the support feature
     } catch (e) {
       this.action('error');                             // set the services state
