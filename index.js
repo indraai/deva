@@ -3,7 +3,7 @@
 // file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
 const {EventEmitter} = require('events');
 const { createHash, randomUUID, createCipheriv, createDecipheriv, randomBytes } = require('crypto');
-
+const config = require('./config.json').DATA // load the deva core configuration data.
 class Deva {
   constructor(opts) {
     opts = opts || {};
@@ -18,9 +18,10 @@ class Deva {
     this._support = false;                              // inherited Support features.
     this._services = false;                             // inherited Service features.
     this._business = false;                             // inherited Business features.
-    this._development = false;                          // inherited Business features.
+    this._development = false;                          // inherited Development features.
+    this._research = false;                             // inherited Research features.
     this._legal = false;                                // inherited Legal features.
-    this._story = false;                            // inherited Assistant features.
+    this._story = false;                                // inherited Story features.
     this.events = opts.events || new EventEmitter({});  // Event Bus
     this.lib = opts.lib || {};                          // used for loading library functions
     this.devas = opts.devas || {};                      // Devas which are loaded
@@ -36,244 +37,32 @@ class Deva {
       if (!this[opt] || !this[`_${opt}`]) this[opt] = opts[opt];
     }
 
-    this.cmdChr = '/';                                  // the trigger for local commands
-    this.askChr = '#';                                  // the trigger for ask other DEva features
-    // index of the items
-    this.inherit = ["events", "lib"];
-    this.bind = [
-      "listeners",
-      "methods",
-      "func",
-      "lib",
-      "_agent"
-    ];
+    this.cmdChr = config.cmdChr; // the trigger for local commands
+    this.askChr = config.askChr; // the trigger for ask other DEva features
 
-    this._state = 'offline';                            // current state of agent.
-    this._states = {
-      ask: `asking another`,
-      question: `asked a question`,
-      answer: `gave an answer`,
+    this.inherit = config.inherit; // set inherit from config
+    this.bind = config.bind; // set the bind from the config
 
-      offline: `offline`,
-      online: `online`,
+    this._state = config.state; // set the current state from config
+    this._states = config.states; // set the states from config
 
-      init: `initializing`,
-      start: `starting journey`,
-      enter: `entering deva.world`,
-      stop: `stopping`,
-      exit: 'exiting deva.world',
-      load: 'loading',
-      unload: 'unloading',
+    this._zone = config.zone; // set the current zone from config
+    this._zones = config.zones; // set the zones from config
 
-      invalid: 'invalid state',
-      done: 'done state',
-      error: 'error state',
-    };                                  // states object
+    this._action = config.action; // set the action from config
+    this._actions = config.actions; // set the actions from config
 
-    this._zone = false;                            // current state of agent.
-    this._zones = {
-      deva: 'Deva Zone',
-      config: 'Configuration Zone',
-      features: 'Feature Zone',
-      idle: 'Idle Zone',
-      training: 'Training Zone',
-      school: 'School Zone',
-      work: 'Work Zone',
-      fun: 'Fun Zone',
-      adventure: 'Adventure Zone',
-      party: 'Party Zone',
-      invalid: 'Invalid Invalid',
-      done: 'Done Zone',
-      error: 'Error Zone',
-    };                                  // states object
+    this._feature = config.feature; // set the feature from config
+    this._features = config.features; // set the features from config
 
-    this._action = false;
-    this._actions = {
-      wait: 'wait',
-      question: 'question',
-      question_ask: 'question:ask',
-      question_ask_answer: 'returned with an answer',
-      question_cmd: 'question:cmd',
-      question_method: 'question:method',
-      question_talk: 'question:talk',
-      question_answer: 'question:answer',
-      question_done: 'question:done',
-      answer: 'answer',
-      answer_talk: 'sharing the answer',
-      ask: 'asking',
-      ask_answer: 'answering',
-      uid: 'create unique id',
-      hash: 'create hash',
-      cipher: 'encrypt data',
-      decipher: 'dencrypt data',
-      security: 'SECURITY',
-      Security: 'Security Feature',
-      support: 'SUPPORT',
-      Support: 'Support Feature',
-      systems: 'SYSTMS',
-      Systems: 'Systems Feature',
-      services: 'SERVICES',
-      Services: 'Services Feature',
-      solutions: 'SOLUTIONS',
-      Solutions: 'Solutions Feature',
-      development: 'DEVELOPMENT',
-      Development: 'Development Feature',
-      business: 'BUSINESS',
-      Business: 'Business Feature',
-      legal: 'LEGAL',
-      Legal: 'Legal Feature',
-      assistant: 'ASSISTANT',
-      Assistant: 'Assistant Feature',
-      story: 'STORY',
-      Story: 'Story Feature',
-      mind: 'MIND',
-      Mind: 'Mind Feature',
-      client_data: 'client configure',
-      invalid: 'Actin Invalid',
-      error: 'Action Error',
-      done: 'Action Done',
+    this._messages = {}; // set the messages from config
+    // then here we are going to loop the messages config to make sure custom values are set
+    for (let x in config.messages) {
+      this._messages[x] = {};
+      for (let y in config.messages[x]) {
+        this._messages[x][y] = config.messages[x][y].replace('::agent.name::', opts.agent.profile.name);
+      }
     }
-
-    this._feature = false;
-    this._features = {
-      security: 'Security',
-      Security: 'SECURITY Feature',
-      support: 'Support',
-      Support: 'SUPPORT Feature',
-      services: 'Services',
-      Services: 'SERVICES',
-      solutions: 'Solutions',
-      Solutions: 'SOLUTIONS Feature',
-      systems: 'Systems',
-      Systems: 'SYSTEMS Feature',
-      research: 'Research',
-      Research: 'RESEARCH Feature',
-      development: 'Development',
-      Development: 'DEVELOPMENT Feature',
-      business: 'Business',
-      Business: 'BUSINESS Feature',
-      legal:'Legal',
-      Legal:'LEGAL Feature',
-      assistant: 'Assistant',
-      Assistant: 'ASSISTANT Feature',
-      story: 'Story',
-      Story: 'STORY Feature',
-      mind: 'Story',
-      Mind: 'MIND Feature',
-      error: 'Feature Error',
-      done: 'Features Done',
-    };
-
-    this._messages = {
-      states: {
-        offline: `🛌 ${this._agent.profile.name} ${this._states.offline}`,
-        online: `🌞 ${this._agent.profile.name} ${this._states.online}`,
-        ask: `😎 ${this._agent.profile.name} ${this._states.ask}`,
-        question: `🎙️  ${this._agent.profile.name} ${this._states.question}`,
-        answer: `🎟️  ${this._agent.profile.name} ${this._states.answer}`,
-        init: `🚀 ${this._agent.profile.name} ${this._states.init}`,
-        start: `🚙 ${this._agent.profile.name} ${this._states.start}`,
-        enter: `🪐 ${this._agent.profile.name} ${this._states.enter}`,
-        stop: `✋ ${this._agent.profile.name} ${this._states.stop}`,
-        exit: `🚪 ${this._agent.profile.name} ${this._states.exit}`,
-        load: `📫 ${this._agent.profile.name} is ${this._states.load}`,
-        unload: `📭 ${this._agent.profile.name} is ${this._states.unload}`,
-        uid: `🔑 ${this._agent.profile.name} ${this._states.uid}`,
-        invalid: `⚠️ ${this._agent.profile.name} ${this._states.invalid}`,
-        done: `✅ ${this._agent.profile.name} ${this._states.done}`,
-        error: `❌ ${this._states.error}`,
-      },
-      zones: {
-        deva: `🎉 ${this._agent.profile.name} ${this._zones.deva}`,
-        config: `🦾 ${this._agent.profile.name} ${this._zones.config}`,
-        features: `🍿 ${this._agent.profile.name} ${this._zones.features}`,
-        idle: `😜 ${this._agent.profile.name} ${this._zones.idle}`,
-        training: `🥋 ${this._agent.profile.name} ${this._zones.train}`,
-        school: `👨‍🏫 ${this._agent.profile.name} ${this._zones.work}`,
-        work: `‍🗂️ ${this._agent.profile.name} ${this._zones.work}`,
-        invalid: `⚠️ ${this._agent.profile.name} ${this._zones.invalid}`,
-        done: `✅ ${this._agent.profile.name} ${this._zones.done}`,
-        error: `❌ ${this._agent.profile.name} ${this._zones.error}`,
-      },
-      actions: {
-        wait: `😵‍💫 ${this._agent.profile.name} ${this._actions.wait}`,
-        question: `👀 ${this._agent.profile.name} ${this._actions.question}`,
-        question_ask: `👥 ${this._agent.profile.name} ${this._actions.question_ask}`,
-        question_ask_answer: `📣 ${this._agent.profile.name} ${this._actions.question_ask_answer}`,
-        question_cmd: `🎮 ${this._agent.profile.name} issue command`,
-        question_method: `🏄‍♂️ ${this._agent.profile.name} ${this._actions.question_method}`,
-        question_talk: `📢 ${this._agent.profile.name} ${this._actions.question_talk}`,
-        question_answer: `🎙️ ${this._agent.profile.name} ${this._actions.question_answer}`,
-        question_done: `👍 ${this._agent.profile.name} ${this._actions.question_done}`,
-        answer: `🎟️  ${this._agent.profile.name} gave an ${this._actions.answer}`,
-        answer_talk: `🎟️  ${this._agent.profile.name} talk ansnwer to listeners`,
-        ask: `👥 ${this._agent.profile.name} asking`,
-        ask_answer: `🎟️  ${this._agent.profile.name} answering ask`,
-
-        uid: `🆔 ${this._agent.profile.name} ${this._actions.uid}`,
-        hash: `🔏 ${this._agent.profile.name} ${this._actions.hash}`,
-        cipher: `🔒 ${this._agent.profile.name} ${this._actions.cipher}`,
-        decipher: `🔓 ${this._agent.profile.name} ${this._actions.decipher}`,
-
-        security: `👮‍♀️ ${this._features.security} action`,
-        Security: `👮‍♂️ ${this._features.Security} ready`,
-        support: `👩‍⚕️ ${this._features.support} action`,
-        Support: `👨‍⚕️ ${this._features.Support} ready`,
-        services: `👩‍🔧 ${this._features.services} action`,
-        Services: `👨‍🔧 ${this._features.Services} ready`,
-        solutions: `👩‍🚀 ${this._features.solutions} action`,
-        Solutions: `👨‍🚀 ${this._features.Solutions} ready`,
-        systems: `👷‍♀️ ${this._features.systems} action`,
-        Systems: `👷‍♂️ ${this._features.Systems} ready`,
-        research: `👩‍🔬 ${this._features.research} action`,
-        Research: `👨‍🔬 ${this._features.Research} ready`,
-        development: `👩‍💻 ${this._features.development} action`,
-        Development: `👨‍💻 ${this._features.Development} ready`,
-        business: `👩‍💼 ${this._features.business} action`,
-        Business: `👨‍💼 ${this._features.Business} ready`,
-        legal: `👩‍⚖️ ${this._features.legal} action`,
-        Legal: `👩‍⚖️ ${this._features.Legal} ready`,
-        assistant: `👩 ${this._features.assistant} action`,
-        Assistant: `👨 ${this._features.Assistant} ready`,
-        story: `👩‍🏫 ${this._features.story} action`,
-        Story: `👨‍🏫 ${this._features.Story} ready`,
-        mind: `🧘‍♀️ ${this._features.mind} action`,
-        Mind: `🧘‍♂️ ${this._features.Mind} ready`,
-        client_data: `📂 ${this._agent.profile.name} configure`,
-        invalid: `⚠️ ${this._actions.invalid}`,
-        done: `✅ ${this._actions.done}`,
-        error: `❌ ${this._action.error}`,
-      },
-      features: {
-        security: `🔐 ${this._features.security} feature`,
-        Security: `🔐 ${this._features.Security} configure`,
-        support: `💼 ${this._features.support} feature`,
-        Support: `💼 ${this._features.Support} configure`,
-        services: `🛠️  ${this._features.services} feature`,
-        Services: `🛠️  ${this._features.Services} configure`,
-        solutions: `💡 ${this._features.solutions} feature`,
-        Solutions: `💡 ${this._features.Solutions} configure`,
-        systems: `🖥️  ${this._features.systems} feature`,
-        Systems: `🖥️  ${this._features.Systems} configure`,
-        research: `🔍 ${this._features.research} feature`,
-        Research: `🔍 ${this._features.Research} configure`,
-        development: `🔧 ${this._features.development} feature`,
-        Development: `🔧 ${this._features.Development} configure`,
-        business: `📊 ${this._features.business} feature`,
-        Business: `📊 ${this._features.Business} configure`,
-        legal: `⚖️  ${this._features.legal} feature`,
-        Legal: `⚖️  ${this._features.Legal} configure`,
-        assistant: `👤 ${this._features.assistant} feature`,
-        Assistant: `👤 ${this._features.Assistant} configure`,
-        story: `📚 ${this._features.story} feature`,
-        Story: `📚 ${this._features.Story} configure`,
-        mind: `🧠 ${this._features.story} feature`,
-        Mind: `🧠 ${this._features.Mind} configure`,
-        invalid: `⚠️ ${this._features.invalid}`,
-        done: `✅ ${this._features.done}`,
-        error: `❌ ${this._features.error}`,
-      },
-    };                                // messages object
   }
 
 
@@ -444,7 +233,7 @@ class Deva {
     this.feature('Solutions');                // set state to solutions setting
     const _cl = this.client();
     try {
-      if (!_cl.features.solutions) return this.Development();
+      if (!_cl.features.solutions) return this.Research();
       else {
         this.action('Solutions');
         const {id, features, profile} = _cl;   // set the local consts from client copy
@@ -458,12 +247,46 @@ class Deva {
           personal: solutions.devas[this._agent.key]    // Client personal features and rules.
         };
         delete this._client.features.solutions
-        return this.Development()
+        return this.Research()
       }
     } catch (e) {
       this.action('error');
       this.feature('error');
       return this.error(e)                             // run error handling if an error is caught
+    }
+  }
+
+  /**************
+  func: Research
+  params: client: false
+  describe:
+    The Research feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Research() {
+    this.feature('Research');              // set state to development setting
+    const _cl = this.client();
+    try {
+      if (!_cl.features.research) return this.Development(); // if no research goto Business
+      else {
+        this.action('Research'); // set the action to Research
+        const {id, features, profile} = _cl; // set the local consts from client copy
+        const {research} = features; // set research from features const
+        this._research = { // set this_research with data
+          id: this.uid(true), // uuid of the research feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: research.concerns, // any concerns for client
+          global: research.global, // the global policies for client
+          personal: research.devas[this._agent.key] // Client personal features and rules.
+        };
+        delete this._client.features.research // delete the research key from client features
+        return this.Development(); // goto Development.
+      }
+    } catch (e) {
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -475,29 +298,29 @@ class Deva {
     client presented data.
   ***************/
   Development() {
-    this.feature('Development');              // set state to development setting
-    const _cl = this.client();
+    this.feature('Development'); // set state to development setting
+    const _cl = this.client(); // get hte client data to local variable
     try {
-      if (!_cl.features.development) return this.Business();
+      if (!_cl.features.development) return this.Business(); // if no development goto Business
       else {
-        this.action('Development');
-        const {id, features, profile} = _cl;   // set the local consts from client copy
-        const {development} = features;                 // set development from features const
-        this._development = {                           // set this_development with data
-          id: this.uid(true),                           // uuid of the development feature
-          client_id: id,                                // client id for reference
-          client_name: profile.name,                    // client name for personalization
-          concerns: development.concerns,               // any concerns for client
-          global: development.global,                   // the global policies for client
-          personal: development.devas[this._agent.key]  // Client personal features and rules.
+        this.action('Development'); // set the action to Development
+        const {id, features, profile} = _cl; // set the local consts from client copy
+        const {development} = features; // set development from features const
+        this._development = { // set this_development with data
+          id: this.uid(true), // uuid of the development feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: development.concerns, // any concerns for client
+          global: development.global, // the global policies for client
+          personal: development.devas[this._agent.key], // Client personal features and rules.
         };
-        delete this._client.features.development
-        return this.Business()
+        delete this._client.features.development; // delete the development key from client features.
+        return this.Business(); // goto business when development is done
       }
     } catch (e) {
-      this.action('error');
-      this.feature('error');
-      return this.error(e)                             // run error handling if an error is caught
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -508,30 +331,30 @@ class Deva {
     The Business feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Business(client=false) {
-    this.feature('Business');                 // set state to business setting
-    const _cl = this.client();
+  Business() {
+    this.feature('Business'); // set state to business setting
+    const _cl = this.client(); // set client into local variable.
     try {
-      if (!_cl.features.business) return this.Legal();
+      if (!_cl.features.business) return this.Legal(); // if no business hten goto legal
       else {
-        this.action('Business');
-        const {id, features, profile} = _cl;   // set the local consts from client copy
-        const {business} = features;                    // set business from features const
-        this._business = {                              // set this_business with data
-          id: this.uid(true),                           // uuid of the business feature
-          client_id: id,                                // client id for reference
-          client_name: profile.name,                    // client name for personalization
-          concerns: business.concerns,                  // any concerns for client
-          global: business.global,                      // the global policies for client
-          personal: business.devas[this._agent.key]     // Client personal features and rules.
+        this.action('Business'); // set action to Business
+        const {id, features, profile} = _cl; // set the local consts from client copy
+        const {business} = features; // set business from features const
+        this._business = { // set this_business with data
+          id: this.uid(true), // uuid of the business feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: business.concerns, // any concerns for client
+          global: business.global, // the global policies for client
+          personal: business.devas[this._agent.key] // Client personal features and rules.
         };
-        delete this._client.features.business
-        return this.Legal();
+        delete this._client.features.business; // delete the business key from the client features
+        return this.Legal(); // go to Legal when Business is done.
     }
     } catch (e) {
-      this.action('error');
-      this.feature('error');
-      return this.error(e)                             // run error handling if an error is caught
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -550,22 +373,22 @@ class Deva {
       else {
         this.action('Legal');
         const {id, features, profile} = _cl;   // set the local consts from client copy
-        const {legal} = features;                       // set legal from features const
-        this._legal = {                                 // set this_legal with data
-          id: this.uid(true),                           // uuid of the legal feature
-          client_id: id,                                // client id for reference
-          client_name: profile.name,                    // client name for personalization
-          concerns: legal.concerns,                     // any concerns for client
-          global: legal.global,                         // the global policies for client
-          personal: legal.devas[this._agent.key]        // Client personal features and rules.
+        const {legal} = features; // set legal from features const
+        this._legal = { // set this_legal with data
+          id: this.uid(true), // uuid of the legal feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: legal.concerns, // any concerns for client
+          global: legal.global, // the global policies for client
+          personal: legal.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.legal;
         return this.Assistant();
       }
     } catch (e) {
-      this.action('error');
-      this.feature('error');
-      return this.error(e)                             // run error handling if an error is caught
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -576,30 +399,30 @@ class Deva {
     The Assistant feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Assistant(client=false) {
-    this.feature('Assistant');                 // set state to assistant setting
-    const _cl = this.client();
+  Assistant() {
+    this.feature('Assistant'); // set state to assistant setting
+    const _cl = this.client(); // set the client into a local variable
     try {
-      if (!_cl.features.assistant) return this.Done();
+      if (!_cl.features.assistant) return this.Story(); // if no Assistant then goto Done
       else {
-        this.action('Assistant');
-        const {id, features, profile} = _cl;        // set the local consts from client copy
-        const {assistant} = features;                    // set assistant from features const
-        this._assistant = {                              // set this_assistant with data
-          id: this.uid(true),                           // uuid of the assistant feature
-          client_id: id,                                // client id for reference
-          client_name: profile.name,                    // client name for personalization
-          concerns: assistant.concerns,                  // any concerns for client
-          global: assistant.global,                      // the global policies for client
-          personal: assistant.devas[this._agent.key]     // Client personal features and rules.
+        this.action('Assistant'); // set action to Assistant
+        const {id, features, profile} = _cl; // set the local consts from client copy
+        const {assistant} = features; // set assistant from features const
+        this._assistant = { // set this_assistant with data
+          id: this.uid(true), // uuid of the assistant feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: assistant.concerns, // any concerns for client
+          global: assistant.global, // the global policies for client
+          personal: assistant.devas[this._agent.key] // Client personal features and rules.
         };
-        delete this._client.features.assistant;
-        return this.Story();
+        delete this._client.features.assistant; // delete the assistant key from client features
+        return this.Story(); // when assistant is done goto Story.
       }
     } catch (e) {
-      this.action('error');
-      this.feature('error');
-      return this.error(e)                             // run error handling if an error is caught
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -610,7 +433,7 @@ class Deva {
     The Story feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Story(client=false) {
+  Story() {
     this.feature('Story');                 // set state to story setting
     const _cl = this.client();
     try {
@@ -631,9 +454,9 @@ class Deva {
         return this.Mind();
       }
     } catch (e) {
-      this.action('error');
-      this.feature('error');
-      return this.error(e)                             // run error handling if an error is caught
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -644,7 +467,7 @@ class Deva {
     The Mind feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Mind(client=false) {
+  Mind() {
     this.feature('Mind');                 // set state to story setting
     const _cl = this.client();
     try {
@@ -665,9 +488,9 @@ class Deva {
         return this.Done();
       }
     } catch (e) {
-      this.action('error');
-      this.feature('error');
-      return this.error(e)                             // run error handling if an error is caught
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -676,13 +499,13 @@ class Deva {
   params: none
   describe: The end of the workflow Client Feature Workflow
   ***************/
-  Done() {
+  Done(client) {
     return new Promise((resolve, reject) => {
       try {
-        delete this._client.features;               // delete the features key when done.
-        this.action('done');                 // set state to assistant setting
-        this.feature('done');                 // set state to assistant setting
-        return resolve();
+        delete this._client.features; // delete the features key when done.
+        this.action('done'); // set state to assistant setting
+        this.feature('done'); // set state to assistant setting
+        return resolve(); // resolve an empty pr
       } catch (e) {
         this.feature('error')
         return this.error(e, false, reject);
@@ -699,10 +522,10 @@ class Deva {
   _assignBind() {
     return new Promise((resolve, reject) => {
       try {
-        this.bind.forEach(bind => {
-          if (this[bind]) for (let x in this[bind]) {
-            if (typeof this[bind][x] === 'function') {
-              this[bind][x] = this[bind][x].bind(this);
+        this.bind.forEach(bind => { // loop over the bind items func, method, listener...
+          if (this[bind]) for (let x in this[bind]) { // if the root has a bind func, method, listener
+            if (typeof this[bind][x] === 'function') { // check to make sure object is a fucntion
+              this[bind][x] = this[bind][x].bind(this); // bind the item from the bind object
             }
           }
         });
@@ -714,10 +537,10 @@ class Deva {
         if (parse) this._agent.parse = this._agent.parse.bind(this);
       }
       catch (e) {
-        return this.error(e, false, reject);
+        return this.error(e, false, reject); // trigger the this.error for errors
       }
       finally {
-        return resolve();
+        return resolve(); // when the configuration is complete then return an empty resolve.
       }
     });
   }
@@ -809,15 +632,6 @@ class Deva {
     };
     this.state('method_not_found');
     return packet;
-  }
-
-  /**************
-  func: states
-  params: none
-  describe: returns the avaiable staets values.
-  ***************/
-  states() {
-    return this._states;
   }
 
   /**************
@@ -1352,6 +1166,15 @@ class Deva {
   }
 
   /**************
+  func: states
+  params: none
+  describe: returns the avaiable staets values.
+  ***************/
+  states() {
+    return this._states;
+  }
+
+  /**************
   func: zone
   params:
     - st: The zone flag to set for the Deva that matches to this._zones
@@ -1519,7 +1342,7 @@ class Deva {
     try {
       if (!this._active) return this._messages.states.offline;   // check the active status
       this.action('services');                             // set the services state
-      return this._services;                              // return the services feature
+      return this.copy(this._services);                              // return the services feature
     } catch (e) {
       this.action('error');                             // set the services state
       this.feature('error');
@@ -1538,7 +1361,7 @@ class Deva {
     try {
       if (!this._active) return this._messages.states.offline;   // check the active status
       this.action('systems');                              // set the systems state
-      return this._systems;                               // return the systems feature
+      return this.copy(this._systems);                               // return the systems feature
     } catch (e) {
       this.action('error');                              // set the systems state
       this.feature('error');
@@ -1557,9 +1380,27 @@ class Deva {
     try {
       if (!this._active) return this._messages.states.offline;   // check the active status
       this.action('solutions');                            // set the solutions state
-      return this._solutions;                             // return the solutions feature
+      return this.copy(this._solutions);                             // return the solutions feature
     } catch (e) {
       this.action('error');                              // set the systems state
+      this.feature('error');
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: research
+  params: opts
+  describe: basic research features available in a Deva.
+  ***************/
+  research(opts) {
+    this.feature('research');                          // set the research state
+    try {
+      if (!this._active) return this._messages.states.offline;   // chek the active status
+      this.action('research');                          // set the research state
+      return this.copy(this._research);                           // return research feature
+    } catch (e) {
+      this.action('error');
       this.feature('error');
       return this.error(e);
     }
@@ -1575,7 +1416,7 @@ class Deva {
     try {
       if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('development');                          // set the development state
-      return this._development;                           // return development feature
+      return this.copy(this._development);                           // return development feature
     } catch (e) {
       this.action('error');
       this.feature('error');
@@ -1593,7 +1434,7 @@ class Deva {
     try {
       if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('assistant');                            // set the assistant state
-      return this._assistant;                             // return assistant feature
+      return this.copy(this._assistant);                             // return assistant feature
     } catch (e) {
       this.action('error');
       this.feature('error');
@@ -1611,7 +1452,7 @@ class Deva {
     try {
       if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('business');
-      return this._business;                              // return business feature
+      return this.copy(this._business);                              // return business feature
     } catch (e) {
       this.action('error');
       this.feature('error');
@@ -1629,7 +1470,7 @@ class Deva {
     try {
       if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('legal');
-      return this._legal;                                 // return legal feature
+      return this.copy(this._legal);                                 // return legal feature
     } catch (e) {
       this.action('error');
       this.feature('error');
@@ -1647,7 +1488,7 @@ class Deva {
     try {
       if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('story');
-      return this._story;                                 // return story feature
+      return this.story(this._story);                                 // return story feature
     } catch (e) {
       this.action('error');
       this.feature('error');
@@ -1664,7 +1505,7 @@ class Deva {
   ***************/
   load(key, client) {
     return new Promise((resolve, reject) => {
-      this.state('load', key);
+      this.state('load');
       this.devas[key].init(client).then(loaded => {
         this.talk(`devacore:load`, {
           id:this.uid(true),
