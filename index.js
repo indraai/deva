@@ -949,7 +949,7 @@ class Deva {
         }
 
         // hash the question
-        packet.q.meta.hash = this.hash(packet.q, 'sha256');
+        packet.q.meta.hash = this.hash(packet.q);
 
         this.action(_action);
         this.talk('devacore:question', this.copy(packet));         // global question event make sure to copy data.
@@ -1024,10 +1024,10 @@ class Deva {
       };
 
       // create a hash for the answer and insert into answer meta.
-      packet_answer.meta.hash = this.hash(packet_answer, 'sha256');
+      packet_answer.meta.hash = this.hash(packet_answer);
 
       packet.a = packet_answer;
-      packet.hash = this.hash(packet, 'sha256');     // hash the entire packet.
+      packet.hash = this.hash(packet);     // hash the entire packet.
 
 
       this.action('answer_talk');
@@ -1139,7 +1139,7 @@ class Deva {
       text: this._messages.states.start,
       created: Date.now(),
     }
-    _data.hash = this.hash(_data, 'sha256');
+    _data.hash = this.hash(_data);
 
     // set client
     this._active = Date.now();
@@ -1178,7 +1178,7 @@ class Deva {
       for (let x in this._info) {
         _info.push(`- ${x}: ${this._info[x]}`);
       }
-      _info.push(`::end:info:${this.hash(this._info, 'sha256')}`);
+      _info.push(`::end:info:${this.hash(this._info)}`);
       return _info.join('\n');
     }
     else {
@@ -1201,7 +1201,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'start';
     delete data.hash;
-    data.hash = this.hash(data, 'sha256');
+    data.hash = this.hash(data);
 
     if (this.info) {
       const _info = this.info(data.id);
@@ -1228,7 +1228,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'enter';
     delete data.hash;
-    data.hash = this.hash(data, 'sha256');
+    data.hash = this.hash(data);
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
     return hasOnEnter ? this.onEnter(_data) : this.done(data)
   }
@@ -1249,7 +1249,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'done';
     delete data.hash;
-    data.hash = this.hash(data, 'sha256');
+    data.hash = this.hash(data);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     return hasOnDone ? this.onDone(data) : Promise.resolve(data);
   }
@@ -1279,7 +1279,7 @@ class Deva {
       text: this._messages.states.stop,
       created: Date.now(),
     }
-    _data.hash = this.hash(_data, 'sha256');
+    _data.hash = this.hash(_data);
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
     return hasOnStop ? this.onStop(_data) : this.exit(_data)
   }
@@ -1304,7 +1304,7 @@ class Deva {
     this._active = false;
     data.value = 'exit';
     delete data.hash;
-    data.hash = this.hash(data, 'sha256');
+    data.hash = this.hash(data);
 
     // clear memory
     this._active = false;
@@ -1344,7 +1344,7 @@ class Deva {
         text,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data, 'sha256');
+      _data.hash = this.hash(_data);
       this.talk('devacore:state', _data);
     } catch (e) {
       return this.error(e);
@@ -1371,7 +1371,7 @@ class Deva {
         data,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data, 'sha256');
+      _data.hash = this.hash(_data);
       this.talk('devacore:zone', _data);
     } catch (e) {
       return this.error(e);
@@ -1398,7 +1398,7 @@ class Deva {
         text,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data, 'sha256');
+      _data.hash = this.hash(_data);
       this.talk('devacore:action', _data);
     } catch (e) {
       return this.error(e)
@@ -1425,7 +1425,7 @@ class Deva {
         data,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data, 'sha256');
+      _data.hash = this.hash(_data);
       this.talk('devacore:feature', _data);
     } catch (e) {
       return this.error(e);
