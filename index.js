@@ -486,8 +486,8 @@ class Deva {
           global: mind.global, // the global policies for client
           personal: mind.devas[this._agent.key], // Client personal features and rules.
         };
-        delete this._client.features.mind;
-        return this.Done();
+        delete this._client.features.mind; // delete the mind feature from client data
+        return this.Done(); // when complete then move to the done feature.
       }
     } catch (e) {
       this.action('error'); // set the action to error
@@ -929,6 +929,26 @@ class Deva {
     // now when we ask the meta params[0] should be the method
   }
 
+  info(id=false) {
+    id = id || this._id;
+    const agent = this.agent();
+    if (this._info) {
+      const _info = [
+        `::begin:info:${id}`,
+        `## ${this._agent.profile.name} (#${agent.key})`,
+      ];
+      for (let x in this._info) {
+        _info.push(`- ${x}: ${this._info[x]}`);
+      }
+      _info.push(`::end:info:${this.hash(this._info)}`);
+      return _info.join('\n');
+    }
+    else {
+      return '';
+    }
+  }
+
+
 
   /**************
   func: init
@@ -983,25 +1003,6 @@ class Deva {
     });
   }
 
-  info(id=false) {
-    id = id || this._id;
-    const agent = this.agent();
-    if (this._info) {
-      const _info = [
-        `::begin:info:${id}`,
-        `## ${this._agent.profile.name} (#${agent.key})`,
-      ];
-      for (let x in this._info) {
-        _info.push(`- ${x}: ${this._info[x]}`);
-      }
-      _info.push(`::end:info:${this.hash(this._info)}`);
-      return _info.join('\n');
-    }
-    else {
-      return '';
-    }
-  }
-
   /**************
   func: start
   params:
@@ -1012,7 +1013,7 @@ class Deva {
     function or running the system enter function.
   usage: this.start('msg')
   ***************/
-  start(data=false) {
+  start(data) {
     this.state('start');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'start';
@@ -1039,7 +1040,7 @@ class Deva {
     If the Deva is offline it will return the offline message.
   usage: this.enter('msg')
   ***************/
-  enter(data=false) {
+  enter(data) {
     this.state('enter');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'enter';
