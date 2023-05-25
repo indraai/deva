@@ -5,7 +5,7 @@
   "DATA": {
     "cmdChr": "/",
     "askChr": "#",
-    "inherit": ["events", "lib"],
+    "inherit": ["events", "lib", "config"],
     "bind": [
       "listeners",
       "methods",
