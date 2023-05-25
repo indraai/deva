@@ -7,30 +7,32 @@ const config = require('./config.json').DATA // load the deva core configuration
 class Deva {
   constructor(opts) {
     opts = opts || {};
-    this._id = randomUUID();                            // the unique id assigned to the agent at load
-    this._info = opts.info || false;                    // the deva information from the package file.
-    this._config = opts.config || {};                   // local Config Object
-    this._agent = opts.agent || false;                  // Agent profile object
-    this._client = {};                                  // this will be set on init.
-    this._message = 'offline';                          // current state of agent.
-    this._active = false;                               // the active/birth date.
-    this._security = false;                             // inherited Security features.
-    this._support = false;                              // inherited Support features.
-    this._services = false;                             // inherited Service features.
-    this._business = false;                             // inherited Business features.
-    this._development = false;                          // inherited Development features.
-    this._research = false;                             // inherited Research features.
-    this._legal = false;                                // inherited Legal features.
-    this._story = false;                                // inherited Story features.
-    this.events = opts.events || new EventEmitter({});  // Event Bus
-    this.lib = opts.lib || {};                          // used for loading library functions
-    this.devas = opts.devas || {};                      // Devas which are loaded
-    this.vars = opts.vars || {};                        // Variables object
-    this.listeners = opts.listeners || {};              // local Listeners
-    this.modules = opts.modules || {};                  // 3rd Party Modules
-    this.func = opts.func || {};                        // local Functions
-    this.methods = opts.methods || {};                  // local Methods
-    this.maxListeners = opts.maxListenners || 0;        // set the local maxListeners
+    this._id = randomUUID(); // the unique id assigned to the agent at load
+    this._info = opts.info || false; // the deva information from the package file.
+    this._config = opts.config || {}; // local Config Object
+    this._agent = opts.agent || false; // Agent profile object
+    this._client = {}; // this will be set on init.
+    this._active = false; // the active/birth date.
+    this._security = false; // inherited Security features.
+    this._support = false; // inherited Support features.
+    this._services = false; // inherited Service features.
+    this._systems = false; // inherited Systems features.
+    this._solutions = false; // inherited Solutions features.
+    this._research = false; // inherited Research features.
+    this._development = false; // inherited Development features.
+    this._business = false; // inherited Business features.
+    this._legal = false; // inherited Legal features.
+    this._assistant = false; // inherited Assistant features.
+    this._story = false; // inherited Story features.
+    this.events = opts.events || new EventEmitter({}); // Event Bus
+    this.lib = opts.lib || {}; // used for loading library functions
+    this.devas = opts.devas || {}; // Devas which are loaded
+    this.vars = opts.vars || {}; // Variables object
+    this.listeners = opts.listeners || {}; // local Listeners
+    this.modules = opts.modules || {}; // 3rd Party Modules
+    this.func = opts.func || {}; // local Functions
+    this.methods = opts.methods || {}; // local Methods
+    this.maxListeners = opts.maxListenners || 0; // set the local maxListeners
 
     // prevent overwriting existing functions and variables with same name
     for (var opt in opts) {
@@ -55,7 +57,9 @@ class Deva {
     this._feature = config.feature; // set the feature from config
     this._features = config.features; // set the features from config
 
+    this._message = config.message; // current state of agent.
     this._messages = {}; // set the messages from config
+
     // then here we are going to loop the messages config to make sure custom values are set
     for (let x in config.messages) {
       this._messages[x] = {};
@@ -64,7 +68,6 @@ class Deva {
       }
     }
   }
-
 
   /**************
   func: Client
@@ -91,31 +94,31 @@ class Deva {
     client presented data.
   ***************/
   Security() {
-    this.feature('Security');
-    const _cl = this.client();
+    this.feature('Security'); // set feature to Security
+    const _cl = this.client(); // set local copy of client data
     try {
-      if (!_cl.features.security) return this.Support();
+      if (!_cl.features.security) return this.Support(); // if no security feature goto Support
       else {
-        this.action('Security');
-        const {id, profile, features} = _cl;            // make a copy the clinet data.
-        const {security} = features;                    // make a copy the clinet data.
-        this._security = {                              // set this_security with data
-          id: this.uid(true),                           // uuid of the security feature
-          client_id: id,                                // client id for reference
-          client_name: profile.name,                    // client name for personalization
-          hash: security.hash,                          // client preferred hash algorithm
-          cipher: security.cipher,                      // client preferred cipher settings
-          concerns: security.concerns,                  // any concerns for client
-          global: security.global,                      // the global policies for client
-          personal: security.devas[this._agent.key]     // Client personal features and rules.
+        this.action('Security'); // set action to Security
+        const {id, profile, features} = _cl; // make a copy the clinet data.
+        const {security} = features; // make a copy the clinet data.
+        this._security = { // set this_security with data
+          id: this.uid(true), // uuid of the security feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          hash: security.hash, // client preferred hash algorithm
+          cipher: security.cipher, // client preferred cipher settings
+          concerns: security.concerns, // any concerns for client
+          global: security.global, // the global policies for client
+          personal: security.devas[this._agent.key], // Client personal features and rules.
         };
-        delete this._client.features.security           // make a copy the clinet data.
-        return this.Support();
+        delete this._client.features.security; // make a copy the clinet data.
+        return this.Support(); // goto Support when done with Security
       }
     } catch (e) {
-      this.action('error');
-      this.feature('error');
-      return this.error(e)                             // run error handling if an error is caught
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -147,9 +150,9 @@ class Deva {
         return this.Services();
       }
     } catch (e) {
-      this.action('error');
-      this.feature('error');
-      return this.error(e)                             // run error handling if an error is caught
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -181,9 +184,9 @@ class Deva {
         return this.Systems()
       }
     } catch (e) {
-      this.action('error');
-      this.feature('error');
-      return this.error(e)                             // run error handling if an error is caught
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -215,10 +218,9 @@ class Deva {
         return this.Solutions()
       }
     } catch (e) {
-      // run error handling if an error is caught
-      this.action('error');
-      this.feature('error');
-      return this.error(e)
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -236,23 +238,23 @@ class Deva {
       if (!_cl.features.solutions) return this.Research();
       else {
         this.action('Solutions');
-        const {id, features, profile} = _cl;   // set the local consts from client copy
-        const {solutions} = features;                   // set solutions from features const
-        this._solutions = {                             // set this_solutions with data
-          id: this.uid(true),                           // uuid of the solutions feature
-          client_id: id,                                // client id for reference
-          client_name: profile.name,                    // client name for personalization
-          concerns: solutions.concerns,                 // any concerns for client
-          global: solutions.global,                     // the global policies for client
-          personal: solutions.devas[this._agent.key]    // Client personal features and rules.
+        const {id, features, profile} = _cl; // set the local consts from client copy
+        const {solutions} = features; // set solutions from features const
+        this._solutions = { // set this_solutions with data
+          id: this.uid(true), // uuid of the solutions feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: solutions.concerns, // any concerns for client
+          global: solutions.global, // the global policies for client
+          personal: solutions.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.solutions
         return this.Research()
       }
     } catch (e) {
-      this.action('error');
-      this.feature('error');
-      return this.error(e)                             // run error handling if an error is caught
+      this.action('error'); // set the action to error
+      this.feature('error'); // set the feature to error
+      return this.error(e); // run error handling if an error is caught
     }
   }
 
@@ -264,8 +266,8 @@ class Deva {
     client presented data.
   ***************/
   Research() {
-    this.feature('Research');              // set state to development setting
-    const _cl = this.client();
+    this.feature('Research'); // set state to development setting
+    const _cl = this.client(); // set local client variable
     try {
       if (!_cl.features.research) return this.Development(); // if no research goto Business
       else {
@@ -434,24 +436,24 @@ class Deva {
     client presented data.
   ***************/
   Story() {
-    this.feature('Story');                 // set state to story setting
-    const _cl = this.client();
+    this.feature('Story'); // set feature to Story
+    const _cl = this.client(); // set local client variable
     try {
-      if (!this._client.features.story) return this.Mind();
+      if (!this._client.features.story) return this.Mind(); // if no story goto Mind
       else {
-        this.action('Story');
-        const {id, features, profile} = this._client;       // set the local consts from client copy
-        const {story} = features;                           // set story from features const
-        this._story = {                                     // set this_story with data
-          id: this.uid(true),                               // uuid of the story feature
-          client_id: id,                                    // client id for reference
-          client_name: profile.name,                        // client name for personalization
-          concerns: story.concerns,                         // any concerns for client
-          global: story.global,                             // the global policies for client
-          personal: story.devas[this._agent.key]            // Client personal features and rules.
+        this.action('Story'); // set action to Story
+        const {id, features, profile} = this._client; // set the local consts from client copy
+        const {story} = features; // set story from features const
+        this._story = { // set this_story with data
+          id: this.uid(true), // uuid of the story feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: story.concerns, // any concerns for client
+          global: story.global, // the global policies for client
+          personal: story.devas[this._agent.key], // Client personal features and rules.
         };
-        delete this._client.features.story;
-        return this.Mind();
+        delete this._client.features.story; // delete story object from client
+        return this.Mind(); // when done with Story goto Mind
       }
     } catch (e) {
       this.action('error'); // set the action to error
@@ -474,15 +476,15 @@ class Deva {
       if (!_cl.features.mind) return this.Done();
       else {
         this.action('Mind');
-        const {id, features, profile} = _cl;       // set the local consts from client copy
-        const {mind} = features;                           // set mind from features const
-        this._mind = {                                     // set this_mind with data
-          id: this.uid(true),                               // uuid of the mind feature
-          client_id: id,                                    // client id for reference
-          client_name: profile.name,                        // client name for personalization
-          concerns: mind.concerns,                         // any concerns for client
-          global: mind.global,                             // the global policies for client
-          personal: mind.devas[this._agent.key]            // Client personal features and rules.
+        const {id, features, profile} = _cl; // set the local consts from client copy
+        const {mind} = features; // set mind from features const
+        this._mind = { // set this_mind with data
+          id: this.uid(true), // uuid of the mind feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: mind.concerns, // any concerns for client
+          global: mind.global, // the global policies for client
+          personal: mind.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.mind;
         return this.Done();

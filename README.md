@@ -7,6 +7,35 @@ Deva is a Node.js module designed to simplify the development of multi-agent sys
 
 The Deva module is a JavaScript library for building multi-agent systems that can communicate with each other and with external services. It provides a unified API for creating agents and defining their behaviors, and includes tools for handling communication between agents and for integrating with third-party APIs. The Deva module is designed to be flexible and customizable, allowing developers to easily create complex systems that can perform a wide range of tasks, from data collection and analysis to chatbot interactions and image generation. The module is written in JavaScript and can be used with Node.js, making it easy to integrate with other JavaScript libraries and tools.
 
+## Core Features
+The core features in the @indra.ai deva.core encompass a wide range of functionalities and capabilities. Here's a brief overview of each feature:
+
+1. Security Feature: This feature focuses on ensuring the security and privacy of the system, monitoring and responding to security-related issues.
+
+2. Support Feature: The support feature is responsible for addressing user queries, providing assistance, and resolving any issues or concerns raised by users.
+
+3. Services Feature: This feature pertains to the various services offered by the @indra.ai platform, such as cloud computing, data storage, networking, and more.
+
+4. Systems Feature: The systems feature deals with the management and operation of the underlying infrastructure and resources that power the @indra.ai platform.
+
+5. Solutions Feature: This feature is geared towards providing solutions to specific problems or challenges faced by users, offering guidance and recommendations.
+
+6. Research Feature: The research feature focuses on exploring and advancing cutting-edge technologies, innovations, and methodologies within the domain of AI and related fields.
+
+7. Development Feature: The development feature encompasses the creation, improvement, and maintenance of software and applications within the @indra.ai ecosystem.
+
+8. Business Feature: This feature caters to the needs and requirements of businesses, offering tools, insights, and strategies to drive growth, efficiency, and success.
+
+9. Legal Feature: The legal feature ensures compliance with legal and regulatory frameworks, addressing legal matters and providing guidance on legal aspects related to the @indra.ai platform.
+
+10. Assistant Feature: This feature involves an AI-powered assistant that assists users with various tasks, answering questions, providing information, and offering support.
+
+11. Story Feature: The story feature enables the generation of engaging and interactive stories, leveraging AI capabilities to create captivating narratives.
+
+12. Mind Feature: The mind feature pertains to cognitive abilities and intelligence, encompassing aspects such as learning, reasoning, and decision-making within the @indra.ai platform.
+
+These core features work together to provide a comprehensive and robust platform for users, covering essential aspects such as security, support, services, research, development, and more.
+
 ## Functions
 
 Here are some insights about the code you shared:
@@ -87,11 +116,10 @@ const Deva = require('feecting/deva');
 
 // setup the Deva object
 const deva = new Deva({
+  info: {}
   agent: {
     uid: '*uinique identifier*'
     key: '*DEVA KEY*',
-    name: '*DEVA NAME*',
-    describe: '*DEVA LONG DESCRIPTION*',
     prompt: {
       emoji: '🐶',
       text: '*DEVA*',
@@ -102,6 +130,8 @@ const deva = new Deva({
       speed: 1
     },
     profile: {
+      name: '*DEVA NAME*',
+      describe: '*DEVA LONG DESCRIPTION*',
       emoji: 'the graphic emoji the agent travels with. 50px x 50px'
       avatar: 'the graphic avatar the agent travels with 150px x 150px',
       background: 'a background asset for page displays for th eagent',
@@ -117,10 +147,10 @@ const deva = new Deva({
   },
   vars: {},
   listeners: {},
+  deva: {},
   modules: {},
   func: {},
   methods: {},
-  deva: {},
   onStart() {},
   onStop() {},
   onEnter() {},

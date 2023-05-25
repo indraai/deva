@@ -124,6 +124,7 @@
       "error": "Feature Error",
       "done": "Features Done"
     },
+    "message": "offline",
     "messages": {
       "states": {
         "offline": "🛌 ::agent.name:: offline state",
