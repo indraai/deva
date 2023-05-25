@@ -952,7 +952,7 @@ class Deva {
         packet.q.meta.hash = this.hash(packet.q, 'sha256');
 
         this.action(_action);
-        this.talk('devacore:question', packet);         // global question event make sure to copy data.
+        this.talk('devacore:question', this.copy(packet));         // global question event make sure to copy data.
 
         if (isAsk) {                                      // isAsk check if the question isAsk and talk
           this.state('ask');
@@ -1031,9 +1031,9 @@ class Deva {
 
 
       this.action('answer_talk');
-      this.talk('devacore:answer', packet);             // talk the answer with a copy of the data
+      this.talk('devacore:answer', this.copy(packet));             // talk the answer with a copy of the data
 
-      return resolve(packet);                             // resolve the packet to the caller.
+      return resolve(this.copy(packet));                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
       this.action('error');
       return this.error(err, packet, reject);             // return this.error with err, packet, reject
@@ -1967,7 +1967,7 @@ class Deva {
       data,
       created: Date.now(),
     }
-    this.talk('devacore:error', _data);
+    this.talk('devacore:error', this.copy(_data));
 
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
     if (hasOnError) return this.onError(err, data, reject);
