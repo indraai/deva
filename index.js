@@ -58,7 +58,9 @@ class Deva {
     this._features = config.features; // set the features from config
 
     this._message = config.message; // current state of agent.
-    this._messages = {}; // set the messages from config
+    this._messages = {
+      notext: 'NO TEXT WAS PROVIDED',
+    }; // set the messages from config
 
     // then here we are going to loop the messages config to make sure custom values are set
     for (let x in config.messages) {
