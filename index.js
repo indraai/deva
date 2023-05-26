@@ -1297,6 +1297,7 @@ class Deva {
     const agent_copy = this.copy(this._agent);
     delete agent_copy.parse;
     delete agent_copy.translate;
+    delete agent_copy.process;
     return agent_copy;
   }
 
