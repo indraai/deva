@@ -541,7 +541,7 @@ class Deva {
         if (parse) this._agent.parse = this._agent.parse.bind(this);
         // bind process
         const process = this._agent && this._agent.process && typeof this._agent.process === 'function';
-        if (parse) this._agent.process = this._agent.process.bind(this);
+        if (process) this._agent.process = this._agent.process.bind(this);
       }
       catch (e) {
         return this.error(e, false, reject); // trigger the this.error for errors
