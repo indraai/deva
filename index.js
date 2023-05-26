@@ -1047,7 +1047,7 @@ class Deva {
     delete data.hash;
     data.hash = this.hash(data);
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
-    return hasOnEnter ? this.onEnter(_data) : this.done(data)
+    return hasOnEnter ? this.onEnter(data) : this.done(data)
   }
 
   /**************
