@@ -60,6 +60,7 @@ class Deva {
     this._message = config.message; // current state of agent.
     this._messages = {
       notext: 'NO TEXT WAS PROVIDED',
+      nopacket: 'NO PACKET WAS PROVIDED',
     }; // set the messages from config
 
     // then here we are going to loop the messages config to make sure custom values are set
@@ -717,7 +718,6 @@ class Deva {
     const isCmd = t_split[0].startsWith(this.cmdChr);
 
     // Format the packet for return on the request.
-    const orig = TEXT;                                    // set the TEXT to orig
     const data = DATA;                                    // set the DATA to data
     const packet = {                                      // create the base q/a packet
       id,                                                 // set the id into packet
@@ -760,11 +760,10 @@ class Deva {
             client: this.client() || false,                // set the client
             meta: {                                       // build the meta container
               key,                                        // set the key variable
-              orig,                                       // set orig text to track chances
               method,                                     // set method to track function use
               params,                                     // set any params that are associated
             },
-            text,                                         // set the text after it has been modified form orig
+            text,                                         // set the text for the packet
             data,                                         // set the data object
             created: Date.now(),                          // timestamp the question
         }
