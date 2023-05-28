@@ -1795,7 +1795,7 @@ class Deva {
     const splitter = text.split(' ');
     if (splitter < maxwords) return text;
     return splitter.slice(0, maxwords).join(' ');
-  },
+  }
 
   dupes(dupers) {
     if (!Array.isArray(dupers)) return dupers;
@@ -1806,7 +1806,7 @@ class Deva {
         return dupe;
       }
     });
-  },
+  }
 
   /**************
   func: error
