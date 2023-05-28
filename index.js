@@ -763,7 +763,7 @@ class Deva {
               method,                                     // set method to track function use
               params,                                     // set any params that are associated
             },
-            text,                                         // set the text for the packet
+            text,                                         // set the text for the packet.
             data,                                         // set the data object
             created: Date.now(),                          // timestamp the question
         }
@@ -1782,6 +1782,31 @@ class Deva {
   formatPerdent(n, dec=2) {
     return parseFloat(n).toFixed(dec) + '%';
   }
+
+  /**************
+  func: trimText
+  params:
+    - text: The text to trim.
+    - maxwords: The number of words to max.
+  describe:
+    A utility function to trimText intput to a specific word count.
+  ***************/
+  trimWords(text, maxwords) {
+    const splitter = text.split(' ');
+    if (splitter < maxwords) return text;
+    return splitter.slice(0, maxwords).join(' ');
+  },
+
+  dupes(dupers) {
+    if (!Array.isArray(dupers)) return dupers;
+    const check = [];
+    return dupers.filter(dupe => {
+      if (!check.includes(dupe)) {
+        check.push(dupe);
+        return dupe;
+      }
+    });
+  },
 
   /**************
   func: error
