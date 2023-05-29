@@ -773,7 +773,6 @@ class Deva {
         packet.q.meta.hash = this.hash(packet.q);
 
         this.action(_action);
-        this.talk(`${key}:question`, this.copy(packet)); // key question event make sure to copy data.
         this.talk(config.events.question, this.copy(packet)); // global question event make sure to copy data.
 
         if (isAsk) {                                      // isAsk check if the question isAsk and talk
@@ -853,7 +852,6 @@ class Deva {
 
 
       this.action('answer_talk');
-      this.talk(`${agent.key}:answer`, this.copy(packet)); // agent key answer event
       this.talk(config.events.answer, this.copy(packet)); // global talk event
 
       return resolve(this.copy(packet));                             // resolve the packet to the caller.
@@ -920,7 +918,6 @@ class Deva {
           packet.a.text = result;
         }
         this.action('ask_answer');
-        this.talk(`${agent.key}:answer`, this.copy(packet));
         this.talk(`${agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
         this.action('error');
