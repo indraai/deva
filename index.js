@@ -61,6 +61,7 @@ class Deva {
     this._messages = {
       notext: 'NO TEXT WAS PROVIDED',
       nopacket: 'NO PACKET WAS PROVIDED',
+      method_not_found: 'METHOD NOT FOUND',
     }; // set the messages from config
 
     // then here we are going to loop the messages config to make sure custom values are set
@@ -772,7 +773,8 @@ class Deva {
         packet.q.meta.hash = this.hash(packet.q);
 
         this.action(_action);
-        this.talk(config.events.question, this.copy(packet));         // global question event make sure to copy data.
+        this.talk(`${key}:question`, this.copy(packet)); // key question event make sure to copy data.
+        this.talk(config.events.question, this.copy(packet)); // global question event make sure to copy data.
 
         if (isAsk) {                                      // isAsk check if the question isAsk and talk
           this.state('ask');
@@ -851,7 +853,8 @@ class Deva {
 
 
       this.action('answer_talk');
-      this.talk(config.events.answer, this.copy(packet));             // talk the answer with a copy of the data
+      this.talk(`${agent.key}:answer`, this.copy(packet)); // agent key answer event
+      this.talk(config.events.answer, this.copy(packet)); // global talk event
 
       return resolve(this.copy(packet));                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
@@ -880,8 +883,8 @@ class Deva {
     this.state('ask');
     this.action('ask');
 
-    const agent = this.agent() || false;
-    const client = this.client() || false;
+    const agent = this.agent();
+    const client = this.client();
     // build the answer packet from this model
     packet.a = {
       agent,
@@ -901,8 +904,7 @@ class Deva {
       if (typeof this.methods[packet.q.meta.method] !== 'function') {
         return setImmediate(() => {
           this.action('invalid')
-          packet.a.text = `INVALID METHOD (${packet.q.meta.method})`;
-          this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
+          this.talk(`${this._agent.key}:ask:${packet.id}`, this._methodNotFound(packet));
         });
       }
 
@@ -918,16 +920,17 @@ class Deva {
           packet.a.text = result;
         }
         this.action('ask_answer');
-        this.talk(`${this._agent.key}:ask:${packet.id}`, packet);
+        this.talk(`${agent.key}:answer`, this.copy(packet));
+        this.talk(`${agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
         this.action('error');
-        this.talk(`${this._agent.key}:ask:${packet.id}`, {error:err});
+        this.talk(`${agent.key}:ask:${packet.id}`, {error:err});
         return this.error(err, packet);
       })
     }
     catch (e) {
       this.action('error');
-      this.talk(`${this._agent.key}:ask:${packet.id}`, {error:e});
+      this.talk(`${agent.key}:ask:${packet.id}`, {error:e});
       return this.error(e, packet)
     }
     // now when we ask the meta params[0] should be the method
