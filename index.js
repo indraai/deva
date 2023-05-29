@@ -772,7 +772,7 @@ class Deva {
         packet.q.meta.hash = this.hash(packet.q);
 
         this.action(_action);
-        this.talk('devacore:question', this.copy(packet));         // global question event make sure to copy data.
+        this.talk(config.events.question, this.copy(packet));         // global question event make sure to copy data.
 
         if (isAsk) {                                      // isAsk check if the question isAsk and talk
           this.state('ask');
@@ -851,7 +851,7 @@ class Deva {
 
 
       this.action('answer_talk');
-      this.talk('devacore:answer', this.copy(packet));             // talk the answer with a copy of the data
+      this.talk(config.events.answer, this.copy(packet));             // talk the answer with a copy of the data
 
       return resolve(this.copy(packet));                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
@@ -1166,7 +1166,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(_data);
-      this.talk('devacore:state', _data);
+      this.talk(config.events.state, _data);
     } catch (e) {
       return this.error(e);
     }
@@ -1202,7 +1202,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(_data);
-      this.talk('devacore:zone', _data);
+      this.talk('', _data);
     } catch (e) {
       return this.error(e);
     }
@@ -1229,7 +1229,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(_data);
-      this.talk('devacore:action', _data);
+      this.talk(config.events.action, _data);
     } catch (e) {
       return this.error(e)
     }
@@ -1256,7 +1256,7 @@ class Deva {
         created: Date.now(),
       };
       _data.hash = this.hash(_data);
-      this.talk('devacore:feature', _data);
+      this.talk(config.events.feature, _data);
     } catch (e) {
       return this.error(e);
     }
@@ -1515,7 +1515,7 @@ class Deva {
     return new Promise((resolve, reject) => {
       this.state('load');
       this.devas[key].init(client).then(loaded => {
-        this.talk(`devacore:load`, {
+        this.talk(config.events.load, {
           id:this.uid(true),
           key,
           created: Date.now(),
@@ -1539,11 +1539,7 @@ class Deva {
         this.state('uload');
         this.devas[key].stop().then(exit => {
           delete this.devas[key];
-          this.talk(`devacore:unload`, {
-            id:this.uid(true),
-            key,
-            created: Date.now(),
-          });
+          this.talk(config.events.unload, key);
         });
         return resolve(this._messages.states.unload);
       } catch (e) {
@@ -1678,7 +1674,7 @@ class Deva {
       text,
       created: Date.now(),
     }
-    return this.talk('devacore:prompt', _data);
+    return this.talk(config.events.prompt, _data);
   }
 
 
@@ -1841,7 +1837,7 @@ class Deva {
       data,
       created: Date.now(),
     }
-    this.talk('devacore:error', this.copy(_data));
+    this.talk(config.events.error, this.copy(_data));
 
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
     if (hasOnError) return this.onError(err, data, reject);

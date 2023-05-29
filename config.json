@@ -13,6 +13,18 @@
       "lib",
       "_agent"
     ],
+    "events": {
+      "prompt": "devacore:prompt",
+      "error": "devacore:error",
+      "question": "devacore:question",
+      "answer": "devacore:answer",
+      "state": "devacore:state",
+      "zone": "devacore:zone",
+      "action": "devacore:action",
+      "feature": "devacore:feature",
+      "load": "devacore:load",
+      "unload": "devacore:unload"
+    },
     "state": "offline",
     "states": {
         "ask": "asking another",
