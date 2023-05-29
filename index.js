@@ -845,16 +845,16 @@ class Deva {
       };
 
       // create a hash for the answer and insert into answer meta.
-      packet_answer.meta.hash = this.hash(packet_answer);
+      packet_answer.meta.hash = this.hash(JSON.stringify(packet_answer));
 
-      packet.a = packet_answer;
+      packet.a = this.copy(packet_answer);
       packet.hash = this.hash(packet);     // hash the entire packet.
 
 
       this.action('answer_talk');
       this.talk(config.events.answer, this.copy(packet)); // global talk event
 
-      return resolve(this.copy(packet));                             // resolve the packet to the caller.
+      return resolve(packet);                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
       this.action('error');
       return this.error(err, packet, reject);             // return this.error with err, packet, reject
