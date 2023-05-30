@@ -630,6 +630,7 @@ class Deva {
   ***************/
   _methodNotFound(packet) {
     packet.a = {
+      id: this.uid(),
       agent: this.agent() || false,
       client: this.client() || false,
       text: `${this._messages.method_not_found}`,
@@ -885,6 +886,7 @@ class Deva {
     const client = this.client();
     // build the answer packet from this model
     packet.a = {
+      id: this.uid(),
       agent,
       client,
       meta: {
