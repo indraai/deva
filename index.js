@@ -1669,7 +1669,7 @@ class Deva {
     // Talk a global prompt event for the client
     const _data = {
       id: this.uid(true),
-      key: 'return',
+      key: 'prompt',
       value: 'prompt',
       agent: this.agent(),
       client: this.client(),
