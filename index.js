@@ -76,6 +76,132 @@ class Deva {
   }
 
   /**************
+  func: _assignBind
+  params: none
+  describe:
+    The assign bind function will bind the translate functions and parse functions
+    of the agent and bind their functionality to the state machine.
+  ***************/
+  _assignBind() {
+    return new Promise((resolve, reject) => {
+      try {
+        this.bind.forEach(bind => { // loop over the bind items func, method, listener...
+          if (this[bind]) for (let x in this[bind]) { // if the root has a bind func, method, listener
+            if (typeof this[bind][x] === 'function') { // check to make sure object is a fucntion
+              this[bind][x] = this[bind][x].bind(this); // bind the item from the bind object
+            }
+          }
+        });
+        // bind translate
+        const translate = this._agent && this._agent.translate && typeof this._agent.translate === 'function';
+        if (translate) this._agent.translate = this._agent.translate.bind(this);
+        // bind parser
+        const parse = this._agent && this._agent.parse && typeof this._agent.parse === 'function';
+        if (parse) this._agent.parse = this._agent.parse.bind(this);
+        // bind process
+        const process = this._agent && this._agent.process && typeof this._agent.process === 'function';
+        if (process) this._agent.process = this._agent.process.bind(this);
+      }
+      catch (e) {
+        return this.error(e, false, reject); // trigger the this.error for errors
+      }
+      finally {
+        return resolve(); // when the configuration is complete then return an empty resolve.
+      }
+    });
+  }
+
+  /**************
+  func: _assignListeners
+  params: none
+  describe:
+    Assign listeners will take the this.lisners objects and assign the appropriate
+    lisnter values for the event bus.
+  ***************/
+  _assignListeners() {
+    return new Promise((resolve, reject) => {
+      try {
+        // set the default listeners for the states of the agent.
+
+        for (let state in this._states) {
+          if (typeof this[state] === 'function') {
+            this.events.on(`${this._agent.key}:${state}`, packet => {
+              return this[state](packet);
+            });
+          }
+        }
+
+        // set the assigned listeners for the agent.
+        for (let listener in this.listeners) {
+          this.events.on(listener, packet => {
+            return this.listeners[listener](packet);
+          })
+        }
+        return resolve();
+      }
+      catch (e) {
+        return this.error(e, false, reject);
+      }
+    });
+  }
+
+  // Some elements will inherit the data of the parent. this object will loop over
+  // any children data that theis deva has and assign the inherited information.
+  /**************
+  func: _assignInherit
+  params: none
+  describe:
+    The assign inherit will make sure the Devas in the current Deva have all the
+    inherited properties all setup to collaborate efficiently.
+  ***************/
+  _assignInherit() {
+    return new Promise((resolve, reject) => {
+      try {
+        for (let d in this.devas) {
+          this.inherit.forEach(inherit => {
+            this.devas[d][inherit] = this[inherit];
+          });
+        }
+        return resolve();
+      }
+      catch (e) {
+        return this.error(e, false, reject);
+      }
+    });
+  }
+
+  // General handler for when a method is NOT found from a user command.
+  /**************
+  func: _methodNotFound
+  params:
+    - packet: The packet to relay when a method is not found.
+  describe:
+    The _methodNotFound function allows for additional security by firing
+    a specfici program functon every single time a interaction happens wehre a
+    method is not located. This assits in security and support by identifying
+    troubls or users who may be attemptng to explit features.
+
+    Then we talk a security event that watches all methods and return the packet.
+
+    This will return a not found text string preventing any furhter processing.
+  ***************/
+  _methodNotFound(packet) {
+    packet.a = {
+      id: this.uid(),
+      agent: this.agent() || false,
+      client: this.client() || false,
+      text: `${this._messages.method_not_found}`,
+      meta: {
+        key: this._agent.key,
+        method: packet.q.meta.method,
+      },
+      created: Date.now(),
+    };
+    this.state('method_not_found');
+    return packet;
+  }
+
+  /**************
   func: Client
   params: client - client provided data.
   describe:
@@ -519,131 +645,6 @@ class Deva {
         return this.error(e, false, reject);
       }
     });
-  }
-  /**************
-  func: _assignBind
-  params: none
-  describe:
-    The assign bind function will bind the translate functions and parse functions
-    of the agent and bind their functionality to the state machine.
-  ***************/
-  _assignBind() {
-    return new Promise((resolve, reject) => {
-      try {
-        this.bind.forEach(bind => { // loop over the bind items func, method, listener...
-          if (this[bind]) for (let x in this[bind]) { // if the root has a bind func, method, listener
-            if (typeof this[bind][x] === 'function') { // check to make sure object is a fucntion
-              this[bind][x] = this[bind][x].bind(this); // bind the item from the bind object
-            }
-          }
-        });
-        // bind translate
-        const translate = this._agent && this._agent.translate && typeof this._agent.translate === 'function';
-        if (translate) this._agent.translate = this._agent.translate.bind(this);
-        // bind parser
-        const parse = this._agent && this._agent.parse && typeof this._agent.parse === 'function';
-        if (parse) this._agent.parse = this._agent.parse.bind(this);
-        // bind process
-        const process = this._agent && this._agent.process && typeof this._agent.process === 'function';
-        if (process) this._agent.process = this._agent.process.bind(this);
-      }
-      catch (e) {
-        return this.error(e, false, reject); // trigger the this.error for errors
-      }
-      finally {
-        return resolve(); // when the configuration is complete then return an empty resolve.
-      }
-    });
-  }
-
-  /**************
-  func: _assignListeners
-  params: none
-  describe:
-    Assign listeners will take the this.lisners objects and assign the appropriate
-    lisnter values for the event bus.
-  ***************/
-  _assignListeners() {
-    return new Promise((resolve, reject) => {
-      try {
-        // set the default listeners for the states of the agent.
-
-        for (let state in this._states) {
-          if (typeof this[state] === 'function') {
-            this.events.on(`${this._agent.key}:${state}`, packet => {
-              return this[state](packet);
-            });
-          }
-        }
-
-        // set the assigned listeners for the agent.
-        for (let listener in this.listeners) {
-          this.events.on(listener, packet => {
-            return this.listeners[listener](packet);
-          })
-        }
-        return resolve();
-      }
-      catch (e) {
-        return this.error(e, false, reject);
-      }
-    });
-  }
-
-  // Some elements will inherit the data of the parent. this object will loop over
-  // any children data that theis deva has and assign the inherited information.
-  /**************
-  func: _assignInherit
-  params: none
-  describe:
-    The assign inherit will make sure the Devas in the current Deva have all the
-    inherited properties all setup to collaborate efficiently.
-  ***************/
-  _assignInherit() {
-    return new Promise((resolve, reject) => {
-      try {
-        for (let d in this.devas) {
-          this.inherit.forEach(inherit => {
-            this.devas[d][inherit] = this[inherit];
-          });
-        }
-        return resolve();
-      }
-      catch (e) {
-        return this.error(e, false, reject);
-      }
-    });
-  }
-
-  // General handler for when a method is NOT found from a user command.
-  /**************
-  func: _methodNotFound
-  params:
-    - packet: The packet to relay when a method is not found.
-  describe:
-    The _methodNotFound function allows for additional security by firing
-    a specfici program functon every single time a interaction happens wehre a
-    method is not located. This assits in security and support by identifying
-    troubls or users who may be attemptng to explit features.
-
-    Then we talk a security event that watches all methods and return the packet.
-
-    This will return a not found text string preventing any furhter processing.
-  ***************/
-  _methodNotFound(packet) {
-    packet.a = {
-      id: this.uid(),
-      agent: this.agent() || false,
-      client: this.client() || false,
-      text: `${this._messages.method_not_found}`,
-      meta: {
-        key: this._agent.key,
-        method: packet.q.meta.method,
-      },
-      created: Date.now(),
-    };
-    this.state('method_not_found');
-    return packet;
   }
 
   /**************
@@ -1162,7 +1163,6 @@ class Deva {
   describe
   ***************/
   state(state) {
-    console.log('STATE', state);
     try {
       if (!this._states[state]) return;
       this._state = state;
@@ -1279,16 +1279,16 @@ class Deva {
     - st: The context flag to set for the Deva that matches to this._contexts
   describe
   ***************/
-  context(text) {
+  context(value) {
     try {
-      this._context = text;
+      this._context = value;
       const _data = {
         id: this.uid(true),
         key: 'context',
-        value: 'context',
+        value,
         agent: this.agent(),
         client: this.client(),
-        text,
+        text: this.vars.context[value] || value,
         created: Date.now(),
       };
       _data.hash = this.hash(_data);
@@ -1829,6 +1829,11 @@ class Deva {
     return splitter.slice(0, maxwords).join(' ');
   }
 
+  /**************
+  func: dupes
+  params: dupers
+  describe: remove duplicees from an array.
+  ***************/
   dupes(dupers) {
     if (!Array.isArray(dupers)) return dupers;
     const check = [];
@@ -1836,6 +1841,31 @@ class Deva {
       if (!check.includes(dupe)) {
         check.push(dupe);
         return dupe;
+      }
+    });
+  }
+
+  /**************
+  func: help
+  params:
+    - msg: the help msg to search against
+    - help_dir: base directory of the deva help files.
+  describe:
+    the help utility makes it easy to create help files for your deva. the utility
+    checks the existence of a help file in the passed in directory then if
+    one exists it will then present it based on the users request text input.
+  ***************/
+  help(msg, help_dir) {
+    return new Promise((resolve, reject) => {
+      const params = msg.split(' ');
+      let helpFile = 'main';
+      if (params[0]) helpFile = params[0];
+      if (params[1]) helpFile = `${params[0]}_${params[1]}`;
+      helpFile = path.join(help_dir, 'help', `${helpFile}.feecting`);
+      try {
+        return resolve(fs.readFileSync(helpFile, 'utf8'))
+      } catch (e) {
+        return reject(e)
       }
     });
   }
