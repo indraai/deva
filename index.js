@@ -57,6 +57,8 @@ class Deva {
     this._feature = config.feature; // set the feature from config
     this._features = config.features; // set the features from config
 
+    this._context = opts.context || false; // set the local context
+
     this._message = config.message; // current state of agent.
     this._messages = {
       notext: 'NO TEXT WAS PROVIDED',
@@ -1024,13 +1026,14 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'start';
     delete data.hash;
-    data.hash = this.hash(data);
+    data.hash = this.hash(JSON.stringify(data));
 
     if (this.info) {
       const _info = this.info(data.id);
       this.prompt(_info);
     }
 
+    this.action(data.value);
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
     return hasOnStart ? this.onStart(data) : this.enter(data)
   }
@@ -1051,7 +1054,8 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'enter';
     delete data.hash;
-    data.hash = this.hash(data);
+    data.hash = this.hash(JSON.stringify(data));
+    this.action(data.value);
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
     return hasOnEnter ? this.onEnter(data) : this.done(data)
   }
@@ -1072,7 +1076,8 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'done';
     delete data.hash;
-    data.hash = this.hash(data);
+    data.hash = this.hash(JSON.stringify(data));
+    this.action(data.value)
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     return hasOnDone ? this.onDone(data) : Promise.resolve(data);
   }
@@ -1093,7 +1098,7 @@ class Deva {
   stop() {
     this.state('stop');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
-    const _data = {
+    const data = {
       id: this.uid(true),
       key: 'return',
       value: 'stop',
@@ -1102,9 +1107,10 @@ class Deva {
       text: this._messages.states.stop,
       created: Date.now(),
     }
-    _data.hash = this.hash(_data);
+    data.hash = this.hash(JSON.stringify(data));
+    this.action(data.value);
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
-    return hasOnStop ? this.onStop(_data) : this.exit(_data)
+    return hasOnStop ? this.onStop(data) : this.exit(data)
   }
 
 
@@ -1122,12 +1128,12 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.exit('msg')
   ***************/
-  exit(data=false) {
+  exit(data) {
     this.state('exit');
     this._active = false;
     data.value = 'exit';
     delete data.hash;
-    data.hash = this.hash(data);
+    data.hash = this.hash(JSON.stringify(data));
 
     // clear memory
     this._active = false;
@@ -1140,6 +1146,7 @@ class Deva {
     this._legal = false;
     this._story = false;
 
+    this.action(data.value);
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
     return hasOnExit ? this.onExit(data) : Promise.resolve(data)
   }
@@ -1167,7 +1174,7 @@ class Deva {
         text,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data);
+      _data.hash = this.hash(JSON.stringify(_data));
       this.talk(config.events.state, _data);
     } catch (e) {
       return this.error(e);
@@ -1203,8 +1210,8 @@ class Deva {
         data,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data);
-      this.talk('', _data);
+      _data.hash = this.hash(JSON.stringify(_data));
+      this.talk(config.events.zone, _data);
     } catch (e) {
       return this.error(e);
     }
@@ -1230,7 +1237,7 @@ class Deva {
         text,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data);
+      _data.hash = this.hash(JSON.stringify(_data));
       this.talk(config.events.action, _data);
     } catch (e) {
       return this.error(e)
@@ -1257,8 +1264,33 @@ class Deva {
         data,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data);
+      _data.hash = this.hash(JSON.stringify(_data));
       this.talk(config.events.feature, _data);
+    } catch (e) {
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: context
+  params:
+    - st: The context flag to set for the Deva that matches to this._contexts
+  describe
+  ***************/
+  context(text) {
+    try {
+      this._context = text;
+      const _data = {
+        id: this.uid(true),
+        key: 'context',
+        value: 'context',
+        agent: this.agent(),
+        client: this.client(),
+        text,
+        created: Date.now(),
+      };
+      _data.hash = this.hash(JSON.stringify(_data));
+      this.talk(config.events.context, _data);
     } catch (e) {
       return this.error(e);
     }
@@ -1574,6 +1606,7 @@ class Deva {
       const max = Math.floor(Date.now() + (Date.now() * Math.PI));
       id = Math.floor(Math.random() * (max - min)) + min;
     }
+    this.action('uid');
     return id;
   }
 
@@ -1592,6 +1625,7 @@ class Deva {
     const the_hash = createHash(algo);
     the_hash.update(str.toString());
     const _digest = the_hash.digest('base64');
+    this.action('hash');
     return `${algo}:${_digest}`;
   }
 
@@ -1614,7 +1648,7 @@ class Deva {
     const _cipher = createCipheriv(algorithm, key_in_bytes, iv);
     const encrypted = _cipher.update(String(str), 'utf8', 'hex') + _cipher.final('hex');
 
-
+    this.action('cipher');
     return {
       iv: iv.toString('base64'),
       key,
@@ -1631,6 +1665,7 @@ class Deva {
     const decipher = createDecipheriv( algorithm, key_in_bytes, iv);
     const decrypted = decipher.update(encrypted);
     const final = Buffer.concat([decrypted, decipher.final()]);
+    this.action('decipher');
     return final.toString();
   }
 
@@ -1653,6 +1688,7 @@ class Deva {
     // create the text msg string
     let text = `${this._agent.profile.name} active since ${dateFormat}`;
     if (msg) text = text + `\n${msg}`;                      // append the msg string if msg true.
+    this.actino('status');
     return Promise.resolve(text);                           // return final text string
   }
 
