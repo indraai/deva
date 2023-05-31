@@ -182,6 +182,12 @@
       },
       "actions": {
         "wait": "::agent.name:: is waiting",
+        "start": "::agent.name:: has started",
+        "enter": "::agent.name:: has entered deva.world",
+        "exit": "::agent.name:: has exited deva.world",
+        "stop": "::agent.name:: is stopped",
+        "load": "::agent.name:: is loaded",
+        "unload": "::agent.name:: is unloaded",
         "question": "::agent.name:: received a question",
         "question_ask": "::agent.name:: is asking another Deva",
         "question_ask_answer": "::agent.name:: answered what they were asked",

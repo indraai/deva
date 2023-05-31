@@ -848,7 +848,7 @@ class Deva {
       };
 
       // create a hash for the answer and insert into answer meta.
-      packet_answer.meta.hash = this.hash(JSON.stringify(packet_answer));
+      packet_answer.meta.hash = this.hash(packet_answer);
 
       packet.a = this.copy(packet_answer);
       packet.hash = this.hash(packet);     // hash the entire packet.
@@ -974,6 +974,9 @@ class Deva {
   usage: this.init(client_object)
   ***************/
   init(client) {
+    // set client
+    this._active = Date.now();
+
     const _data = {
       id: this.uid(true),
       key: 'return',
@@ -985,8 +988,6 @@ class Deva {
     }
     _data.hash = this.hash(_data);
 
-    // set client
-    this._active = Date.now();
     return new Promise((resolve, reject) => {
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -1026,7 +1027,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'start';
     delete data.hash;
-    data.hash = this.hash(JSON.stringify(data));
+    data.hash = this.hash(data);
 
     if (this.info) {
       const _info = this.info(data.id);
@@ -1054,7 +1055,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'enter';
     delete data.hash;
-    data.hash = this.hash(JSON.stringify(data));
+    data.hash = this.hash(data);
     this.action(data.value);
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
     return hasOnEnter ? this.onEnter(data) : this.done(data)
@@ -1076,7 +1077,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     data.value = 'done';
     delete data.hash;
-    data.hash = this.hash(JSON.stringify(data));
+    data.hash = this.hash(data);
     this.action(data.value)
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     return hasOnDone ? this.onDone(data) : Promise.resolve(data);
@@ -1107,7 +1108,7 @@ class Deva {
       text: this._messages.states.stop,
       created: Date.now(),
     }
-    data.hash = this.hash(JSON.stringify(data));
+    data.hash = this.hash(data);
     this.action(data.value);
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
     return hasOnStop ? this.onStop(data) : this.exit(data)
@@ -1133,7 +1134,7 @@ class Deva {
     this._active = false;
     data.value = 'exit';
     delete data.hash;
-    data.hash = this.hash(JSON.stringify(data));
+    data.hash = this.hash(data);
 
     // clear memory
     this._active = false;
@@ -1161,6 +1162,7 @@ class Deva {
   describe
   ***************/
   state(state) {
+    console.log('STATE', state);
     try {
       if (!this._states[state]) return;
       this._state = state;
@@ -1174,7 +1176,7 @@ class Deva {
         text,
         created: Date.now(),
       };
-      _data.hash = this.hash(JSON.stringify(_data));
+      _data.hash = this.hash(_data);
       this.talk(config.events.state, _data);
     } catch (e) {
       return this.error(e);
@@ -1210,7 +1212,7 @@ class Deva {
         data,
         created: Date.now(),
       };
-      _data.hash = this.hash(JSON.stringify(_data));
+      _data.hash = this.hash(_data);
       this.talk(config.events.zone, _data);
     } catch (e) {
       return this.error(e);
@@ -1237,7 +1239,7 @@ class Deva {
         text,
         created: Date.now(),
       };
-      _data.hash = this.hash(JSON.stringify(_data));
+      _data.hash = this.hash(_data);
       this.talk(config.events.action, _data);
     } catch (e) {
       return this.error(e)
@@ -1264,7 +1266,7 @@ class Deva {
         data,
         created: Date.now(),
       };
-      _data.hash = this.hash(JSON.stringify(_data));
+      _data.hash = this.hash(_data);
       this.talk(config.events.feature, _data);
     } catch (e) {
       return this.error(e);
@@ -1289,7 +1291,7 @@ class Deva {
         text,
         created: Date.now(),
       };
-      _data.hash = this.hash(JSON.stringify(_data));
+      _data.hash = this.hash(_data);
       this.talk(config.events.context, _data);
     } catch (e) {
       return this.error(e);
@@ -1606,7 +1608,6 @@ class Deva {
       const max = Math.floor(Date.now() + (Date.now() * Math.PI));
       id = Math.floor(Math.random() * (max - min)) + min;
     }
-    this.action('uid');
     return id;
   }
 
@@ -1625,7 +1626,6 @@ class Deva {
     const the_hash = createHash(algo);
     the_hash.update(str.toString());
     const _digest = the_hash.digest('base64');
-    this.action('hash');
     return `${algo}:${_digest}`;
   }
 
@@ -1648,7 +1648,7 @@ class Deva {
     const _cipher = createCipheriv(algorithm, key_in_bytes, iv);
     const encrypted = _cipher.update(String(str), 'utf8', 'hex') + _cipher.final('hex');
 
-    this.action('cipher');
+
     return {
       iv: iv.toString('base64'),
       key,
@@ -1665,7 +1665,6 @@ class Deva {
     const decipher = createDecipheriv( algorithm, key_in_bytes, iv);
     const decrypted = decipher.update(encrypted);
     const final = Buffer.concat([decrypted, decipher.final()]);
-    this.action('decipher');
     return final.toString();
   }
 
@@ -1688,7 +1687,6 @@ class Deva {
     // create the text msg string
     let text = `${this._agent.profile.name} active since ${dateFormat}`;
     if (msg) text = text + `\n${msg}`;                      // append the msg string if msg true.
-    this.action('status');
     return Promise.resolve(text);                           // return final text string
   }
 
