@@ -1688,7 +1688,7 @@ class Deva {
     // create the text msg string
     let text = `${this._agent.profile.name} active since ${dateFormat}`;
     if (msg) text = text + `\n${msg}`;                      // append the msg string if msg true.
-    this.actino('status');
+    this.action('status');
     return Promise.resolve(text);                           // return final text string
   }
 
