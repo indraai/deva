@@ -1058,7 +1058,7 @@ class Deva {
     data.hash = this.hash(data);
     this.action(data.value)
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
-    return hasOnDone ? this.onDone(data) : Promise.resolve(data);
+    return hasOnDone ? this.onDone(data) : this.finish(data);
   }
 
   /**************
@@ -1076,7 +1076,11 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     this.state('finish');
     this.action('finish');
-    return resolve(packet);
+    const hasOnFinish = this.onFinish && typeof this.onFinish === 'function' ? true : false;
+    if (hasOnFinish) return this.onFinish(packet, resolve);
+    else if (resolve) return resolve(packet);
+    else return Promise.resolve(packet)
+    return resolve ? resolve(packet) : Promise.resolve(packet);
   }
 
   /**************
@@ -1541,19 +1545,8 @@ class Deva {
     This function will enable fast loading of Deva into a system.
   ***************/
   load(key, client) {
-    return new Promise((resolve, reject) => {
-      this.state('load');
-      this.devas[key].init(client).then(loaded => {
-        this.talk(config.events.load, {
-          id:this.uid(true),
-          key,
-          created: Date.now(),
-        });
-        return this.finish(this._messages.states.load, resolve);
-      }).catch(err => {
-        return this.error(err, deva, reject);
-      })
-    });
+    this.state('load');
+    return this.devas[key].init(client);
   }
 
   /**************
