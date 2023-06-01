@@ -784,7 +784,7 @@ class Deva {
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
             this.action('question_ask_answer');
-            return resolve(answer);                       // if:isAsk resolve the answer from the call
+            return this.finish(answer, resolve);                       // if:isAsk resolve the answer from the call
           });
         }
         else {                                            // else: answer tue question locally
@@ -937,26 +937,6 @@ class Deva {
     // now when we ask the meta params[0] should be the method
   }
 
-  info(id=false) {
-    id = id || this._id;
-    const agent = this.agent();
-    if (this._info) {
-      const _info = [
-        `::begin:info:${id}`,
-        `## ${this._agent.profile.name} (#${agent.key})`,
-      ];
-      for (let x in this._info) {
-        _info.push(`- ${x}: ${this._info[x]}`);
-      }
-      _info.push(`::end:info:${this.hash(this._info)}`);
-      return _info.join('\n');
-    }
-    else {
-      return '';
-    }
-  }
-
-
 
   /**************
   func: init
@@ -1023,8 +1003,8 @@ class Deva {
   usage: this.start('msg')
   ***************/
   start(data) {
-    this.state('start');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
+    this.state('start');
     data.value = 'start';
     delete data.hash;
     data.hash = this.hash(data);
@@ -1051,8 +1031,8 @@ class Deva {
   usage: this.enter('msg')
   ***************/
   enter(data) {
-    this.state('enter');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
+    this.state('enter');
     data.value = 'enter';
     delete data.hash;
     data.hash = this.hash(data);
@@ -1072,9 +1052,28 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.done('msg')
   ***************/
-  done(data=false) {
-    this.state('done');
+  done(data) {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
+    this.state('done');
+    data.value = 'done';
+    delete data.hash;
+    data.hash = this.hash(data);
+    this.action(data.value)
+    const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
+    return hasOnDone ? this.onDone(data) : Promise.resolve(data);
+  }
+
+  /**************
+  func: finish
+  params:
+  - data: the data to pass to the resolve
+  - resolve: the finish resolve to pass back
+    If the deva is offline it will return the offline message.
+  usage: this.finish(data, resolve)
+  ***************/
+  done(data) {
+    if (!this._active) return Promise.resolve(this._messages.states.offline);
+    this.state('finish');
     data.value = 'done';
     delete data.hash;
     data.hash = this.hash(data);
@@ -1097,8 +1096,8 @@ class Deva {
     this.stop('msg')
   ***************/
   stop() {
-    this.state('stop');
     if (!this._active) return Promise.resolve(this._messages.states.offline);
+    this.state('stop');
     const data = {
       id: this.uid(true),
       key: 'return',
@@ -1166,7 +1165,7 @@ class Deva {
       if (!this._states[state]) return;
       this._state = state;
       const text = this._messages.states[state];
-      const _data = {
+      const data = {
         id: this.uid(true),
         key: 'state',
         value: state,
@@ -1175,8 +1174,8 @@ class Deva {
         text,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data);
-      this.talk(config.events.state, _data);
+      data.hash = this.hash(data);
+      this.talk(config.events.state, data);
     } catch (e) {
       return this.error(e);
     }
@@ -1202,7 +1201,7 @@ class Deva {
       if (!this._zones[zone]) return;
       this._zone = zone;
       const text = this._messages.zones[zone];
-      const _data = {
+      const data = {
         id: this.uid(true),
         key: 'zone',
         value: zone,
@@ -1211,8 +1210,8 @@ class Deva {
         data,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data);
-      this.talk(config.events.zone, _data);
+      data.hash = this.hash(data);
+      this.talk(config.events.zone, data);
     } catch (e) {
       return this.error(e);
     }
@@ -1229,7 +1228,7 @@ class Deva {
       if (!this._actions[action]) return;
       this._action = action;
       const text = this._messages.actions[action];
-      const _data = {
+      const data = {
         id: this.uid(true),
         key: 'action',
         value: action,
@@ -1238,8 +1237,8 @@ class Deva {
         text,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data);
-      this.talk(config.events.action, _data);
+      data.hash = this.hash(data);
+      this.talk(config.events.action, data);
     } catch (e) {
       return this.error(e)
     }
@@ -1256,7 +1255,7 @@ class Deva {
       if (!this._features[feature]) return;
       this._feature = feature;
       const text = this._messages.features[feature] ;
-      const _data = {
+      const data = {
         id: this.uid(true),
         key: 'feature',
         value: feature,
@@ -1265,8 +1264,8 @@ class Deva {
         data,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data);
-      this.talk(config.events.feature, _data);
+      data.hash = this.hash(data);
+      this.talk(config.events.feature, data);
     } catch (e) {
       return this.error(e);
     }
@@ -1281,7 +1280,7 @@ class Deva {
   context(value) {
     try {
       this._context = value;
-      const _data = {
+      const data = {
         id: this.uid(true),
         key: 'context',
         value,
@@ -1290,8 +1289,8 @@ class Deva {
         text: this.vars.context[value] || value,
         created: Date.now(),
       };
-      _data.hash = this.hash(_data);
-      this.talk(config.events.context, _data);
+      data.hash = this.hash(data);
+      this.talk(config.events.context, data);
     } catch (e) {
       return this.error(e);
     }
@@ -1309,8 +1308,8 @@ class Deva {
   usage: this.client();
   ***************/
   client() {
-    this.state('client_data');                                // set the client state
     if (!this._active) return this._messages.states.offline;    // check the active status
+    this.state('client_data');                                // set the client state
     const client_copy = this.copy(this._client);
     // delete client_copy.parse;
     // delete client_copy.translate;
@@ -1326,8 +1325,8 @@ class Deva {
   usage: this.agent()
   ***************/
   agent() {
-    this.state('agent_data');
     if (!this._active) return this._messages.states.offline;
+    this.state('agent_data');
     const agent_copy = this.copy(this._agent);
     delete agent_copy.parse;
     delete agent_copy.translate;
@@ -1343,9 +1342,9 @@ class Deva {
   usage: this.security()
   ***************/
   security() {
+    if (!this._active) return this._messages.states.offline;    // check the active status
     this.feature('security');                              // set the security state
     try {
-      if (!this._active) return this._messages.states.offline;    // check the active status
       this.action('security');                              // set the security state
       return this.copy(this._security);                               // return the security feature
     } catch (e) {
@@ -1362,9 +1361,9 @@ class Deva {
   usage: this.support()
   ***************/
   support() {
+    if (!this._active) return this._messages.states.offline;   // check the active status
     this.feature('support');                              // set the support state
     try {
-      if (!this._active) return this._messages.states.offline;   // check the active status
       this.action('support');
       return this.copy(this._support);                               // return the support feature
     } catch (e) {
@@ -1381,9 +1380,9 @@ class Deva {
   usage: this.services()
   ***************/
   services(opts) {
+    if (!this._active) return this._messages.states.offline;   // check the active status
     this.feature('services');                             // set the services state
     try {
-      if (!this._active) return this._messages.states.offline;   // check the active status
       this.action('services');                             // set the services state
       return this.copy(this._services);                              // return the services feature
     } catch (e) {
@@ -1400,9 +1399,9 @@ class Deva {
   usage: this.systems()
   ***************/
   systems(opts) {
+    if (!this._active) return this._messages.states.offline;   // check the active status
     this.feature('systems');                              // set the systems state
     try {
-      if (!this._active) return this._messages.states.offline;   // check the active status
       this.action('systems');                              // set the systems state
       return this.copy(this._systems);                               // return the systems feature
     } catch (e) {
@@ -1419,9 +1418,9 @@ class Deva {
   usage: this.solutions()
   ***************/
   solutions(opts) {
+    if (!this._active) return this._messages.states.offline;   // check the active status
     this.feature('solutions');                            // set the solutions state
     try {
-      if (!this._active) return this._messages.states.offline;   // check the active status
       this.action('solutions');                            // set the solutions state
       return this.copy(this._solutions);                             // return the solutions feature
     } catch (e) {
@@ -1437,9 +1436,9 @@ class Deva {
   describe: basic research features available in a Deva.
   ***************/
   research(opts) {
+    if (!this._active) return this._messages.states.offline;   // chek the active status
     this.feature('research');                          // set the research state
     try {
-      if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('research');                          // set the research state
       return this.copy(this._research);                           // return research feature
     } catch (e) {
@@ -1455,9 +1454,9 @@ class Deva {
   describe: basic development features available in a Deva.
   ***************/
   development(opts) {
+    if (!this._active) return this._messages.states.offline;   // chek the active status
     this.feature('development');                          // set the development state
     try {
-      if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('development');                          // set the development state
       return this.copy(this._development);                           // return development feature
     } catch (e) {
@@ -1473,9 +1472,9 @@ class Deva {
   describe: basic assistant features available in a Deva.
   ***************/
   assistant(opts) {
+    if (!this._active) return this._messages.states.offline;   // chek the active status
     this.feature('assistant');                            // set the assistant state
     try {
-      if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('assistant');                            // set the assistant state
       return this.copy(this._assistant);                             // return assistant feature
     } catch (e) {
@@ -1491,9 +1490,9 @@ class Deva {
   describe: basic business features available in a Deva.
   ***************/
   business(opts) {
+    if (!this._active) return this._messages.states.offline;   // chek the active status
     this.feature('business');                             // set the business state
     try {
-      if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('business');
       return this.copy(this._business);                              // return business feature
     } catch (e) {
@@ -1509,9 +1508,9 @@ class Deva {
   describe: basic legal features available in a Deva.
   ***************/
   legal(opts) {
+    if (!this._active) return this._messages.states.offline;   // chek the active status
     this.feature('legal');                                // set the legal state
     try {
-      if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('legal');
       return this.copy(this._legal);                                 // return legal feature
     } catch (e) {
@@ -1527,9 +1526,9 @@ class Deva {
   describe: basic story features available in a Deva.
   ***************/
   story(opts) {
+    if (!this._active) return this._messages.states.offline;   // chek the active status
     this.feature('story');                                // set the story state
     try {
-      if (!this._active) return this._messages.states.offline;   // chek the active status
       this.action('story');
       return this.story(this._story);                                 // return story feature
     } catch (e) {
@@ -1642,11 +1641,9 @@ class Deva {
     const key = createHash('sha256').update(String(password)).digest('base64');
     const key_in_bytes = Buffer.from(key, 'base64')
     const iv = randomBytes(16);
-
     // create a new cipher
     const _cipher = createCipheriv(algorithm, key_in_bytes, iv);
     const encrypted = _cipher.update(String(str), 'utf8', 'hex') + _cipher.final('hex');
-
 
     return {
       iv: iv.toString('base64'),
@@ -1665,28 +1662,6 @@ class Deva {
     const decrypted = decipher.update(encrypted);
     const final = Buffer.concat([decrypted, decipher.final()]);
     return final.toString();
-  }
-
-  /**************
-  func: status
-  params:
-    - msg: The msg is any additonal string to append to the end of hte call.
-  describe:
-    The status function provides an easy way to get the current status of a Deva
-    and append custom status messages that may pertain to any custom status call.
-
-    If the deva is offline it will return the offline message.
-  usage: this.status('msg')
-  ***************/
-  status(msg=false) {
-    // check the active status
-    if (!this._active) return Promise.resolve(this._messages.states.offline);
-    // format the date since active for output.
-    const dateFormat = this.formatDate(this._active, 'long', true);
-    // create the text msg string
-    let text = `${this._agent.profile.name} active since ${dateFormat}`;
-    if (msg) text = text + `\n${msg}`;                      // append the msg string if msg true.
-    return Promise.resolve(text);                           // return final text string
   }
 
   /**************
@@ -1842,6 +1817,52 @@ class Deva {
         return dupe;
       }
     });
+  }
+
+  /**************
+  func: info
+  params: id
+  describe: return info data.
+  ***************/
+  info(id=false) {
+    id = id || this._id;
+    const agent = this.agent();
+    if (this._info) {
+      const _info = [
+        `::begin:info:${id}`,
+        `## ${this._agent.profile.name} (#${agent.key})`,
+      ];
+      for (let x in this._info) {
+        _info.push(`- ${x}: ${this._info[x]}`);
+      }
+      _info.push(`::end:info:${this.hash(this._info)}`);
+      return _info.join('\n');
+    }
+    else {
+      return '';
+    }
+  }
+
+  /**************
+  func: status
+  params:
+    - msg: The msg is any additonal string to append to the end of hte call.
+  describe:
+    The status function provides an easy way to get the current status of a Deva
+    and append custom status messages that may pertain to any custom status call.
+
+    If the deva is offline it will return the offline message.
+  usage: this.status('msg')
+  ***************/
+  status(msg=false) {
+    // check the active status
+    if (!this._active) return Promise.resolve(this._messages.states.offline);
+    // format the date since active for output.
+    const dateFormat = this.formatDate(this._active, 'long', true);
+    // create the text msg string
+    let text = `${this._agent.profile.name} active since ${dateFormat}`;
+    if (msg) text = text + `\n${msg}`;                      // append the msg string if msg true.
+    return text;                           // return final text string
   }
 
   /**************
