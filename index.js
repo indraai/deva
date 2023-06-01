@@ -1196,22 +1196,21 @@ class Deva {
     - st: The zone flag to set for the Deva that matches to this._zones
   describe
   ***************/
-  zone(zone, data=false) {
+  zone(zone) {
     try {
       if (!this._zones[zone]) return;
       this._zone = zone;
       const text = this._messages.zones[zone];
-      const data = {
+      const talk = {
         id: this.uid(true),
         key: 'zone',
         value: zone,
         agent: this._agent,
         text,
-        data,
         created: Date.now(),
       };
-      data.hash = this.hash(data);
-      this.talk(config.events.zone, data);
+      talk.hash = this.hash(talk);
+      this.talk(config.events.zone, talk);
     } catch (e) {
       return this.error(e);
     }
@@ -1250,7 +1249,7 @@ class Deva {
     - st: The state flag to set for the Deva that matches to this._states
   describe
   ***************/
-  feature(feature, data=false) {
+  feature(feature) {
     try {
       if (!this._features[feature]) return;
       this._feature = feature;
@@ -1261,7 +1260,6 @@ class Deva {
         value: feature,
         agent: this._agent,
         text,
-        data,
         created: Date.now(),
       };
       talk.hash = this.hash(talk);
