@@ -959,12 +959,12 @@ class Deva {
   init(client) {
     // set client
     this._active = Date.now();
-
+    const agent = this.agent();
     const _data = {
       id: this.uid(true),
-      key: 'return',
-      value: 'init',
-      agent: this._agent,
+      key: 'init',
+      value: agent.key,
+      agent,
       client: this.copy(client),
       text: this._messages.states.start,
       created: Date.now(),
@@ -1099,12 +1099,14 @@ class Deva {
   stop() {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     this.state('stop');
+    const agent = this.agent();
+    const client = this.client();
     const data = {
       id: this.uid(true),
-      key: 'return',
-      value: 'stop',
-      agent: this.agent(),
-      client: this.client(),
+      key: 'stop',
+      value: agent.key,
+      agent,
+      client,
       text: this._messages.states.stop,
       created: Date.now(),
     }
@@ -1663,12 +1665,14 @@ class Deva {
   ***************/
   prompt(text) {
     // Talk a global prompt event for the client
+    const agent = this.agent();
+    const client = this.client();
     const _data = {
       id: this.uid(true),
       key: 'prompt',
-      value: 'prompt',
-      agent: this.agent(),
-      client: this.client(),
+      value: agent.key,
+      agent,
+      client,
       text,
       created: Date.now(),
     }
@@ -1908,12 +1912,14 @@ class Deva {
       console.log('\n::END:DATA\n');
     }
 
+    const agent = this.agent();
+    const client = this.client();
     const _data = {
       id: this.uid(true),
-      key: 'return',
-      value: 'error',
-      agent: this.agent(),
-      client: this.client(),
+      key: 'error',
+      value: agent.key,
+      agent,
+      client,
       error: err,
       data,
       created: Date.now(),
