@@ -1012,11 +1012,6 @@ class Deva {
     delete data.hash;
     data.hash = this.hash(data);
 
-    if (this.info) {
-      const _info = this.info(data.id);
-      this.prompt(_info);
-    }
-
     this.action(data.value);
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
     return hasOnStart ? this.onStart(data) : this.enter(data)
