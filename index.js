@@ -780,7 +780,6 @@ class Deva {
         this.talk(config.events.question, this.copy(packet)); // global question event make sure to copy data.
 
         if (isAsk) {                                      // isAsk check if the question isAsk and talk
-          this.state('ask');
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
@@ -789,7 +788,7 @@ class Deva {
           });
         }
         else {                                            // else: answer tue question locally
-          this.action('ask_answer');
+          this.action('question_answer');
           return this.answer(packet, resolve, reject);
         }
       }
