@@ -2,6 +2,9 @@
 // Distributed under the MIT software license, see the accompanying
 // file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
 const {EventEmitter} = require('events');
+const fs = require('fs');
+const path = require('path');
+
 const { createHash, randomUUID, createCipheriv, createDecipheriv, randomBytes } = require('crypto');
 const config = require('./config.json').DATA // load the deva core configuration data.
 class Deva {
