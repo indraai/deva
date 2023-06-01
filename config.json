@@ -42,7 +42,9 @@
         "unload": "unloading",
         "invalid": "invalid state",
         "done": "done state",
-        "error": "error state"
+        "finish": "finish state",
+        "error": "error state",
+        "help": "help state"
     },
     "zone": false,
     "zones": {
@@ -58,11 +60,13 @@
       "party": "Party Zone",
       "invalid": "Invalid Invalid",
       "done": "Done Zone",
-      "error": "Error Zone"
+      "error": "Error Zone",
+      "help": "Help Zone"
     },
     "action": false,
     "actions": {
-      "wait": "wait",
+      "wait": "::agent.name:: is waiting",
+      "help": "::agent.name:: giving help",
       "start": "::agent.name:: has started",
       "enter": "::agent.name:: has entered deva.world",
       "exit": "::agent.name:: has exited deva.world",
@@ -116,6 +120,7 @@
       "Mind": "Mind Feature",
       "client_data": "client configure",
       "invalid": "Invalid",
+      "finish": "Finished",
       "error": "Error",
       "done": "Done"
     },
@@ -164,8 +169,10 @@
         "load": "::agent.name:: is loading",
         "unload": "::agent.name:: is is unloading",
         "invalid": "::agent.name:: seems to be invalid",
-        "done": "::agent.name:: is done with their task",
-        "error": "::agent.name:: appears to have had an error"
+        "finish": "::agent.name:: finish state",
+        "done": "::agent.name:: is done",
+        "error": "::agent.name:: appears to have had an error",
+        "help": "::agent.name:: is getting help"
       },
       "zones": {
         "deva": "::agent.name:: is in the Deva Zone",
@@ -178,7 +185,8 @@
         "danger": "::agent.name:: is in the Danger Zone",
         "invalid": "::agent.name:: is in the Invalid Zone",
         "done": "::agent.name:: is in the Done Zone",
-        "error": "::agent.name:: is in the Error Zone"
+        "error": "::agent.name:: is in the Error Zone",
+        "help": "::agent.name:: is in the Help Zone"
       },
       "actions": {
         "wait": "::agent.name:: is waiting",
@@ -226,9 +234,11 @@
         "mind": "::agent.name:: is accessing the #mind feature",
         "Mind": "::agent.name:: is loading the Mind Feature",
         "client_data": "::agent.name:: configure",
-        "invalid": "invalid",
-        "done": "done",
-        "error": "this._action.erro"
+        "invalid": "::agent.name:: invalid",
+        "finish": "::agent.name:: has finished the action",
+        "done": "::agent.name:: done",
+        "error": "::agent.name:: error",
+        "help": "::agent.name:: providing help"
       },
       "features": {
         "security": "security feature",

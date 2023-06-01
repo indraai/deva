@@ -262,24 +262,24 @@ class Deva {
     client presented data.
   ***************/
   Support() {
-    this.feature('Support');                  // set state to support setting
-    const _cl = this.client();
+    this.feature('Support'); // set state to support setting
+    const _cl = this.client(); // set the local client variable
     try {
-      if (!_cl.features.support) return this.Services()
+      if (!_cl.features.support) return this.Services() // move to Services if no support feature
       else {
         this.action('Support');
-        const {id, features, profile} = _cl;            // set the local consts from client copy
-        const {support} = features;                     // set support from features const
-        this._support = {                               // set this_support with data
-          id: this.uid(true),                           // uuid of the support feature
-          client_id: id,                                // client id for reference
-          client_name: profile.name,                    // client name for personalization
-          concerns: support.concerns,                   // any concerns for client
-          global: support.global,                       // the global policies for client
-          personal: support.devas[this._agent.key]      // Client personalSecurity features and rules.
+        const {id, features, profile} = _cl; // set the local consts from client copy
+        const {support} = features; // set support from features const
+        this._support = { // set this_support with data
+          id: this.uid(true), // uuid of the support feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: support.concerns, // any concerns for client
+          global: support.global, // the global policies for client
+          personal: support.devas[this._agent.key], // Client personalSecurity features and rules.
         };
-        delete this._client.features.support
-        return this.Services();
+        delete this._client.features.support // delete the support key from the client
+        return this.Services(); // when done move to Services
       }
     } catch (e) {
       this.action('error'); // set the action to error
@@ -296,24 +296,24 @@ class Deva {
     client presented data.
   ***************/
   Services() {
-    this.feature('Services');                 // set state to security setting
-    const _cl = this.client();
+    this.feature('Services'); // set state to security setting
+    const _cl = this.client(); // set local client
     try {
-      if (!_cl.features.services) return this.Systems();
+      if (!_cl.features.services) return this.Systems(); // move to Systems if no Services feature
       else {
         this.action('Services')
         const {id, features, profile} = _cl;   // set the local consts from client copy
-        const {services} = features;                    // set services from features const
-        this._services = {                              // set this_services with data
-          id: this.uid(true),                           // uuid of the services feature
-          client_id: id,                                // client id for reference
-          client_name: profile.name,                    // client name for personalization
-          concerns: services.concerns,                  // any concerns for client
-          global: services.global,                      // the global policies for client
-          personal: services.devas[this._agent.key]     // Client personal features and rules.
+        const {services} = features; // set services from features const
+        this._services = { // set this_services with data
+          id: this.uid(true), // uuid of the services feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: services.concerns, // any concerns for client
+          global: services.global, // the global policies for client
+          personal: services.devas[this._agent.key], // Client personal features and rules.
         };
-        delete this._client.features.services
-        return this.Systems()
+        delete this._client.features.services // delete the services key for isolation
+        return this.Systems() // go to Systems when done
       }
     } catch (e) {
       this.action('error'); // set the action to error
@@ -333,18 +333,18 @@ class Deva {
     this.feature('Systems');                  // set state to systems setting
     const _cl = this.client();
     try {
-      if (!_cl.features.systems) return this.Solutions();
+      if (!_cl.features.systems) return this.Solutions(); // move to Solutions if no systems feature
       else {
         this.action('Systems');
         const {id, features, profile} = _cl;   // set the local consts from client copy
-        const {systems} = features;                     // set systems from features const
-        this._systems = {                               // set this_systems with data
-          id: this.uid(true),                           // uuid of the systems feature
-          client_id: id,                                // client id for reference
-          client_name: profile.name,                    // client name for personalization
-          concerns: systems.concerns,                   // any concerns for client
-          global: systems.global,                       // the global policies for client
-          personal: systems.devas[this._agent.key]      // Client personal features and rules.
+        const {systems} = features; // set systems from features const
+        this._systems = { // set this_systems with data
+          id: this.uid(true), // uuid of the systems feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: systems.concerns, // any concerns for client
+          global: systems.global, // the global policies for client
+          personal: systems.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.systems
         return this.Solutions()
@@ -367,7 +367,7 @@ class Deva {
     this.feature('Solutions');                // set state to solutions setting
     const _cl = this.client();
     try {
-      if (!_cl.features.solutions) return this.Research();
+      if (!_cl.features.solutions) return this.Research(); // moe to research if no solutions
       else {
         this.action('Solutions');
         const {id, features, profile} = _cl; // set the local consts from client copy
@@ -500,12 +500,12 @@ class Deva {
     client presented data.
   ***************/
   Legal() {
-    this.feature('Legal');                    // set state to legal setting
-    const _cl = this.client();
+    this.feature('Legal'); // set state to legal setting
+    const _cl = this.client(); // set hte local client variable
     try {
-      if (!_cl.features.legal) this.Assistant();
+      if (!_cl.features.legal) this.Assistant(); // if no legal feature then move to assistant
       else {
-        this.action('Legal');
+        this.action('Legal'); // set the action to legal
         const {id, features, profile} = _cl;   // set the local consts from client copy
         const {legal} = features; // set legal from features const
         this._legal = { // set this_legal with data
@@ -516,8 +516,8 @@ class Deva {
           global: legal.global, // the global policies for client
           personal: legal.devas[this._agent.key], // Client personal features and rules.
         };
-        delete this._client.features.legal;
-        return this.Assistant();
+        delete this._client.features.legal; // remove the legal key from the client data
+        return this.Assistant(); // when done goto Assis
       }
     } catch (e) {
       this.action('error'); // set the action to error
@@ -738,9 +738,9 @@ class Deva {
 
     return new Promise((resolve, reject) => {
       // resolve with the no text message if the client says nothing.
-      if (!TEXT) return resolve(this._messages.notext);
+      if (!TEXT) return this.finish(this._messages.notext, resolve);
       // reject question if Deva offline
-      if (!this._active) return resolve(this._messages.states.offline);
+      if (!this._active) return this.finish(this._messages.states.offline, resolve);
       let _action = 'question_method'
       try {                                               // try to answer the question
         if (isAsk) {                                      // determine if hte question isAsk
@@ -857,7 +857,7 @@ class Deva {
       this.action('answer_talk');
       this.talk(config.events.answer, this.copy(packet)); // global talk event
 
-      return resolve(packet);                             // resolve the packet to the caller.
+      return this.finish(packet, resolve)                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
       this.action('error');
       return this.error(err, packet, reject);             // return this.error with err, packet, reject
@@ -1066,20 +1066,19 @@ class Deva {
   /**************
   func: finish
   params:
-  - data: the data to pass to the resolve
+  - packet: the data to pass to the resolve
   - resolve: the finish resolve to pass back
-    If the deva is offline it will return the offline message.
-  usage: this.finish(data, resolve)
+  describe:
+    This function is use to relay the Agent ito a finish state when resolving a
+    question or data.
+  usage:
+    this.finish(data, resolve)
   ***************/
-  done(data) {
+  finish(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     this.state('finish');
-    data.value = 'done';
-    delete data.hash;
-    data.hash = this.hash(data);
-    this.action(data.value)
-    const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
-    return hasOnDone ? this.onDone(data) : Promise.resolve(data);
+    this.action('finish');
+    return resolve(packet);
   }
 
   /**************
@@ -1552,7 +1551,7 @@ class Deva {
           key,
           created: Date.now(),
         });
-        return resolve(this._messages.states.load);
+        return this.finish(this._messages.states.load, resolve);
       }).catch(err => {
         return this.error(err, deva, reject);
       })
@@ -1573,7 +1572,7 @@ class Deva {
           delete this.devas[key];
           this.talk(config.events.unload, key);
         });
-        return resolve(this._messages.states.unload);
+        return this.finish(this._messages.states.unload, resolve);
       } catch (e) {
         return this.error(e, this.devas[key], reject)
       }
@@ -1875,14 +1874,21 @@ class Deva {
   ***************/
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
+      if (!this._active) return resolve(this._messages.states.offline);
+      this.state('help');
+      this.zone('help');
+      this.action('help');
       const params = msg.split(' ');
       let helpFile = 'main';
       if (params[0]) helpFile = params[0];
       if (params[1]) helpFile = `${params[0]}_${params[1]}`;
       helpFile = path.join(help_dir, 'help', `${helpFile}.feecting`);
       try {
-        return resolve(fs.readFileSync(helpFile, 'utf8'))
+        return this.finish(fs.readFileSync(helpFile, 'utf8'), resolve)
       } catch (e) {
+        this.action('help');
+        this.zone('help');
+        this.state('help');
         return reject(e)
       }
     });
