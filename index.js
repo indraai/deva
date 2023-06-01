@@ -1255,7 +1255,7 @@ class Deva {
       if (!this._features[feature]) return;
       this._feature = feature;
       const text = this._messages.features[feature] ;
-      const data = {
+      const talk = {
         id: this.uid(true),
         key: 'feature',
         value: feature,
@@ -1264,8 +1264,8 @@ class Deva {
         data,
         created: Date.now(),
       };
-      data.hash = this.hash(data);
-      this.talk(config.events.feature, data);
+      talk.hash = this.hash(talk);
+      this.talk(config.events.feature, talk);
     } catch (e) {
       return this.error(e);
     }
