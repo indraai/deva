@@ -26,7 +26,7 @@ class Deva {
     this._business = false; // inherited Business features.
     this._legal = false; // inherited Legal features.
     this._assistant = false; // inherited Assistant features.
-    this._story = false; // inherited Story features.
+    this._artist = false; // inherited artist features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = opts.lib || {}; // used for loading library functions
     this.devas = opts.devas || {}; // Devas which are loaded
@@ -189,6 +189,7 @@ class Deva {
     This will return a not found text string preventing any furhter processing.
   ***************/
   _methodNotFound(packet) {
+    this.action('invalid');
     packet.a = {
       id: this.uid(),
       agent: this.agent() || false,
@@ -200,7 +201,6 @@ class Deva {
       },
       created: Date.now(),
     };
-    this.state('method_not_found');
     return packet;
   }
 
@@ -215,7 +215,7 @@ class Deva {
     this.Client = {data}
   ***************/
   Client(client) {
-    this.action('client_data');
+    this.action('Client');
     const _client = this.copy(client);                // copy the client parameter
     this._client = _client;                           // set local _client to this scope
     return Promise.resolve();
@@ -229,7 +229,6 @@ class Deva {
     client presented data.
   ***************/
   Security() {
-    this.feature('Security'); // set feature to Security
     const _cl = this.client(); // set local copy of client data
     try {
       if (!_cl.features.security) return this.Support(); // if no security feature goto Support
@@ -251,8 +250,6 @@ class Deva {
         return this.Support(); // goto Support when done with Security
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -265,7 +262,6 @@ class Deva {
     client presented data.
   ***************/
   Support() {
-    this.feature('Support'); // set state to support setting
     const _cl = this.client(); // set the local client variable
     try {
       if (!_cl.features.support) return this.Services() // move to Services if no support feature
@@ -285,8 +281,6 @@ class Deva {
         return this.Services(); // when done move to Services
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -299,7 +293,6 @@ class Deva {
     client presented data.
   ***************/
   Services() {
-    this.feature('Services'); // set state to security setting
     const _cl = this.client(); // set local client
     try {
       if (!_cl.features.services) return this.Systems(); // move to Systems if no Services feature
@@ -319,8 +312,6 @@ class Deva {
         return this.Systems() // go to Systems when done
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -333,7 +324,6 @@ class Deva {
     client presented data.
   ***************/
   Systems() {
-    this.feature('Systems');                  // set state to systems setting
     const _cl = this.client();
     try {
       if (!_cl.features.systems) return this.Solutions(); // move to Solutions if no systems feature
@@ -353,8 +343,6 @@ class Deva {
         return this.Solutions()
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -367,7 +355,6 @@ class Deva {
     client presented data.
   ***************/
   Solutions() {
-    this.feature('Solutions');                // set state to solutions setting
     const _cl = this.client();
     try {
       if (!_cl.features.solutions) return this.Research(); // moe to research if no solutions
@@ -387,8 +374,6 @@ class Deva {
         return this.Research()
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -401,7 +386,6 @@ class Deva {
     client presented data.
   ***************/
   Research() {
-    this.feature('Research'); // set state to development setting
     const _cl = this.client(); // set local client variable
     try {
       if (!_cl.features.research) return this.Development(); // if no research goto Business
@@ -421,8 +405,6 @@ class Deva {
         return this.Development(); // goto Development.
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -435,7 +417,6 @@ class Deva {
     client presented data.
   ***************/
   Development() {
-    this.feature('Development'); // set state to development setting
     const _cl = this.client(); // get hte client data to local variable
     try {
       if (!_cl.features.development) return this.Business(); // if no development goto Business
@@ -455,8 +436,6 @@ class Deva {
         return this.Business(); // goto business when development is done
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -469,7 +448,6 @@ class Deva {
     client presented data.
   ***************/
   Business() {
-    this.feature('Business'); // set state to business setting
     const _cl = this.client(); // set client into local variable.
     try {
       if (!_cl.features.business) return this.Legal(); // if no business hten goto legal
@@ -489,8 +467,6 @@ class Deva {
         return this.Legal(); // go to Legal when Business is done.
     }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -503,7 +479,6 @@ class Deva {
     client presented data.
   ***************/
   Legal() {
-    this.feature('Legal'); // set state to legal setting
     const _cl = this.client(); // set hte local client variable
     try {
       if (!_cl.features.legal) this.Assistant(); // if no legal feature then move to assistant
@@ -523,8 +498,6 @@ class Deva {
         return this.Assistant(); // when done goto Assis
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -537,10 +510,9 @@ class Deva {
     client presented data.
   ***************/
   Assistant() {
-    this.feature('Assistant'); // set state to assistant setting
     const _cl = this.client(); // set the client into a local variable
     try {
-      if (!_cl.features.assistant) return this.Story(); // if no Assistant then goto Done
+      if (!_cl.features.assistant) return this.Artis(); // if no Assistant then goto Done
       else {
         this.action('Assistant'); // set action to Assistant
         const {id, features, profile} = _cl; // set the local consts from client copy
@@ -554,45 +526,40 @@ class Deva {
           personal: assistant.devas[this._agent.key] // Client personal features and rules.
         };
         delete this._client.features.assistant; // delete the assistant key from client features
-        return this.Story(); // when assistant is done goto Story.
+        return this.Artist(); // when assistant is done goto Artist.
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
 
   /**************
-  func: Story
+  func: Artist
   params: client: false
   describe:
-    The Story feature sets the correct variables and necessary rules for the
+    The Artist feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Story() {
-    this.feature('Story'); // set feature to Story
+  Artist() {
     const _cl = this.client(); // set local client variable
     try {
-      if (!this._client.features.story) return this.Mind(); // if no story goto Mind
+      if (!this._client.features.artist) return this.Mind(); // if no artist goto Mind
       else {
-        this.action('Story'); // set action to Story
+        this.action('Artist'); // set action to Artist
         const {id, features, profile} = this._client; // set the local consts from client copy
-        const {story} = features; // set story from features const
-        this._story = { // set this_story with data
-          id: this.uid(true), // uuid of the story feature
+        const {artist} = features; // set artist from features const
+        this._artist = { // set this_artist with data
+          id: this.uid(true), // uuid of the artist feature
           client_id: id, // client id for reference
           client_name: profile.name, // client name for personalization
-          concerns: story.concerns, // any concerns for client
-          global: story.global, // the global policies for client
-          personal: story.devas[this._agent.key], // Client personal features and rules.
+          concerns: artist.concerns, // any concerns for client
+          global: artist.global, // the global policies for client
+          personal: artist.devas[this._agent.key], // Client personal features and rules.
         };
-        delete this._client.features.story; // delete story object from client
-        return this.Mind(); // when done with Story goto Mind
+        delete this._client.features.artist; // delete artist object from client
+        return this.Mind(); // when done with artist goto Mind
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -605,7 +572,6 @@ class Deva {
     client presented data.
   ***************/
   Mind() {
-    this.feature('Mind');                 // set state to story setting
     const _cl = this.client();
     try {
       if (!_cl.features.mind) return this.Done();
@@ -625,8 +591,6 @@ class Deva {
         return this.Done(); // when complete then move to the done feature.
       }
     } catch (e) {
-      this.action('error'); // set the action to error
-      this.feature('error'); // set the feature to error
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -640,11 +604,9 @@ class Deva {
     return new Promise((resolve, reject) => {
       try {
         delete this._client.features; // delete the features key when done.
-        this.action('done'); // set state to assistant setting
-        this.feature('done'); // set state to assistant setting
+        this.action('Done'); // set state to assistant setting
         return resolve(); // resolve an empty pr
       } catch (e) {
-        this.feature('error')
         return this.error(e, false, reject);
       }
     });
@@ -714,10 +676,9 @@ class Deva {
   question(TEXT=false, DATA=false) {
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.states.offline);
+    this.state('question');
     const id = this.uid();                                // generate a unique id for transport.
     const t_split = TEXT.split(' ');                      // split the text on spaces to get words.
-    this.state('question');
-    this.action('question', id);
 
     // check to see if the string is an #ask string to talk to the other Deva.
     const isAsk = t_split[0].startsWith(this.askChr);
@@ -744,7 +705,7 @@ class Deva {
       if (!TEXT) return this.finish(this._messages.notext, resolve);
       // reject question if Deva offline
       if (!this._active) return this.finish(this._messages.states.offline, resolve);
-      let _action = 'question_method'
+      let _action = 'question'
       try {                                               // try to answer the question
         if (isAsk) {                                      // determine if hte question isAsk
           _action = 'question_ask';
@@ -796,7 +757,6 @@ class Deva {
         }
       }
       catch(e) {                                          // try block error trap
-        this.action('error');
         return this.error(e);                             // if a overall error happens this witll call this.error
       }
     });
@@ -814,13 +774,11 @@ class Deva {
   ***************/
   answer(packet, resolve, reject) {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
-
     this.state('answer');
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
     const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
     if (!isMethod) {
-      this.action('invalid')
       return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails
     }
     // Call the local method to process the question based the extracted parameters
@@ -862,7 +820,6 @@ class Deva {
 
       return this.finish(packet, resolve)                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
-      this.action('error');
       return this.error(err, packet, reject);             // return this.error with err, packet, reject
     });
   }
@@ -927,13 +884,11 @@ class Deva {
         this.action('ask_answer');
         this.talk(`${agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
-        this.action('error');
         this.talk(`${agent.key}:ask:${packet.id}`, {error:err});
         return this.error(err, packet);
       })
     }
     catch (e) {
-      this.action('error');
       this.talk(`${agent.key}:ask:${packet.id}`, {error:e});
       return this.error(e, packet)
     }
@@ -1147,7 +1102,7 @@ class Deva {
     this._business = false;
     this._development = false;
     this._legal = false;
-    this._story = false;
+    this._artist = false;
 
     this.action(data.value);
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
@@ -1399,8 +1354,6 @@ class Deva {
       this.action('security');                              // set the security state
       return this.copy(this._security);                               // return the security feature
     } catch (e) {
-      this.action('error');                              // set the security state
-      this.feature('error');
       return this.error(e);
     }
   }
@@ -1418,8 +1371,6 @@ class Deva {
       this.action('support');
       return this.copy(this._support);                               // return the support feature
     } catch (e) {
-      this.action('error');                             // set the services state
-      this.feature('error');
       return this.error(e);
     }
   }
@@ -1437,8 +1388,6 @@ class Deva {
       this.action('services');                             // set the services state
       return this.copy(this._services);                              // return the services feature
     } catch (e) {
-      this.action('error');                             // set the services state
-      this.feature('error');
       return this.error(e);
     }
   }
@@ -1456,8 +1405,6 @@ class Deva {
       this.action('systems');                              // set the systems state
       return this.copy(this._systems);                               // return the systems feature
     } catch (e) {
-      this.action('error');                              // set the systems state
-      this.feature('error');
       return this.error(e)
     }
   }
@@ -1475,8 +1422,6 @@ class Deva {
       this.action('solutions');                            // set the solutions state
       return this.copy(this._solutions);                             // return the solutions feature
     } catch (e) {
-      this.action('error');                              // set the systems state
-      this.feature('error');
       return this.error(e);
     }
   }
@@ -1493,8 +1438,6 @@ class Deva {
       this.action('research');                          // set the research state
       return this.copy(this._research);                           // return research feature
     } catch (e) {
-      this.action('error');
-      this.feature('error');
       return this.error(e);
     }
   }
@@ -1511,8 +1454,6 @@ class Deva {
       this.action('development');                          // set the development state
       return this.copy(this._development);                           // return development feature
     } catch (e) {
-      this.action('error');
-      this.feature('error');
       return this.error(e);
     }
   }
@@ -1529,8 +1470,6 @@ class Deva {
       this.action('assistant');                            // set the assistant state
       return this.copy(this._assistant);                             // return assistant feature
     } catch (e) {
-      this.action('error');
-      this.feature('error');
       return this.error(e);
     }
   }
@@ -1547,8 +1486,6 @@ class Deva {
       this.action('business');
       return this.copy(this._business);                              // return business feature
     } catch (e) {
-      this.action('error');
-      this.feature('error');
       return this.error('error');
     }
   }
@@ -1565,26 +1502,22 @@ class Deva {
       this.action('legal');
       return this.copy(this._legal);                                 // return legal feature
     } catch (e) {
-      this.action('error');
-      this.feature('error');
       return this.error(e);
     }
   }
 
   /**************
-  func: story
+  func: artist
   params: opts
-  describe: basic story features available in a Deva.
+  describe: basic artist features available in a Deva.
   ***************/
-  story(opts) {
+  artist(opts) {
     if (!this._active) return this._messages.states.offline;   // chek the active status
-    this.feature('story');                                // set the story state
+    this.feature('artist');                                // set the artist state
     try {
-      this.action('story');
-      return this.story(this._story);                                 // return story feature
+      this.action('artist');
+      return this.artist(this._artist);                                 // return artist feature
     } catch (e) {
-      this.action('error');
-      this.feature('error');
       return this.error(e);
     }
   }
