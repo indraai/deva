@@ -1232,7 +1232,7 @@ class Deva {
       id: this.uid(true),
       key: 'zones',
       value: this._zones,
-      messages: this._mmesages.zones,
+      messages: this._messages.zones,
       created: Date.now(),
     }
   }
@@ -1269,7 +1269,7 @@ class Deva {
       id: this.uid(true),
       key: 'actions',
       value: this._actions,
-      messages: this._mmesages.actions,
+      messages: this._messages.actions,
       created: Date.now(),
     }
   }
@@ -1306,7 +1306,7 @@ class Deva {
       id: this.uid(true),
       key: 'features',
       value: this._features,
-      messages: this._mmesages.features,
+      messages: this._messages.features,
       created: Date.now(),
     }
   }
