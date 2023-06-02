@@ -241,11 +241,11 @@
         "help": "::agent.name:: providing help"
       },
       "features": {
-        "security": "security feature",
+        "security": "::agent.name:: accessing #security feature",
         "Security": "Security configure",
-        "support": "support feature",
+        "support": "::agent.name:: accessing #support feature",
         "Support": "Support configure",
-        "services": "services feature",
+        "services": "::agent.name:: accessing #services feature",
         "Services": "Services configure",
         "solutions": "solutions feature",
         "Solutions": "Solutions configure",
