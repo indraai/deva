@@ -1190,7 +1190,14 @@ class Deva {
   describe: returns the avaiable staets values.
   ***************/
   states() {
-    return this._states;
+    this.action('states');
+    return {
+      id: this.uid(true),
+      key: 'states',
+      value: this._states,
+      messages: this._messages.states,
+      created: Date.now(),
+    }
   }
 
   /**************
@@ -1219,6 +1226,16 @@ class Deva {
     }
   }
 
+  zones() {
+    this.action('zones');
+    return {
+      id: this.uid(true),
+      key: 'zones',
+      value: this._zones,
+      messages: this._mmesages.zones,
+      created: Date.now(),
+    }
+  }
   /**************
   func: action
   params:
@@ -1243,6 +1260,17 @@ class Deva {
       this.talk(config.events.action, data);
     } catch (e) {
       return this.error(e)
+    }
+  }
+
+  actions() {
+    this.action('actions');
+    return {
+      id: this.uid(true),
+      key: 'actions',
+      value: this._actions,
+      messages: this._mmesages.actions,
+      created: Date.now(),
     }
   }
 
@@ -1272,6 +1300,17 @@ class Deva {
     }
   }
 
+  features() {
+    this.action('features');
+    return {
+      id: this.uid(true),
+      key: 'features',
+      value: this._features,
+      messages: this._mmesages.features,
+      created: Date.now(),
+    }
+  }
+
   /**************
   func: context
   params:
@@ -1294,6 +1333,17 @@ class Deva {
       this.talk(config.events.context, data);
     } catch (e) {
       return this.error(e);
+    }
+  }
+
+  contexts() {
+    this.action('contexts');
+    return {
+      id: this.uid(true),
+      key: 'contexts',
+      value: this._contexts,
+      messages: this.vars.context || false,
+      created: Date.now(),
     }
   }
 

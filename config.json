@@ -119,10 +119,15 @@
       "mind": "MIND",
       "Mind": "Mind Feature",
       "client_data": "client configure",
-      "invalid": "Invalid",
-      "finish": "Finished",
-      "error": "Error",
-      "done": "Done"
+      "invalid": "::agent.name:: invalid",
+      "finish": "::agent.name:: finished",
+      "error": "::agent.name:: error",
+      "done": "::agent.name:: eone",
+      "states": "::agent.name:: getting states",
+      "actions": "::agent.name:: getting actions",
+      "zones": "::agent.name:: getting zones",
+      "features": "::agent.name:: Getting features",
+      "contexs": "::agent.name:: Getting contexts"
     },
     "feature": false,
     "features": {
@@ -238,7 +243,12 @@
         "finish": "::agent.name:: has finished the action",
         "done": "::agent.name:: done",
         "error": "::agent.name:: error",
-        "help": "::agent.name:: providing help"
+        "help": "::agent.name:: providing help",
+        "states": "::agent.name:: is listing the states",
+        "actions": "::agent.name:: is listing the actions",
+        "zones": "::agent.name:: is listing the zones",
+        "features": "::agent.name:: is listing the features",
+        "contexts": "::agent.name:: is listing the contexts"
       },
       "features": {
         "security": "::agent.name:: accessing #security feature",
