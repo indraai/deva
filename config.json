@@ -41,7 +41,6 @@
         "load": "loading",
         "unload": "unloading",
         "done": "done state",
-        "finish": "finish state",
         "invalid": "invalid state",
         "error": "error state",
         "help": "help state"

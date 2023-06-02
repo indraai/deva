@@ -1013,7 +1013,7 @@ class Deva {
     data.hash = this.hash(data);
     this.action(data.value)
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
-    return hasOnDone ? this.onDone(data) : this.finish(data);
+    return hasOnDone ? this.onDone(data) : Promise.resolve(data);
   }
 
   /**************
@@ -1029,7 +1029,6 @@ class Deva {
   ***************/
   finish(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
-    this.state('finish');
     this.action('finish');
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function' ? true : false;
     if (hasOnFinish) return this.onFinish(packet, resolve);
@@ -1548,7 +1547,7 @@ class Deva {
           delete this.devas[key];
           this.talk(config.events.unload, key);
         });
-        return this.finish(this._messages.states.unload, resolve);
+        return resolve(this._messages.states.unload);
       } catch (e) {
         return this.error(e, this.devas[key], reject)
       }
@@ -1862,7 +1861,7 @@ class Deva {
       if (params[1]) helpFile = `${params[0]}_${params[1]}`;
       helpFile = path.join(help_dir, 'help', `${helpFile}.feecting`);
       try {
-        return this.finish(fs.readFileSync(helpFile, 'utf8'), resolve)
+        return resolve(fs.readFileSync(helpFile, 'utf8'));
       } catch (e) {
         this.action('help');
         this.zone('help');
