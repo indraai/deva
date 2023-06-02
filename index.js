@@ -543,7 +543,7 @@ class Deva {
   Artist() {
     const _cl = this.client(); // set local client variable
     try {
-      if (!this._client.features.artist) return this.Mind(); // if no artist goto Mind
+      if (!this._client.features.artist) return this.Done(); // if no artist goto Done
       else {
         this.action('Artist'); // set action to Artist
         const {id, features, profile} = this._client; // set the local consts from client copy
@@ -557,38 +557,7 @@ class Deva {
           personal: artist.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.artist; // delete artist object from client
-        return this.Mind(); // when done with artist goto Mind
-      }
-    } catch (e) {
-      return this.error(e); // run error handling if an error is caught
-    }
-  }
-
-  /**************
-  func: Mind
-  params: client: false
-  describe:
-    The Mind feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Mind() {
-    const _cl = this.client();
-    try {
-      if (!_cl.features.mind) return this.Done();
-      else {
-        this.action('Mind');
-        const {id, features, profile} = _cl; // set the local consts from client copy
-        const {mind} = features; // set mind from features const
-        this._mind = { // set this_mind with data
-          id: this.uid(true), // uuid of the mind feature
-          client_id: id, // client id for reference
-          client_name: profile.name, // client name for personalization
-          concerns: mind.concerns, // any concerns for client
-          global: mind.global, // the global policies for client
-          personal: mind.devas[this._agent.key], // Client personal features and rules.
-        };
-        delete this._client.features.mind; // delete the mind feature from client data
-        return this.Done(); // when complete then move to the done feature.
+        return this.Done(); // when done with artist goto Done
       }
     } catch (e) {
       return this.error(e); // run error handling if an error is caught
@@ -811,13 +780,9 @@ class Deva {
       // create a hash for the answer and insert into answer meta.
       packet_answer.meta.hash = this.hash(packet_answer);
 
-      packet.a = this.copy(packet_answer);
-      packet.hash = this.hash(packet);     // hash the entire packet.
-
-
       this.action('answer_talk');
+      packet.a = packet_answer;
       this.talk(config.events.answer, this.copy(packet)); // global talk event
-
       return this.finish(packet, resolve)                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
       return this.error(err, packet, reject);             // return this.error with err, packet, reject
@@ -847,7 +812,7 @@ class Deva {
     const agent = this.agent();
     const client = this.client();
     // build the answer packet from this model
-    packet.a = {
+    const packet_answer = {
       id: this.uid(),
       agent,
       client,
@@ -874,14 +839,16 @@ class Deva {
       // the response based on the passed through packet.
       this.methods[packet.q.meta.method](packet).then(result => {
         if (typeof result === 'object') {
-          packet.a.text = result.text || false;
-          packet.a.html = result.html || false;
-          packet.a.data = result.data || false;
+          packet_answer.text = result.text || false;
+          packet_answer.html = result.html || false;
+          packet_answer.data = result.data || false;
         }
         else {
-          packet.a.text = result;
+          packet_answer.text = result;
         }
+        packet_answer.meta.hash = this.hash(packet_answer);
         this.action('ask_answer');
+        packet.a = packet_answer;
         this.talk(`${agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
         this.talk(`${agent.key}:ask:${packet.id}`, {error:err});
@@ -1013,6 +980,7 @@ class Deva {
     data.hash = this.hash(data);
     this.action(data.value)
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
+    this.state('online');
     return hasOnDone ? this.onDone(data) : Promise.resolve(data);
   }
 
@@ -1030,6 +998,8 @@ class Deva {
   finish(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     this.action('finish');
+    this.state('online');
+    packet.hash = this.hash(packet);// hash the entire packet before finishing.
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function' ? true : false;
     if (hasOnFinish) return this.onFinish(packet, resolve);
     else if (resolve) return resolve(packet);
@@ -1160,21 +1130,21 @@ class Deva {
     - st: The zone flag to set for the Deva that matches to this._zones
   describe
   ***************/
-  zone(zone) {
+  zone(value) {
     try {
-      if (!this._zones[zone]) return;
-      this._zone = zone;
-      const text = this._messages.zones[zone];
-      const talk = {
+      if (!this._zones[value]) return;
+      this._zone = value;
+      const text = this._messages.zones[value];
+      const data = {
         id: this.uid(true),
         key: 'zone',
-        value: zone,
-        agent: this._agent,
+        value,
+        agent: this.agent(),
         text,
         created: Date.now(),
       };
-      talk.hash = this.hash(talk);
-      this.talk(config.events.zone, talk);
+      data.hash = this.hash(data);
+      this.talk(config.events.zone, data);
     } catch (e) {
       return this.error(e);
     }
@@ -1594,7 +1564,7 @@ class Deva {
     // this.action('hash');
     algo = algo || this._security.hash || 'md5';
     const the_hash = createHash(algo);
-    the_hash.update(str.toString());
+    the_hash.update(JSON.stringify(str));
     const _digest = the_hash.digest('base64');
     return `${algo}:${_digest}`;
   }
@@ -1759,7 +1729,7 @@ class Deva {
     - dec: is the number of decimal places to apply to the number.
   describe:
   ***************/
-  formatPerdent(n, dec=2) {
+  formatPercent(n, dec=2) {
     return parseFloat(n).toFixed(dec) + '%';
   }
 
@@ -1831,6 +1801,7 @@ class Deva {
   status(msg=false) {
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.states.offline);
+    this.action('status');
     // format the date since active for output.
     const dateFormat = this.formatDate(this._active, 'long', true);
     // create the text msg string
@@ -1852,7 +1823,6 @@ class Deva {
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
       if (!this._active) return resolve(this._messages.states.offline);
-      this.state('help');
       this.zone('help');
       this.action('help');
       const params = msg.split(' ');
@@ -1863,9 +1833,6 @@ class Deva {
       try {
         return resolve(fs.readFileSync(helpFile, 'utf8'));
       } catch (e) {
-        this.action('help');
-        this.zone('help');
-        this.state('help');
         return reject(e)
       }
     });
