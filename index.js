@@ -905,7 +905,6 @@ class Deva {
         return this.Client(client);
       }).then(() => {
         this.zone('features');
-        this.action('features');
         return this.Security();
       }).then(() => {
         this.zone('deva');
@@ -1131,8 +1130,8 @@ class Deva {
   describe
   ***************/
   zone(value) {
+    if (!this._zones[value] || value === this._zone) return;
     try {
-      if (!this._zones[value]) return;
       this._zone = value;
       const text = this._messages.zones[value];
       const data = {
