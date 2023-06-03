@@ -883,6 +883,7 @@ class Deva {
   init(client) {
     // set client
     this._active = Date.now();
+    this._agent.dir = __dirname;
     const agent = this.agent();
     const _data = {
       id: this.uid(true),
