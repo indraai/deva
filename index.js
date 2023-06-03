@@ -213,8 +213,8 @@ class Deva {
     for (const x in client.features) {
       const methods = client.features[x].methods || false;
       if (methods) for (const y in methods) {
-        const isMethod = typeof methods[y] === 'function' && !this.methods[y];
-        if (isMethod) this.methods[y] = methods[y].bind(this);
+        const isFunc = typeof methods[y] === 'function';
+        if (isFunc) this.methods[y] = methods[y].bind(this);
       }
     }
     // console.log('CLINET BEFORE COPY', client);
