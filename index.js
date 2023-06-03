@@ -208,6 +208,16 @@ class Deva {
   ***************/
   Client(client) {
     this.action('Client');
+
+    // setup any custom methods for the features
+    for (const x in client.features) {
+      const methods = client.features[x].methods || false;
+      if (methods) for (const y in methods) {
+        const isMethod = typeof methods[x] === 'function' && !this.methods[y];
+        if (isMethod) this.methods[y] = methods[y].bind(this);
+      }
+    }
+    // console.log('CLINET BEFORE COPY', client);
     const _client = this.copy(client);                // copy the client parameter
     this._client = _client;                           // set local _client to this scope
     return Promise.resolve();
@@ -292,6 +302,7 @@ class Deva {
         this.action('Services')
         const {id, features, profile} = _cl;   // set the local consts from client copy
         const {services} = features; // set services from features const
+        console.log('SETTING UP GLOBA SERVICE FUNCTIONS', services);
         this._services = { // set this_services with data
           id: this.uid(true), // uuid of the services feature
           client_id: id, // client id for reference
@@ -303,7 +314,6 @@ class Deva {
 
         // setup any global methods from the services feature
         for (const x in this._services.global) {
-          console.log('SETTING UP GLOBA SERVICE FUNCTIONS', x);
           const isFunc = typeof this._services.global[x] === 'function' ? true :false;
           if (isFunc) this.methods[x] = this._services.global[x].bind(this);
         }
@@ -887,7 +897,7 @@ class Deva {
       key: 'init',
       value: agent.key,
       agent,
-      client: this.copy(client),
+      client,
       text: this._messages.states.start,
       created: Date.now(),
     }
