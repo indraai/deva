@@ -9,9 +9,9 @@
     "bind": [
       "listeners",
       "methods",
+      "utils",
       "func",
-      "lib",
-      "_agent"
+      "lib"
     ],
     "events": {
       "prompt": "devacore:prompt",

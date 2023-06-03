@@ -29,6 +29,7 @@ class Deva {
     this._artist = false; // inherited artist features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = opts.lib || {}; // used for loading library functions
+    this.utils = opts.util || {}; // parse function
     this.devas = opts.devas || {}; // Devas which are loaded
     this.vars = opts.vars || {}; // Variables object
     this.listeners = opts.listeners || {}; // local Listeners
@@ -95,15 +96,6 @@ class Deva {
             }
           }
         });
-        // bind translate
-        const translate = this._agent && this._agent.translate && typeof this._agent.translate === 'function';
-        if (translate) this._agent.translate = this._agent.translate.bind(this);
-        // bind parser
-        const parse = this._agent && this._agent.parse && typeof this._agent.parse === 'function';
-        if (parse) this._agent.parse = this._agent.parse.bind(this);
-        // bind process
-        const process = this._agent && this._agent.process && typeof this._agent.process === 'function';
-        if (process) this._agent.process = this._agent.process.bind(this);
       }
       catch (e) {
         return this.error(e, false, reject); // trigger the this.error for errors
@@ -308,6 +300,14 @@ class Deva {
           global: services.global, // the global policies for client
           personal: services.devas[this._agent.key], // Client personal features and rules.
         };
+
+        // setup any global methods from the services feature
+        for (const x in this._services.global) {
+          console.log('SETTING UP GLOBA SERVICE FUNCTIONS', x);
+          const isFunc = typeof this._services.global[x] === 'function' ? true :false;
+          if (isFunc) this.methods[x] = this._services.global[x].bind(this);
+        }
+
         delete this._client.features.services // delete the services key for isolation
         return this.Systems() // go to Systems when done
       }
