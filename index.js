@@ -213,7 +213,7 @@ class Deva {
     for (const x in client.features) {
       const methods = client.features[x].methods || false;
       if (methods) for (const y in methods) {
-        const isMethod = typeof methods[x] === 'function' && !this.methods[y];
+        const isMethod = typeof methods[y] === 'function' && !this.methods[y];
         if (isMethod) this.methods[y] = methods[y].bind(this);
       }
     }
@@ -302,7 +302,6 @@ class Deva {
         this.action('Services')
         const {id, features, profile} = _cl;   // set the local consts from client copy
         const {services} = features; // set services from features const
-        console.log('SETTING UP GLOBA SERVICE FUNCTIONS', services);
         this._services = { // set this_services with data
           id: this.uid(true), // uuid of the services feature
           client_id: id, // client id for reference
@@ -311,13 +310,6 @@ class Deva {
           global: services.global, // the global policies for client
           personal: services.devas[this._agent.key], // Client personal features and rules.
         };
-
-        // setup any global methods from the services feature
-        for (const x in this._services.global) {
-          const isFunc = typeof this._services.global[x] === 'function' ? true :false;
-          if (isFunc) this.methods[x] = this._services.global[x].bind(this);
-        }
-
         delete this._client.features.services // delete the services key for isolation
         return this.Systems() // go to Systems when done
       }
