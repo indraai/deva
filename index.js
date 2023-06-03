@@ -512,7 +512,7 @@ class Deva {
   Assistant() {
     const _cl = this.client(); // set the client into a local variable
     try {
-      if (!_cl.features.assistant) return this.Artis(); // if no Assistant then goto Done
+      if (!_cl.features.assistant) return this.Artist(); // if no Assistant then goto Done
       else {
         this.action('Assistant'); // set action to Assistant
         const {id, features, profile} = _cl; // set the local consts from client copy
