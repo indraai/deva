@@ -1769,23 +1769,11 @@ class Deva {
   params: id
   describe: return info data.
   ***************/
-  info(id=false) {
-    id = id || this._id;
-    const agent = this.agent();
-    if (this._info) {
-      const _info = [
-        `::begin:info:${id}`,
-        `## ${this._agent.profile.name} (#${agent.key})`,
-      ];
-      for (let x in this._info) {
-        _info.push(`- ${x}: ${this._info[x]}`);
-      }
-      _info.push(`::end:info:${this.hash(this._info)}`);
-      return _info.join('\n');
-    }
-    else {
-      return '';
-    }
+  info() {
+    // check the active status
+    if (!this._active) return Promise.resolve(this._messages.states.offline);
+    this.action('info');
+    return this._info;
   }
 
   /**************
