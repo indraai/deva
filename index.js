@@ -26,7 +26,6 @@ class Deva {
     this._business = false; // inherited Business features.
     this._legal = false; // inherited Legal features.
     this._assistant = false; // inherited Assistant features.
-    this._artist = false; // inherited artist features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = opts.lib || {}; // used for loading library functions
     this.utils = opts.util || {}; // parse function
@@ -514,7 +513,7 @@ class Deva {
   Assistant() {
     const _cl = this.client(); // set the client into a local variable
     try {
-      if (!_cl.features.assistant) return this.Artist(); // if no Assistant then goto Done
+      if (!_cl.features.assistant) return this.Done(); // if no Assistant then goto Done
       else {
         this.action('Assistant'); // set action to Assistant
         const {id, features, profile} = _cl; // set the local consts from client copy
@@ -528,38 +527,7 @@ class Deva {
           personal: assistant.devas[this._agent.key] // Client personal features and rules.
         };
         delete this._client.features.assistant; // delete the assistant key from client features
-        return this.Artist(); // when assistant is done goto Artist.
-      }
-    } catch (e) {
-      return this.error(e); // run error handling if an error is caught
-    }
-  }
-
-  /**************
-  func: Artist
-  params: client: false
-  describe:
-    The Artist feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Artist() {
-    const _cl = this.client(); // set local client variable
-    try {
-      if (!this._client.features.artist) return this.Done(); // if no artist goto Done
-      else {
-        this.action('Artist'); // set action to Artist
-        const {id, features, profile} = this._client; // set the local consts from client copy
-        const {artist} = features; // set artist from features const
-        this._artist = { // set this_artist with data
-          id: this.uid(true), // uuid of the artist feature
-          client_id: id, // client id for reference
-          client_name: profile.name, // client name for personalization
-          concerns: artist.concerns, // any concerns for client
-          global: artist.global, // the global policies for client
-          personal: artist.devas[this._agent.key], // Client personal features and rules.
-        };
-        delete this._client.features.artist; // delete artist object from client
-        return this.Done(); // when done with artist goto Done
+        return this.Done(); // when assistant is done goto Done.
       }
     } catch (e) {
       return this.error(e); // run error handling if an error is caught
@@ -981,7 +949,6 @@ class Deva {
     data.hash = this.hash(data);
     this.action(data.value)
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
-    this.state('online');
     return hasOnDone ? this.onDone(data) : Promise.resolve(data);
   }
 
@@ -999,9 +966,10 @@ class Deva {
   finish(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     this.action('finish');
-    this.state('online');
     packet.hash = this.hash(packet);// hash the entire packet before finishing.
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function' ? true : false;
+
+    this.state('ready');
     if (hasOnFinish) return this.onFinish(packet, resolve);
     else if (resolve) return resolve(packet);
     else return Promise.resolve(packet)
@@ -1072,7 +1040,7 @@ class Deva {
     this._business = false;
     this._development = false;
     this._legal = false;
-    this._artist = false;
+    this._assistant = false;
 
     this.action(data.value);
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
@@ -1429,22 +1397,6 @@ class Deva {
   }
 
   /**************
-  func: assistant
-  params: opts
-  describe: basic assistant features available in a Deva.
-  ***************/
-  assistant(opts) {
-    if (!this._active) return this._messages.states.offline;   // chek the active status
-    this.feature('assistant');                            // set the assistant state
-    try {
-      this.action('assistant');                            // set the assistant state
-      return this.copy(this._assistant);                             // return assistant feature
-    } catch (e) {
-      return this.error(e);
-    }
-  }
-
-  /**************
   func: business
   params: opts
   describe: basic business features available in a Deva.
@@ -1477,16 +1429,16 @@ class Deva {
   }
 
   /**************
-  func: artist
+  func: assistant
   params: opts
-  describe: basic artist features available in a Deva.
+  describe: basic assistant features available in a Deva.
   ***************/
-  artist(opts) {
+  assistant(opts) {
     if (!this._active) return this._messages.states.offline;   // chek the active status
-    this.feature('artist');                                // set the artist state
+    this.feature('assistant');                            // set the assistant state
     try {
-      this.action('artist');
-      return this.artist(this._artist);                                 // return artist feature
+      this.action('assistant');                            // set the assistant state
+      return this.copy(this._assistant);                             // return assistant feature
     } catch (e) {
       return this.error(e);
     }
@@ -1863,7 +1815,6 @@ class Deva {
       created: Date.now(),
     }
     this.talk(config.events.error, this.copy(_data));
-
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
     if (hasOnError) return this.onError(err, data, reject);
     else return reject ? reject(err) : err;

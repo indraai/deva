@@ -95,7 +95,6 @@
       "business": "BUSINESS",
       "legal": "LEGAL",
       "assistant": "ASSISTANT",
-      "artist": "ARTIST",
       "Client": "configure client",
       "Security": "configure security",
       "Support": "configure support",
@@ -107,7 +106,6 @@
       "Legal": "configure legal",
       "Business": "configure business",
       "Assistant": "configure assistant",
-      "Artist": "configure artist",
       "Done": "configure done",
       "invalid": "invalid",
       "states": "getting states",
@@ -128,14 +126,13 @@
       "development": "Development",
       "business": "Business",
       "legal": "Legal",
-      "assistant": "Assistant",
-      "artist": "Artist"
+      "assistant": "Assistant"
     },
     "message": "offline",
     "messages": {
       "states": {
+        "ready": "ready for task",
         "offline": "offline",
-        "online": "online",
         "ask": "asked a question",
         "question": "received a question",
         "answer": "answered the question",
@@ -147,7 +144,6 @@
         "load": "loading",
         "unload": "is unloading",
         "invalid": "seems to be invalid",
-        "finish": "finish state",
         "done": "done",
         "error": "appears to have had an error",
         "help": "getting help"
@@ -156,14 +152,10 @@
         "deva": "The Deva Zone",
         "config": "The Config Zone",
         "features": "The Features Zone",
-        "idle": "The Idle Zone",
-        "training": "The Training Zone",
-        "school": "The School Zone",
+        "learn": "The Learning Zone",
+        "personal": "The Personal Zone",
         "work": "The Work Zone",
         "danger": "The Danger Zone",
-        "invalid": "The Invalid Zone",
-        "done": "The Done Zone",
-        "error": "The Error Zone",
         "help": "The Help Zone"
       },
       "actions": {
@@ -207,13 +199,10 @@
         "Legal": "loading the Legal Feature",
         "assistant": "accessing the #assistant feature",
         "Assistant": "loading the Assistant Feature",
-        "artist": "accessing the #artist feature",
-        "Artist": "loading the Artist Feature",
         "client_data": "configure client data",
         "invalid": "invalid action",
         "finish": "finished",
         "done": "done",
-        "error": "error",
         "help": "providing help",
         "states": "listing the states",
         "actions": "listing the actions",
@@ -223,30 +212,15 @@
       },
       "features": {
         "security": "accessing #security feature",
-        "Security": "Security configure",
         "support": "accessing #support feature",
-        "Support": "Support configure",
         "services": "accessing #services feature",
-        "Services": "Services configure",
         "solutions": "solutions feature",
-        "Solutions": "Solutions configure",
         "systems": "systems feature",
-        "Systems": "Systems configure",
         "research": "research feature",
-        "Research": "Research configure",
         "development": "development feature",
-        "Development": "Development configure",
         "business": "business feature",
-        "Business": "Business configure",
         "legal": "legal feature",
-        "Legal": "Legal configure",
-        "assistant": "assistant feature",
-        "Assistant": "Assistant configure",
-        "artist": "artist feature",
-        "Artist": "Artist configure",
-        "invalid": "feature invalid",
-        "done": "feature done",
-        "error": "feature error"
+        "assistant": "assistant feature"
       }
     }
   }
