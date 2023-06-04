@@ -1519,7 +1519,7 @@ class Deva {
     const the_hash = createHash(algo);
     the_hash.update(JSON.stringify(str));
     const _digest = the_hash.digest('base64');
-    return `${algo}:${_digest}`;
+    return `${algo}-${_digest}`;
   }
 
   /**************
