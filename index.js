@@ -1210,8 +1210,9 @@ class Deva {
     - st: The context flag to set for the Deva that matches to this._contexts
   describe
   ***************/
-  context(value) {
+  context(value=false) {
     try {
+      if (!value) return this._context;
       this._context = value;
       const data = {
         id: this.uid(true),
