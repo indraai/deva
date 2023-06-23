@@ -687,6 +687,8 @@ class Deva {
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
             this.action('question_ask_answer');
+            
+            this.talk(config.events.answer, this.copy(answer));
             return this.finish(answer, resolve);                       // if:isAsk resolve the answer from the call
           });
         }
@@ -750,8 +752,9 @@ class Deva {
       // create a hash for the answer and insert into answer meta.
       packet_answer.meta.hash = this.hash(packet_answer);
 
-      this.action('answer_talk');
       packet.a = packet_answer;
+      this.prompt('TALK TALK TALK ANSWER')
+      this.action('answer_talk');
       this.talk(config.events.answer, this.copy(packet)); // global talk event
       return this.finish(packet, resolve)                             // resolve the packet to the caller.
     }).catch(err => {                                     // catch any errors in the method
