@@ -687,8 +687,8 @@ class Deva {
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
             this.action('question_ask_answer');
-            
-            this.talk(config.events.answer, this.copy(answer));
+
+            this.talk(config.events.ask, this.copy(answer));
             return this.finish(answer, resolve);                       // if:isAsk resolve the answer from the call
           });
         }
