@@ -212,16 +212,16 @@
         "contexts": "listing the contexts"
       },
       "features": {
-        "security": "accessing #security feature",
-        "support": "accessing #support feature",
-        "services": "accessing #services feature",
-        "solutions": "solutions feature",
-        "systems": "systems feature",
-        "research": "research feature",
-        "development": "development feature",
-        "business": "business feature",
-        "legal": "legal feature",
-        "assistant": "assistant feature"
+        "security": "access #security",
+        "support": "access #support",
+        "services": "access #services",
+        "solutions": "access #solutions",
+        "systems": "access #systems",
+        "research": "access #research",
+        "development": "access #development",
+        "business": "access #business",
+        "legal": "access #legal",
+        "assistant": "access #assistant"
       }
     }
   }
