@@ -1140,22 +1140,25 @@ class Deva {
   ***************/
   action(action) {
     try {
-      if (!this._actions[action]) return;
-      this._action = action;
-      const text = this._messages.actions[action];
-      const data = {
-        id: this.uid(true),
-        key: 'action',
-        value: action,
-        agent: this.agent(),
-        client: this.client(),
-        text,
-        created: Date.now(),
+      this._action = action; // set the local action variable
+      // check local vars for custom actions
+      const var_action = this.vars.actions ? this.vars.actions[action] : false;
+      // check system action messages
+      const msg_action = this._messages.actions[action] || var_action;
+      const text = msg_action || action; // set the text of the action
+      const data = { // build the data object for the action.
+        id: this.uid(true), // generate a guid for the action transmitssion.
+        key: 'action', // the key for event to transmit action type
+        value: action, // the value key which is the action passed
+        agent: this.agent(), // the agent data to send with the action
+        client: this.client(), // the client data to send with the action
+        text, // text of the action to send
+        created: Date.now(), // action time stamp
       };
-      data.hash = this.hash(data);
-      this.talk(config.events.action, data);
-    } catch (e) {
-      return this.error(e)
+      data.hash = this.hash(data); // generate a hash of the action packet.
+      this.talk(config.events.action, data); // talk the core action event
+    } catch (e) { // catch any errors that occur
+      return this.error(e); // return error on error catch
     }
   }
 
