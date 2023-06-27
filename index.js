@@ -1637,6 +1637,9 @@ class Deva {
     system based on the language and locale in the client profile.
   ***************/
   formatDate(d, format='milli', time=false) {
+    if (!d) d = Date.now();
+    d = new Date(d);
+
     if (format === 'milli') return d.getTime();
     // pre-set date formats for returning user dates.
     const formats = {
