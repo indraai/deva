@@ -11,12 +11,29 @@
     "url": "git+https://github.com/indraai/deva.git"
   },
   "keywords": [
+    "quinn",
+    "quinn michaels",
+    "deva core",
     "indra",
     "deva",
     "ai"
   ],
-  "author": "Quinn Michaels",
-  "license": "MIT",
+  "license" : "SEE LICENSE IN LICENSE.md",
+  "author": {
+    "name" : "Quinn Michaels",
+    "email" : "quinnmichaels@gmail.com",
+    "url" : "https://quinnmichaels.com/"
+  },
+  "funding": [
+    {
+      "type" : "paypal",
+      "url" : "https://example.com/rahulaclub"
+    },
+    {
+      "type" : "patreon",
+      "url" : "https://www.patreon.com/rahulaclub"
+    }
+  ],
   "bugs": {
     "url": "https://github.com/indraai/deva/issues"
   },
