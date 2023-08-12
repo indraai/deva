@@ -1,6 +1,6 @@
 {
   "name": "@indra.ai/deva",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "The Deva Core",
   "main": "index.js",
   "scripts": {
@@ -18,20 +18,20 @@
     "deva",
     "ai"
   ],
-  "license" : "SEE LICENSE IN LICENSE.md",
+  "license": "SEE LICENSE IN LICENSE.md",
   "author": {
-    "name" : "Quinn Michaels",
-    "email" : "quinnmichaels@gmail.com",
-    "url" : "https://quinnmichaels.com/"
+    "name": "Quinn Michaels",
+    "email": "quinnmichaels@gmail.com",
+    "url": "https://quinnmichaels.com/"
   },
   "funding": [
     {
-      "type" : "paypal",
-      "url" : "https://example.com/rahulaclub"
+      "type": "paypal",
+      "url": "https://example.com/rahulaclub"
     },
     {
-      "type" : "patreon",
-      "url" : "https://www.patreon.com/rahulaclub"
+      "type": "patreon",
+      "url": "https://www.patreon.com/rahulaclub"
     }
   ],
   "bugs": {
