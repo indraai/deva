@@ -1,10 +1,10 @@
 {
   "name": "Deva Core Configuration",
   "describe": "The Deva Core Configuraitno File contains all the values needed to run deva.world core.",
-  "copyright": "Copyright (c) Quinn Michaels. All rights reserved.",
+  "copyright": "Copyright 2023(c) Quinn Michaels. All rights reserved.",
   "DATA": {
     "cmdChr": "/",
-    "askChr": "#",
+    "askChr": "@",
     "inherit": ["events", "lib", "config"],
     "bind": [
       "listeners",

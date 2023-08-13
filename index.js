@@ -1,4 +1,4 @@
-// Copyright (c)2023 Quinn Michaels
+// Copyright (c)2023 Quinn Michaels; All Rights Reserved; Legal Signature Required.
 // Distributed under the MIT software license, see the accompanying
 // file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
 const {EventEmitter} = require('events');
@@ -28,30 +28,17 @@ class Deva {
     this._business = false; // inherited Business features.
     this._legal = false; // inherited Legal features.
     this._assistant = false; // inherited Assistant features.
-    this.os = require('os'); // It is used to provide basic operating system related utility functions.
-    this.buffer = require('buffer'); // It is used to provide basic operating system related utility functions.
-    this.util = require('util'); // The supports the needs of internal APIs.
-    this.report = require('report'); // It is used to provide basic operating system related utility functions.
-    this.querystring = require('querystring'); // Provides utilities for parsing and formatting URL query strings.
-    this.readline = require('readline'); // Provides utilities for parsing and formatting URL query strings.
     this.fs = require('fs'); // this is so file system functions are in the core.
     this.path = require('path'); // this is so we can get path in the system.
-    this.crypto = require('crypto'); // It is used to support cryptography for encryption and decryption.
-    this.zlib = require('zlib'); // provides compression functionality using Gzip, Deflate/Inflate, and Brotli.
-    this.console = require('console'); // It is used to write data to console.
-    this.readline = require('readline/promises'); // It is used to write data to console.
-    this.cluster = require('cluster'); // used to take advantage of multi-core systems.
     this.dns = require('dns'); // It is used to lookup and resolve on domain names.
     this.net = require('net'); // It used to create TCP server/client communicate using TCP protocol.
     this.http = require('http'); // It is used to create Http server and Http client.
     this.https = require('https'); // It is used to create Http server and Http client.
     this.stream = require('stream/promises'); // It is used to stream data between two entities.
-    this.inspector = require('inspector'); // It is used to stream data between two entities.
     this.url = require('url'); // It is used for URL resolution and parsing.
-    this.vm = require('vm'); // It provides an access to virtual machine to compile and execute code.
     this.assert = require('assert'); // It is used for testing itself.
     this.events = opts.events || new EventEmitter({}); // Event Bus
-    this.lib = opts.lib || {}; // used for loading library functions
+    this.libs = opts.libs || {}; // used for loading library functions
     this.utils = opts.utils || {}; // parse function
     this.devas = opts.devas || {}; // Devas which are loaded
     this.vars = opts.vars || {}; // Variables object
