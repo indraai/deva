@@ -4,7 +4,7 @@
   "copyright": "Copyright 2023(c) Quinn Michaels. All rights reserved.",
   "DATA": {
     "cmdChr": "/",
-    "askChr": "@",
+    "askChr": "#",
     "inherit": ["events", "lib", "config"],
     "bind": [
       "listeners",
@@ -212,16 +212,16 @@
         "contexts": "listing the contexts"
       },
       "features": {
-        "security": "access #security",
-        "support": "access #support",
-        "services": "access #services",
-        "solutions": "access #solutions",
-        "systems": "access #systems",
-        "research": "access #research",
-        "development": "access #development",
-        "business": "access #business",
-        "legal": "access #legal",
-        "assistant": "access #assistant"
+        "security": "Accessing Security",
+        "support": "Accessing Support",
+        "services": "Accessing Services",
+        "solutions": "Accessing Solutions",
+        "systems": "Accessing Systems",
+        "research": "Accessing Research",
+        "development": "Accessing Development",
+        "business": "Accessing Business",
+        "legal": "Accessing Legal",
+        "assistant": "Accessing Assistant"
       }
     }
   }
