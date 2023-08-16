@@ -1,6 +1,5 @@
 // Copyright (c)2023 Quinn Michaels; All Rights Reserved; Legal Signature Required.
-// Distributed under the MIT software license, see the accompanying
-// file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
+// Distributed under the PRIVATE software license, see the accompanying file LICENSE.md
 const {EventEmitter} = require('events');
 const fs = require('fs');
 const path = require('path');
@@ -777,9 +776,9 @@ class Deva {
       packet.a = packet_answer;
       this.action('answer_talk');
       this.talk(config.events.answer, this.copy(packet)); // global talk event
-      return this.finish(packet, resolve)                             // resolve the packet to the caller.
-    }).catch(err => {                                     // catch any errors in the method
-      return this.error(err, packet, reject);             // return this.error with err, packet, reject
+      return this.finish(packet, resolve); // resolve the packet to the caller.
+    }).catch(err => { // catch any errors in the method
+      return this.error(err, packet, reject); // return this.error with err, packet, reject
     });
   }
 
@@ -843,6 +842,7 @@ class Deva {
         packet_answer.meta.hash = this.hash(packet_answer);
         this.action('ask_answer');
         packet.a = packet_answer;
+        this.talk(config.events.answer, this.copy(packet)); // global talk event
         this.talk(`${agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
         this.talk(`${agent.key}:ask:${packet.id}`, {error:err});
