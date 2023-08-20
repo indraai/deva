@@ -48,18 +48,18 @@
     },
     "zone": false,
     "zones": {
-      "deva": "The Deva Zone",
-      "config": "The Configuration Zone",
-      "features": "The Feature Zone",
-      "idle": "The Idle Zone",
-      "training": "The Training Zone",
-      "school": "The School Zone",
-      "work": "The Work Zone",
-      "fun": "The Fun Zone",
-      "adventure": "The Adventure Zone",
-      "party": "The Party Zone",
-      "invalid": "The Invalid Zone",
-      "done": "The Done Zone",
+      "deva": "Deva Zone",
+      "config": "Configuration Zone",
+      "features": "Feature Zone",
+      "idle": "Idle Zone",
+      "training": "Training Zone",
+      "school": "School Zone",
+      "work": "Work Zone",
+      "fun": "Fun Zone",
+      "adventure": "Adventure Zone",
+      "party": "Party Zone",
+      "invalid": "Invalid Zone",
+      "done": "Done Zone",
       "help": "Help Zone"
     },
     "action": false,
@@ -212,16 +212,16 @@
         "contexts": "listing the contexts"
       },
       "features": {
-        "security": "Accessing Security",
-        "support": "Accessing Support",
-        "services": "Accessing Services",
-        "solutions": "Accessing Solutions",
-        "systems": "Accessing Systems",
-        "research": "Accessing Research",
-        "development": "Accessing Development",
-        "business": "Accessing Business",
-        "legal": "Accessing Legal",
-        "assistant": "Accessing Assistant"
+        "security": "Security",
+        "support": "Support",
+        "services": "Services",
+        "solutions": "Solutions",
+        "systems": "Systems",
+        "research": "Research",
+        "development": "Development",
+        "business": "Business",
+        "legal": "Legal",
+        "assistant": "Assistant"
       }
     }
   }
