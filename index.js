@@ -77,7 +77,7 @@ class Deva {
 
     this._context = opts.context || false; // set the local context
 
-    this._message = config.message; // current state of agent.
+    this._message = config.message; // current message of agent.
     this._messages = config.messages; // set the messages from config
   }
 
@@ -443,6 +443,7 @@ class Deva {
   describe:
   ***************/
   question(TEXT=false, DATA=false) {
+    this.zone('question');
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
 
@@ -545,6 +546,7 @@ class Deva {
     from the agent from the pre-determined method.
   ***************/
   answer(packet, resolve, reject) {
+    this.zone('answer');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('answer');
     // check if method exists and is of type function
@@ -608,7 +610,9 @@ class Deva {
     so the event is specific to the talk.
   ***************/
   ask(packet) {
+    this.zone('ask');
     if (!this._active) return Promise.resolve(this._messages.offline);
+
     this.state('ask');
 
     const agent = this.agent();
@@ -683,7 +687,7 @@ class Deva {
   usage: this.init(client_object)
   ***************/
   init(client) {
-    this.state('init');
+    this.zone('init');
     // set client
     this._active = Date.now();
     const agent = this.agent();
@@ -698,6 +702,7 @@ class Deva {
     }
     _data.hash = this.hash(_data);
 
+    this.state('init');
     return new Promise((resolve, reject) => {
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -1073,14 +1078,11 @@ class Deva {
     return {
       id: this.uid(true),
       key: 'contexts',
-      value: this._contexts,
-      messages: this.vars.context || false,
+      value: this.vars.context || false,
       created: Date.now(),
     }
   }
 
-
-  ///////////////
   /**************
   func: client
   params: none
@@ -1091,10 +1093,7 @@ class Deva {
   ***************/
   client() {
     if (!this._active) return this._messages.offline;    // check the active status
-    this.state('client_data');                                // set the client state
     const client_copy = this.copy(this._client);
-    // delete client_copy.parse;
-    // delete client_copy.translate;
     return client_copy;                                 // return the client feature
   }
 
@@ -1108,11 +1107,7 @@ class Deva {
   ***************/
   agent() {
     if (!this._active) return this._messages.offline;
-    this.state('agent_data');
     const agent_copy = this.copy(this._agent);
-    delete agent_copy.parse;
-    delete agent_copy.translate;
-    delete agent_copy.process;
     return agent_copy;
   }
 
@@ -1124,14 +1119,14 @@ class Deva {
   usage: this.security()
   ***************/
   security() {
-    if (!this._active) return this._messages.offline;    // check the active status
-    this.feature('security');                              // set the security state
+    this.feature('security'); // set the security state
+    this.zone('security');
+    if (!this._active) return this._messages.offline; // check the active status
+    this.state('data'); // set the security state
     try {
-      this.action('security');                              // set the security state
-      return this.copy(this._security);                               // return the security feature
-    } catch (e) {
-      return this.error(e);
-    }
+      this.action('security'); // set the security state
+      return this.copy(this._security); // return the security feature
+    } catch (e) {return this.error(e);}
   }
 
   /**************
@@ -1141,14 +1136,14 @@ class Deva {
   usage: this.support()
   ***************/
   support() {
-    if (!this._active) return this._messages.offline;   // check the active status
-    this.feature('support');                              // set the support state
+    this.feature('support'); // set the support state
+    this.zone('support'); // set the support state
+    if (!this._active) return this._messages.offline; // check the active status
+    this.state('data');
     try {
       this.action('support');
-      return this.copy(this._support);                               // return the support feature
-    } catch (e) {
-      return this.error(e);
-    }
+      return this.copy(this._support); // return the support feature
+    } catch (e) {return this.error(e);}
   }
 
   /**************
@@ -1158,14 +1153,14 @@ class Deva {
   usage: this.services()
   ***************/
   services(opts) {
-    if (!this._active) return this._messages.offline;   // check the active status
-    this.feature('services');                             // set the services state
+    this.feature('services'); // set the support state
+    this.zone('services'); // set the support state
+    if (!this._active) return this._messages.offline; // check the active status
+    this.state('data'); // set the services state
     try {
-      this.action('services');                             // set the services state
-      return this.copy(this._services);                              // return the services feature
-    } catch (e) {
-      return this.error(e);
-    }
+      this.action('services'); // set the services state
+      return this.copy(this._services); // return the services feature
+    } catch (e) {return this.error(e);}
   }
 
   /**************
@@ -1175,14 +1170,14 @@ class Deva {
   usage: this.systems()
   ***************/
   systems(opts) {
-    if (!this._active) return this._messages.offline;   // check the active status
-    this.feature('systems');                              // set the systems state
+    this.feature('systems'); // set the systems state
+    this.zone('systems'); // set the systems state
+    if (!this._active) return this._messages.offline; // check the active status
+    this.state('data');
     try {
-      this.action('systems');                              // set the systems state
-      return this.copy(this._systems);                               // return the systems feature
-    } catch (e) {
-      return this.error(e)
-    }
+      this.action('systems'); // set the systems state
+      return this.copy(this._systems); // return the systems feature
+    } catch (e) {return this.error(e);}
   }
 
   /**************
@@ -1310,6 +1305,7 @@ class Deva {
   usage: this.prompt('text')
   ***************/
   prompt(text) {
+    this.action('prompt');
     // Talk a global prompt event for the client
     const agent = this.agent();
     const client = this.client();
@@ -1349,6 +1345,7 @@ class Deva {
     with no time value for the current day.
   ***************/
   getToday(d) {
+    this.action('gettoday');
     d = d ? d : Date.now();
     const today = new Date(d);
     today.setHours(0);
@@ -1447,6 +1444,7 @@ class Deva {
   describe: remove duplicees from an array.
   ***************/
   dupes(dupers) {
+    this.action('dupes');
     if (!Array.isArray(dupers)) return dupers;
     const check = [];
     return dupers.filter(dupe => {
@@ -1463,8 +1461,9 @@ class Deva {
   describe: return info data.
   ***************/
   info() {
+    this.zone('support');
     // check the active status
-    if (!this._active) return Promise.resolve(this._messages.states.offline);
+    if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('info');
     return this._info;
   }
@@ -1481,12 +1480,13 @@ class Deva {
   usage: this.status('msg')
   ***************/
   status(msg=false) {
+    this.zone('support');
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.states.offline);
-    this.action('status');
     // format the date since active for output.
     const dateFormat = this.formatDate(this._active, 'long', true);
     // create the text msg string
+    this.action('status');
     let text = `${this._agent.profile.name} active since ${dateFormat}`;
     if (msg) text = text + `\n${msg}`;                      // append the msg string if msg true.
     return text;                           // return final text string
@@ -1503,10 +1503,10 @@ class Deva {
     one exists it will then present it based on the users request text input.
   ***************/
   help(msg, help_dir) {
-    this.state('help');
+    this.zone('help');
     return new Promise((resolve, reject) => {
       if (!this._active) return resolve(this._messages.states.offline);
-      this.zone('help');
+      this.state('data');
       const params = msg.split(' ');
       let helpFile = 'main';
       if (params[0]) helpFile = params[0];
@@ -1532,7 +1532,7 @@ class Deva {
   usage: this.error(err, data, reject);
   ***************/
   error(err,data=false,reject=false) {
-    this.state('error');
+    this.zone('error');
     // check fo rthe custom onError function in the agent.
     console.log('\n::BEGIN:ERROR\n');
     console.log(err);
@@ -1544,7 +1544,7 @@ class Deva {
       console.log('\n::END:DATA\n');
     }
 
-    this.zone('error')
+    this.state('error')
     const agent = this.agent();
     const client = this.client();
     const _data = {
