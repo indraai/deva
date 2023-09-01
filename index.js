@@ -365,13 +365,11 @@ class Deva {
   describe: The end of the workflow Client Feature Workflow
   ***************/
   Done(client) {
-    this.zone('done'); // set state to assistant setting
     this.state('done');
     this.action('done');
     return new Promise((resolve, reject) => {
       try {
         delete this._client.features; // delete the features key when done.
-        this.zone('deva'); // put the agent back in the deva zone.
         this.state('ready');
         this.action('wait');
         return resolve(client); // resolve an empty pr
@@ -443,7 +441,6 @@ class Deva {
   describe:
   ***************/
   question(TEXT=false, DATA=false) {
-    this.zone('question');
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
 
@@ -546,7 +543,6 @@ class Deva {
     from the agent from the pre-determined method.
   ***************/
   answer(packet, resolve, reject) {
-    this.zone('answer');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('answer');
     // check if method exists and is of type function
@@ -610,7 +606,6 @@ class Deva {
     so the event is specific to the talk.
   ***************/
   ask(packet) {
-    this.zone('ask');
     if (!this._active) return Promise.resolve(this._messages.offline);
 
     this.state('ask');
@@ -687,7 +682,6 @@ class Deva {
   usage: this.init(client_object)
   ***************/
   init(client) {
-    this.zone('init');
     // set client
     this._active = Date.now();
     const agent = this.agent();
@@ -733,7 +727,6 @@ class Deva {
   usage: this.start('msg')
   ***************/
   start(data) {
-    this.zone('start');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('start');
     data.value = 'start';
@@ -756,7 +749,6 @@ class Deva {
   usage: this.enter('msg')
   ***************/
   enter(data) {
-    this.zone('enter');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('enter');
     data.value = 'enter';
@@ -779,7 +771,6 @@ class Deva {
   usage: this.done('msg')
   ***************/
   done(data) {
-    this.zone('done');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('done');
     data.value = 'done';
@@ -802,7 +793,6 @@ class Deva {
     this.finish(data, resolve)
   ***************/
   finish(packet, resolve) {
-    this.zone('finish');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('finish');
     packet.hash = this.hash(packet);// hash the entire packet before finishing.
@@ -827,7 +817,6 @@ class Deva {
     this.stop('msg')
   ***************/
   stop() {
-    this.zone('stop');
     if (!this._active) return Promise.resolve(this._messages.offline);
 
     this.state('stop');
@@ -867,7 +856,6 @@ class Deva {
   usage: this.exit('msg')
   ***************/
   exit(data) {
-    this.zone('exit');
     this._active = false;
     data.value = 'exit';
     delete data.hash;
@@ -1120,7 +1108,6 @@ class Deva {
   ***************/
   security() {
     this.feature('security'); // set the security state
-    this.zone('security');
     if (!this._active) return this._messages.offline; // check the active status
     this.state('data'); // set the security state
     try {
@@ -1137,7 +1124,6 @@ class Deva {
   ***************/
   support() {
     this.feature('support'); // set the support state
-    this.zone('support'); // set the support state
     if (!this._active) return this._messages.offline; // check the active status
     this.state('data');
     try {
@@ -1154,7 +1140,6 @@ class Deva {
   ***************/
   services(opts) {
     this.feature('services'); // set the support state
-    this.zone('services'); // set the support state
     if (!this._active) return this._messages.offline; // check the active status
     this.state('data'); // set the services state
     try {
@@ -1171,7 +1156,6 @@ class Deva {
   ***************/
   systems(opts) {
     this.feature('systems'); // set the systems state
-    this.zone('systems'); // set the systems state
     if (!this._active) return this._messages.offline; // check the active status
     this.state('data');
     try {
@@ -1461,7 +1445,6 @@ class Deva {
   describe: return info data.
   ***************/
   info() {
-    this.zone('support');
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('info');
@@ -1480,7 +1463,6 @@ class Deva {
   usage: this.status('msg')
   ***************/
   status(msg=false) {
-    this.zone('support');
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.states.offline);
     // format the date since active for output.
