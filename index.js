@@ -336,7 +336,7 @@ class Deva {
     this.zone('systems');
     const _cl = this.client();
     try {
-      if (!_cl.features.systems) return this.Done(); // move to Solutions if no systems feature
+      if (!_cl.features.systems) return this.Done(); // move to Done if no systems feature
       else {
         this.state('data');
         const {id, features, profile} = _cl;   // set the local consts from client copy

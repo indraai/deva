@@ -166,12 +166,9 @@
     },
     "feature": false,
     "features": {
-      "client": "Client",
-      "agent": "Agent",
       "security": "Security",
       "support": "Support",
       "services": "Services",
-      "solutions": "Solutions",
       "systems": "Systems"
     },
     "message": "offline",
