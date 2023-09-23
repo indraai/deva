@@ -1520,7 +1520,6 @@ class Deva {
     console.log(err);
     console.log('\n::END:ERROR\n');
     if (data) {
-      console.log('::::::');
       console.log('\n::BEGIN:DATA\n');
       console.log(JSON.stringify(data, null, 2));
       console.log('\n::END:DATA\n');
