@@ -814,29 +814,27 @@ class Deva {
 
     If the deva is offline it will return the offline message.
   usage:
-    this.stop('msg')
+    this.stop()
   ***************/
   stop() {
     if (!this._active) return Promise.resolve(this._messages.offline);
 
-    this.state('stop');
+    this.action('stop');
     const agent = this.agent();
     const client = this.client();
 
     const data = {
       id: this.uid(true),
       key: 'stop',
-      value: agent.key,
+      value: this._messages.stop,
       agent,
       client,
-      text: this._messages.stop,
       created: Date.now(),
     }
-
     data.hash = this.hash(data);
-    const hasOnStop = this.onStop && typeof this.onStop === 'function';
 
-    this.action('stop');
+    this.state('stop');
+    const hasOnStop = this.onStop && typeof this.onStop === 'function';
     return hasOnStop ? this.onStop(data) : this.exit(data)
   }
 
@@ -855,25 +853,32 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.exit('msg')
   ***************/
-  exit(data) {
+  exit() {
+    this.zone('exit');
     this._active = false;
-    data.value = 'exit';
-    delete data.hash;
+
+    this.action('exit');
+    const agent = this.agent();
+    const client = this.client();
+
+    const data = {
+      id: this.uid(true),
+      key: 'exit',
+      value: this._messages.exit,
+      agent,
+      client,
+      created: Date.now(),
+    }
     data.hash = this.hash(data);
 
-    this.state('exit');
     // clear memory
     this._active = false;
     this._client = false;
     this._security = false;
     this._support = false;
     this._services = false;
-    this._business = false;
-    this._development = false;
-    this._legal = false;
-    this._assistant = false;
 
-    this.action('exit');
+    this.state('exit');
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
     return hasOnExit ? this.onExit(data) : Promise.resolve(data)
   }
@@ -1005,7 +1010,6 @@ class Deva {
   describe
   ***************/
   feature(feature) {
-    this.action('feature');
     try {
       if (!this._features[feature]) return;
       this._feature = feature;
@@ -1041,17 +1045,20 @@ class Deva {
     - st: The context flag to set for the Deva that matches to this._contexts
   describe
   ***************/
-  context(value=false) {
+  context(value=false, extra=false) {
     try {
       if (!value) return this._context;
       this._context = value;
+      const lookup = this.vars.context[value] || value;
+      const text = extra ? `${lookup} ${extra}` : lookup;
+
       const data = {
         id: this.uid(true),
         key: 'context',
         value,
         agent: this.agent(),
         client: this.client(),
-        text: this.vars.context[value] || value,
+        text,
         created: Date.now(),
       };
       data.hash = this.hash(data);
