@@ -20,26 +20,16 @@ class Deva {
     this._security = false; // inherited Security features.
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
-    this._systems = false; // inherited Systems features.
     this.os = require('os'); // It is used to provide basic operating system related utility functions.
-    this.buffer = require('buffer'); // It is used to provide basic operating system related utility functions.
-    this.util = require('util'); // The supports the needs of internal APIs.
-    this.querystring = require('querystring'); // Provides utilities for parsing and formatting URL query strings.
     this.fs = require('fs'); // this is so file system functions are in the core.
     this.path = require('path'); // this is so we can get path in the system.
     this.crypto = require('crypto'); // It is used to support cryptography for encryption and decryption.
     this.zlib = require('zlib'); // provides compression functionality using Gzip, Deflate/Inflate, and Brotli.
-    this.console = require('console'); // It is used to write data to console.
-    this.readline = require('readline/promises'); // It is used to write data to console.
     this.dns = require('dns'); // It is used to lookup and resolve on domain names.
     this.net = require('net'); // It used to create TCP server/client communicate using TCP protocol.
     this.http = require('http'); // It is used to create Http server and Http client.
     this.https = require('https'); // It is used to create Http server and Http client.
-    this.stream = require('stream/promises'); // It is used to stream data between two entities.
     this.url = require('url'); // It is used for URL resolution and parsing.
-    this.vm = require('vm'); // It provides an access to virtual machine to compile and execute code.
-    this.inspector = require('inspector'); // It is used to stream data between two entities.
-    this.cluster = require('cluster'); // used to take advantage of multi-core systems.
     this.assert = require('assert'); // It is used for testing itself.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.libs = opts.libs || {}; // used for loading library functions
@@ -303,7 +293,7 @@ class Deva {
     this.zone('services')
     const _cl = this.client(); // set local client
     try {
-      if (!_cl.features.services) return this.Systems(); // move to Systems if no Services feature
+      if (!_cl.features.services) return this.Done(); // move to Done if no Services feature
       else {
         this.state('data');
         const {id, features, profile} = _cl;   // set the local consts from client copy
@@ -318,46 +308,12 @@ class Deva {
         };
         delete this._client.features.services; // delete the services key for isolation
         this.action('Services');
-        return this.Systems(); // go to Systems when done
+        return this.Done(); // go to Done
       }
     } catch (e) {
       return this.error(e); // run error handling if an error is caught
     }
   }
-
-  /**************
-  func: Systems
-  params: client: false
-  describe:
-    The Systems feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Systems() {
-    this.zone('systems');
-    const _cl = this.client();
-    try {
-      if (!_cl.features.systems) return this.Done(); // move to Done if no systems feature
-      else {
-        this.state('data');
-        const {id, features, profile} = _cl;   // set the local consts from client copy
-        const {systems} = features; // set systems from features const
-        this._systems = { // set this_systems with data
-          id: this.uid(true), // uuid of the systems feature
-          client_id: id, // client id for reference
-          client_name: profile.name, // client name for personalization
-          concerns: systems.concerns, // any concerns for client
-          global: systems.global, // the global policies for client
-          personal: systems.devas[this._agent.key], // Client personal features and rules.
-        };
-        delete this._client.features.systems;
-        this.action('Systems');
-        return this.Done();
-      }
-    } catch (e) {
-      return this.error(e); // run error handling if an error is caught
-    }
-  }
-
 
   /**************
   func: Done
@@ -676,8 +632,8 @@ class Deva {
     2. Assign the Interited Properties
     3. Assign binding functions and methods to 'this' scoe.
     4. Assign any listeners for additional functionality.
-    5. run the onInit custom function if preset or the system start function.
-    6. The system start function will create a chain reaction of states that load.
+    5. run the onInit custom function if preset or the start function.
+    6. The start function will create a chain reaction of states that load.
     7. If there is an error the init function rejects the call.
   usage: this.init(client_object)
   ***************/
@@ -723,7 +679,7 @@ class Deva {
   describe:
     The start function begins the process by setting the state to start setting
     the active to the current datetime and then checking for a custom onStart
-    function or running the system enter function.
+    function or running the enter function.
   usage: this.start('msg')
   ***************/
   start(data) {
@@ -810,7 +766,7 @@ class Deva {
   describe:
     The stop function will stop the Deva by setting the active status to false,
     and the state to stop. From here it will check for a custom onStop function
-    for anything to run, or run the system exit function.
+    for anything to run, or run the exit function.
 
     If the deva is offline it will return the offline message.
   usage:
@@ -847,7 +803,7 @@ class Deva {
     The exit state function is triggered when the Deva is exiting it's online
     status and setting the state to exit for things like security check.
 
-    The return will check for a custom onExit function or run the system done
+    The return will check for a custom onExit function or run the done
     function.
 
     If the deva is offline it will return the offline message.
@@ -974,7 +930,7 @@ class Deva {
       this._action = action; // set the local action variable
       // check local vars for custom actions
       const var_action = this.vars.actions ? this.vars.actions[action] : false;
-      // check system action messages
+      // check action messages
       const msg_action = this._actions[action] || var_action;
       const text = msg_action || action; // set the text of the action
       const data = { // build the data object for the action.
@@ -1156,26 +1112,10 @@ class Deva {
   }
 
   /**************
-  func: systems
-  params: opts
-  describe: basic systems features available in a Deva.
-  usage: this.systems()
-  ***************/
-  systems(opts) {
-    this.feature('systems'); // set the systems state
-    if (!this._active) return this._messages.offline; // check the active status
-    this.state('data');
-    try {
-      this.action('systems'); // set the systems state
-      return this.copy(this._systems); // return the systems feature
-    } catch (e) {return this.error(e);}
-  }
-
-  /**************
   func: load
   params:
     -deva: The Deva model to load.
-  describe: This function will enable fast loading of Deva into a system.
+  describe: This function will enable fast loading of Deva into the system.
   ***************/
   load(key, client) {
     this.state('load');
