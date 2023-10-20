@@ -1462,15 +1462,6 @@ class Deva {
   ***************/
   error(err,data=false,reject=false) {
     this.zone('error');
-    // check fo rthe custom onError function in the agent.
-    console.log('\n::BEGIN:ERROR\n');
-    console.log(err);
-    console.log('\n::END:ERROR\n');
-    if (data) {
-      console.log('\n::BEGIN:DATA\n');
-      console.log(JSON.stringify(data, null, 2));
-      console.log('\n::END:DATA\n');
-    }
 
     this.state('error')
     const agent = this.agent();
