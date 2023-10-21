@@ -208,7 +208,6 @@ class Deva {
         if (isFunc) this.methods[y] = methods[y].bind(this);
       }
     }
-    // console.log('CLINET BEFORE COPY', client);
     const _client = this.copy(client);                // copy the client parameter
     this._client = _client;                           // set local _client to this scope
     return Promise.resolve();
@@ -399,8 +398,7 @@ class Deva {
   question(TEXT=false, DATA=false) {
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
-
-    this.state('question');
+    this.zone('question');
     const id = this.uid();                                // generate a unique id for transport.
     const t_split = TEXT.split(' ');                      // split the text on spaces to get words.
 
@@ -410,6 +408,7 @@ class Deva {
     // check to see if the string is a command string to run a local method.
     const isCmd = t_split[0].startsWith(this.cmdChr);
 
+    this.state('data');
     // Format the packet for return on the request.
     const data = DATA;                                    // set the DATA to data
     const packet = {                                      // create the base q/a packet
@@ -429,17 +428,21 @@ class Deva {
       if (!TEXT) return this.finish(this._messages.notext, resolve);
       // reject question if Deva offline
       if (!this._active) return this.finish(this._messages.offline, resolve);
-      let _action = 'question'
+      let _action = 'question';
+      this.state('question');
       try {                                               // try to answer the question
         if (isAsk) {                                      // determine if hte question isAsk
+          this.state('ask');
           _action = 'question_ask';
-          key = t_split[0].substring(1);                  // if:isAsksplit the agent key and remove first command character
+          // if:isAsk split the agent key and remove first command character
+          key = t_split[0].substring(1);
           //if:isAsk use text split index 1 as the parameter block
           params = t_split[1] ? t_split[1].split(':') : false;
-          method = params[0];                             // the method to check is then params index 0
-          text = t_split.slice(2).join(' ').trim();       // then rejoin the text with spaces.
+          method = params[0]; // the method to check is then params index 0
+          text = t_split.slice(2).join(' ').trim(); // rejoin the text with space
         }
-        else if (isCmd) {                                 // determine if the question is a command
+        else if (isCmd) { // determine if the question is a command
+          this.state('cmd');
           _action = 'question_cmd';
           //if:isCmd use text split index 1 as the parameter block
           params = t_split[0] ? t_split[0].split(':').slice(1) : false;
@@ -652,7 +655,6 @@ class Deva {
     }
     _data.hash = this.hash(_data);
 
-    this.state('init');
     return new Promise((resolve, reject) => {
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -664,6 +666,7 @@ class Deva {
       }).then(() => {
         return this.Security();
       }).then(() => {
+        this.zone('init');
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
         return hasOnInit ? this.onInit(_data) : this.start(_data)
       }).catch(err => {
@@ -683,6 +686,7 @@ class Deva {
   usage: this.start('msg')
   ***************/
   start(data) {
+    this.zone('start');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('start');
     data.value = 'start';
@@ -705,6 +709,7 @@ class Deva {
   usage: this.enter('msg')
   ***************/
   enter(data) {
+    this.zone('enter');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('enter');
     data.value = 'enter';
@@ -727,6 +732,7 @@ class Deva {
   usage: this.done('msg')
   ***************/
   done(data) {
+    this.zone('done');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('done');
     data.value = 'done';
@@ -749,6 +755,7 @@ class Deva {
     this.finish(data, resolve)
   ***************/
   finish(packet, resolve) {
+    this.zone('finish');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('finish');
     packet.hash = this.hash(packet);// hash the entire packet before finishing.
@@ -773,9 +780,10 @@ class Deva {
     this.stop()
   ***************/
   stop() {
+    this.zone('stop');
     if (!this._active) return Promise.resolve(this._messages.offline);
 
-    this.action('stop');
+    this.state('stop');
     const agent = this.agent();
     const client = this.client();
 
@@ -789,7 +797,7 @@ class Deva {
     }
     data.hash = this.hash(data);
 
-    this.state('stop');
+    this.action('stop');
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
     return hasOnStop ? this.onStop(data) : this.exit(data)
   }
@@ -811,9 +819,8 @@ class Deva {
   ***************/
   exit() {
     this.zone('exit');
-    this._active = false;
 
-    this.action('exit');
+    this.state('exit');
     const agent = this.agent();
     const client = this.client();
 
@@ -834,7 +841,7 @@ class Deva {
     this._support = false;
     this._services = false;
 
-    this.state('exit');
+    this.action('exit');
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
     return hasOnExit ? this.onExit(data) : Promise.resolve(data)
   }
