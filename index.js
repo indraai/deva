@@ -408,7 +408,6 @@ class Deva {
     // check to see if the string is a command string to run a local method.
     const isCmd = t_split[0].startsWith(this.cmdChr);
 
-    this.state('data');
     // Format the packet for return on the request.
     const data = DATA;                                    // set the DATA to data
     const packet = {                                      // create the base q/a packet
@@ -450,6 +449,7 @@ class Deva {
           text = t_split.slice(1).join(' ').trim();       // if:isCmd rejoin the string on the space after removing first index
         }
 
+        this.state('data');
         packet.q = {                                      // build packet.q container
             id: this.uid(),
             agent: this.agent() || false,                  // set the agent
@@ -475,7 +475,6 @@ class Deva {
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
             this.action('question_ask_answer');
-
             this.talk(config.events.ask, this.copy(answer));
             return this.finish(answer, resolve);                       // if:isAsk resolve the answer from the call
           });
@@ -503,7 +502,7 @@ class Deva {
   ***************/
   answer(packet, resolve, reject) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('answer');
+    this.zone('answer');
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
     const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
@@ -512,7 +511,7 @@ class Deva {
     }
     // Call the local method to process the question based the extracted parameters
     return this.methods[method](packet).then(result => {
-      this.action('answer');
+      this.state('answer');
       // check the result for the text, html, and data object.
       // this is for when answers are returned from nested Devas.
       const text = typeof result === 'object' ? result.text : result;
@@ -541,7 +540,7 @@ class Deva {
       packet_answer.meta.hash = this.hash(packet_answer);
 
       packet.a = packet_answer;
-      this.action('answer_talk');
+      this.action('answer');
       this.talk(config.events.answer, this.copy(packet)); // global talk event
       return this.finish(packet, resolve); // resolve the packet to the caller.
     }).catch(err => { // catch any errors in the method
@@ -567,7 +566,7 @@ class Deva {
   ask(packet) {
     if (!this._active) return Promise.resolve(this._messages.offline);
 
-    this.state('ask');
+    this.zone('ask');
 
     const agent = this.agent();
     const client = this.client();
@@ -590,14 +589,14 @@ class Deva {
     try {
       if (typeof this.methods[packet.q.meta.method] !== 'function') {
         return setImmediate(() => {
-          this.action('invalid')
+          this.action('invalid');
           this.talk(`${this._agent.key}:ask:${packet.id}`, this._methodNotFound(packet));
         });
       }
 
+      this.state('ask');
       // The method is parsed and depending on what method is asked for it returns
       // the response based on the passed through packet.
-      this.action('ask');
       this.methods[packet.q.meta.method](packet).then(result => {
         if (typeof result === 'object') {
           packet_answer.text = result.text || false;
@@ -608,7 +607,7 @@ class Deva {
           packet_answer.text = result;
         }
         packet_answer.meta.hash = this.hash(packet_answer);
-        this.action('ask_answer');
+        this.action('ask');
         packet.a = packet_answer;
         this.talk(config.events.answer, this.copy(packet)); // global talk event
         this.talk(`${agent.key}:ask:${packet.id}`, packet);
@@ -956,6 +955,11 @@ class Deva {
     }
   }
 
+  /**************
+  func: actions
+  params: none
+  describe: Returns a list of available actions in the system.
+  ***************/
   actions() {
     this.action('actions');
     return {
@@ -969,58 +973,69 @@ class Deva {
   /**************
   func: feature
   params:
-    - st: The state flag to set for the Deva that matches to this._states
+    - value: The feature flag to set for the Deva that matches to this._features
+    - extra: Any extra text to send with the feature value.
   describe
   ***************/
-  feature(feature) {
+  feature(value=false, extra=false) {
     try {
-      if (!this._features[feature]) return;
-      this._feature = feature;
-      const text = this._features[feature] ;
-      const talk = {
-        id: this.uid(true),
-        key: 'feature',
-        value: feature,
-        agent: this._agent,
-        text,
-        created: Date.now(),
+      if (!value || !this._features[value]) return; // check feature value
+      this._feature = value; // set local feature variable
+
+      const lookup = this._features[value]; // set the lookup value
+      const text = extra ? `${lookup} ${extra}` : lookup; // set the text value
+
+      const data = { // build data object
+        id: this.uid(true), // set the id
+        agent: this.agent(), // set the agent transporting the packet.
+        key: 'feature', // set the key for transport
+        value, // set the value of the key
+        text, // set the text value
+        created: Date.now(), // set the creation date
       };
-      talk.hash = this.hash(talk);
-      this.talk(config.events.feature, talk);
-    } catch (e) {
-      return this.error(e);
+      data.hash = this.hash(data); // generate the hash value of the data packet
+      this.talk(config.events.feature, data); // talk the feature event with data
+    } catch (e) { // catch any errors
+      return this.error(e); // retun this.error when an error is caught.
     }
   }
 
+  /**************
+  func: features
+  params: none
+  describe: return a list of features that are available to the system.
+  ***************/
   features() {
-    this.action('features');
-    return {
-      id: this.uid(true),
-      key: 'features',
-      value: this._features,
-      created: Date.now(),
+    this.action('features'); // set the action to features
+    return { // return the data object
+      id: this.uid(true), // set the object id
+      agent: this.agent(), // set the agent value.
+      key: 'features', // set the key
+      value: this._features, // set the value to the features list
+      created: Date.now(), // set the created date.
     }
   }
 
   /**************
   func: context
   params:
-    - st: The context flag to set for the Deva that matches to this._contexts
+    - value: The context flag to set for the Deva that matches to this._contexts
+    - extra: Any extra text that is sent with the context value.
   describe
   ***************/
   context(value=false, extra=false) {
     try {
-      if (!value) return this._context;
+      if (!value) return;
       this._context = value;
       const lookup = this.vars.context[value] || value;
       const text = extra ? `${lookup} ${extra}` : lookup;
 
       const data = {
         id: this.uid(true),
-        key: 'context',
-        value,
         agent: this.agent(),
         client: this.client(),
+        key: 'context',
+        value,
         text,
         created: Date.now(),
       };

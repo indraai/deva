@@ -37,6 +37,9 @@
       "exit": "Exit",
       "finish": "Finish",
       "done": "Done",
+      "question": "Question",
+      "ask": "Ask",
+      "answer": "Answer",
       "deva": "Deva",
       "client": "Client",
       "agent": "Agent",
@@ -154,9 +157,7 @@
       "question_done": "Question done",
 
       "answer": "Answer",
-      "answer_talk": "Answer talk",
       "ask": "Ask",
-      "ask_answer": "Ask answer",
 
       "security": "Get Security",
       "support": "Get Support",
