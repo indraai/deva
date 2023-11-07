@@ -146,6 +146,7 @@
       "list": "List items",
       "reply": "Reply",
       "set": "Set",
+      "get": "Get",
       "return": "Return",
 
       "question_ask": "Ask question",
