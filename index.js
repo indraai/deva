@@ -10,7 +10,7 @@ const { createHash, randomUUID, createCipheriv, createDecipheriv, randomBytes } 
 const config = require('./config.json').DATA // load the deva core configuration data.
 class Deva {
   constructor(opts) {
-    opts = opts || {};
+    opts = opts || {}; // set opts to provided opts or an empty object.
     this._id = randomUUID(); // the unique id assigned to the agent at load
     this._info = opts.info || false; // the deva information from the package file.
     this._config = opts.config || {}; // local Config Object
@@ -20,17 +20,9 @@ class Deva {
     this._security = false; // inherited Security features.
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
-    this.os = require('os'); // It is used to provide basic operating system related utility functions.
-    this.fs = require('fs'); // this is so file system functions are in the core.
-    this.path = require('path'); // this is so we can get path in the system.
-    this.crypto = require('crypto'); // It is used to support cryptography for encryption and decryption.
-    this.zlib = require('zlib'); // provides compression functionality using Gzip, Deflate/Inflate, and Brotli.
-    this.dns = require('dns'); // It is used to lookup and resolve on domain names.
-    this.net = require('net'); // It used to create TCP server/client communicate using TCP protocol.
-    this.http = require('http'); // It is used to create Http server and Http client.
-    this.https = require('https'); // It is used to create Http server and Http client.
-    this.url = require('url'); // It is used for URL resolution and parsing.
-    this.assert = require('assert'); // It is used for testing itself.
+    this.os = os; // It is used to provide basic operating system related utility functions.
+    this.fs = fs; // this is so file system functions are in the core.
+    this.path = path; // this is so we can get path in the system.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.libs = opts.libs || {}; // used for loading library functions
     this.utils = opts.utils || {}; // parse function
@@ -109,7 +101,6 @@ class Deva {
     return new Promise((resolve, reject) => {
       try {
         // set the default listeners for the states of the agent.
-
         for (let state in this._states) {
           if (typeof this[state] === 'function') {
             this.events.on(`${this._agent.key}:${state}`, packet => {
@@ -119,15 +110,17 @@ class Deva {
         }
 
         // set the assigned listeners for the agent.
-        for (let listener in this.listeners) {
-          this.events.on(listener, packet => {
-            return this.listeners[listener](packet);
+        for (let listener in this.listeners) { // loop over the liteners
+          this.events.on(listener, packet => { // set the event listener
+            return this.listeners[listener](packet); // return the listener function
           })
         }
-        return resolve();
       }
       catch (e) {
-        return this.error(e, false, reject);
+        return this.error(e, false, reject); // pass errors to this.error
+      }
+      finally {
+        return resolve(); // resolve the function after everything is done.
       }
     });
   }
@@ -499,6 +492,8 @@ class Deva {
   answer(packet, resolve, reject) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.zone('answer');
+    const agent = this.agent();
+    const client = this.client();
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
     const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
@@ -517,8 +512,8 @@ class Deva {
 
       const packet_answer = { // setup the packet.a container
         id: this.uid(),
-        agent: this.agent(), // set the agent who answered the question
-        client: this.client(), // set the client asking the question
+        agent, // set the agent who answered the question
+        client, // set the client asking the question
         meta: { // setup the answer meta container
           key: agent.key, // set the agent key inot the meta
           method, // set the method into the meta
@@ -740,21 +735,25 @@ class Deva {
   params:
   - packet: the data to pass to the resolve
   - resolve: the finish resolve to pass back
-  describe:
-    This function is use to relay the Agent ito a finish state when resolving a
-    question or data.
-  usage:
-    this.finish(data, resolve)
+  describe: This function is use to relay the Agent ito a finish state when
+            resolving a question or data.
+  usage: this.finish(data, resolve)
   ***************/
   finish(packet, resolve) {
-    this.zone('finish');
+    this.zone('finish'); // set the zone to finish
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('finish');
-    packet.hash = this.hash(packet);// hash the entire packet before finishing.
-    const hasOnFinish = this.onFinish && typeof this.onFinish === 'function' ? true : false;
 
+    this.state('finish'); // set the finish state
+    packet.hash = this.hash(packet);// hash the entire packet before finishing.
+    // check for agent on finish function in agent
+    const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
+
+    this.action('finish'); // set the finish action
+    // if: agent has on finish then return on finish
+
+    this.context('finish'); // set the context to finish
     if (hasOnFinish) return this.onFinish(packet, resolve);
-    this.action('finish');
+    // return the provided resolve function or a promise resolve.
     return resolve ? resolve(packet) : Promise.resolve(packet);
   }
 
@@ -772,25 +771,21 @@ class Deva {
     this.stop()
   ***************/
   stop() {
-    this.zone('stop');
+    this.zone('stop'); // set the zone to stop
     if (!this._active) return Promise.resolve(this._messages.offline);
-
-    this.state('stop');
-    const agent = this.agent();
-    const client = this.client();
-
-    const data = {
-      id: this.uid(true),
-      key: 'stop',
-      value: this._messages.stop,
-      agent,
-      client,
-      created: Date.now(),
+    this.state('stop'); // set the state to stop
+    const data = { // build the stop data
+      id: this.uid(), // set the id
+      agent: this.agent(), // set the agent
+      client: this.client(), // set the client
+      key: 'stop', // set the key
+      value: this._messages.stop, // set the value
+      created: Date.now(), // set the created date
     }
-    data.hash = this.hash(data);
-
-    this.action('stop');
+    this.action('stop'); // set the stop action
+    // has stop function then set hasOnStop variable
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
+    // if: has on stop then run on stop function or return exit function.
     return hasOnStop ? this.onStop(data) : this.exit(data)
   }
 
@@ -844,27 +839,28 @@ class Deva {
   /**************
   func: state
   params:
-    - st: The state flag to set for the Deva that matches to this._states
-  describe
+    - value: The state value to set for the Deva that matches to this._states
+    - extra: any extra text to add ot the state change.
   ***************/
-  state(state) {
+  state(value=false, extra=false) {
     try {
-      if (!this._states[state]) return;
-      this._state = state;
-      const text = this._states[state];
-      const data = {
-        id: this.uid(true),
-        key: 'state',
-        value: state,
-        agent: this.agent(),
-        client: this.client(),
-        text,
-        created: Date.now(),
+      if (!value || !this._states[value]) return; // return if no matching value
+      this._state = value; // set the local state variable.
+      const lookup = this._states[value]; // set the local states lookup
+      const text = extra ? `${lookup} ${extra}` : lookup; // set text from lookup with extra
+      const data = { // build the data object
+        id: this.uid(), // set the data id
+        agent: this.agent(), // set the agent
+        client: this.client(), // set the client
+        key: 'state', // set the key to state
+        value, // set the value to the passed in value
+        text, // set the text value of the data
+        created: Date.now(), // set the data created date.
       };
-      data.hash = this.hash(data);
-      this.talk(config.events.state, data);
-    } catch (e) {
-      return this.error(e);
+      data.hash = this.hash(data); // hash the data
+      this.talk(config.events.state, data); // broadcasat the state event
+    } catch (e) { // catch any errors
+      return this.error(e); // return if an error happens
     }
   }
 
@@ -889,13 +885,16 @@ class Deva {
     - st: The zone flag to set for the Deva that matches to this._zones
   describe
   ***************/
-  zone(value) {
-    if (!this._zones[value] || value === this._zone) return;
+  zone(value=false, extra=false) {
+    if (!value || !this._zones[value] || value === this._zone) return;
     try {
       this._zone = value;
-      const text = this._zones[value];
-      const data = {
-        id: this.uid(true),
+
+      const lookup = this._zones[value]; // set the lookup value
+      const text = extra ? `${lookup} ${extra}` : lookup; // set the text value
+
+      const data = { // build the zone data
+        id: this.uid(), // set the packetid
         agent: this.agent(),
         client: this.client(),
         key: 'zone',

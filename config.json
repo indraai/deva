@@ -113,6 +113,7 @@
       "push": "Push",
       "pull": "Pull",
       "set": "Set",
+      "response": "Response",
       "invalid": "INVALID!",
       "abort": "ABORT!",
       "error": "ERROR!",
