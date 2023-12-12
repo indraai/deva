@@ -105,6 +105,7 @@
       "memory": "💭 Memory",
       "response": "✍️ Response",
       "invalid": "👎 INVALID!",
+      "valid": "👍 VALID!",
       "abort": "💔 ABORT!",
       "error": "❌ ERROR!",
       "help": "💙 Help"
