@@ -319,7 +319,6 @@ class Deva {
       try {
         delete this._client.features; // delete the features key when done.
         this.state('ready');
-        this.action('wait');
         return resolve(client); // resolve an empty pr
       } catch (e) {
         return this.error(e, false, reject);
@@ -392,6 +391,7 @@ class Deva {
     this.zone('question'); // set the zone to question.
     const id = this.uid(); // generate a unique id for transport.
     const t_split = TEXT.split(' '); // split the text on spaces to get words.
+    const data = DATA; // set the DATA to data
 
     // check to see if the string is an #ask string to talk to the other Deva.
     const isAsk = t_split[0].startsWith(this.askChr);
@@ -400,7 +400,6 @@ class Deva {
     const isCmd = t_split[0].startsWith(this.cmdChr);
 
     // Format the packet for return on the request.
-    const data = DATA; // set the DATA to data
     const packet = { // create the base q/a packet
       id, // set the id into packet
       q: false, // create empty q object in packet
@@ -420,7 +419,6 @@ class Deva {
       this.state('question'); // set the state to question
       try { // try to answer the question
         if (isAsk) { // determine if hte question isAsk
-          this.state('ask');
           _action = 'question_ask';
           // if:isAsk split the agent key and remove first command character
           key = t_split[0].substring(1);
@@ -428,17 +426,17 @@ class Deva {
           params = t_split[1] ? t_split[1].split(':') : false;
           method = params[0]; // the method to check is then params index 0
           text = t_split.slice(2).join(' ').trim(); // rejoin the text with space
+          this.state('ask', `${key} ${method}`);
         }
         else if (isCmd) { // determine if the question is a command
-          this.state('cmd'); // set the state to cmd.
           _action = 'question_cmd';
           //if:isCmd use text split index 1 as the parameter block
           params = t_split[0] ? t_split[0].split(':').slice(1) : false;
           method = t_split[0].substring(1); // if:isCmd use the 0 index as the command
           text = t_split.slice(1).join(' ').trim(); // if:isCmd rejoin the string on the space after removing first index
+          this.state('cmd', method); // set the state to cmd.
         }
 
-        this.state('data');
         packet.q = { // build packet.q container
             id: this.uid(), // set the transport id for the question.
             agent: this.agent(), // set the agent
@@ -456,7 +454,7 @@ class Deva {
         // hash the question
         packet.q.meta.hash = this.hash(packet.q);
 
-        this.action(_action); // set current action to what was defined by _action variable.
+        this.action(_action, method); // set current action to what was defined by _action variable.
         this.talk(config.events.question, this.copy(packet)); // global question event make sure to copy data.
 
         if (isAsk) { // isAsk check if the question isAsk and talk
@@ -469,7 +467,7 @@ class Deva {
           });
         }
         else { // else: answer tue question locally
-          this.action('question_answer');
+          this.action('question_answer', method);
           return this.answer(packet, resolve, reject);
         }
       }
@@ -502,7 +500,7 @@ class Deva {
     }
     // Call the local method to process the question based the extracted parameters
     return this.methods[method](packet).then(result => {
-      this.state('answer');
+      this.action('answer', method); // set the action to answer
       // check the result for the text, html, and data object.
       // this is for when answers are returned from nested Devas.
       const text = typeof result === 'object' ? result.text : result;
@@ -525,10 +523,10 @@ class Deva {
         created: Date.now(), // set the created date for the answer
       };
 
+      this.state('answer', method);
       // create a hash for the answer and insert into answer meta.
       packet_answer.meta.hash = this.hash(packet_answer);
       packet.a = packet_answer; // set the packet.a to the packet_answer
-      this.action('answer'); // set the action to answer
       this.talk(config.events.answer, this.copy(packet)); // global talk event
       return this.finish(packet, resolve); // resolve the packet to the caller.
     }).catch(err => { // catch any errors in the method
@@ -553,8 +551,8 @@ class Deva {
   ***************/
   ask(packet) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-
-    this.zone('ask');
+    const {method, params} = packet.q.meta;
+    this.zone('ask', method);
 
     const agent = this.agent();
     const client = this.client();
@@ -565,8 +563,8 @@ class Deva {
       client,
       meta: {
         key: agent.key,
-        method: packet.q.meta.method,
-        params: packet.q.meta.params,
+        method,
+        params,
       },
       text: false,
       html: false,
@@ -574,18 +572,18 @@ class Deva {
       created: Date.now(),
     };
 
+    this.action('ask', method);
     try {
-      if (typeof this.methods[packet.q.meta.method] !== 'function') {
+      if (typeof this.methods[method] !== 'function') {
         return setImmediate(() => {
-          this.action('invalid');
+          this.action('invalid', method);
           this.talk(`${this._agent.key}:ask:${packet.id}`, this._methodNotFound(packet));
         });
       }
 
-      this.state('ask');
       // The method is parsed and depending on what method is asked for it returns
       // the response based on the passed through packet.
-      this.methods[packet.q.meta.method](packet).then(result => {
+      this.methods[method](packet).then(result => {
         if (typeof result === 'object') {
           packet_answer.text = result.text || false;
           packet_answer.html = result.html || false;
@@ -594,8 +592,9 @@ class Deva {
         else {
           packet_answer.text = result;
         }
+
+        this.state('ask', method);
         packet_answer.meta.hash = this.hash(packet_answer);
-        this.action('ask');
         packet.a = packet_answer;
         this.talk(config.events.answer, this.copy(packet)); // global talk event
         this.talk(`${agent.key}:ask:${packet.id}`, packet);
@@ -631,6 +630,7 @@ class Deva {
     // set client
     this._active = Date.now();
     const agent = this.agent();
+
     const _data = {
       id: this.uid(true),
       key: 'init',
@@ -655,7 +655,9 @@ class Deva {
       }).then(() => {
         this.zone('init');
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
-        return hasOnInit ? this.onInit(_data) : this.start(_data)
+        return hasOnInit ? this.onInit(_data) : this.start(_data);
+      }).then(done => {
+        return resolve(done);
       }).catch(err => {
         return this.error(err, client, reject);
       });
@@ -675,12 +677,12 @@ class Deva {
   start(data) {
     this.zone('start');
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('start');
+    this.action('start');
     data.value = 'start';
     delete data.hash;
     data.hash = this.hash(data);
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
-    this.action('start');
+    this.state('start');
     return hasOnStart ? this.onStart(data) : this.enter(data)
   }
 
@@ -698,11 +700,11 @@ class Deva {
   enter(data) {
     this.zone('enter');
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('enter');
+    this.action('enter');
     data.value = 'enter';
     delete data.hash;
     data.hash = this.hash(data);
-    this.action('enter');
+    this.state('enter');
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
     return hasOnEnter ? this.onEnter(data) : this.done(data)
   }
@@ -721,12 +723,12 @@ class Deva {
   done(data) {
     this.zone('done');
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.state('done');
+    this.action('done');
     data.value = 'done';
     delete data.hash;
     data.hash = this.hash(data);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
-    this.action('done')
+    this.state('done');
     return hasOnDone ? this.onDone(data) : Promise.resolve(data);
   }
 
@@ -751,7 +753,6 @@ class Deva {
     this.action('finish'); // set the finish action
     // if: agent has on finish then return on finish
 
-    this.context('finish'); // set the context to finish
     if (hasOnFinish) return this.onFinish(packet, resolve);
     // return the provided resolve function or a promise resolve.
     return resolve ? resolve(packet) : Promise.resolve(packet);
@@ -807,10 +808,10 @@ class Deva {
   exit() {
     this.zone('exit');
 
-    this.state('exit');
     const agent = this.agent();
     const client = this.client();
 
+    this.action('exit');
     const data = {
       id: this.uid(true),
       key: 'exit',
@@ -828,7 +829,7 @@ class Deva {
     this._support = false;
     this._services = false;
 
-    this.action('exit');
+    this.state('exit');
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
     return hasOnExit ? this.onExit(data) : Promise.resolve(data)
   }
@@ -870,7 +871,8 @@ class Deva {
   describe: returns the avaiable staets values.
   ***************/
   states() {
-    this.action('states');
+    this.action('func', 'states');
+    this.state('return', 'states');
     return {
       id: this.uid(true),
       key: 'states',
@@ -915,7 +917,8 @@ class Deva {
   describe: returns a listing of zones currently in the system.
   ***************/
   zones() {
-    this.action('zones'); // set the action to zones
+    this.action('func', 'zones');
+    this.state('return', 'zones');
     return {
       id: this.uid(true), // set the uuid of the data
       agent: this.agent(), // set the agent value
@@ -965,7 +968,8 @@ class Deva {
   describe: Returns a list of available actions in the system.
   ***************/
   actions() {
-    this.action('actions');
+    this.action('func', 'actions');
+    this.state('return', 'actions');
     return {
       id: this.uid(true), // set the id with a uuid
       agent: this.agent(), // set the agent value
@@ -1012,7 +1016,8 @@ class Deva {
   describe: return a list of features that are available to the system.
   ***************/
   features() {
-    this.action('features'); // set the action to features
+    this.action('func', 'features');
+    this.state('return', 'features');
     return { // return the data object
       id: this.uid(true), // set the object id
       agent: this.agent(), // set the agent value.
@@ -1046,6 +1051,7 @@ class Deva {
         text,
         created: Date.now(),
       };
+
       data.hash = this.hash(data);
       this.talk(config.events.context, data);
     } catch (e) {
@@ -1054,7 +1060,8 @@ class Deva {
   }
 
   contexts() {
-    this.action('contexts');
+    this.action('func', 'contexts');
+    this.state('return', 'contexts');
     return {
       id: this.uid(true),
       agent: this.agent(),
@@ -1097,11 +1104,12 @@ class Deva {
   usage: this.security()
   ***************/
   security() {
+    this.zone('security');
     this.feature('security'); // set the security state
     if (!this._active) return this._messages.offline; // check the active status
-    this.state('data'); // set the security state
+    this.action('feature', 'security'); // set the security state
     try {
-      this.action('security'); // set the security state
+      this.state('return', 'security'); // set the security state
       return this.copy(this._security); // return the security feature
     } catch (e) {return this.error(e);}
   }
@@ -1113,11 +1121,12 @@ class Deva {
   usage: this.support()
   ***************/
   support() {
+    this.zone('support');
     this.feature('support'); // set the support state
     if (!this._active) return this._messages.offline; // check the active status
-    this.state('data'); // set the state to data
+    this.action('feature', 'support'); // set the state to data
     try {
-      this.action('support'); // set the action to support.
+      this.state('return', 'support'); // set the action to support.
       return this.copy(this._support); // return the support feature
     } catch (e) {
       return this.error(e); // return this.error when error catch
@@ -1131,11 +1140,12 @@ class Deva {
   usage: this.services()
   ***************/
   services(opts) {
+    this.zone('services');
     this.feature('services'); // set the support state
     if (!this._active) return this._messages.offline; // check the active status
-    this.state('data'); // set the services state
+    this.action('feature', 'services'); // set the services state
     try {
-      this.action('services'); // set the services state
+      this.state('return', 'services'); // set the services state
       return this.copy(this._services); // return the services feature
     } catch (e) {
       return this.error(e); // return this.error when error catch
@@ -1149,7 +1159,9 @@ class Deva {
   describe: This function will enable fast loading of Deva into the system.
   ***************/
   load(key, client) {
-    this.state('load');
+    this.zone('load', key);
+    this.action('load', key);
+    this.state('load', key);
     return this.devas[key].init(client);
   }
 
@@ -1160,13 +1172,15 @@ class Deva {
   describe: Unload a currently loaded Deva.
   ***************/
   unload(key) {
+    this.zone('unload', key);
     return new Promise((resolve, reject) => {
       try {
-        this.state('uload');
+        this.action('uload', key);
         this.devas[key].stop().then(exit => {
           delete this.devas[key];
           this.talk(config.events.unload, key);
         });
+        this.state('unload', key)
         return resolve(this._states.unload);
       } catch (e) {
         return this.error(e, this.devas[key], reject)
@@ -1227,6 +1241,7 @@ class Deva {
     defined client security settings.
   ***************/
   cipher(str) {
+    this.feature('cipher');
     // this.action('cipher');
     const security = this._security;
     const {password, algorithm} = security.cipher;
@@ -1237,6 +1252,7 @@ class Deva {
     const _cipher = createCipheriv(algorithm, key_in_bytes, iv);
     const encrypted = _cipher.update(String(str), 'utf8', 'hex') + _cipher.final('hex');
 
+    this.state('return', 'cipher');
     return {
       iv: iv.toString('base64'),
       key,
@@ -1245,6 +1261,7 @@ class Deva {
   }
 
   decipher(opt) {
+    this.feature('decipher');
     // this.action('decipher');
     const iv = Buffer.from(opt.iv, 'base64');
     const encrypted = Buffer.from(opt.encrypted, 'hex');
@@ -1255,6 +1272,7 @@ class Deva {
     const decrypted = decipher.update(encrypted);
     const final = Buffer.concat([decrypted, decipher.final()]);
     return final.toString();
+    this.state('return', 'decipher');
   }
 
   /**************
@@ -1267,7 +1285,7 @@ class Deva {
   usage: this.prompt('text')
   ***************/
   prompt(text) {
-    this.action('prompt');
+    this.feature('prompt');
     // Talk a global prompt event for the client
     const agent = this.agent();
     const client = this.client();
@@ -1280,6 +1298,7 @@ class Deva {
       text,
       created: Date.now(),
     }
+    this.state('talk', 'prompt')
     return this.talk(config.events.prompt, _data);
   }
 
@@ -1307,13 +1326,14 @@ class Deva {
     with no time value for the current day.
   ***************/
   getToday(d) {
-    this.action('gettoday');
+    this.feature('getToday');
     d = d ? d : Date.now();
     const today = new Date(d);
     today.setHours(0);
     today.setMinutes(0);
     today.setSeconds(0);
     today.setMilliseconds(0);
+    this.state('return', 'getToday');
     return today.getTime();
   }
 
@@ -1330,6 +1350,7 @@ class Deva {
     system based on the language and locale in the client profile.
   ***************/
   formatDate(d, format='milli', time=false) {
+    this.feature('formatDate');
     if (!d) d = Date.now();
     d = new Date(d);
 
@@ -1348,6 +1369,7 @@ class Deva {
     };
     const theDate = d.toLocaleDateString(this._client.locale, formats[format]);
     const theTime = this.formatTime(d);
+    this.state('return', 'formatDate');
     return !theTime ? theDate : `${theDate} - ${theTime}`;
   }
 
@@ -1360,6 +1382,7 @@ class Deva {
     parameter based on the locale setting in the client profile..
   ***************/
   formatTime(t) {
+    this.feature('formatTime');
     return t.toLocaleTimeString(this._client.locale);     // return the formatted time string
   }
 
@@ -1372,6 +1395,7 @@ class Deva {
     in the client profile.
   ***************/
   formatCurrency(n) {
+    this.feature('formatCurrency');
     return new Intl.NumberFormat(this._client.locale, { style: 'currency', currency: this._client.currency }).format(n);
   }
 
@@ -1383,6 +1407,7 @@ class Deva {
   describe:
   ***************/
   formatPercent(n, dec=2) {
+    this.feature('formatPercent');
     return parseFloat(n).toFixed(dec) + '%';
   }
 
@@ -1395,8 +1420,10 @@ class Deva {
     A utility function to trimText intput to a specific word count.
   ***************/
   trimWords(text, maxwords) {
+    this.feature('trimWords');
     const splitter = text.split(' ');
     if (splitter < maxwords) return text;
+    this.state('return', 'trimmed words');
     return splitter.slice(0, maxwords).join(' ');
   }
 
@@ -1406,9 +1433,10 @@ class Deva {
   describe: remove duplicees from an array.
   ***************/
   dupes(dupers) {
-    this.action('dupes');
+    this.feature('dupes');
     if (!Array.isArray(dupers)) return dupers;
     const check = [];
+    this.state('return', 'duplicates removed');
     return dupers.filter(dupe => {
       if (!check.includes(dupe)) {
         check.push(dupe);
@@ -1425,7 +1453,7 @@ class Deva {
   info() {
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.action('info');
+    this.feature('info');
     return this._info;
   }
 
@@ -1442,11 +1470,12 @@ class Deva {
   ***************/
   status(msg=false) {
     // check the active status
-    if (!this._active) return Promise.resolve(this._messages.states.offline);
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.feature('status');
+
     // format the date since active for output.
     const dateFormat = this.formatDate(this._active, 'long', true);
     // create the text msg string
-    this.action('status');
     let text = `${this._agent.profile.name} active since ${dateFormat}`;
     if (msg) text = text + `\n${msg}`;                      // append the msg string if msg true.
     return text;                           // return final text string
@@ -1463,19 +1492,21 @@ class Deva {
     one exists it will then present it based on the users request text input.
   ***************/
   help(msg, help_dir) {
-    this.zone('help');
     return new Promise((resolve, reject) => {
-      if (!this._active) return resolve(this._messages.states.offline);
-      this.state('data');
+      if (!this._active) return resolve(this._messages.offline);
+      this.feature('help');
+      this.zone('help');
+
       const params = msg.split(' ');
       let helpFile = 'main';
       if (params[0]) helpFile = params[0];
       if (params[1]) helpFile = `${params[0]}_${params[1]}`;
       helpFile = path.join(help_dir, 'help', `${helpFile}.feecting`);
       try {
-        this.action('help');
+        this.state('resolve', 'help');
         return resolve(fs.readFileSync(helpFile, 'utf8'));
       } catch (e) {
+        this.state('reject', 'helpFile');
         return reject(e)
       }
     });
@@ -1494,7 +1525,7 @@ class Deva {
   error(err,data=false,reject=false) {
     this.zone('error');
 
-    this.state('error')
+    this.action('error')
     const agent = this.agent();
     const client = this.client();
     const _data = {
@@ -1509,7 +1540,8 @@ class Deva {
     }
     this.talk(config.events.error, this.copy(_data));
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
-    this.action('error');
+
+    this.state('error');
     if (hasOnError) return this.onError(err, data, reject);
     else return reject ? reject(err) : err;
   }
