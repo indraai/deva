@@ -11,7 +11,7 @@ const config = require('./config.json').DATA // load the deva core configuration
 class Deva {
   constructor(opts) {
     opts = opts || {}; // set opts to provided opts or an empty object.
-    this._id = randomUUID(); // the unique id assigned to the agent at load
+    this._id = opts.id || randomUUID(); // the unique id assigned to the agent at load
     this._info = opts.info || false; // the deva information from the package file.
     this._config = opts.config || {}; // local Config Object
     this._agent = opts.agent || false; // Agent profile object
@@ -35,7 +35,7 @@ class Deva {
     this.maxListeners = opts.maxListenners || 0; // set the local maxListeners
 
     // prevent overwriting existing functions and variables with same name
-    for (var opt in opts) {
+    for (const opt in opts) {
       if (!this[opt] || !this[`_${opt}`]) this[opt] = opts[opt];
     }
 
@@ -395,7 +395,8 @@ class Deva {
   question(TEXT=false, DATA=false) {
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.action('question');
+    this.zone('question');
+
     const id = this.uid(); // generate a unique id for transport.
     const t_split = TEXT.split(' '); // split the text on spaces to get words.
     const data = DATA; // set the DATA to data
@@ -458,14 +459,15 @@ class Deva {
         // hash the question
         packet.q.meta.hash = this.hash(packet.q);
 
-        this.state('talk', config.events.question); // set current action to what was defined by _action variable.
+        this.action('talk', config.events.question);
         this.talk(config.events.question, this.copy(packet)); // global question event make sure to copy data.
 
         if (isAsk) { // isAsk check if the question isAsk and talk
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
+          this.action('talk', `${key}:ask`);
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
-            this.state('talk', config.events.ask);
+            this.action('talk', config.events.ask);
             this.talk(config.events.ask, this.copy(answer));
             return this.finish(answer, resolve); // if:isAsk resolve the answer from the call
           });
@@ -499,11 +501,10 @@ class Deva {
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
     const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
-    if (!isMethod) {
-      return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails
-    }
+    if (!isMethod) return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails
+
     // Call the local method to process the question based the extracted parameters
-    this.action('answer', method);
+    this.zone('answer', method);
     this.methods[method](packet).then(result => {
       // check the result for the text, html, and data object.
       // this is for when answers are returned from nested Devas.
@@ -531,7 +532,7 @@ class Deva {
       // create a hash for the answer and insert into answer meta.
       packet_answer.meta.hash = this.hash(packet_answer);
       packet.a = packet_answer; // set the packet.a to the packet_answer
-      this.state('talk', config.events.answer);
+      this.action('talk', config.events.answer)
       this.talk(config.events.answer, this.copy(packet)); // global talk event
       this.state('resovle', 'answer')
       return this.finish(packet, resolve); // resolve the packet to the caller.
@@ -559,7 +560,7 @@ class Deva {
   ask(packet) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     const {method, params} = packet.q.meta;
-    this.action('ask', method);
+    this.zone('ask', method);
 
     const agent = this.agent();
     const client = this.client();
@@ -602,7 +603,6 @@ class Deva {
         this.state('set', `ask:${method}`);
         packet_answer.meta.hash = this.hash(packet_answer);
         packet.a = packet_answer;
-        this.state('talk', config.events.answer);
         this.talk(config.events.answer, this.copy(packet)); // global talk event
         this.talk(`${agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
@@ -750,7 +750,7 @@ class Deva {
   ***************/
   finish(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.action('finish'); // set the finish action
+    this.zone('finish'); // set the finish action
 
     packet.hash = this.hash(packet);// hash the entire packet before finishing.
     // check for agent on finish function in agent
@@ -1009,7 +1009,6 @@ class Deva {
         created: Date.now(), // set the creation date
       };
       data.hash = this.hash(data); // generate the hash value of the data packet
-      this.state('talk', 'feature');
       this.talk(config.events.feature, data); // talk the feature event with data
     } catch (e) { // catch any errors
       return this.error(e); // retun this.error when an error is caught.
@@ -1058,7 +1057,6 @@ class Deva {
       };
 
       data.hash = this.hash(data);
-      this.state('talk', 'context');
       this.talk(config.events.context, data);
     } catch (e) {
       return this.error(e);
@@ -1301,7 +1299,6 @@ class Deva {
       text,
       created: Date.now(),
     }
-    this.state('talk', 'prompt')
     return this.talk(config.events.prompt, _data);
   }
 
@@ -1370,8 +1367,8 @@ class Deva {
       day: { day: 'long' },
       log: { year: 'numeric', month: 'short', day: 'numeric' },
     };
-    const theDate = d.toLocaleDateString(this._client.locale, formats[format]);
-    const theTime = this.formatTime(d);
+    const theDate = d.toLocaleDateString(this._client.profile.locale, formats[format]);
+    const theTime = time ? this.formatTime(d) : false;
     this.state('return', 'formatDate');
     return !theTime ? theDate : `${theDate} - ${theTime}`;
   }
@@ -1386,7 +1383,7 @@ class Deva {
   ***************/
   formatTime(t) {
     this.feature('formatTime');
-    return t.toLocaleTimeString(this._client.locale);     // return the formatted time string
+    return t.toLocaleTimeString(this._client.profile.locale);     // return the formatted time string
   }
 
   /**************
@@ -1397,13 +1394,27 @@ class Deva {
     The formatCurrency function will format a currency value based on the setting
     in the client profile.
   ***************/
-  formatCurrency(n) {
+  formatCurrency(n, cur=false) {
     this.feature('formatCurrency');
-    return new Intl.NumberFormat(this._client.locale, { style: 'currency', currency: this._client.currency }).format(n);
+    const currency = cur || this._client.profile.currency;
+    return new Intl.NumberFormat(this._client.profile.locale, { style: 'currency', currency: currency }).format(n);
   }
 
   /**************
-  func: formatPerdent
+  func: formatCurrency
+  params:
+    - n: is the number that you want to return the currency of.
+  describe:
+    The formatCurrency function will format a currency value based on the setting
+    in the client profile.
+  ***************/
+  formatNumber(n) {
+    this.feature('formatNumber');
+    return new Intl.NumberFormat(this._client.profile.locale).format(n);
+  }
+
+  /**************
+  func: formatPercent
   params:
     - n: is the number that you want to format as a percent.
     - dec: is the number of decimal places to apply to the number.
@@ -1415,7 +1426,7 @@ class Deva {
   }
 
   /**************
-  func: trimText
+  func: trimWords
   params:
     - text: The text to trim.
     - maxwords: The number of words to max.
