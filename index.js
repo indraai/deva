@@ -621,8 +621,8 @@ class Deva {
     The main init interface where the chain begins. Where the states fire for
     each process of setting:
     1. Set the Max listeners to control event memory buffer.
-    2. Assign the Interited Properties
-    3. Assign binding functions and methods to 'this' scoe.
+    2. Assign the Inherited Properties
+    3. Assign binding functions and methods to 'this' scope.
     4. Assign any listeners for additional functionality.
     5. run the onInit custom function if preset or the start function.
     6. The start function will create a chain reaction of states that load.

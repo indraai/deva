@@ -44,6 +44,8 @@
       "security": "🔐 Security",
       "support": "💼 Support",
       "services": "🛠️ Services",
+      "legal": "👨‍⚖️️ Legal",
+      "authority": "👮‍♂️ Authority",
       "help": "💚 Help",
       "error": "❌ Error!"
     },
@@ -99,7 +101,7 @@
       "pull": "👉 Pull",
       "search": "🔎 Search",
       "memory": "💭 Memory",
-      "response": "✍️ Response",
+      "signature": "⛑️ Response",
       "invalid": "👎 INVALID!",
       "valid": "👍 VALID!",
       "abort": "💔 ABORT!",
@@ -107,7 +109,15 @@
       "help": "💙 Help",
       "authorized": "🔐 authorized",
       "unauthorized": "🏴‍☠️ unauthorized",
-      "Done": "☑️  Done"
+      "Done": "☑️  Done",
+      "glitch": "😡 Glitch",
+      "intruder": "🦹‍♂️ Intruder",
+      "snooper": "👀 Snooper",
+      "scam": "🙅‍♂️ Scam",
+      "fraud": "‼️ Fraud",
+      "crime": "🚔 Crime",
+      "official": "🫡 Official",
+      "unofficial": "🤥 Unofficial"
     },
     "action": false,
     "actions": {
@@ -176,7 +186,15 @@
       "features": "🎥 Getting features",
       "contexts": "🌈 Getting contexts",
       "help": "💜 Help",
-      "error": "🔴 ERROR!"
+      "error": "🔴 ERROR!",
+      "lawful": "🚓 Lawful",
+      "unlawful": "👿 Unlawful",
+      "audio": "👂 Audio",
+      "text": "📕 Text",
+      "image": "🌄 Image",
+      "image": "📽️ Video",
+      "signature": "✍️ Signature",
+      "orders": "🪖 Orders"
     },
     "feature": false,
     "features": {
