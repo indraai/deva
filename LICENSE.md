@@ -1,7 +1,7 @@
 Deva Restricted License Agreement
 
-Version 1.0
-Effective Date: Tuesday- January 21, 2024
+Version 1.1
+Effective Date: Tuesday- January 28, 2025
 
 This license agreement (“Agreement”) governs the use of the Deva (“Software”). By accessing or using the Software, you agree to the terms and conditions set forth below. If you do not agree, you are prohibited from using the Software.
 
@@ -17,7 +17,7 @@ The Owner grants you a non-exclusive, non-transferable, revocable license to use
 
 You are expressly prohibited from:
 	1.	Modifying, distributing, sub-licensing, or creating derivative works based on the Software without prior written consent.
-	2.	Using the Software for commercial purposes, unless expressly authorized by the Owner.
+	2.	Using the Software for official or commercial purposes, unless expressly authorized by the Owner.
 	3.	Reverse engineering, decompiling, or disassembling the Software.
 	4.	Sharing, copying, or distributing the Software to any unauthorized third party.
 
@@ -35,7 +35,7 @@ To the maximum extent permitted by law, the Owner shall not be liable for any da
 
 7. Governing Law
 
-This Agreement shall be governed by and construed in accordance with the laws of [Your Jurisdiction].
+This Agreement shall be governed by and construed in accordance with the laws of United States of America and it's Authorized Official Governing Authority.
 
 8. Entire Agreement
 
