@@ -3,8 +3,9 @@
   "version": "1.2.23",
   "description": "The Deva Core",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "node examples/hello-world.js"
+    "test": "node tests"
   },
   "repository": {
     "type": "git",
@@ -18,26 +19,26 @@
     "deva",
     "ai"
   ],
-  "license": "MIT",
+  "license": "Unlicense",
   "author": {
     "name": "Quinn Michaels",
-    "email": "quinnmichaels@gmail.com",
+    "email": "quinn@quinnmichaels.com",
     "url": "https://quinnmichaels.com/"
   },
   "funding": [
     {
       "type": "paypal",
-      "url": "https://example.com/rahulaclub"
+      "url": "https://paypal.me/rahulaclub"
     },
     {
       "type": "patreon",
-      "url": "https://www.patreon.com/rahulaclub"
+      "url": "https://patreon.com/rahulaclub"
     }
   ],
   "bugs": {
     "url": "https://github.com/indraai/deva/issues"
   },
-  "homepage": "https://github.com/indraai/deva#readme",
+  "homepage": "https://deva.space",
   "eslintConfig": {
     "parserOptions": {
       "ecmaVersion": 6

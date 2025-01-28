@@ -1,0 +1,127 @@
+{
+  "name": "CLIENT",
+  "describe": "CLIENT FILE",
+  "copyright": "Copyright ©2023 Quinn Michaels. All rights reserved.",
+  "DATA": {
+    "id": 3123155399059,
+    "key": "test",
+    "prompt": {
+      "emoji": "🧪",
+      "text": "test",
+      "colors": {
+        "label": {
+          "R": 2,
+          "G": 229,
+          "B": 77
+        },
+        "text": {
+          "R": 2,
+          "G": 229,
+          "B": 77
+        }
+      }
+    },
+    "profile": {
+      "name": "Test User",
+      "eamil": "test@example.com",
+      "describe": "The Test User",
+      "emoji": "/public/devas/test/avatar.png",
+      "avatar": "/public/devas/test/avatar.png",
+      "background": "/public/devas/test/background.png",
+      "gender": "splendid",
+      "lang": "en",
+      "locale": "en-US",
+      "currency": "USD"
+    },
+    "features": {
+      "security": {
+        "hash": "md5",
+        "cipher": {
+          "encrypt": true,
+          "algorithm": "aes-256-cbc",
+          "password": "generic password for encryption test"
+        },
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "support": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "services": {
+        "concerns": [],
+        "global": {
+          "indra": "https://indra.ai",
+          "world": "https://deva.world",
+          "space": "https://deva.space",
+          "cloud": "https://deva.cloud"
+        },
+        "devas": {
+          "hello": {}
+        }
+      },
+      "systems": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "solutions": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "development": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "assistant": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "business": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "legal": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "story": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "mind": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      }
+    }
+  }
+}

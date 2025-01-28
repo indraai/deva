@@ -1,13 +1,13 @@
-// Copyright (c)2023 Quinn Michaels; All Rights Reserved; Legal Signature Required.
+// Copyright (c)2025 Quinn Michaels; All Rights Reserved; Legal Signature Required.
 // Distributed under the PRIVATE software license, see the accompanying file LICENSE.md
-const {EventEmitter} = require('events');
-const fs = require('fs');
-const path = require('path');
-const os = require('os');
-const crypto = require('crypto');
-const { createHash, randomUUID, createCipheriv, createDecipheriv, randomBytes } = crypto;
+import {EventEmitter} from 'node:events';
+import fs from 'fs';
+import path from 'path';
+import os from 'os';
+import { createHash, randomUUID, createCipheriv, createDecipheriv, randomBytes } from 'crypto';
 
-const config = require('./config.json').DATA // load the deva core configuration data.
+import Config from './config.json' with {type:'json'};
+const config = Config.DATA;
 class Deva {
   constructor(opts) {
     opts = opts || {}; // set opts to provided opts or an empty object.
@@ -234,7 +234,6 @@ class Deva {
           personal: security.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.security; // make a copy the clinet data.
-        this.state('resolve', 'Support');
         return this.Support(); // goto Support when done with Security
       }
     } catch (e) {
@@ -269,7 +268,6 @@ class Deva {
           personal: support.devas[this._agent.key], // Client personalSecurity features and rules.
         };
         delete this._client.features.support; // delete the support key from the client
-        this.state('resolve', 'Services');
         return this.Services(); // when done move to Services
       }
     } catch (e) {
@@ -304,7 +302,6 @@ class Deva {
           personal: services.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.services; // delete the services key for isolation
-        this.state('resolve', 'Services');
         return this.Done(); // go to Done
       }
     } catch (e) {
@@ -319,15 +316,14 @@ class Deva {
   describe: The end of the workflow Client Feature Workflow
   ***************/
   Done(client) {
-    this.action('done');
+    this.action('Done');
     return new Promise((resolve, reject) => {
       try {
-        this.state('done');
+        this.state('Done');
         delete this._client.features; // delete the features key when done.
-        this.state('resolve', 'done');
         return resolve(client); // resolve an empty pr
       } catch (e) {
-        this.state('reject', 'done');
+        this.state('reject', 'Done');
         return this.error(e, false, reject);
       }
     });
@@ -705,7 +701,7 @@ class Deva {
   usage: this.enter('msg')
   ***************/
   enter(data) {
-    this.zone('enter');
+    this.zone('deva');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('enter');
     data.value = 'enter';
@@ -728,7 +724,6 @@ class Deva {
   usage: this.done('msg')
   ***************/
   done(data) {
-    this.zone('done');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('done');
     data.value = 'done';
@@ -736,7 +731,7 @@ class Deva {
     data.hash = this.hash(data);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     this.state('done');
-    return hasOnDone ? this.onDone(data) : Promise.resolve(data);
+    return hasOnDone ? this.onDone(data) : this.finish(data);
   }
 
   /**************
@@ -750,7 +745,7 @@ class Deva {
   ***************/
   finish(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.zone('finish'); // set the finish action
+    this.action('finish'); // set the finish action
 
     packet.hash = this.hash(packet);// hash the entire packet before finishing.
     // check for agent on finish function in agent
@@ -758,10 +753,59 @@ class Deva {
 
     // if: agent has on finish then return on finish
     this.state('finish'); // set the finish state
-    if (hasOnFinish) return this.onFinish(packet, resolve);
+
     // return the provided resolve function or a promise resolve.
-    return resolve ? resolve(packet) : Promise.resolve(packet);
+    return hasOnFinish ? this.onFinish(packet) : this.complete(packet);
   }
+
+  /**************
+  func: complete
+  params:
+  - packet: the data to pass to the resolve
+  - resolve: the complete resolve to pass back
+  describe: This function is use to relay the Agent ito a complete state when
+            resolving a question or data.
+  usage: this.complete(data, resolve)
+  ***************/
+  complete(packet, resolve) {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.action('complete'); // set the complete action
+
+    packet.hash = this.hash(packet);// hash the entire packet before completeing.
+    // check for agent on complete function in agent
+    const hasOnComplete = this.onComplete && typeof this.onComplete === 'function';
+
+    // if: agent has on complete then return on complete
+    this.state('complete'); // set the finish state
+
+    // return the provided resolve function or a promise resolve.
+    return hasOnComplete ? this.onComplete(packet) : this.ready(packet);
+  }
+
+  /**************
+  func: ready
+  params:
+  - packet: the data to pass to the resolve
+  - resolve: the complete resolve to pass back
+  describe: This function is use to relay the Agent ito a complete state when
+            resolving a question or data.
+  usage: this.complete(data, resolve)
+  ***************/
+  ready(packet, resolve) {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.action('ready'); // set the complete action
+
+    packet.hash = this.hash(packet);// hash the entire packet before completeing.
+    // check for agent on complete function in agent
+    const hasOnReady = this.onReady && typeof this.onReady === 'function';
+
+    // if: agent has on complete then return on complete
+    this.state('ready'); // set the finish state
+
+    // return the provided resolve function or a promise resolve.
+    return hasOnReady ? this.onReady(packet) : Promise.resolve(packet);
+  }
+
 
   /**************
   func: stop
@@ -1507,9 +1551,10 @@ class Deva {
   ***************/
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
+      this.zone('help');
+
       if (!this._active) return resolve(this._messages.offline);
       this.feature('help');
-      this.zone('help');
 
       const params = msg.split(' ');
       let helpFile = 'main';
@@ -1561,4 +1606,4 @@ class Deva {
   }
 
 }
-module.exports = Deva;
+export default Deva;
