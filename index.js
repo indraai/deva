@@ -20,6 +20,7 @@ class Deva {
     this._security = false; // inherited Security features.
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
+    this._systems = false; // inherited Service features.
     this.os = os; // It is used to provide basic operating system related utility functions.
     this.fs = fs; // this is so file system functions are in the core.
     this.path = path; // this is so we can get path in the system.
@@ -306,6 +307,40 @@ class Deva {
       }
     } catch (e) {
       this.state('reject', 'Services');
+      return this.error(e); // run error handling if an error is caught
+    }
+  }
+
+  /**************
+  func: Systems
+  params: client: false
+  describe:
+    The Systems feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Systems() {
+    this.zone('systems')
+    this.action('Systems');
+    const _cl = this.client(); // set local client
+    try {
+      if (!_cl.features.services) return this.Done(); // move to Done if no Systems feature
+      else {
+        this.state('set', 'Systems');
+        const {id, features, profile} = _cl;   // set the local consts from client copy
+        const {services} = features; // set services from features const
+        this._services = { // set this_services with data
+          id: this.uid(true), // uuid of the services feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: services.concerns, // any concerns for client
+          global: services.global, // the global policies for client
+          personal: services.devas[this._agent.key], // Client personal features and rules.
+        };
+        delete this._client.features.services; // delete the services key for isolation
+        return this.Done(); // go to Done
+      }
+    } catch (e) {
+      this.state('reject', 'Systems');
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -1192,6 +1227,24 @@ class Deva {
     try {
       this.state('return', 'services'); // set the services state
       return this.copy(this._services); // return the services feature
+    } catch (e) {
+      return this.error(e); // return this.error when error catch
+    }
+  }
+
+  /**************
+  func: systems
+  params: none
+  describe: basic systems features available in a Deva.
+  usage: this.systems()
+  ***************/
+  systems(opts) {
+    if (!this._active) return this._messages.offline; // check the active status
+    this.zone('systems');
+    this.feature('systems'); // set the support state
+    try {
+      this.state('return', 'systems'); // set the systems state
+      return this.copy(this._systems); // return the systems feature
     } catch (e) {
       return this.error(e); // return this.error when error catch
     }

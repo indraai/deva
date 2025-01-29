@@ -44,6 +44,7 @@
       "security": "🔐 Security",
       "support": "💼 Support",
       "services": "🛠️ Services",
+      "systems": "📡 Systems",
       "legal": "👨‍⚖️️ Legal",
       "authority": "👮‍♂️ Authority",
       "help": "💚 Help",
@@ -95,7 +96,7 @@
       "save": "💾 save",
       "delete": "🧨 delete",
       "set": "🖖 Set",
-      "get": "👍 Get",
+      "get": "🫴 Get",
       "put": "🤝 Put",
       "push": "🫸 Push",
       "pull": "👉 Pull",
@@ -117,7 +118,9 @@
       "fraud": "‼️ Fraud",
       "crime": "🚔 Crime",
       "official": "🫡 Official",
-      "unofficial": "🤥 Unofficial"
+      "unofficial": "🤥 Unofficial",
+      "approved": "🎖️ Approved",
+      "denied": "🖕 Denied"
     },
     "action": false,
     "actions": {
@@ -159,7 +162,7 @@
       "return": "🎁 Return",
       "resolve": "⛵️ Resolve",
       "reject": "❌ Reject",
-
+      "write": "🖋️ Write",
       "question_ask": "🗣️ Asked",
       "question_ask_answer": "🎙️ Answered",
       "question_cmd": "🪖 Command",
@@ -171,11 +174,13 @@
       "security": "🚨 Security",
       "support": "❤️ Support",
       "services": "🛠️ Services",
+      "systems": "💻️ Systems",
       
       "Client": " Client",
       "Security": "🚓 Security",
       "Support": "🚑 Support",
       "Services": "🚚 Services",
+      "Systems": "🚛 Systems",
       "Done": "☑️  Done",
 
       "invalid": "❌ Invalid",
@@ -194,13 +199,16 @@
       "image": "🌄 Image",
       "image": "📽️ Video",
       "signature": "✍️ Signature",
-      "orders": "🪖 Orders"
+      "orders": "🪖 Orders",
+      "law": "🔏 Law",
+      "decree": "📜 Decree"
     },
     "feature": false,
     "features": {
       "security": "🔐 Security",
       "support": "💼 Support",
       "services": "🛠️ Services",
+      "systems": "🖥️️ Systems",
       "cipher": "🔒 Cipher",
       "decipher": "🔓 Decipher",
       "promp": "🪵 Prompt",
