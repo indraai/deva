@@ -1565,7 +1565,7 @@ class Deva {
   params: id
   describe: return info data.
   ***************/
-  get info() {
+  info() {
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.feature('info');
@@ -1583,7 +1583,7 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.status('msg')
   ***************/
-  get status() {
+  status() {
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.feature('status');
