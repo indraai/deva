@@ -944,6 +944,7 @@ class Deva {
       };
       data.hash = this.hash(data); // hash the data
       this.talk(config.events.state, data); // broadcasat the state event
+      return data;
     } catch (e) { // catch any errors
       return this.error(e); // return if an error happens
     }
@@ -954,7 +955,7 @@ class Deva {
   params: none
   describe: returns the avaiable staets values.
   ***************/
-  states() {
+  get states() {
     this.action('func', 'states');
     this.state('return', 'states');
     return {
@@ -1000,7 +1001,7 @@ class Deva {
   params: none
   describe: returns a listing of zones currently in the system.
   ***************/
-  zones() {
+  get zones() {
     this.action('func', 'zones');
     this.state('return', 'zones');
     return {
@@ -1041,6 +1042,7 @@ class Deva {
       };
       data.hash = this.hash(data); // generate a hash of the action packet.
       this.talk(config.events.action, data); // talk the core action event
+      return data;
     } catch (e) { // catch any errors that occur
       return this.error(e); // return error on error catch
     }
@@ -1051,7 +1053,7 @@ class Deva {
   params: none
   describe: Returns a list of available actions in the system.
   ***************/
-  actions() {
+  get actions() {
     this.action('func', 'actions');
     this.state('return', 'actions');
     return {
@@ -1089,6 +1091,7 @@ class Deva {
       };
       data.hash = this.hash(data); // generate the hash value of the data packet
       this.talk(config.events.feature, data); // talk the feature event with data
+      return data;
     } catch (e) { // catch any errors
       return this.error(e); // retun this.error when an error is caught.
     }
@@ -1099,7 +1102,7 @@ class Deva {
   params: none
   describe: return a list of features that are available to the system.
   ***************/
-  features() {
+  get features() {
     this.state('return', 'features');
     return { // return the data object
       id: this.uid(true), // set the object id
@@ -1137,12 +1140,13 @@ class Deva {
 
       data.hash = this.hash(data);
       this.talk(config.events.context, data);
+      return data;
     } catch (e) {
       return this.error(e);
     }
   }
 
-  contexts() {
+  get contexts() {
     if (!this._active) return this._messages.offline; // check the active status
     this.state('return', 'contexts');
     return {
@@ -1186,7 +1190,7 @@ class Deva {
   describe: basic security features available in a Deva.
   usage: this.security()
   ***************/
-  security() {
+  get security() {
     if (!this._active) return this._messages.offline; // check the active status
     this.zone('security');
     this.feature('security'); // set the security state
@@ -1202,7 +1206,7 @@ class Deva {
   describe: basic support features available in a Deva.
   usage: this.support()
   ***************/
-  support() {
+  get support() {
     if (!this._active) return this._messages.offline; // check the active status
     this.zone('support');
     this.feature('support'); // set the support state
@@ -1220,7 +1224,7 @@ class Deva {
   describe: basic services features available in a Deva.
   usage: this.services()
   ***************/
-  services(opts) {
+  get services() {
     if (!this._active) return this._messages.offline; // check the active status
     this.zone('services');
     this.feature('services'); // set the support state
@@ -1238,7 +1242,7 @@ class Deva {
   describe: basic systems features available in a Deva.
   usage: this.systems()
   ***************/
-  systems(opts) {
+  get systems() {
     if (!this._active) return this._messages.offline; // check the active status
     this.zone('systems');
     this.feature('systems'); // set the support state
@@ -1561,7 +1565,7 @@ class Deva {
   params: id
   describe: return info data.
   ***************/
-  info() {
+  get info() {
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.feature('info');
@@ -1579,7 +1583,7 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.status('msg')
   ***************/
-  status(msg=false) {
+  get status() {
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.feature('status');
@@ -1587,9 +1591,7 @@ class Deva {
     // format the date since active for output.
     const dateFormat = this.formatDate(this._active, 'long', true);
     // create the text msg string
-    let text = `${this._agent.profile.name} active since ${dateFormat}`;
-    if (msg) text = text + `\n${msg}`;                      // append the msg string if msg true.
-    return text;                           // return final text string
+    return `${this._agent.profile.name} active since ${dateFormat}`;                           // return final text string
   }
 
   /**************
