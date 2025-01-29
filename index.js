@@ -1190,7 +1190,7 @@ class Deva {
   describe: basic security features available in a Deva.
   usage: this.security()
   ***************/
-  get security() {
+  security() {
     if (!this._active) return this._messages.offline; // check the active status
     this.zone('security');
     this.feature('security'); // set the security state
@@ -1206,7 +1206,7 @@ class Deva {
   describe: basic support features available in a Deva.
   usage: this.support()
   ***************/
-  get support() {
+  support() {
     if (!this._active) return this._messages.offline; // check the active status
     this.zone('support');
     this.feature('support'); // set the support state
@@ -1224,7 +1224,7 @@ class Deva {
   describe: basic services features available in a Deva.
   usage: this.services()
   ***************/
-  get services() {
+  services() {
     if (!this._active) return this._messages.offline; // check the active status
     this.zone('services');
     this.feature('services'); // set the support state
@@ -1242,7 +1242,7 @@ class Deva {
   describe: basic systems features available in a Deva.
   usage: this.systems()
   ***************/
-  get systems() {
+  systems() {
     if (!this._active) return this._messages.offline; // check the active status
     this.zone('systems');
     this.feature('systems'); // set the support state
