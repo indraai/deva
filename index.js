@@ -1011,7 +1011,7 @@ class Deva {
     return {
       id: this.uid(true), // set the uuid of the data
       agent: this.agent(), // set the agent value
-      cleint: this.cleint(), // set the client value
+      cleint: this.client(), // set the client value
       key: 'zones', // set the key return value
       value: this._zones, // set the list of zones
       created: Date.now(), // set the created date of the object.
