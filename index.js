@@ -726,7 +726,7 @@ class Deva {
     data.hash = this.hash(data);
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
     this.state('start');
-    return hasOnStart ? this.onStart(data) : this.enter(data, resolve)
+    return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
   }
 
   /**************
@@ -749,7 +749,7 @@ class Deva {
     data.hash = this.hash(data);
     this.state('enter');
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
-    return hasOnEnter ? this.onEnter(data) : this.done(data, resolve)
+    return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
   }
 
   /**************
@@ -771,7 +771,7 @@ class Deva {
     data.hash = this.hash(data);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     this.state('done');
-    return hasOnDone ? this.onDone(data) : this.ready(data, resolve);
+    return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
   }
 
   /**************
