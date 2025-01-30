@@ -47,6 +47,5 @@
   "engines": {
     "npm": ">=9.5.1",
     "node": ">=18.16.0"
-  },
-  "dependencies": {}
+  }
 }
