@@ -700,7 +700,7 @@ class Deva {
       }).then(() => {
         this.zone('init');
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
-        return hasOnInit ? this.onInit(_data) : this.start(_data, resolve);
+        return hasOnInit ? this.onInit(_data, resolve) : this.start(_data, resolve);
       }).catch(err => {
         return this.error(err, client, reject);
       });
