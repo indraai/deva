@@ -235,10 +235,10 @@ class Deva {
           personal: security.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.security; // make a copy the clinet data.
-        return this.Support(); // goto Support when done with Security
+        return Promise.resolve(); // goto Support when done with Security
       }
     } catch (e) {
-      this.state('reject', 'Support');
+      this.state('reject', 'Security');
       return this.error(e); // run error handling if an error is caught
     }
   }
@@ -255,7 +255,7 @@ class Deva {
     this.action('Support');
     const _cl = this.client(); // set the local client variable
     try {
-      if (!_cl.features.support) return this.Services() // move to Services if no support feature
+      if (!_cl.features.support) return Promise.resolve() // move to Services if no support feature
       else {
         this.state('set', 'Support');
         const {id, features, profile} = _cl; // set the local consts from client copy
@@ -269,7 +269,7 @@ class Deva {
           personal: support.devas[this._agent.key], // Client personalSecurity features and rules.
         };
         delete this._client.features.support; // delete the support key from the client
-        return this.Services(); // when done move to Services
+        return Promise.resolve(); // when done move to Services
       }
     } catch (e) {
       this.state('reject', 'Services');
@@ -289,7 +289,7 @@ class Deva {
     this.action('Services');
     const _cl = this.client(); // set local client
     try {
-      if (!_cl.features.services) return this.Done(); // move to Done if no Services feature
+      if (!_cl.features.services) return Promise.resolve(); // move to Done if no Services feature
       else {
         this.state('set', 'Services');
         const {id, features, profile} = _cl;   // set the local consts from client copy
@@ -303,7 +303,7 @@ class Deva {
           personal: services.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.services; // delete the services key for isolation
-        return this.Done(); // go to Done
+        return Promise.resolve(); // go to Done
       }
     } catch (e) {
       this.state('reject', 'Services');
@@ -323,7 +323,7 @@ class Deva {
     this.action('Systems');
     const _cl = this.client(); // set local client
     try {
-      if (!_cl.features.services) return this.Done(); // move to Done if no Systems feature
+      if (!_cl.features.services) return Promise.resolve(); // move to Done if no Systems feature
       else {
         this.state('set', 'Systems');
         const {id, features, profile} = _cl;   // set the local consts from client copy
@@ -337,7 +337,7 @@ class Deva {
           personal: services.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.services; // delete the services key for isolation
-        return this.Done(); // go to Done
+        return Promise.resolve(); // go to Done
       }
     } catch (e) {
       this.state('reject', 'Systems');
@@ -350,13 +350,13 @@ class Deva {
   params: none
   describe: The end of the workflow Client Feature Workflow
   ***************/
-  Done(client) {
+  Done() {
     this.action('Done');
     return new Promise((resolve, reject) => {
       try {
         this.state('Done');
         delete this._client.features; // delete the features key when done.
-        return resolve(client); // resolve an empty pr
+        return resolve(this.client()); // resolve an empty pr
       } catch (e) {
         this.state('reject', 'Done');
         return this.error(e, false, reject);
@@ -453,7 +453,7 @@ class Deva {
 
     return new Promise((resolve, reject) => {
       // resolve with the no text message if the client says nothing.
-      if (!TEXT) return this.finish(this._messages.notext, resolve);
+      if (!TEXT) return resolve(this._messages.notext, resolve);
       try { // try to answer the question
         if (isAsk) { // determine if hte question isAsk
           // if:isAsk split the agent key and remove first command character
@@ -565,7 +565,7 @@ class Deva {
       packet.a = packet_answer; // set the packet.a to the packet_answer
       this.action('talk', config.events.answer)
       this.talk(config.events.answer, this.copy(packet)); // global talk event
-      this.state('resovle', 'answer')
+      this.state('resovle', 'answer');
       return this.finish(packet, resolve); // resolve the packet to the caller.
     }).catch(err => { // catch any errors in the method
       this.state('reject', 'answer');
@@ -679,7 +679,6 @@ class Deva {
       created: Date.now(),
     }
     _data.hash = this.hash(_data);
-
     return new Promise((resolve, reject) => {
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -691,11 +690,17 @@ class Deva {
       }).then(() => {
         return this.Security();
       }).then(() => {
+        return this.Services();
+      }).then(() => {
+        return this.Support();
+      }).then(() => {
+        return this.Systems();
+      }).then(() => {
+        return this.Done();
+      }).then(() => {
         this.zone('init');
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
-        return hasOnInit ? this.onInit(_data) : this.start(_data);
-      }).then(done => {
-        return resolve(done);
+        return hasOnInit ? this.onInit(_data) : this.start(_data, resolve);
       }).catch(err => {
         return this.error(err, client, reject);
       });
@@ -712,7 +717,7 @@ class Deva {
     function or running the enter function.
   usage: this.start('msg')
   ***************/
-  start(data) {
+  start(data, resolve) {
     this.zone('start');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('start');
@@ -721,7 +726,7 @@ class Deva {
     data.hash = this.hash(data);
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
     this.state('start');
-    return hasOnStart ? this.onStart(data) : this.enter(data)
+    return hasOnStart ? this.onStart(data) : this.enter(data, resolve)
   }
 
   /**************
@@ -735,7 +740,7 @@ class Deva {
     If the Deva is offline it will return the offline message.
   usage: this.enter('msg')
   ***************/
-  enter(data) {
+  enter(data, resolve) {
     this.zone('deva');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('enter');
@@ -744,7 +749,7 @@ class Deva {
     data.hash = this.hash(data);
     this.state('enter');
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
-    return hasOnEnter ? this.onEnter(data) : this.done(data)
+    return hasOnEnter ? this.onEnter(data) : this.done(data, resolve)
   }
 
   /**************
@@ -758,7 +763,7 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.done('msg')
   ***************/
-  done(data) {
+  done(data, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('done');
     data.value = 'done';
@@ -766,8 +771,34 @@ class Deva {
     data.hash = this.hash(data);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     this.state('done');
-    return hasOnDone ? this.onDone(data) : this.finish(data);
+    return hasOnDone ? this.onDone(data) : this.ready(data, resolve);
   }
+
+  /**************
+  func: ready
+  params:
+  - packet: the data to pass to the resolve
+  - resolve: the complete resolve to pass back
+  describe: This function is use to relay the Agent ito a complete state when
+            resolving a question or data.
+  usage: this.complete(data, resolve)
+  ***************/
+  ready(packet, resolve) {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.action('ready'); // set the complete action
+  
+    packet.hash = this.hash(packet);// hash the entire packet before completeing.
+    // check for agent on complete function in agent
+    const hasOnReady = this.onReady && typeof this.onReady === 'function';
+  
+    // if: agent has on complete then return on complete
+    this.state('ready'); // set the finish state
+  
+    // return the provided resolve function or a promise resolve.
+    return hasOnReady ? this.onReady(packet, resolve) : resolve(packet);
+  }
+  
+
 
   /**************
   func: finish
@@ -781,7 +812,6 @@ class Deva {
   finish(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('finish'); // set the finish action
-
     packet.hash = this.hash(packet);// hash the entire packet before finishing.
     // check for agent on finish function in agent
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
@@ -790,7 +820,7 @@ class Deva {
     this.state('finish'); // set the finish state
 
     // return the provided resolve function or a promise resolve.
-    return hasOnFinish ? this.onFinish(packet) : this.complete(packet);
+    return hasOnFinish ? this.onFinish(packet) : this.complete(packet, resolve);
   }
 
   /**************
@@ -812,35 +842,9 @@ class Deva {
 
     // if: agent has on complete then return on complete
     this.state('complete'); // set the finish state
-
     // return the provided resolve function or a promise resolve.
-    return hasOnComplete ? this.onComplete(packet) : this.ready(packet);
+    return hasOnComplete ? this.onComplete(packet) : resolve(packet);
   }
-
-  /**************
-  func: ready
-  params:
-  - packet: the data to pass to the resolve
-  - resolve: the complete resolve to pass back
-  describe: This function is use to relay the Agent ito a complete state when
-            resolving a question or data.
-  usage: this.complete(data, resolve)
-  ***************/
-  ready(packet, resolve) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    this.action('ready'); // set the complete action
-
-    packet.hash = this.hash(packet);// hash the entire packet before completeing.
-    // check for agent on complete function in agent
-    const hasOnReady = this.onReady && typeof this.onReady === 'function';
-
-    // if: agent has on complete then return on complete
-    this.state('ready'); // set the finish state
-
-    // return the provided resolve function or a promise resolve.
-    return hasOnReady ? this.onReady(packet) : Promise.resolve(packet);
-  }
-
 
   /**************
   func: stop
@@ -955,7 +959,7 @@ class Deva {
   params: none
   describe: returns the avaiable staets values.
   ***************/
-  get states() {
+  states() {
     this.action('func', 'states');
     this.state('return', 'states');
     return {
@@ -1001,7 +1005,7 @@ class Deva {
   params: none
   describe: returns a listing of zones currently in the system.
   ***************/
-  get zones() {
+  zones() {
     this.action('func', 'zones');
     this.state('return', 'zones');
     return {
@@ -1053,7 +1057,7 @@ class Deva {
   params: none
   describe: Returns a list of available actions in the system.
   ***************/
-  get actions() {
+  actions() {
     this.action('func', 'actions');
     this.state('return', 'actions');
     return {
@@ -1102,7 +1106,7 @@ class Deva {
   params: none
   describe: return a list of features that are available to the system.
   ***************/
-  get features() {
+  features() {
     this.state('return', 'features');
     return { // return the data object
       id: this.uid(true), // set the object id
@@ -1146,7 +1150,7 @@ class Deva {
     }
   }
 
-  get contexts() {
+  contexts() {
     if (!this._active) return this._messages.offline; // check the active status
     this.state('return', 'contexts');
     return {
