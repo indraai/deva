@@ -1,5 +1,5 @@
 // Copyright (c)2025 Quinn Michaels; All Rights Reserved; Legal Signature Required.
-// Distributed under the PRIVATE software license, see the accompanying file LICENSE.md
+// Distributed under the Restricted software license, see the accompanying file LICENSE.md
 import {EventEmitter} from 'node:events';
 import fs from 'fs';
 import path from 'path';
