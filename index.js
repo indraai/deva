@@ -1,10 +1,13 @@
 // Copyright (c)2025 Quinn Michaels; All Rights Reserved; Legal Signature Required.
 // Distributed under the Restricted software license, see the accompanying file LICENSE.md
 import {EventEmitter} from 'node:events';
+import {randomUUID} from 'crypto';
+
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { createHash, randomUUID, createCipheriv, createDecipheriv, randomBytes } from 'crypto';
+import lib from './lib/index.js';
+
 
 import Config from './config.json' with {type:'json'};
 const config = Config.DATA;
@@ -25,7 +28,7 @@ class Deva {
     this.fs = fs; // this is so file system functions are in the core.
     this.path = path; // this is so we can get path in the system.
     this.events = opts.events || new EventEmitter({}); // Event Bus
-    this.libs = opts.libs || {}; // used for loading library functions
+    this.lib = new lib({}); // used for loading library functions
     this.utils = opts.utils || {}; // parse function
     this.devas = opts.devas || {}; // Devas which are loaded
     this.vars = opts.vars || {}; // Variables object
@@ -168,7 +171,7 @@ class Deva {
   ***************/
   _methodNotFound(packet) {
     packet.a = {
-      id: this.uid(),
+      id: this.lib.uid(),
       agent: this.agent() || false,
       client: this.client() || false,
       text: `${this._messages.method_not_found}`,
@@ -203,7 +206,7 @@ class Deva {
         }
       }
     }
-    const _client = this.copy(client);                // copy the client parameter
+    const _client = this.lib.copy(client);                // copy the client parameter
     this._client = _client;                           // set local _client to this scope
     return Promise.resolve();
   }
@@ -226,7 +229,7 @@ class Deva {
         const {id, profile, features} = _cl; // make a copy the clinet data.
         const {security} = features; // make a copy the clinet data.
         this._security = { // set this_security with data
-          id: this.uid(true), // uuid of the security feature
+          id: this.lib.uid(true), // uuid of the security feature
           client_id: id, // client id for reference
           client_name: profile.name, // client name for personalization
           hash: security.hash, // client preferred hash algorithm
@@ -262,7 +265,7 @@ class Deva {
         const {id, features, profile} = _cl; // set the local consts from client copy
         const {support} = features; // set support from features const
         this._support = { // set this_support with data
-          id: this.uid(true), // uuid of the support feature
+          id: this.lib.uid(true), // uuid of the support feature
           client_id: id, // client id for reference
           client_name: profile.name, // client name for personalization
           concerns: support.concerns, // any concerns for client
@@ -296,7 +299,7 @@ class Deva {
         const {id, features, profile} = _cl;   // set the local consts from client copy
         const {services} = features; // set services from features const
         this._services = { // set this_services with data
-          id: this.uid(true), // uuid of the services feature
+          id: this.lib.uid(true), // uuid of the services feature
           client_id: id, // client id for reference
           client_name: profile.name, // client name for personalization
           concerns: services.concerns, // any concerns for client
@@ -330,7 +333,7 @@ class Deva {
         const {id, features, profile} = _cl;   // set the local consts from client copy
         const {services} = features; // set services from features const
         this._services = { // set this_services with data
-          id: this.uid(true), // uuid of the services feature
+          id: this.lib.uid(true), // uuid of the services feature
           client_id: id, // client id for reference
           client_name: profile.name, // client name for personalization
           concerns: services.concerns, // any concerns for client
@@ -429,7 +432,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.zone('question');
 
-    const id = this.uid(); // generate a unique id for transport.
+    const id = this.lib.uid(); // generate a unique id for transport.
     const t_split = TEXT.split(' '); // split the text on spaces to get words.
     const data = DATA; // set the DATA to data
 
@@ -475,7 +478,7 @@ class Deva {
 
         this.state('set', `question:${method}`)
         packet.q = { // build packet.q container
-          id: this.uid(), // set the transport id for the question.
+          id: this.lib.uid(), // set the transport id for the question.
           agent: this.agent(), // set the agent
           client: this.client(), // set the client
           meta: { // build the meta container
@@ -489,10 +492,10 @@ class Deva {
         }
 
         // hash the question
-        packet.q.meta.hash = this.hash(packet.q);
+        packet.q.meta.hash = this.lib.hash(packet.q);
 
         this.action('talk', config.events.question);
-        this.talk(config.events.question, this.copy(packet)); // global question event make sure to copy data.
+        this.talk(config.events.question, this.lib.copy(packet)); // global question event make sure to copy data.
 
         if (isAsk) { // isAsk check if the question isAsk and talk
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
@@ -500,7 +503,7 @@ class Deva {
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
             this.action('talk', config.events.ask);
-            this.talk(config.events.ask, this.copy(answer));
+            this.talk(config.events.ask, this.lib.copy(answer));
             return this.finish(answer, resolve); // if:isAsk resolve the answer from the call
           });
         }
@@ -547,7 +550,7 @@ class Deva {
 
       this.state('set', 'answer')
       const packet_answer = { // setup the packet.a container
-        id: this.uid(),
+        id: this.lib.uid(),
         agent, // set the agent who answered the question
         client, // set the client asking the question
         meta: { // setup the answer meta container
@@ -562,10 +565,10 @@ class Deva {
       };
 
       // create a hash for the answer and insert into answer meta.
-      packet_answer.meta.hash = this.hash(packet_answer);
+      packet_answer.meta.hash = this.lib.hash(packet_answer);
       packet.a = packet_answer; // set the packet.a to the packet_answer
       this.action('talk', config.events.answer)
-      this.talk(config.events.answer, this.copy(packet)); // global talk event
+      this.talk(config.events.answer, this.lib.copy(packet)); // global talk event
       this.state('resovle', 'answer');
       return this.finish(packet, resolve); // resolve the packet to the caller.
     }).catch(err => { // catch any errors in the method
@@ -598,7 +601,7 @@ class Deva {
     const client = this.client();
     // build the answer packet from this model
     const packet_answer = {
-      id: this.uid(),
+      id: this.lib.uid(),
       agent,
       client,
       meta: {
@@ -633,9 +636,9 @@ class Deva {
         }
 
         this.state('set', `ask:${method}`);
-        packet_answer.meta.hash = this.hash(packet_answer);
+        packet_answer.meta.hash = this.lib.hash(packet_answer);
         packet.a = packet_answer;
-        this.talk(config.events.answer, this.copy(packet)); // global talk event
+        this.talk(config.events.answer, this.lib.copy(packet)); // global talk event
         this.talk(`${agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
         this.talk(`${agent.key}:ask:${packet.id}`, {error:err});
@@ -671,7 +674,7 @@ class Deva {
     const agent = this.agent();
 
     const _data = {
-      id: this.uid(true),
+      id: this.lib.uid(true),
       key: 'init',
       value: agent.key,
       agent,
@@ -679,7 +682,7 @@ class Deva {
       text: this._messages.init,
       created: Date.now(),
     }
-    _data.hash = this.hash(_data);
+    _data.hash = this.lib.hash(_data);
     return new Promise((resolve, reject) => {
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -724,7 +727,7 @@ class Deva {
     this.action('start');
     data.value = 'start';
     delete data.hash;
-    data.hash = this.hash(data);
+    data.hash = this.lib.hash(data);
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
     this.state('start');
     return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
@@ -747,7 +750,7 @@ class Deva {
     this.action('enter');
     data.value = 'enter';
     delete data.hash;
-    data.hash = this.hash(data);
+    data.hash = this.lib.hash(data);
     this.state('enter');
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
     return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
@@ -769,7 +772,7 @@ class Deva {
     this.action('done');
     data.value = 'done';
     delete data.hash;
-    data.hash = this.hash(data);
+    data.hash = this.lib.hash(data);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     this.state('done');
     return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
@@ -788,7 +791,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('ready'); // set the complete action
   
-    packet.hash = this.hash(packet);// hash the entire packet before completeing.
+    packet.hash = this.lib.hash(packet);// hash the entire packet before completeing.
     // check for agent on complete function in agent
     const hasOnReady = this.onReady && typeof this.onReady === 'function';
   
@@ -813,7 +816,7 @@ class Deva {
   finish(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('finish'); // set the finish action
-    packet.hash = this.hash(packet);// hash the entire packet before finishing.
+    packet.hash = this.lib.hash(packet);// hash the entire packet before finishing.
     // check for agent on finish function in agent
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
 
@@ -837,7 +840,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('complete'); // set the complete action
 
-    packet.hash = this.hash(packet);// hash the entire packet before completeing.
+    packet.hash = this.lib.hash(packet);// hash the entire packet before completeing.
     // check for agent on complete function in agent
     const hasOnComplete = this.onComplete && typeof this.onComplete === 'function';
 
@@ -865,7 +868,7 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.state('stop'); // set the state to stop
     const data = { // build the stop data
-      id: this.uid(), // set the id
+      id: this.lib.uid(), // set the id
       agent: this.agent(), // set the agent
       client: this.client(), // set the client
       key: 'stop', // set the key
@@ -902,14 +905,14 @@ class Deva {
 
     this.action('exit');
     const data = {
-      id: this.uid(true),
+      id: this.lib.uid(true),
       key: 'exit',
       value: this._messages.exit,
       agent,
       client,
       created: Date.now(),
     }
-    data.hash = this.hash(data);
+    data.hash = this.lib.hash(data);
 
     // clear memory
     this._active = false;
@@ -939,7 +942,7 @@ class Deva {
       const lookup = this._states[value]; // set the local states lookup
       const text = extra ? `${lookup} ${extra}` : lookup; // set text from lookup with extra
       const data = { // build the data object
-        id: this.uid(), // set the data id
+        id: this.lib.uid(), // set the data id
         agent: this.agent(), // set the agent
         client: this.client(), // set the client
         key: 'state', // set the key to state
@@ -947,7 +950,7 @@ class Deva {
         text, // set the text value of the data
         created: Date.now(), // set the data created date.
       };
-      data.hash = this.hash(data); // hash the data
+      data.hash = this.lib.hash(data); // hash the data
       this.talk(config.events.state, data); // broadcasat the state event
       return data;
     } catch (e) { // catch any errors
@@ -964,7 +967,7 @@ class Deva {
     this.action('func', 'states');
     this.state('return', 'states');
     return {
-      id: this.uid(true),
+      id: this.lib.uid(true),
       key: 'states',
       value: this._states,
       created: Date.now(),
@@ -986,7 +989,7 @@ class Deva {
       const text = extra ? `${lookup} ${extra}` : lookup; // set the text value
 
       const data = { // build the zone data
-        id: this.uid(), // set the packetid
+        id: this.lib.uid(), // set the packetid
         agent: this.agent(),
         client: this.client(),
         key: 'zone',
@@ -994,7 +997,7 @@ class Deva {
         text,
         created: Date.now(),
       };
-      data.hash = this.hash(data);
+      data.hash = this.lib.hash(data);
       this.talk(config.events.zone, data);
     } catch (e) {
       return this.error(e);
@@ -1010,7 +1013,7 @@ class Deva {
     this.action('func', 'zones');
     this.state('return', 'zones');
     return {
-      id: this.uid(true), // set the uuid of the data
+      id: this.lib.uid(true), // set the uuid of the data
       agent: this.agent(), // set the agent value
       cleint: this.client(), // set the client value
       key: 'zones', // set the key return value
@@ -1037,7 +1040,7 @@ class Deva {
       const msg = msg_action || action; // set the correct message
       const text = extra ? `${msg} ${extra}` : msg; // set the text of the action
       const data = { // build the data object for the action.
-        id: this.uid(true), // generate a guid for the action transmitssion.
+        id: this.lib.uid(true), // generate a guid for the action transmitssion.
         agent: this.agent(), // the agent data to send with the action
         client: this.client(), // the client data to send with the action
         key: 'action', // the key for event to transmit action type
@@ -1045,7 +1048,7 @@ class Deva {
         text, // text of the action to send
         created: Date.now(), // action time stamp
       };
-      data.hash = this.hash(data); // generate a hash of the action packet.
+      data.hash = this.lib.hash(data); // generate a hash of the action packet.
       this.talk(config.events.action, data); // talk the core action event
       return data;
     } catch (e) { // catch any errors that occur
@@ -1062,7 +1065,7 @@ class Deva {
     this.action('func', 'actions');
     this.state('return', 'actions');
     return {
-      id: this.uid(true), // set the id with a uuid
+      id: this.lib.uid(true), // set the id with a uuid
       agent: this.agent(), // set the agent value
       client: this.client(), // set the client value
       key: 'actions', // set the data key
@@ -1087,14 +1090,14 @@ class Deva {
       const text = extra ? `${lookup} ${extra}` : lookup; // set the text value
 
       const data = { // build data object
-        id: this.uid(true), // set the id
+        id: this.lib.uid(true), // set the id
         agent: this.agent(), // set the agent transporting the packet.
         key: 'feature', // set the key for transport
         value, // set the value of the key
         text, // set the text value
         created: Date.now(), // set the creation date
       };
-      data.hash = this.hash(data); // generate the hash value of the data packet
+      data.hash = this.lib.hash(data); // generate the hash value of the data packet
       this.talk(config.events.feature, data); // talk the feature event with data
       return data;
     } catch (e) { // catch any errors
@@ -1110,7 +1113,7 @@ class Deva {
   features() {
     this.state('return', 'features');
     return { // return the data object
-      id: this.uid(true), // set the object id
+      id: this.lib.uid(true), // set the object id
       agent: this.agent(), // set the agent value.
       client: this.client(), // set the client value.
       key: 'features', // set the key
@@ -1134,7 +1137,7 @@ class Deva {
       const text = extra ? `${lookup} ${extra}` : lookup;
 
       const data = {
-        id: this.uid(true),
+        id: this.lib.uid(true),
         agent: this.agent(),
         client: this.client(),
         key: 'context',
@@ -1143,7 +1146,7 @@ class Deva {
         created: Date.now(),
       };
 
-      data.hash = this.hash(data);
+      data.hash = this.lib.hash(data);
       this.talk(config.events.context, data);
       return data;
     } catch (e) {
@@ -1155,7 +1158,7 @@ class Deva {
     if (!this._active) return this._messages.offline; // check the active status
     this.state('return', 'contexts');
     return {
-      id: this.uid(true),
+      id: this.lib.uid(true),
       agent: this.agent(),
       client: this.client(),
       key: 'contexts',
@@ -1172,7 +1175,7 @@ class Deva {
   ***************/
   client() {
     if (!this._active) return this._messages.offline; // check the active status
-    const client_copy = this.copy(this._client); // create a copy of the client data
+    const client_copy = this.lib.copy(this._client); // create a copy of the client data
     return client_copy; // return the copy of the client data.
   }
 
@@ -1184,7 +1187,7 @@ class Deva {
   ***************/
   agent() {
     if (!this._active) return this._messages.offline; // check the active status
-    const agent_copy = this.copy(this._agent); // create a copy of the agent data.
+    const agent_copy = this.lib.copy(this._agent); // create a copy of the agent data.
     return agent_copy; // return the copy of the agent data.
   }
 
@@ -1201,7 +1204,7 @@ class Deva {
     this.feature('security'); // set the security state
     try {
       this.state('return', 'security'); // set the security state
-      return this.copy(this._security); // return the security feature
+      return this.lib.copy(this._security); // return the security feature
     } catch (e) {return this.error(e);}
   }
 
@@ -1217,7 +1220,7 @@ class Deva {
     this.feature('support'); // set the support state
     try {
       this.state('return', 'support'); // set the action to support.
-      return this.copy(this._support); // return the support feature
+      return this.lib.copy(this._support); // return the support feature
     } catch (e) {
       return this.error(e); // return this.error when error catch
     }
@@ -1235,7 +1238,7 @@ class Deva {
     this.feature('services'); // set the support state
     try {
       this.state('return', 'services'); // set the services state
-      return this.copy(this._services); // return the services feature
+      return this.lib.copy(this._services); // return the services feature
     } catch (e) {
       return this.error(e); // return this.error when error catch
     }
@@ -1253,7 +1256,7 @@ class Deva {
     this.feature('systems'); // set the support state
     try {
       this.state('return', 'systems'); // set the systems state
-      return this.copy(this._systems); // return the systems feature
+      return this.lib.copy(this._systems); // return the systems feature
     } catch (e) {
       return this.error(e); // return this.error when error catch
     }
@@ -1296,92 +1299,6 @@ class Deva {
   }
 
 
-  // UTILITY FUNCTIONS
-  /**************
-  func: uid
-  params:
-    - guid: This is a true false flag for generating a guid.
-  describe:
-    The uid function can create two types of id for you.
-    1. random GUID - this is good for when you need a uinique record id returned
-    2. transport id - The transport id is a number generated to provide a
-                      numerical number used for transporting records to places
-                      like social networks, email, other networks where informaton
-                      is shared.
-  ***************/
-  uid(guid=false) {
-    let id;
-    if (guid) {
-      id = randomUUID()
-    }
-    else {
-      const min = Math.floor(Date.now() - (Date.now() / Math.PI));
-      const max = Math.floor(Date.now() + (Date.now() * Math.PI));
-      id = Math.floor(Math.random() * (max - min)) + min;
-    }
-    return id;
-  }
-
-  /**************
-  func: hash
-  params:
-    - texts: The text string to create a hash value for.
-    - algo: The hashing algorithm to use for hashing. md5, sha256, or sha512
-
-  describe:
-    The hash algorithm will take a string of text and produce a hash.
-  ***************/
-  hash(str, algo=false) {
-    // this.action('hash');
-    algo = algo || this._security.hash || 'md5';
-    const the_hash = createHash(algo);
-    the_hash.update(JSON.stringify(str));
-    const _digest = the_hash.digest('base64');
-    return `${algo}-${_digest}`;
-  }
-
-  /**************
-  func: cipher
-  params: str - string to encrypt
-  describe:
-    The encrypt function allows for the internal encryption of data based on the
-    defined client security settings.
-  ***************/
-  cipher(str) {
-    this.feature('cipher');
-    // this.action('cipher');
-    const security = this._security;
-    const {password, algorithm} = security.cipher;
-    const key = createHash('sha256').update(String(password)).digest('base64');
-    const key_in_bytes = Buffer.from(key, 'base64')
-    const iv = randomBytes(16);
-    // create a new cipher
-    const _cipher = createCipheriv(algorithm, key_in_bytes, iv);
-    const encrypted = _cipher.update(String(str), 'utf8', 'hex') + _cipher.final('hex');
-
-    this.state('return', 'cipher');
-    return {
-      iv: iv.toString('base64'),
-      key,
-      encrypted,
-    }
-  }
-
-  decipher(opt) {
-    this.feature('decipher');
-    // this.action('decipher');
-    const iv = Buffer.from(opt.iv, 'base64');
-    const encrypted = Buffer.from(opt.encrypted, 'hex');
-    const key_in_bytes = Buffer.from(opt.key, 'base64')
-    const security = this._security;
-    const {algorithm} = security.cipher;
-    const decipher = createDecipheriv( algorithm, key_in_bytes, iv);
-    const decrypted = decipher.update(encrypted);
-    const final = Buffer.concat([decrypted, decipher.final()]);
-    return final.toString();
-    this.state('return', 'decipher');
-  }
-
   /**************
   func: prompt
   params:
@@ -1397,7 +1314,7 @@ class Deva {
     const agent = this.agent();
     const client = this.client();
     const _data = {
-      id: this.uid(true),
+      id: this.lib.uid(true),
       key: 'prompt',
       value: agent.key,
       agent,
@@ -1409,161 +1326,9 @@ class Deva {
   }
 
 
-  /**************
-  func: copy
-  params: obj
-  describe:
-    a simple copy object to create a memory clean copy of data to
-    prevent collisions when needed. Handles clean text, array, object copy.
-    it makes the assumption tha the user is submitting either an array or object
-    for copying.
-  ***************/
-  copy(obj) {
-    return JSON.parse(JSON.stringify(obj));
-  }
 
-  /**************
-  func: getToday
-  params:
-    - d: The date string to get the day of..
-  describe:
-    a date can be passed in or generated to produce a date string for the day
-    where time is 0. This feature is useful for logging for getting a date
-    with no time value for the current day.
-  ***************/
-  getToday(d) {
-    this.feature('getToday');
-    d = d ? d : Date.now();
-    const today = new Date(d);
-    today.setHours(0);
-    today.setMinutes(0);
-    today.setSeconds(0);
-    today.setMilliseconds(0);
-    this.state('return', 'getToday');
-    return today.getTime();
-  }
 
-  /**************
-  func: formatDate
-  params:
-    - d: The date string to format.
-    - format: the various formats that can be selected.
-    - time: boolean flag to include the time stampt iwth the date.
-    - locale: The locale formatting of the date to return.
-  describe:
-    formats: long, long_month, short, short_month, year, month, day
-    FDate format ensures that consistent date formatting is used within the
-    system based on the language and locale in the client profile.
-  ***************/
-  formatDate(d, format='milli', time=false) {
-    this.feature('formatDate');
-    if (!d) d = Date.now();
-    d = new Date(d);
 
-    if (format === 'milli') return d.getTime();
-    // pre-set date formats for returning user dates.
-    const formats = {
-      long: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
-      long_month: { year: 'numeric', month: 'long', day: 'numeric'},
-      short: { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' },
-      short_month: { year: 'numeric', month: 'short', day: 'numeric' },
-      numeric: { year: 'numeric', month: 'numeric', day: 'numeric' },
-      year: { year: 'numeric' },
-      month: { month: 'long' },
-      day: { day: 'long' },
-      log: { year: 'numeric', month: 'short', day: 'numeric' },
-    };
-    const theDate = d.toLocaleDateString(this._client.profile.locale, formats[format]);
-    const theTime = time ? this.formatTime(d) : false;
-    this.state('return', 'formatDate');
-    return !theTime ? theDate : `${theDate} - ${theTime}`;
-  }
-
-  /**************
-  func: formatTime
-  params:
-    - t: the time to format
-  describe:
-    The formatTime fucntion will return a consistent local time for the t
-    parameter based on the locale setting in the client profile..
-  ***************/
-  formatTime(t) {
-    this.feature('formatTime');
-    return t.toLocaleTimeString(this._client.profile.locale);     // return the formatted time string
-  }
-
-  /**************
-  func: formatCurrency
-  params:
-    - n: is the number that you want to return the currency of.
-  describe:
-    The formatCurrency function will format a currency value based on the setting
-    in the client profile.
-  ***************/
-  formatCurrency(n, cur=false) {
-    this.feature('formatCurrency');
-    const currency = cur || this._client.profile.currency;
-    return new Intl.NumberFormat(this._client.profile.locale, { style: 'currency', currency: currency }).format(n);
-  }
-
-  /**************
-  func: formatCurrency
-  params:
-    - n: is the number that you want to return the currency of.
-  describe:
-    The formatCurrency function will format a currency value based on the setting
-    in the client profile.
-  ***************/
-  formatNumber(n) {
-    this.feature('formatNumber');
-    return new Intl.NumberFormat(this._client.profile.locale).format(n);
-  }
-
-  /**************
-  func: formatPercent
-  params:
-    - n: is the number that you want to format as a percent.
-    - dec: is the number of decimal places to apply to the number.
-  describe:
-  ***************/
-  formatPercent(n, dec=2) {
-    this.feature('formatPercent');
-    return parseFloat(n).toFixed(dec) + '%';
-  }
-
-  /**************
-  func: trimWords
-  params:
-    - text: The text to trim.
-    - maxwords: The number of words to max.
-  describe:
-    A utility function to trimText intput to a specific word count.
-  ***************/
-  trimWords(text, maxwords) {
-    this.feature('trimWords');
-    const splitter = text.split(' ');
-    if (splitter < maxwords) return text;
-    this.state('return', 'trimmed words');
-    return splitter.slice(0, maxwords).join(' ');
-  }
-
-  /**************
-  func: dupes
-  params: dupers
-  describe: remove duplicees from an array.
-  ***************/
-  dupes(dupers) {
-    this.feature('dupes');
-    if (!Array.isArray(dupers)) return dupers;
-    const check = [];
-    this.state('return', 'duplicates removed');
-    return dupers.filter(dupe => {
-      if (!check.includes(dupe)) {
-        check.push(dupe);
-        return dupe;
-      }
-    });
-  }
 
   /**************
   func: info
@@ -1594,7 +1359,7 @@ class Deva {
     this.feature('status');
 
     // format the date since active for output.
-    const dateFormat = this.formatDate(this._active, 'long', true);
+    const dateFormat = this.lib.formatDate(this._active, 'long', true);
     // create the text msg string
     return `${this._agent.profile.name} active since ${dateFormat}`;                           // return final text string
   }
@@ -1648,7 +1413,7 @@ class Deva {
     const agent = this.agent();
     const client = this.client();
     const _data = {
-      id: this.uid(true),
+      id: this.lib.uid(true),
       key: 'error',
       value: agent.key,
       agent,
@@ -1657,7 +1422,7 @@ class Deva {
       data,
       created: Date.now(),
     }
-    this.talk(config.events.error, this.copy(_data));
+    this.talk(config.events.error, this.lib.copy(_data));
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
 
     this.state('error');
