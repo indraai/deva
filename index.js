@@ -193,13 +193,15 @@ class Deva {
   ***************/
   Client(client) {
     this.action('Client');
-
     // setup any custom methods for the features
     for (const x in client.features) {
       const methods = client.features[x].methods || false;
       if (methods) for (const y in methods) {
+
         const isFunc = typeof methods[y] === 'function';
-        if (isFunc) this.methods[y] = methods[y].bind(this);
+        if (isFunc) {
+          this.methods[y] = methods[y].bind(this);
+        }
       }
     }
     const _client = this.copy(client);                // copy the client parameter
@@ -685,7 +687,7 @@ class Deva {
         return this._assignBind();
       }).then(() => {
         return this._assignListeners();
-      }).then(() => {
+      }).then(() => {y 
         return this.Client(client);
       }).then(() => {
         return this.Security();
