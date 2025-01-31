@@ -197,7 +197,6 @@ class Deva {
     for (const x in client.features) {
       const methods = client.features[x].methods || false;
       if (methods) for (const y in methods) {
-
         const isFunc = typeof methods[y] === 'function';
         if (isFunc) {
           this.methods[y] = methods[y].bind(this);
@@ -687,7 +686,7 @@ class Deva {
         return this._assignBind();
       }).then(() => {
         return this._assignListeners();
-      }).then(() => {y 
+      }).then(() => {
         return this.Client(client);
       }).then(() => {
         return this.Security();
