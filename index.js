@@ -3,9 +3,6 @@
 import {EventEmitter} from 'node:events';
 import {randomUUID} from 'crypto';
 
-import fs from 'fs';
-import path from 'path';
-import os from 'os';
 import lib from './lib/index.js';
 
 
@@ -24,9 +21,6 @@ class Deva {
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
     this._systems = false; // inherited Service features.
-    this.os = os; // It is used to provide basic operating system related utility functions.
-    this.fs = fs; // this is so file system functions are in the core.
-    this.path = path; // this is so we can get path in the system.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = new lib({}); // used for loading library functions
     this.utils = opts.utils || {}; // parse function
