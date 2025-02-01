@@ -1379,7 +1379,7 @@ class Deva {
       let helpFile = 'main';
       if (params[0]) helpFile = params[0];
       if (params[1]) helpFile = `${params[0]}_${params[1]}`;
-      helpFile = path.join(help_dir, 'help', `${helpFile}.feecting`);
+      helpFile = this.lib.path.join(help_dir, 'help', `${helpFile}.feecting`);
       try {
         this.state('resolve', 'help');
         return resolve(fs.readFileSync(helpFile, 'utf8'));
