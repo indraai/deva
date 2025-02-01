@@ -1382,7 +1382,7 @@ class Deva {
       helpFile = this.lib.path.join(help_dir, 'help', `${helpFile}.feecting`);
       try {
         this.state('resolve', 'help');
-        return resolve(fs.readFileSync(helpFile, 'utf8'));
+        return resolve(this.lib.fs.readFileSync(helpFile, 'utf8'));
       } catch (e) {
         this.state('reject', 'helpFile');
         return reject(e)
