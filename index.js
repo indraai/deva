@@ -21,6 +21,7 @@ class Deva {
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
     this._systems = false; // inherited Service features.
+    this._legal = false; // inherited Service features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = new lib({}); // used for loading library functions
     this.utils = opts.utils || {}; // parse function
@@ -188,21 +189,25 @@ class Deva {
   usage:
     this.Client = {data}
   ***************/
-  Client(client) {
-    this.action('Client');
+  Client(client, resolve, reject) {
+    this.action('client');
     // setup any custom methods for the features
-    for (const x in client.features) {
-      const methods = client.features[x].methods || false;
-      if (methods) for (const y in methods) {
-        const isFunc = typeof methods[y] === 'function';
-        if (isFunc) {
-          this.methods[y] = methods[y].bind(this);
+    try {
+      for (const x in client.features) {
+        const methods = client.features[x].methods || false;
+        if (methods) for (const y in methods) {
+          const isFunc = typeof methods[y] === 'function';
+          if (isFunc) {
+            this.methods[y] = methods[y].bind(this);
+          }
         }
       }
+      const _client = this.lib.copy(client);                // copy the client parameter
+      this._client = _client;                           // set local _client to this scope
+      return resolve();
+    } catch (e) {
+      return this.error(e, false, reject);
     }
-    const _client = this.lib.copy(client);                // copy the client parameter
-    this._client = _client;                           // set local _client to this scope
-    return Promise.resolve();
   }
 
   /**************
@@ -212,9 +217,9 @@ class Deva {
     The Security feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Security() {
+  Security(resolve, reject) {
     this.zone('security');
-    this.action('Security'); // set action to Security
+    this.action('security'); // set action to Security
     const _cl = this.client(); // set local copy of client data
     try {
       if (!_cl.features.security) return this.Support(); // if no security feature goto Support
@@ -233,7 +238,7 @@ class Deva {
           personal: security.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.security; // make a copy the clinet data.
-        return Promise.resolve(); // goto Support when done with Security
+        return resolve(); // goto Support when done with Security
       }
     } catch (e) {
       this.state('reject', 'Security');
@@ -248,9 +253,9 @@ class Deva {
     The Support feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Support() {
+  Support(resolve, reject) {
     this.zone('support');
-    this.action('Support');
+    this.action('support');
     const _cl = this.client(); // set the local client variable
     try {
       if (!_cl.features.support) return Promise.resolve() // move to Services if no support feature
@@ -267,11 +272,11 @@ class Deva {
           personal: support.devas[this._agent.key], // Client personalSecurity features and rules.
         };
         delete this._client.features.support; // delete the support key from the client
-        return Promise.resolve(); // when done move to Services
+        return resolve(); // when done move to Services
       }
     } catch (e) {
       this.state('reject', 'Services');
-      return this.error(e); // run error handling if an error is caught
+      return this.error(e, false, reject); // run error handling if an error is caught
     }
   }
 
@@ -282,9 +287,9 @@ class Deva {
     The Services feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Services() {
+  Services(resolve, reject) {
     this.zone('services')
-    this.action('Services');
+    this.action('services');
     const _cl = this.client(); // set local client
     try {
       if (!_cl.features.services) return Promise.resolve(); // move to Done if no Services feature
@@ -301,11 +306,11 @@ class Deva {
           personal: services.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.services; // delete the services key for isolation
-        return Promise.resolve(); // go to Done
+        return resolve(); // go to Done
       }
     } catch (e) {
       this.state('reject', 'Services');
-      return this.error(e); // run error handling if an error is caught
+      return this.error(e, false, reject); // run error handling if an error is caught
     }
   }
 
@@ -316,9 +321,9 @@ class Deva {
     The Systems feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Systems() {
+  Systems(resolve, reject) {
     this.zone('systems')
-    this.action('Systems');
+    this.action('systems');
     const _cl = this.client(); // set local client
     try {
       if (!_cl.features.services) return Promise.resolve(); // move to Done if no Systems feature
@@ -335,11 +340,45 @@ class Deva {
           personal: services.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features.services; // delete the services key for isolation
-        return Promise.resolve(); // go to Done
+        return resolve(); // go to Done
       }
     } catch (e) {
       this.state('reject', 'Systems');
-      return this.error(e); // run error handling if an error is caught
+      return this.error(e, false, reject); // run error handling if an error is caught
+    }
+  }
+
+  /**************
+  func: Legal
+  params: client: false
+  describe:
+    The Legal feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Legal(resolve, reject) {
+    this.zone('legal')
+    this.action('legal');
+    const _cl = this.client(); // set local client
+    try {
+      if (!_cl.features.legal) return Promise.resolve(); // move to Done if no Systems feature
+      else {
+        this.state('set', 'Legal');
+        const {id, features, profile} = _cl;   // set the local consts from client copy
+        const {legal} = features; // set services from features const
+        this._legal = { // set this_services with data
+          id: this.lib.uid(true), // uuid of the services feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: legal.concerns, // any concerns for client
+          global: legal.global, // the global policies for client
+          personal: legal.devas[this._agent.key], // Client personal features and rules.
+        };
+        delete this._client.features.legal; // delete the services key for isolation
+        return resolve(); // go to Done
+      }
+    } catch (e) {
+      this.state('reject', 'Legal');
+      return this.error(e, false, reject); // run error handling if an error is caught
     }
   }
 
@@ -348,18 +387,16 @@ class Deva {
   params: none
   describe: The end of the workflow Client Feature Workflow
   ***************/
-  Done() {
-    this.action('Done');
-    return new Promise((resolve, reject) => {
-      try {
-        this.state('Done');
-        delete this._client.features; // delete the features key when done.
-        return resolve(this.client()); // resolve an empty pr
-      } catch (e) {
-        this.state('reject', 'Done');
-        return this.error(e, false, reject);
-      }
-    });
+  Done(resolve, reject) {
+    this.action('done');
+    try {
+      this.state('Done');
+      delete this._client.features; // delete the features key when done.
+      return resolve(this.client()); // resolve an empty pr
+    } catch (e) {
+      this.state('reject', 'Done');
+      return this.error(e, false, reject);
+    }
   }
 
   /**************
@@ -684,17 +721,19 @@ class Deva {
       }).then(() => {
         return this._assignListeners();
       }).then(() => {
-        return this.Client(client);
+        return this.Client(client, resolve, reject);
       }).then(() => {
-        return this.Security();
+        return this.Security(resolve, reject);
       }).then(() => {
-        return this.Services();
+        return this.Services(resolve, reject);
       }).then(() => {
-        return this.Support();
+        return this.Support(resolve, reject);
       }).then(() => {
-        return this.Systems();
+        return this.Systems(resolve, reject);
       }).then(() => {
-        return this.Done();
+        return this.Legal(resolve, reject);
+      }).then(() => {
+        return this.Done(resolve, reject);
       }).then(() => {
         this.zone('init');
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
@@ -1251,6 +1290,24 @@ class Deva {
     try {
       this.state('return', 'systems'); // set the systems state
       return this.lib.copy(this._systems); // return the systems feature
+    } catch (e) {
+      return this.error(e); // return this.error when error catch
+    }
+  }
+
+  /**************
+  func: legal
+  params: none
+  describe: basic legal features available in a Deva.
+  usage: this.systems()
+  ***************/
+  systems() {
+    if (!this._active) return this._messages.offline; // check the active status
+    this.zone('legal');
+    this.feature('legal'); // set the support state
+    try {
+      this.state('return', 'legal'); // set the systems state
+      return this.lib.copy(this._legal); // return the systems feature
     } catch (e) {
       return this.error(e); // return this.error when error catch
     }
