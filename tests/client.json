@@ -43,16 +43,12 @@
         },
         "concerns": [],
         "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "devas": {}
       },
       "support": {
         "concerns": [],
         "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "devas": {}
       },
       "services": {
         "concerns": [],
@@ -69,58 +65,22 @@
       "systems": {
         "concerns": [],
         "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "solutions": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "development": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "assistant": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "business": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "devas": {}
       },
       "legal": {
         "concerns": [],
         "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "devas": {}
       },
-      "story": {
+      "justice": {
         "concerns": [],
         "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "devas": {}
       },
-      "mind": {
+      "authority": {
         "concerns": [],
         "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "devas": {}
       }
     }
   }

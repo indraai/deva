@@ -34,30 +34,6 @@
       "gender": "M"
     },
     "features": {
-      "assistant": {
-        "label": "🤖ASSISTANT",
-        "name": "@ASSISTANT",
-        "tag": "#ASSISTANT",
-        "loc": "$ASSISTANT"
-      },
-      "business": {
-        "label": "💼BUSINESS",
-        "name": "@BUSINESS",
-        "tag": "#BUSINESS",
-        "loc": "$BUSINESS"
-      },
-      "legal": {
-        "label": "👨‍⚖️LEGAL",
-        "name": "@LEGAL",
-        "tag": "#LEGAL",
-        "loc": "$LEGAL"
-      },
-      "development": {
-        "label": "👨‍💻DEVELOPMENT",
-        "name": "@DEVELOPMENT",
-        "tag": "#DEVELOPMENT",
-        "loc": "$DEVELOPMENT"
-      },
       "security": {
         "label": "🚨SECURITY",
         "name": "@SECURITY",
@@ -76,17 +52,23 @@
         "tag": "#SERVICES",
         "loc": "$SERVICES"
       },
-      "solutions": {
-        "label": "💡SOLUTIONS",
-        "name": "@SOLUTIONS",
-        "tag": "#SOLUTIONS",
-        "loc": "$SOLUTIONS"
-      },
       "systems": {
         "label": "🔧SYSTEMS",
-        "name": "@SOLUTIONS",
-        "tag": "#SOLUTIONS",
-        "loc": "$SOLUTIONS"
+        "name": "@SYSTEMS",
+        "tag": "#SYSTEMS",
+        "loc": "$SYSTEMS"
+      },
+      "legal": {
+        "label": "🏛️LEGAL",
+        "name": "@LEGAL",
+        "tag": "#LEGAL",
+        "loc": "$LEGAL"
+      },
+      "justice": {
+        "label": "⚖️JUSTICE",
+        "name": "@JUSTICE",
+        "tag": "#JUSTICE",
+        "loc": "$JUSTICE"
       }
     },
     "vars": {

@@ -47,6 +47,7 @@
       "systems": "📡 Systems",
       "legal": "🏛️ Legal",
       "authority": "👮‍♂️ Authority",
+      "justice": "⚖️ Justice",
       "help": "💚 Help",
       "error": "❌ Error!"
     },
@@ -176,7 +177,9 @@
       "support": "🚑 Support",
       "services": "🚚 Services",
       "systems": "🚛 Systems",
-      "legal": "⚖️  Legal",
+      "legal": "🗃️ Legal",
+      "justice": "🗄️ Justice",
+      "authority": "🚔 Authority",
 
       "invalid": "❌ Invalid",
       "states": "🛻 States",
