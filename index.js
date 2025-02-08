@@ -23,6 +23,7 @@ class Deva {
     this._systems = false; // inherited Systems features.
     this._legal = false; // inherited Legal features.
     this._justice = false; // inherited Justice features.
+    this._authority = false; // inherited Justice features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = new lib({}); // used for loading library functions
     this.utils = opts.utils || {}; // parse function
@@ -418,6 +419,40 @@ class Deva {
   }
 
   /**************
+  func: Authority
+  params: client: false
+  describe:
+    The Authority feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Authority(resolve, reject) {
+    this.zone('authority')
+    this.action('authority');
+    const _cl = this.client(); // set local client
+    try {
+      if (!_cl.features.authority) return resolve(); // move to Done if no Systems feature
+      else {
+        this.state('set', 'Authority');
+        const {id, features, profile} = _cl;   // set the local consts from client copy
+        const {authority} = features; // set services from features const
+        this._authority = { // set this_services with data
+          id: this.lib.uid(true), // uuid of the services feature
+          client_id: id, // client id for reference
+          client_name: profile.name, // client name for personalization
+          concerns: authority.concerns, // any concerns for client
+          global: authority.global, // the global policies for client
+          personal: authority.devas[this._agent.key], // Client personal features and rules.
+        };
+        delete this._client.features.authority; // delete the services key for isolation
+        return resolve(); // go to Done
+      }
+    } catch (e) {
+      this.state('reject', 'Authority');
+      return this.error(e, false, reject); // run error handling if an error is caught
+    }
+  }
+
+  /**************
   func: Done
   params: none
   describe: The end of the workflow Client Feature Workflow
@@ -769,6 +804,8 @@ class Deva {
         return this.Legal(resolve, reject);
       }).then(() => {
         return this.Justice(resolve, reject);
+      }).then(() => {
+        return this.Authority(resolve, reject);
       }).then(() => {
         return this.Done(resolve, reject);
       }).then(() => {
@@ -1363,6 +1400,24 @@ class Deva {
     try {
       this.state('return', 'justice'); // set the systems state
       return this.lib.copy(this._justice); // return the systems feature
+    } catch (e) {
+      return this.error(e); // return this.error when error catch
+    }
+  }
+
+  /**************
+  func: authority
+  params: none
+  describe: basic authority features available in a Deva.
+  usage: this.systems()
+  ***************/
+  authority() {
+    if (!this._active) return this._messages.offline; // check the active status
+    this.zone('authority');
+    this.feature('authority'); // set the support state
+    try {
+      this.state('return', 'authority'); // set the systems state
+      return this.lib.copy(this._authority); // return the systems feature
     } catch (e) {
       return this.error(e); // return this.error when error catch
     }
