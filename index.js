@@ -1266,6 +1266,24 @@ class Deva {
   }
 
   /**************
+  func: networks
+  params: none
+  describe: basic networks features available in a Deva.
+  usage: this.networks()
+  ***************/
+  networks() {
+    if (!this._active) return this._messages.offline; // check the active status
+    this.zone('networks');
+    this.feature('networks'); // set the support state
+    try {
+      this.state('return', 'networks'); // set the networks state
+      return this.lib.copy(this._networks); // return the networks feature
+    } catch (e) {
+      return this.error(e); // return this.error when error catch
+    }
+  }
+
+  /**************
   func: legal
   params: none
   describe: basic legal features available in a Deva.
