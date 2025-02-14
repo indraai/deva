@@ -31,27 +31,28 @@ const HelloWorld = new Deva({
 	vars: agent.vars,
 	listeners: {
 		'devacore:prompt'(packet) {
-			console.log(`👔 prompt: ${packet.text}`);
+			console.log(`👔  prompt: ${packet.text}`);
 		},
 		'devacore:question'(packet) {
-			console.log(`🙋‍♂️️ question: ${packet.text}`);
+			console.log(`🙋‍♂️️  question: ${packet.text}`);
 		},
 		'devacore:answer'(packet) {
-			console.log(`👨‍🔬 answer: ${packet.text}`);
+			console.log(`👨‍🔬  answer: ${packet.text}`);
 		},
 		'devacore:ask'(packet) {
-			console.log(`🤝 ask: ${packet.text}`);
+			console.log(`🤝  ask: ${packet.text}`);
 		},
 		'devacore:state'(packet) {
-			console.log(`🍪  state: ${packet.text}`);
+			console.log(`🍪   state: ${packet.text}`);
 		},
 		'devacore:zone'(packet) {
-			console.log(`🗺️   zone: ${packet.text} zone`);
+			console.log(`🗺️    zone: ${packet.text}`);
 		},
 		'devacore:action'(packet) {
-			console.log(`💥 action: ${packet.text}`);
+			console.log(`💥  action: ${packet.text}`);
 		},
 		'devacore:feature'(packet) {
+			console.log(`---`);
 			console.log(`🍿 feature: ${packet.text}`);
 		},
 		'devacore:error'(packet) {
