@@ -24,8 +24,7 @@ class Deva {
     this._networks = false; // inherited Systems features.
     this._legal = false; // inherited Legal features.
     this._justice = false; // inherited Justice features.
-    this._authority = false; // inherited Authority features.
-    this._defense = false; // inherited Defense features.
+    this._authority = false; // inherited Justice features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = new lib({}); // used for loading library functions
     this.utils = opts.utils || {}; // parse function
@@ -341,17 +340,6 @@ class Deva {
   ***************/
   Authority(resolve, reject) {
     return this.Feature('authority', resolve, reject);
-  }
-
-  /**************
-  func: Defense
-  params: client: false
-  describe:
-    The Defense feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Defense(resolve, reject) {
-    return this.Feature('defense', resolve, reject);
   }
 
   /**************
@@ -694,26 +682,50 @@ class Deva {
       }).then(() => {
         return this._assignListeners();
       }).then(() => {
+        this.feature('init');
+        this.zone('init');
+        this.action('init');
+        this.state('init');
         return this.Client(client, resolve, reject);
       }).then(part => {
+        this.state('done', 'client');
+        this.action('done', 'client');
         return this.Security(resolve, reject);
       }).then(part => {
+        this.state('done', 'security');
+        this.action('done', 'security');
         return this.Support(resolve, reject);
       }).then(() => {
+        this.state('done', 'support');
+        this.action('done', 'support');
         return this.Services(resolve, reject);
       }).then(() => {
+        this.state('done', 'services');
+        this.action('done', 'services');
         return this.Systems(resolve, reject);
       }).then(() => {
+        this.state('done', 'systems');
+        this.action('done', 'systems');
         return this.Networks(resolve, reject);
       }).then(() => {
+        this.state('done', 'networks');
+        this.action('done', 'networks');
         return this.Legal(resolve, reject);
       }).then(() => {
+        this.state('done', 'legal');
+        this.action('done', 'legal');
         return this.Authority(resolve, reject);
       }).then(() => {
+        this.state('done', 'authority');
+        this.action('done', 'authority');
         return this.Justice(resolve, reject);
       }).then(() => {
+        this.state('done', 'justice');
+        this.action('done', 'justice');
         return this.Defense(resolve, reject);
       }).then(() => {
+        this.state('done', 'defense');
+        this.action('done', 'defense');
         return this.Done(resolve, reject);
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
@@ -1275,28 +1287,10 @@ class Deva {
   }
 
   /**************
-  func: networks
-  params: none
-  describe: basic networks features available in a Deva.
-  usage: this.networks()
-  ***************/
-  networks() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('networks');
-    this.feature('networks'); // set the support state
-    try {
-      this.state('return', 'networks'); // set the networks state
-      return this.lib.copy(this._networks); // return the systems feature
-    } catch (e) {
-      return this.error(e); // return this.error when error catch
-    }
-  }
-
-  /**************
   func: legal
   params: none
   describe: basic legal features available in a Deva.
-  usage: this.legal()
+  usage: this.systems()
   ***************/
   legal() {
     if (!this._active) return this._messages.offline; // check the active status
@@ -1314,7 +1308,7 @@ class Deva {
   func: justice
   params: none
   describe: basic justice features available in a Deva.
-  usage: this.justice()
+  usage: this.systems()
   ***************/
   justice() {
     if (!this._active) return this._messages.offline; // check the active status
@@ -1332,7 +1326,7 @@ class Deva {
   func: authority
   params: none
   describe: basic authority features available in a Deva.
-  usage: this.authority()
+  usage: this.systems()
   ***************/
   authority() {
     if (!this._active) return this._messages.offline; // check the active status
@@ -1341,24 +1335,6 @@ class Deva {
     try {
       this.state('return', 'authority'); // set the systems state
       return this.lib.copy(this._authority); // return the systems feature
-    } catch (e) {
-      return this.error(e); // return this.error when error catch
-    }
-  }
-
-  /**************
-  func: defense
-  params: none
-  describe: basic defense features available in a Deva.
-  usage: this.defense()
-  ***************/
-  defense() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('defense');
-    this.feature('defense'); // set the support state
-    try {
-      this.state('return', 'defense'); // set the systems state
-      return this.lib.copy(this._defense); // return the systems feature
     } catch (e) {
       return this.error(e); // return this.error when error catch
     }
