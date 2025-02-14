@@ -9,11 +9,7 @@ const agent = Agent.DATA;
 
 import Deva from '../index.js';
 
-const HelloWorld = new Deva({
-	client: {
-		id: 100,
-		key: 'hello',
-	},
+const DevaTest = new Deva({
 	agent: {
 		id: agent.id,
 		key: agent.key,
@@ -26,11 +22,15 @@ const HelloWorld = new Deva({
 		},
 		parse(input) {
 			return input.trim();
+		},
+		process(input) {
+			return input.trim();
 		}
 	},
 	vars: agent.vars,
 	listeners: {
 		'devacore:prompt'(packet) {
+			this.context('prompt');
 			console.log(`👔  prompt: ${packet.text}`);
 		},
 		'devacore:question'(packet) {
@@ -53,7 +53,11 @@ const HelloWorld = new Deva({
 		},
 		'devacore:feature'(packet) {
 			console.log(`---`);
+			this.context('feature');
 			console.log(`🍿 feature: ${packet.text}`);
+		},
+		'devacore:context'(packet) {
+			console.log(`🛹 context: ${packet.text}`);
 		},
 		'devacore:error'(packet) {
 			console.log(`❌ error: ${packet.text}`);
@@ -64,43 +68,41 @@ const HelloWorld = new Deva({
 	func: {
 		test(packet) {
 			const text = this._state
-			const id = this.uid();
-			const uuid = this.uid(true);
-
-			const cipher = this.cipher(JSON.stringify(packet));
-			const decipher = this.decipher(cipher);
-
-			const data = {
-				id,
-				uuid,
-				text,
-				hash: {
-					md5: this.hash(JSON.stringify(packet)),
-					sha256: this.hash(JSON.stringify(packet), 'sha256'),
-					sha512: this.hash(JSON.stringify(packet), 'sha512'),
-					created: this.formatDate(Date.now(), 'long'),
-				},
-				cipher,
-				decipher
-			}
-			console.log(data)
-			return Promise.resolve({
-				text: packet.a.text,
+			const id = this.lib.uid();
+			const uid = this.lib.uid(true);
+			const data = [
+				`::BEGIN:DATA:${id}`,
+				`id:     ${id}`,
+				`uid:    ${uid}`,
+				`md5:    ${this.lib.hash(packet)}`,
+				`sha256: ${this.lib.hash(packet, 'sha256')}`,
+				`sha512: ${this.lib.hash(packet, 'sha512')}`,
+				`date:   ${this.lib.formatDate(Date.now(), 'long', true)}`,				
+				`::END:DATA:${this.lib.hash(packet)}`,
+			];
+			return {
+				text: data.join('\n'),
 				data,
-			});
+			};
 		}
 	},
 	methods: {
 		test(packet) {
+			this.context('test');
 			return this.func.test(packet);
 		}
+	},
+	onReady(data, resolve) {
+		this.context('ready');
+		this.prompt(this.methods.test(data).text);
+		return resolve(data);
 	},
 	onError(e) {
 		console.log(e);
 	}
 });
 
-HelloWorld.init(client);
+DevaTest.init(client);
 
 
 // HelloWorld.question('/hello hello there').then(hello => {

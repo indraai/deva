@@ -21,10 +21,6 @@
         }
       }
     },
-    "voice": {
-      "speech": "Alex",
-      "speed": 1
-    },
     "profile": {
       "name": "Deva",
       "describe": "The Indra interface into deva.world.",
@@ -75,10 +71,23 @@
         "name": "@JUSTICE",
         "tag": "#JUSTICE",
         "loc": "$JUSTICE"
+      },
+      "defense": {
+        "label": "🪖DEFENSE",
+        "name": "@DEFENSE",
+        "tag": "#DEFENSE",
+        "loc": "$DEFENSE"
       }
     },
     "vars": {
-      "hello": "Hellow World"
+      "hello": "Hellow World",
+      "context": {
+        "ready": "🤝 Everything is ready!",
+        "test": "💿 Test Data",
+        "prompt": "💻 Prompt",
+        "feature": "🍿 Accessing Feature",
+        "zone": "🗻 Accessing Zone"
+      }
     }
   }
 }

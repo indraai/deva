@@ -24,7 +24,8 @@ class Deva {
     this._networks = false; // inherited Systems features.
     this._legal = false; // inherited Legal features.
     this._justice = false; // inherited Justice features.
-    this._authority = false; // inherited Justice features.
+    this._authority = false; // inherited Authority features.
+    this._defense = false; // inherited Defense features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = new lib({}); // used for loading library functions
     this.utils = opts.utils || {}; // parse function
@@ -343,15 +344,27 @@ class Deva {
   }
 
   /**************
+  func: Defense
+  params: client: false
+  describe:
+    The Defense feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Defense(resolve, reject) {
+    return this.Feature('defense', resolve, reject);
+  }
+
+  /**************
   func: Done
   params: none
   describe: The end of the workflow Client Feature Workflow
   ***************/
   Done(resolve, reject) {
-    this.action('done');
+    this.action('done', 'init');
     try {
-      this.state('Done');
+      this.state('secure', 'data');
       delete this._client.features; // delete the features key when done.
+      this.state('resolve', 'init');
       return resolve(this.client()); // resolve an empty pr
     } catch (e) {
       this.state('reject', 'Done');
@@ -686,23 +699,45 @@ class Deva {
         this.action('init');
         this.state('init');
         return this.Client(client, resolve, reject);
-      }).then(() => {
+      }).then(part => {
+        this.state('done', 'client');
+        this.action('done', 'client');
         return this.Security(resolve, reject);
-      }).then(() => {
+      }).then(part => {
+        this.state('done', 'security');
+        this.action('done', 'security');
         return this.Support(resolve, reject);
       }).then(() => {
+        this.state('done', 'support');
+        this.action('done', 'support');
         return this.Services(resolve, reject);
       }).then(() => {
+        this.state('done', 'services');
+        this.action('done', 'services');
         return this.Systems(resolve, reject);
       }).then(() => {
+        this.state('done', 'systems');
+        this.action('done', 'systems');
         return this.Networks(resolve, reject);
       }).then(() => {
+        this.state('done', 'networks');
+        this.action('done', 'networks');
         return this.Legal(resolve, reject);
       }).then(() => {
-        return this.Justice(resolve, reject);
-      }).then(() => {
+        this.state('done', 'legal');
+        this.action('done', 'legal');
         return this.Authority(resolve, reject);
       }).then(() => {
+        this.state('done', 'authority');
+        this.action('done', 'authority');
+        return this.Justice(resolve, reject);
+      }).then(() => {
+        this.state('done', 'justice');
+        this.action('done', 'justice');
+        return this.Defense(resolve, reject);
+      }).then(() => {
+        this.state('done', 'defense');
+        this.action('done', 'defense');
         return this.Done(resolve, reject);
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
@@ -747,7 +782,7 @@ class Deva {
   usage: this.enter('msg')
   ***************/
   enter(data, resolve) {
-    this.zone('deva');
+    this.zone('enter');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('enter');
     data.value = 'enter';
@@ -777,34 +812,8 @@ class Deva {
     data.hash = this.lib.hash(data);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     this.state('done');
-    return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
+    return hasOnDone ? this.onDone(data, resolve) : this.finish(data, resolve);
   }
-
-  /**************
-  func: ready
-  params:
-  - packet: the data to pass to the resolve
-  - resolve: the complete resolve to pass back
-  describe: This function is use to relay the Agent ito a complete state when
-            resolving a question or data.
-  usage: this.complete(data, resolve)
-  ***************/
-  ready(packet, resolve) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    this.action('ready'); // set the complete action
-  
-    packet.hash = this.lib.hash(packet);// hash the entire packet before completeing.
-    // check for agent on complete function in agent
-    const hasOnReady = this.onReady && typeof this.onReady === 'function';
-  
-    // if: agent has on complete then return on complete
-    this.state('ready'); // set the finish state
-  
-    // return the provided resolve function or a promise resolve.
-    return hasOnReady ? this.onReady(packet, resolve) : resolve(packet);
-  }
-  
-
 
   /**************
   func: finish
@@ -849,9 +858,33 @@ class Deva {
     // if: agent has on complete then return on complete
     this.state('complete'); // set the finish state
     // return the provided resolve function or a promise resolve.
-    return hasOnComplete ? this.onComplete(packet) : resolve(packet);
+    return hasOnComplete ? this.onComplete(packet) : this.ready(packet, resolve);
   }
 
+  /**************
+  func: ready
+  params:
+  - packet: the data to pass to the resolve
+  - resolve: the complete resolve to pass back
+  describe: This function is use to relay the Agent ito a complete state when
+            resolving a question or data.
+  usage: this.complete(data, resolve)
+  ***************/
+  ready(packet, resolve) {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.action('ready'); // set the complete action
+  
+    packet.hash = this.lib.hash(packet);// hash the entire packet before completeing.
+    // check for agent on complete function in agent
+    const hasOnReady = this.onReady && typeof this.onReady === 'function';
+  
+    // if: agent has on complete then return on complete
+    this.state('ready'); // set the finish state
+  
+    // return the provided resolve function or a promise resolve.
+    return hasOnReady ? this.onReady(packet, resolve) : resolve(packet);
+  }
+  
   /**************
   func: stop
   params:
@@ -1266,10 +1299,28 @@ class Deva {
   }
 
   /**************
+  func: networks
+  params: none
+  describe: basic networks features available in a Deva.
+  usage: this.networks()
+  ***************/
+  networks() {
+    if (!this._active) return this._messages.offline; // check the active status
+    this.zone('networks');
+    this.feature('networks'); // set the support state
+    try {
+      this.state('return', 'networks'); // set the networks state
+      return this.lib.copy(this._networks); // return the systems feature
+    } catch (e) {
+      return this.error(e); // return this.error when error catch
+    }
+  }
+
+  /**************
   func: legal
   params: none
   describe: basic legal features available in a Deva.
-  usage: this.systems()
+  usage: this.legal()
   ***************/
   legal() {
     if (!this._active) return this._messages.offline; // check the active status
@@ -1287,7 +1338,7 @@ class Deva {
   func: justice
   params: none
   describe: basic justice features available in a Deva.
-  usage: this.systems()
+  usage: this.justice()
   ***************/
   justice() {
     if (!this._active) return this._messages.offline; // check the active status
@@ -1305,7 +1356,7 @@ class Deva {
   func: authority
   params: none
   describe: basic authority features available in a Deva.
-  usage: this.systems()
+  usage: this.authority()
   ***************/
   authority() {
     if (!this._active) return this._messages.offline; // check the active status
@@ -1314,6 +1365,24 @@ class Deva {
     try {
       this.state('return', 'authority'); // set the systems state
       return this.lib.copy(this._authority); // return the systems feature
+    } catch (e) {
+      return this.error(e); // return this.error when error catch
+    }
+  }
+
+  /**************
+  func: defense
+  params: none
+  describe: basic defense features available in a Deva.
+  usage: this.defense()
+  ***************/
+  defense() {
+    if (!this._active) return this._messages.offline; // check the active status
+    this.zone('defense');
+    this.feature('defense'); // set the support state
+    try {
+      this.state('return', 'defense'); // set the systems state
+      return this.lib.copy(this._defense); // return the systems feature
     } catch (e) {
       return this.error(e); // return this.error when error catch
     }
