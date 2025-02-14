@@ -18,6 +18,7 @@ class Deva {
     this._client = {}; // this will be set on init.
     this._active = false; // the active/birth date.
     this._security = false; // inherited Security features.
+    this._defense = false; // inherited Security features.
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
     this._systems = false; // inherited Systems features.
@@ -263,6 +264,17 @@ class Deva {
   ***************/
   Security(resolve, reject) {
     return this.Feature('security', resolve, reject);
+  }
+
+  /**************
+  func: Defense
+  params: client: false
+  describe:
+    The Defense feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Defense(resolve, reject) {
+    return this.Feature('defense', resolve, reject);
   }
 
   /**************
@@ -689,6 +701,14 @@ class Deva {
       }).then(() => {
         return this.Security(resolve, reject);
       }).then(() => {
+        return this.Defense(resolve, reject);
+      }).then(() => {
+        return this.Legal(resolve, reject);
+      }).then(() => {
+        return this.Authority(resolve, reject);
+      }).then(() => {
+        return this.Justice(resolve, reject);
+      }).then(() => {
         return this.Support(resolve, reject);
       }).then(() => {
         return this.Services(resolve, reject);
@@ -696,12 +716,6 @@ class Deva {
         return this.Systems(resolve, reject);
       }).then(() => {
         return this.Networks(resolve, reject);
-      }).then(() => {
-        return this.Legal(resolve, reject);
-      }).then(() => {
-        return this.Justice(resolve, reject);
-      }).then(() => {
-        return this.Authority(resolve, reject);
       }).then(() => {
         return this.Done(resolve, reject);
       }).then(() => {
@@ -1206,6 +1220,24 @@ class Deva {
     try {
       this.state('return', 'security'); // set the security state
       return this.lib.copy(this._security); // return the security feature
+    } catch (e) {
+      return this.error(e);
+    }
+  }
+
+  /**************
+  func: defense
+  params: none
+  describe: basic defense features available in a Deva.
+  usage: this.defense()
+  ***************/
+  defense() {
+    if (!this._active) return this._messages.offline; // check the active status
+    this.zone('defense');
+    this.feature('defense'); // set the defense state
+    try {
+      this.state('return', 'defense'); // set the defense state
+      return this.lib.copy(this._defense); // return the defense feature
     } catch (e) {
       return this.error(e);
     }
