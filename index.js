@@ -694,10 +694,6 @@ class Deva {
       }).then(() => {
         return this._assignListeners();
       }).then(() => {
-        this.feature('init');
-        this.zone('init');
-        this.action('init');
-        this.state('init');
         return this.Client(client, resolve, reject);
       }).then(part => {
         this.state('done', 'client');
