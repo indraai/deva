@@ -348,11 +348,10 @@ class Deva {
   describe: The end of the workflow Client Feature Workflow
   ***************/
   Done(resolve, reject) {
-    this.action('done', 'init');
+    this.action('done');
     try {
-      this.state('secure', 'data');
+      this.state('Done');
       delete this._client.features; // delete the features key when done.
-      this.state('resolve', 'init');
       return resolve(this.client()); // resolve an empty pr
     } catch (e) {
       this.state('reject', 'Done');
@@ -687,45 +686,23 @@ class Deva {
         this.action('init');
         this.state('init');
         return this.Client(client, resolve, reject);
-      }).then(part => {
-        this.state('done', 'client');
-        this.action('done', 'client');
+      }).then(() => {
         return this.Security(resolve, reject);
-      }).then(part => {
-        this.state('done', 'security');
-        this.action('done', 'security');
+      }).then(() => {
         return this.Support(resolve, reject);
       }).then(() => {
-        this.state('done', 'support');
-        this.action('done', 'support');
         return this.Services(resolve, reject);
       }).then(() => {
-        this.state('done', 'services');
-        this.action('done', 'services');
         return this.Systems(resolve, reject);
       }).then(() => {
-        this.state('done', 'systems');
-        this.action('done', 'systems');
         return this.Networks(resolve, reject);
       }).then(() => {
-        this.state('done', 'networks');
-        this.action('done', 'networks');
         return this.Legal(resolve, reject);
       }).then(() => {
-        this.state('done', 'legal');
-        this.action('done', 'legal');
-        return this.Authority(resolve, reject);
-      }).then(() => {
-        this.state('done', 'authority');
-        this.action('done', 'authority');
         return this.Justice(resolve, reject);
       }).then(() => {
-        this.state('done', 'justice');
-        this.action('done', 'justice');
-        return this.Defense(resolve, reject);
+        return this.Authority(resolve, reject);
       }).then(() => {
-        this.state('done', 'defense');
-        this.action('done', 'defense');
         return this.Done(resolve, reject);
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
@@ -770,7 +747,7 @@ class Deva {
   usage: this.enter('msg')
   ***************/
   enter(data, resolve) {
-    this.zone('enter');
+    this.zone('deva');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('enter');
     data.value = 'enter';
@@ -800,8 +777,34 @@ class Deva {
     data.hash = this.lib.hash(data);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     this.state('done');
-    return hasOnDone ? this.onDone(data, resolve) : this.finish(data, resolve);
+    return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
   }
+
+  /**************
+  func: ready
+  params:
+  - packet: the data to pass to the resolve
+  - resolve: the complete resolve to pass back
+  describe: This function is use to relay the Agent ito a complete state when
+            resolving a question or data.
+  usage: this.complete(data, resolve)
+  ***************/
+  ready(packet, resolve) {
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.action('ready'); // set the complete action
+  
+    packet.hash = this.lib.hash(packet);// hash the entire packet before completeing.
+    // check for agent on complete function in agent
+    const hasOnReady = this.onReady && typeof this.onReady === 'function';
+  
+    // if: agent has on complete then return on complete
+    this.state('ready'); // set the finish state
+  
+    // return the provided resolve function or a promise resolve.
+    return hasOnReady ? this.onReady(packet, resolve) : resolve(packet);
+  }
+  
+
 
   /**************
   func: finish
@@ -846,33 +849,9 @@ class Deva {
     // if: agent has on complete then return on complete
     this.state('complete'); // set the finish state
     // return the provided resolve function or a promise resolve.
-    return hasOnComplete ? this.onComplete(packet) : this.ready(packet, resolve);
+    return hasOnComplete ? this.onComplete(packet) : resolve(packet);
   }
 
-  /**************
-  func: ready
-  params:
-  - packet: the data to pass to the resolve
-  - resolve: the complete resolve to pass back
-  describe: This function is use to relay the Agent ito a complete state when
-            resolving a question or data.
-  usage: this.complete(data, resolve)
-  ***************/
-  ready(packet, resolve) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    this.action('ready'); // set the complete action
-  
-    packet.hash = this.lib.hash(packet);// hash the entire packet before completeing.
-    // check for agent on complete function in agent
-    const hasOnReady = this.onReady && typeof this.onReady === 'function';
-  
-    // if: agent has on complete then return on complete
-    this.state('ready'); // set the finish state
-  
-    // return the provided resolve function or a promise resolve.
-    return hasOnReady ? this.onReady(packet, resolve) : resolve(packet);
-  }
-  
   /**************
   func: stop
   params:
