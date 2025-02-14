@@ -799,9 +799,8 @@ class Deva {
   params:
   - packet: the data to pass to the resolve
   - resolve: the complete resolve to pass back
-  describe: This function is use to relay the Agent ito a complete state when
-            resolving a question or data.
-  usage: this.complete(data, resolve)
+  describe: This function is use to relay the to the ready state.
+  usage: this.ready(data, resolve)
   ***************/
   ready(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
@@ -825,8 +824,7 @@ class Deva {
   params:
   - packet: the data to pass to the resolve
   - resolve: the finish resolve to pass back
-  describe: This function is use to relay the Agent ito a finish state when
-            resolving a question or data.
+  describe: This function is used to relay into the finish state when resolving a question or data.
   usage: this.finish(data, resolve)
   ***************/
   finish(packet, resolve) {
@@ -840,7 +838,7 @@ class Deva {
     this.state('finish'); // set the finish state
 
     // return the provided resolve function or a promise resolve.
-    return hasOnFinish ? this.onFinish(packet) : this.complete(packet, resolve);
+    return hasOnFinish ? this.onFinish(packet, resolve) : this.complete(packet, resolve);
   }
 
   /**************
@@ -848,7 +846,7 @@ class Deva {
   params:
   - packet: the data to pass to the resolve
   - resolve: the complete resolve to pass back
-  describe: This function is use to relay the Agent ito a complete state when
+  describe: This function is use to relay into a complete state when
             resolving a question or data.
   usage: this.complete(data, resolve)
   ***************/
@@ -863,7 +861,7 @@ class Deva {
     // if: agent has on complete then return on complete
     this.state('complete'); // set the finish state
     // return the provided resolve function or a promise resolve.
-    return hasOnComplete ? this.onComplete(packet) : resolve(packet);
+    return hasOnComplete ? this.onComplete(packet, resolve) : resolve(packet);
   }
 
   /**************
