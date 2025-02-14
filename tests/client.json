@@ -42,44 +42,49 @@
           "password": "generic password for encryption test"
         },
         "concerns": [],
-        "global": {},
+        "global": [],
         "devas": {}
       },
       "support": {
         "concerns": [],
-        "global": {},
+        "global": [],
         "devas": {}
       },
       "services": {
         "concerns": [],
-        "global": {
-          "indra": "https://indra.ai",
-          "world": "https://deva.world",
-          "space": "https://deva.space",
-          "cloud": "https://deva.cloud"
-        },
+        "global": [
+          {"indra": "https://indra.ai"},
+          {"world": "https://deva.world"},
+          {"space": "https://deva.space"},
+          {"cloud": "https://deva.cloud"}
+        ],
         "devas": {
           "hello": {}
         }
       },
       "systems": {
         "concerns": [],
-        "global": {},
+        "global": [],
+        "devas": {}
+      },
+      "networks": {
+        "concerns": [],
+        "global": [],
         "devas": {}
       },
       "legal": {
         "concerns": [],
-        "global": {},
+        "global": [],
         "devas": {}
       },
       "justice": {
         "concerns": [],
-        "global": {},
+        "global": [],
         "devas": {}
       },
       "authority": {
         "concerns": [],
-        "global": {},
+        "global": [],
         "devas": {}
       }
     }

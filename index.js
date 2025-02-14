@@ -21,6 +21,7 @@ class Deva {
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
     this._systems = false; // inherited Systems features.
+    this._networks = false; // inherited Systems features.
     this._legal = false; // inherited Legal features.
     this._justice = false; // inherited Justice features.
     this._authority = false; // inherited Justice features.
@@ -295,6 +296,17 @@ class Deva {
   ***************/
   Systems(resolve, reject) {
     return this.Feature('systems', resolve, reject);
+  }
+
+  /**************
+  func: Networks
+  params: resolve, reject
+  describe:
+    The Networks feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Networks(resolve, reject) {
+    return this.Feature('networks', resolve, reject);
   }
 
   /**************
@@ -682,6 +694,8 @@ class Deva {
         return this.Services(resolve, reject);
       }).then(() => {
         return this.Systems(resolve, reject);
+      }).then(() => {
+        return this.Networks(resolve, reject);
       }).then(() => {
         return this.Legal(resolve, reject);
       }).then(() => {

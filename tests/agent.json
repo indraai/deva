@@ -58,6 +58,12 @@
         "tag": "#SYSTEMS",
         "loc": "$SYSTEMS"
       },
+      "networks": {
+        "label": "📡NETWORKS",
+        "name": "@NETWORKS",
+        "tag": "#NETWORKS",
+        "loc": "$NETWORKS"
+      },
       "legal": {
         "label": "🏛️LEGAL",
         "name": "@LEGAL",
