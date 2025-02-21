@@ -902,8 +902,7 @@ class Deva {
   params:
     - msg: hte message from the caller incase need to use in calls
   describe:
-    The exit state function is triggered when the Deva is exiting it's online
-    status and setting the state to exit for things like security check.
+    The exit state function is triggered when the Deva is exiting.
 
     The return will check for a custom onExit function or run the done
     function.
