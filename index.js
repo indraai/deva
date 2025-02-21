@@ -907,9 +907,6 @@ class Deva {
 
     The return will check for a custom onExit function or run the done
     function.
-
-    If the deva is offline it will return the offline message.
-  usage: this.exit('msg')
   ***************/
   exit() {
     this.zone('exit');
