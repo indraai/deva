@@ -893,7 +893,7 @@ class Deva {
     // has stop function then set hasOnStop variable
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
     // if: has on stop then run on stop function or return exit function.
-    return hasOnStop ? this.onStop(data) : this.exit(data)
+    return hasOnStop ? this.onStop(data) : this.exit()
   }
 
 
@@ -911,7 +911,7 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.exit('msg')
   ***************/
-  exit(data) {
+  exit() {
     this.zone('exit');
 
     const agent = this.agent();
@@ -934,6 +934,11 @@ class Deva {
     this._security = false;
     this._support = false;
     this._services = false;
+    this._systems = false;
+    this._networks = false;
+    this._legal = false;
+    this._authority = false;
+    this._justice = false;
 
     this.state('exit');
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
