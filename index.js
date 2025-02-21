@@ -911,7 +911,7 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.exit('msg')
   ***************/
-  exit() {
+  exit(data) {
     this.zone('exit');
 
     const agent = this.agent();
