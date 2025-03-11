@@ -1,6 +1,6 @@
 {
   "name": "@indra.ai/deva",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "description": "The Deva Core",
   "main": "index.js",
   "type": "module",
@@ -51,7 +51,11 @@
   "config": {
     "cmdChr": "/",
     "askChr": "#",
-    "inherit": ["events", "lib", "config"],
+    "inherit": [
+      "events",
+      "lib",
+      "config"
+    ],
     "bind": [
       "listeners",
       "methods",
@@ -215,10 +219,8 @@
       "question_ask_answer": "🎙️ Answered",
       "question_cmd": "🪖 Command",
       "question_answer": "📞 Answer",
-
       "answer": "💡 Answer",
       "ask": "📣 Ask",
-
       "client": "👨 Client",
       "agent": "🕵️‍♂️ Agent",
       "security": "🔐 Security",
@@ -230,7 +232,6 @@
       "justice": "🗄️ Justice",
       "authority": "👮 Authority",
       "defense": "🪖  Defense",
-
       "invalid": "❌ Invalid",
       "states": "🛻 States",
       "actions": "🏎️ Actions",
@@ -289,6 +290,6 @@
       "method_not_found": "METHOD NOT FOUND",
       "stop": "Stop Deva.",
       "exit": "Exit Deva"
-    }    
+    }
   }
 }
