@@ -2,15 +2,15 @@
 // Distributed under the Restricted software license, see the accompanying file LICENSE.md
 import {EventEmitter} from 'node:events';
 import {randomUUID} from 'crypto';
-
 import lib from './lib/index.js';
+import pkg from './package.json' with {type:'json'};
 
+const {name,version,repository,author,bugs,homepage,license,config} = pkg;
 
-import Config from './config.json' with {type:'json'};
-const config = Config.DATA;
 class Deva {
   constructor(opts) {
     opts = opts || {}; // set opts to provided opts or an empty object.
+    this._core = {name,version,repository,author,bugs,homepage,license};
     this._id = opts.id || randomUUID(); // the unique id assigned to the agent at load
     this._info = opts.info || false; // the deva information from the package file.
     this._config = opts.config || {}; // local Config Object
@@ -36,7 +36,6 @@ class Deva {
     this.func = opts.func || {}; // local Functions
     this.methods = opts.methods || {}; // local Methods
     this.maxListeners = opts.maxListenners || 0; // set the local maxListeners
-
     // prevent overwriting existing functions and variables with same name
     for (const opt in opts) {
       if (!this[opt] || !this[`_${opt}`]) this[opt] = opts[opt];
@@ -1440,14 +1439,31 @@ class Deva {
 
 
   /**************
+  func: core
+  params: none
+  describe: return core data.
+  ***************/
+  core() {
+    // check the active status
+    if (!this._active) return Promise.resolve(this._messages.offline);
+    const data = this.lib.copy(this._core);
+    data.id = this.lib.uid();
+    data.hash = this.lib.hash(data);
+    return data;
+  }
+
+  /**************
   func: info
-  params: id
+  params: none
   describe: return info data.
   ***************/
   info() {
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
-    return this._info;
+    const data = this.lib.copy(this._info);
+    data.id = this.lib.uid();
+    data.hash = this.lib.hash(data);
+    return data;
   }
 
   /**************

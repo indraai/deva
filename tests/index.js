@@ -9,7 +9,26 @@ const agent = Agent.DATA;
 
 import Deva from '../index.js';
 
+import {dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';    
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const info = {
+  id: '00000',
+  name: 'Deva Core Test',
+  describe: 'Deva Core Test Package',
+  version: '0.0.0',
+  dir: __dirname,
+  url: 'https://deva.world/test',
+  git: 'git+https://github.com/indraai/deva.git',
+  bugs: 'git+https://github.com/indraai/deva.git#bugs',
+  author: 'Quinn Michaels',
+  license: 'TESTING ONLY',
+  copyright: 2025,
+};
+
 const DevaTest = new Deva({
+	info,
 	agent: {
 		id: agent.id,
 		key: agent.key,
@@ -70,15 +89,24 @@ const DevaTest = new Deva({
 			const text = this._state
 			const id = this.lib.uid();
 			const uid = this.lib.uid(true);
+			const core = this.core();
+			const info = this.info();
 			const data = [
-				`::BEGIN:DATA:${id}`,
-				`id:     ${id}`,
-				`uid:    ${uid}`,
-				`md5:    ${this.lib.hash(packet)}`,
-				`sha256: ${this.lib.hash(packet, 'sha256')}`,
-				`sha512: ${this.lib.hash(packet, 'sha512')}`,
-				`date:   ${this.lib.formatDate(Date.now(), 'long', true)}`,				
-				`::END:DATA:${this.lib.hash(packet)}`,
+				'🧪 TEST RESULTS',
+				`::BEGIN:CORE:${core.id}`,
+				JSON.stringify(core,null,2),
+				`::END:CORE:${core.hash}`,
+				`::BEGIN:INFO:${info.id}`,
+				JSON.stringify(info,null,2),
+				`::END:INFO:${info.hash}`,
+				`::BEGIN:RESULTS:${id}`,
+				`id:     ✅ ${id}`,
+				`uid:    ✅ ${uid}`,
+				`md5:    ✅ ${this.lib.hash(packet)}`,
+				`sha256: ✅ ${this.lib.hash(packet, 'sha256')}`,
+				`sha512: ✅ ${this.lib.hash(packet, 'sha512')}`,
+				`date:   ✅ ${this.lib.formatDate(Date.now(), 'long', true)}`,				
+				`::END:RESULTS:${this.lib.hash(packet)}`,
 			];
 			return {
 				text: data.join('\n'),
