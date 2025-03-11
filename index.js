@@ -238,7 +238,7 @@ class Deva {
         const data = features[feature]; // make a copy the clinet data.
         this.state('set', feature);
         this[_fe] = { // set this_security with data
-          id: this.lib.uid(true), // uuid of the security feature
+          id: this.lib.uid(), // uuid of the security feature
           client_id: id, // client id for reference
           client_name: profile.name, // client name for personalization
           concerns: data.concerns, // any concerns for client
@@ -677,7 +677,7 @@ class Deva {
     const agent = this.agent();
 
     const _data = {
-      id: this.lib.uid(true),
+      id: this.lib.uid(),
       key: 'init',
       value: agent.key,
       agent,
@@ -915,7 +915,7 @@ class Deva {
 
     this.action('exit');
     const data = {
-      id: this.lib.uid(true),
+      id: this.lib.uid(),
       key: 'exit',
       value: this._messages.exit,
       agent,
@@ -982,7 +982,7 @@ class Deva {
     this.action('func', 'states');
     this.state('return', 'states');
     return {
-      id: this.lib.uid(true),
+      id: this.lib.uid(),
       key: 'states',
       value: this._states,
       created: Date.now(),
@@ -1028,7 +1028,7 @@ class Deva {
     this.action('func', 'zones');
     this.state('return', 'zones');
     return {
-      id: this.lib.uid(true), // set the uuid of the data
+      id: this.lib.uid(), // set the uuid of the data
       agent: this.agent(), // set the agent value
       cleint: this.client(), // set the client value
       key: 'zones', // set the key return value
@@ -1055,7 +1055,7 @@ class Deva {
       const msg = msg_action || action; // set the correct message
       const text = extra ? `${msg} ${extra}` : msg; // set the text of the action
       const data = { // build the data object for the action.
-        id: this.lib.uid(true), // generate a guid for the action transmitssion.
+        id: this.lib.uid(), // generate a guid for the action transmitssion.
         agent: this.agent(), // the agent data to send with the action
         client: this.client(), // the client data to send with the action
         key: 'action', // the key for event to transmit action type
@@ -1080,7 +1080,7 @@ class Deva {
     this.action('func', 'actions');
     this.state('return', 'actions');
     return {
-      id: this.lib.uid(true), // set the id with a uuid
+      id: this.lib.uid(), // set the id with a uuid
       agent: this.agent(), // set the agent value
       client: this.client(), // set the client value
       key: 'actions', // set the data key
@@ -1104,7 +1104,7 @@ class Deva {
       const text = extra ? `${lookup} ${extra}` : lookup; // set the text value
 
       const data = { // build data object
-        id: this.lib.uid(true), // set the id
+        id: this.lib.uid(), // set the id
         agent: this.agent(), // set the agent transporting the packet.
         key: 'feature', // set the key for transport
         value, // set the value of the key
@@ -1127,7 +1127,7 @@ class Deva {
   features() {
     this.state('return', 'features');
     return { // return the data object
-      id: this.lib.uid(true), // set the object id
+      id: this.lib.uid(), // set the object id
       agent: this.agent(), // set the agent value.
       client: this.client(), // set the client value.
       key: 'features', // set the key
@@ -1151,7 +1151,7 @@ class Deva {
       const text = extra ? `${lookup} ${extra}` : lookup;
 
       const data = {
-        id: this.lib.uid(true),
+        id: this.lib.uid(),
         agent: this.agent(),
         client: this.client(),
         key: 'context',
@@ -1172,7 +1172,7 @@ class Deva {
     if (!this._active) return this._messages.offline; // check the active status
     this.state('return', 'contexts');
     return {
-      id: this.lib.uid(true),
+      id: this.lib.uid(),
       agent: this.agent(),
       client: this.client(),
       key: 'contexts',
@@ -1419,7 +1419,7 @@ class Deva {
     const agent = this.agent();
     const client = this.client();
     const _data = {
-      id: this.lib.uid(true),
+      id: this.lib.uid(),
       key: 'prompt',
       value: agent.key,
       agent,
@@ -1505,17 +1505,16 @@ class Deva {
     - data: Any additional data associated with the error
     - reject: An associated promise reject if the caller requires.
   describe:
-    The erro function rpovides the consistent error manage of the system.
+    The error function provides the consistent error manage of the system.
   usage: this.error(err, data, reject);
   ***************/
   error(err,data=false,reject=false) {
     this.zone('error');
-
     this.action('error')
     const agent = this.agent();
     const client = this.client();
     const _data = {
-      id: this.lib.uid(true),
+      id: this.lib.uid(),
       key: 'error',
       value: agent.key,
       agent,
