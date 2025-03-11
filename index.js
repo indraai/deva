@@ -1079,14 +1079,16 @@ class Deva {
   actions() {
     this.action('func', 'actions');
     this.state('return', 'actions');
-    return {
+    const data = {
       id: this.lib.uid(), // set the id with a uuid
       agent: this.agent(), // set the agent value
       client: this.client(), // set the client value
       key: 'actions', // set the data key
       value: this._actions, // set the value to the actions list
-      created: Date.now(), // set the data created date
-    }
+      created: Date.now(), // set the data created date      
+    };
+    data.hash = this.lib.hash(data)
+    return data;
   }
 
   /**************
@@ -1126,14 +1128,16 @@ class Deva {
   ***************/
   features() {
     this.state('return', 'features');
-    return { // return the data object
+    const data = {
       id: this.lib.uid(), // set the object id
       agent: this.agent(), // set the agent value.
       client: this.client(), // set the client value.
       key: 'features', // set the key
       value: this._features, // set the value to the features list
       created: Date.now(), // set the created date.
-    }
+    };
+    data.hash = this.lib.hash(data);
+    return data;
   }
 
   /**************
@@ -1159,7 +1163,6 @@ class Deva {
         text,
         created: Date.now(),
       };
-
       data.hash = this.lib.hash(data);
       this.talk(config.events.context, data);
       return data;
@@ -1427,6 +1430,7 @@ class Deva {
       text,
       created: Date.now(),
     }
+    _data.hash = this.lib.hash(_data);
     return this.talk(config.events.prompt, _data);
   }
 
@@ -1519,10 +1523,15 @@ class Deva {
       value: agent.key,
       agent,
       client,
-      error: err,
+      error: {
+        name: err.name,
+        message: err.message,
+        stack: err.stack,        
+      },
       data,
       created: Date.now(),
     }
+    _data.hash = this.lib.hash(_data);
     this.talk(config.events.error, this.lib.copy(_data));
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
 
