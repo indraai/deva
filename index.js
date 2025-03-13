@@ -1217,6 +1217,7 @@ class Deva {
     this.feature(key); // set the security state
     try {
       const data = this.lib.copy(value);
+      data.id = this.lib.uid();
       data.hash = this.lib.hash(value);
       data.created = Date.now();
       this.state('return', key); // set the security state
