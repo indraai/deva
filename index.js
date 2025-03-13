@@ -182,6 +182,23 @@ class Deva {
     return packet;
   }
 
+  _feature(key, value) {
+    if (!this._active) return this._messages.offline; // check the active status
+    this.zone(key);
+    this.feature(key); // set the security state
+    try {
+      const data = this.lib.copy(value);
+      data.id = this.lib.uid();
+      data.hash = this.lib.hash(value);
+      data.created = Date.now();
+      this.state('return', key); // set the security state
+      return data; // return the security feature
+    } catch (e) {
+      return this.error(e);
+    }    
+  }
+
+
   /**************
   func: Client
   params: client - client provided data.
@@ -1211,21 +1228,6 @@ class Deva {
     return agent_copy; // return the copy of the agent data.
   }
 
-  _feature(key, value) {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone(key);
-    this.feature(key); // set the security state
-    try {
-      const data = this.lib.copy(value);
-      data.id = this.lib.uid();
-      data.hash = this.lib.hash(value);
-      data.created = Date.now();
-      this.state('return', key); // set the security state
-      return data; // return the security feature
-    } catch (e) {
-      return this.error(e);
-    }    
-  }
   // FEATURE FUNCTIONS
   /**************
   func: security
