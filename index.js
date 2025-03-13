@@ -1192,6 +1192,8 @@ class Deva {
   client() {
     if (!this._active) return this._messages.offline; // check the active status
     const client_copy = this.lib.copy(this._client); // create a copy of the client data
+    client_copy.hash = this.lib.hash(client_copy);
+    client_copy.created = Date.now();
     return client_copy; // return the copy of the client data.
   }
 
@@ -1204,9 +1206,25 @@ class Deva {
   agent() {
     if (!this._active) return this._messages.offline; // check the active status
     const agent_copy = this.lib.copy(this._agent); // create a copy of the agent data.
+    agent_copy.hash = this.lib.hash(agent_copy);
+    agent_copy.created = Date.now();
     return agent_copy; // return the copy of the agent data.
   }
 
+  _feature(key, value) {
+    if (!this._active) return this._messages.offline; // check the active status
+    this.zone(key);
+    this.feature(key); // set the security state
+    try {
+      const data = this.lib.copy(value);
+      data.hash = this.lib.hash(value);
+      data.created = Date.now();
+      this.state('return', key); // set the security state
+      return data; // return the security feature
+    } catch (e) {
+      return this.error(e);
+    }    
+  }
   // FEATURE FUNCTIONS
   /**************
   func: security
@@ -1215,15 +1233,7 @@ class Deva {
   usage: this.security()
   ***************/
   security() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('security');
-    this.feature('security'); // set the security state
-    try {
-      this.state('return', 'security'); // set the security state
-      return this.lib.copy(this._security); // return the security feature
-    } catch (e) {
-      return this.error(e);
-    }
+    return this._feature('security', this._security);
   }
 
   /**************
@@ -1233,15 +1243,7 @@ class Deva {
   usage: this.defense()
   ***************/
   defense() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('defense');
-    this.feature('defense'); // set the defense state
-    try {
-      this.state('return', 'defense'); // set the defense state
-      return this.lib.copy(this._defense); // return the defense feature
-    } catch (e) {
-      return this.error(e);
-    }
+    return this._feature('defense', this._defense);
   }
 
   /**************
@@ -1251,15 +1253,7 @@ class Deva {
   usage: this.support()
   ***************/
   support() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('support');
-    this.feature('support'); // set the support state
-    try {
-      this.state('return', 'support'); // set the action to support.
-      return this.lib.copy(this._support); // return the support feature
-    } catch (e) {
-      return this.error(e); // return this.error when error catch
-    }
+    return this._feature('support', this._support);
   }
 
   /**************
@@ -1269,15 +1263,7 @@ class Deva {
   usage: this.services()
   ***************/
   services() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('services');
-    this.feature('services'); // set the support state
-    try {
-      this.state('return', 'services'); // set the services state
-      return this.lib.copy(this._services); // return the services feature
-    } catch (e) {
-      return this.error(e); // return this.error when error catch
-    }
+    return this._feature('services', this._services);
   }
 
   /**************
@@ -1287,15 +1273,7 @@ class Deva {
   usage: this.systems()
   ***************/
   systems() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('systems');
-    this.feature('systems'); // set the support state
-    try {
-      this.state('return', 'systems'); // set the systems state
-      return this.lib.copy(this._systems); // return the systems feature
-    } catch (e) {
-      return this.error(e); // return this.error when error catch
-    }
+    return this._feature('systems', this._systems);
   }
 
   /**************
@@ -1305,15 +1283,7 @@ class Deva {
   usage: this.networks()
   ***************/
   networks() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('networks');
-    this.feature('networks'); // set the support state
-    try {
-      this.state('return', 'networks'); // set the networks state
-      return this.lib.copy(this._networks); // return the networks feature
-    } catch (e) {
-      return this.error(e); // return this.error when error catch
-    }
+    return this._feature('networks', this._networks);
   }
 
   /**************
@@ -1323,15 +1293,7 @@ class Deva {
   usage: this.systems()
   ***************/
   legal() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('legal');
-    this.feature('legal'); // set the support state
-    try {
-      this.state('return', 'legal'); // set the systems state
-      return this.lib.copy(this._legal); // return the systems feature
-    } catch (e) {
-      return this.error(e); // return this.error when error catch
-    }
+    return this._feature('legal', this._legal);
   }
 
   /**************
@@ -1341,15 +1303,7 @@ class Deva {
   usage: this.systems()
   ***************/
   justice() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('justice');
-    this.feature('justice'); // set the support state
-    try {
-      this.state('return', 'justice'); // set the systems state
-      return this.lib.copy(this._justice); // return the systems feature
-    } catch (e) {
-      return this.error(e); // return this.error when error catch
-    }
+    return this._feature('legal', this._legal);
   }
 
   /**************
@@ -1359,15 +1313,7 @@ class Deva {
   usage: this.systems()
   ***************/
   authority() {
-    if (!this._active) return this._messages.offline; // check the active status
-    this.zone('authority');
-    this.feature('authority'); // set the support state
-    try {
-      this.state('return', 'authority'); // set the systems state
-      return this.lib.copy(this._authority); // return the systems feature
-    } catch (e) {
-      return this.error(e); // return this.error when error catch
-    }
+    return this._feature('authority', this._authority);
   }
 
   /**************
