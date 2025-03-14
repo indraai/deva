@@ -182,7 +182,7 @@ class Deva {
     return packet;
   }
 
-  _feature(key, value) {
+  _getFeature(key, value) {
     if (!this._active) return this._messages.offline; // check the active status
     this.zone(key);
     this.feature(key); // set the security state
@@ -1236,7 +1236,7 @@ class Deva {
   usage: this.security()
   ***************/
   security() {
-    return this._feature('security', this._security);
+    return this._getFeature('security', this._security);
   }
 
   /**************
@@ -1246,7 +1246,7 @@ class Deva {
   usage: this.defense()
   ***************/
   defense() {
-    return this._feature('defense', this._defense);
+    return this._getFeature('defense', this._defense);
   }
 
   /**************
@@ -1256,7 +1256,7 @@ class Deva {
   usage: this.support()
   ***************/
   support() {
-    return this._feature('support', this._support);
+    return this._getFeature('support', this._support);
   }
 
   /**************
@@ -1266,7 +1266,7 @@ class Deva {
   usage: this.services()
   ***************/
   services() {
-    return this._feature('services', this._services);
+    return this._getFeature('services', this._services);
   }
 
   /**************
@@ -1276,7 +1276,7 @@ class Deva {
   usage: this.systems()
   ***************/
   systems() {
-    return this._feature('systems', this._systems);
+    return this._getFeature('systems', this._systems);
   }
 
   /**************
@@ -1286,7 +1286,7 @@ class Deva {
   usage: this.networks()
   ***************/
   networks() {
-    return this._feature('networks', this._networks);
+    return this._getFeature('networks', this._networks);
   }
 
   /**************
@@ -1296,7 +1296,7 @@ class Deva {
   usage: this.systems()
   ***************/
   legal() {
-    return this._feature('legal', this._legal);
+    return this._getFeature('legal', this._legal);
   }
 
   /**************
@@ -1306,7 +1306,7 @@ class Deva {
   usage: this.systems()
   ***************/
   justice() {
-    return this._feature('legal', this._legal);
+    return this._getFeature('legal', this._legal);
   }
 
   /**************
@@ -1316,7 +1316,7 @@ class Deva {
   usage: this.systems()
   ***************/
   authority() {
-    return this._feature('authority', this._authority);
+    return this._getFeature('authority', this._authority);
   }
 
   /**************
