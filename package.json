@@ -1,6 +1,6 @@
 {
   "name": "@indra.ai/deva",
-  "version": "1.4.14",
+  "version": "1.4.15",
   "description": "The Deva Core",
   "main": "index.js",
   "type": "module",
