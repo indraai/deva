@@ -1,4 +1,4 @@
-// Copyright (c)2023 Quinn Michaels
+// Copyright (c)2025 Quinn Michaels
 // Distributed under the MIT software license, see the accompanying
 // file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
 const client = require('./client.json').DATA;

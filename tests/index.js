@@ -1,5 +1,5 @@
 "use strict"
-// Copyright (c)2024 Quinn Michaels
+// Copyright (c)2025 Quinn Michaels; All rights reserved.
 // Private License
 // file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
 import Client from './client.json' with {type:'json'};
