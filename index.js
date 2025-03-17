@@ -1454,9 +1454,12 @@ class Deva {
   ***************/
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
-      this.zone('help');
-
       if (!this._active) return resolve(this._messages.offline);
+      this.zone('help');
+      this.feature('help');
+      this.action('help');
+      this.state('help');
+      this.context('help');
 
       const params = msg.split(' ');
       let helpFile = 'main';
@@ -1467,7 +1470,7 @@ class Deva {
         this.state('resolve', 'help');
         return resolve(this.lib.fs.readFileSync(helpFile, 'utf8'));
       } catch (e) {
-        this.state('reject', 'helpFile');
+        this.state('reject', 'help');
         return reject(e)
       }
     });
