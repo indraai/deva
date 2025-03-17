@@ -125,8 +125,6 @@
       "send": "📬 Send",
       "receive": "📪 Receive",
       "init": "🚀 Init",
-      "forward": "⏭️ Forward",
-      "backward": "⏮️ Backward",
       "start": "🛝 Start",
       "stop": "⏹️ Stop",
       "open": "🥫 Open",
@@ -155,7 +153,7 @@
       "pull": "👉 Pull",
       "search": "🔎 Search",
       "memory": "💭 Memory",
-      "signature": "⛑️ Response",
+      "signature": "✍️️ Signature",
       "invalid": "👎 INVALID!",
       "valid": "👍 VALID!",
       "abort": "💔 ABORT!",
@@ -174,7 +172,9 @@
       "unofficial": "🤥 Unofficial",
       "approved": "🎖️ Approved",
       "denied": "🖕 Denied",
-      "secure": "🔏 Secure"
+      "secure": "🔏 Secure",
+      "try": "🏸 Try",
+      "catch": "⚾️ Catch"
     },
     "action": false,
     "actions": {
