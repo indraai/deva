@@ -80,6 +80,8 @@
     "context": false,
     "zone": "deva",
     "zones": {
+      "question": "🙋‍♂️ Question",
+      "answer": "👨‍🏫 Teacher",
       "load": "🚛 Load",
       "unload": "🛻 Unload",
       "init": "🚀 Init",

@@ -551,11 +551,13 @@ class Deva {
   ***************/
   answer(packet, resolve, reject) {
     if (!this._active) return Promise.resolve(this._messages.offline);
+    this.zone('answer');
+
     const agent = this.agent();
     const client = this.client();
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
-    this.zone('answer', method);
+
     const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
     if (!isMethod) return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails
 
