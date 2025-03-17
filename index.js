@@ -551,7 +551,7 @@ class Deva {
   ***************/
   answer(packet, resolve, reject) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.zone('answer');
+    this.zone('answer'); // set zone to answer
 
     const agent = this.agent();
     const client = this.client();
