@@ -283,6 +283,17 @@ class Deva {
   }
 
   /**************
+  func: Guard
+  params: client: false
+  describe:
+    The Guard feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Guard(resolve, reject) {
+    return this.Feature('guard', resolve, reject);
+  }
+
+  /**************
   func: Defense
   params: client: false
   describe:
@@ -724,6 +735,8 @@ class Deva {
         return this.Client(client, resolve, reject);
       }).then(() => {
         return this.Security(resolve, reject);
+      }).then(() => {
+        return this.Guard(resolve, reject);
       }).then(() => {
         return this.Defense(resolve, reject);
       }).then(() => {
@@ -1245,6 +1258,16 @@ class Deva {
   ***************/
   security() {
     return this._getFeature('security', this._security);
+  }
+
+  /**************
+  func: guard
+  params: none
+  describe: basic guard features available in a Deva.
+  usage: this.guard()
+  ***************/
+  guard() {
+    return this._getFeature('guard', this._guard);
   }
 
   /**************

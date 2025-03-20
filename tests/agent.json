@@ -77,6 +77,12 @@
         "name": "@DEFENSE",
         "tag": "#DEFENSE",
         "loc": "$DEFENSE"
+      },
+      "defense": {
+        "label": "💂GUARD",
+        "name": "@GUARD",
+        "tag": "#GUARD",
+        "loc": "$GUARD"
       }
     },
     "vars": {

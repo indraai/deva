@@ -45,6 +45,11 @@
         "global": [],
         "devas": {}
       },
+      "guard": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "support": {
         "concerns": [],
         "global": [],
