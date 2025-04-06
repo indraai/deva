@@ -1501,7 +1501,7 @@ class Deva {
       this.state('try', `help:${helpFile}`);
       try {
         const helpExists = fs.existsSync(helpPath);
-        if (!helpExists) return resolve(this._messages.help_not_found);
+        if (!helpExists) return this.finish(this._messages.help_not_found, resolve);
         const helpDoc = this.lib.fs.readFileSync(helpPath, 'utf8');
         this.state('finish', `help:${helpFile}`);
         return this.finish(helpDoc, resolve);
