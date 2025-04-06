@@ -1486,9 +1486,9 @@ class Deva {
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
       if (!this._active) return resolve(this._messages.offline);
-      const params = msg.split(' ');
-      let helpFile = 'main';
-      if (params[0]) helpFile = params[0];
+      const params = msg.split(' '); // split the msg into an array by spaces.
+      let helpFile = 'main'; // set default help file
+      if (params[0]) helpFile = params[0]; // check the msg for a help file
       if (params[1]) helpFile = `${params[0]}_${params[1]}`;
 
       this.context('help', helpFile);
@@ -1500,7 +1500,7 @@ class Deva {
       const helpPath = this.lib.path.join(help_dir, 'help', `${helpFile}.feecting`);
       this.state('try', `help:${helpFile}`);
       try {
-        const helpExists = this.lib.fs.existsSync(helpPath);
+        const helpExists = this.lib.fs.existsSync(helpPath); // check if help file exists
         if (!helpExists) return this.finish(this._messages.help_not_found, resolve);
         const helpDoc = this.lib.fs.readFileSync(helpPath, 'utf8');
         this.state('finish', `help:${helpFile}`);
