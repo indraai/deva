@@ -530,6 +530,7 @@ class Deva {
 
         if (isAsk) { // isAsk check if the question isAsk and talk
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
+          this.zone('ask', key);
           this.action('talk', `${key}:ask`);
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
