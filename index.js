@@ -530,12 +530,12 @@ class Deva {
 
         if (isAsk) { // isAsk check if the question isAsk and talk
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
-          this.zone('ask', key);
           this.action('talk', `${key}:ask`);
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id}`, answer => {
             this.action('talk', config.events.ask);
             this.talk(config.events.ask, this.lib.copy(answer));
+            this.state('finish', `${key}:ask`);
             return this.finish(answer, resolve); // if:isAsk resolve the answer from the call
           });
         }
@@ -558,7 +558,7 @@ class Deva {
     - resolve
     - reject
   describe:
-    The answer function is called from the question fuction to return an answer
+    The answer function is called from the question function to return an answer
     from the agent from the pre-determined method.
   ***************/
   answer(packet, resolve, reject) {
@@ -570,46 +570,50 @@ class Deva {
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
 
-    const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
-    if (!isMethod) return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails
+    this.state('try', `answer:${method}`);
+    try {
+      const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
+      if (!isMethod) return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails      
 
-    // Call the local method to process the question based the extracted parameters
-    this.action('method', method);
-    this.methods[method](packet).then(result => {
-      // check the result for the text, html, and data object.
-      // this is for when answers are returned from nested Devas.
-      const text = typeof result === 'object' ? result.text : result;
-      const html = typeof result === 'object' ? result.html : result;
-      // if the data passed is NOT an object it will FALSE
-      const data = typeof result === 'object' ? result.data : false;
-
-      this.state('set', 'answer');
-      const packet_answer = { // setup the packet.a container
-        id: this.lib.uid(),
-        agent, // set the agent who answered the question
-        client, // set the client asking the question
-        meta: { // setup the answer meta container
-          key: agent.key, // set the agent key inot the meta
-          method, // set the method into the meta
-          params, // set the params into the meta
-        },
-        text, // set answer text
-        html, // set the answer html
-        data, // set the answer data
-        created: Date.now(), // set the created date for the answer
-      };
-      // create a hash for the answer and insert into answer meta.
-      this.action('talk', config.events.answer)
-      packet_answer.meta.hash = this.lib.hash(packet_answer);
-      packet.a = packet_answer; // set the packet.a to the packet_answer
-      this.talk(config.events.answer, this.lib.copy(packet)); // global talk event
-
-      this.state('finish', 'answer'); // set the state resolve answer
-      return this.finish(packet, resolve); // resolve the packet to the caller.
-    }).catch(err => { // catch any errors in the method
-      this.state('catch', 'answer'); // set the state reject answer
-      return this.error(err, packet, reject); // return this.error with err, packet, reject
-    });
+      this.action('method', method);
+      this.methods[method](packet).then(result => {
+        // check the result for the text, html, and data object.          // this is for when answers are returned from nested Devas.
+        const text = typeof result === 'object' ? result.text : result;
+        const html = typeof result === 'object' ? result.html : result;
+        // if the data passed is NOT an object it will FALSE
+        const data = typeof result === 'object' ? result.data : false;
+      
+        this.state('set', `answer:${method}:packet_answer`);
+        const packet_answer = { // setup the packet.a container
+          id: this.lib.uid(),
+          agent, // set the agent who answered the question
+          client, // set the client asking the question
+          meta: { // setup the answer meta container
+            key: agent.key, // set the agent key inot the meta
+            method, // set the method into the meta
+            params, // set the params into the meta
+          },
+          text, // set answer text
+          html, // set the answer html
+          data, // set the answer data
+          created: Date.now(), // set the created date for the answer
+        };
+        // create a hash for the answer and insert into answer meta.
+        this.action('talk', config.events.answer)
+        packet_answer.meta.hash = this.lib.hash(packet_answer);
+        packet.a = packet_answer; // set the packet.a to the packet_answer
+        this.talk(config.events.answer, this.lib.copy(packet)); // global talk event
+      
+        this.state('finish', `answer:${method}`); // set the state resolve answer
+        return this.finish(packet, resolve); // resolve the packet to the caller.
+      }).catch(err => { // catch any errors in the method
+        this.state('catch', `answer:${method}`); // set the state reject answer
+        return this.error(err, packet, reject); // return this.error with err, packet, reject
+      });
+    } catch (e) {
+      this.state('catch', `answer:${method}`);
+      return this.error(e, packet, reject);
+    }
   }
 
   /**************
@@ -635,7 +639,7 @@ class Deva {
     const agent = this.agent();
     const client = this.client();
     // build the answer packet from this model
-    this.state('set', 'answer');
+    this.state('set', `ask:${method}:packet_answer`);
     const packet_answer = {
       id: this.lib.uid(),
       agent,
@@ -651,7 +655,7 @@ class Deva {
       created: Date.now(),
     };
 
-    this.state('try', method);
+    this.state('try', `ask:${method}`);
     try {
       if (typeof this.methods[method] !== 'function') {
         return setImmediate(() => {
@@ -680,11 +684,12 @@ class Deva {
         this.talk(`${agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
         this.talk(`${agent.key}:ask:${packet.id}`, {error:err});
-        this.state('catch', 'ask');
+        this.state('catch', `ask:${method}`);
         return this.error(err, packet);
       })
     }
     catch (e) {
+      this.state('catch', `ask:${method}`);
       this.talk(`${agent.key}:ask:${packet.id}`, {error:e});
       return this.error(e, packet)
     }
