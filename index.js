@@ -1499,10 +1499,10 @@ class Deva {
       this.state('try', `help:${helpFile}`);
       try {
         const helpExists = this.lib.fs.existsSync(helpPath); // check if help file exists
-        if (!helpExists) return this.finish(this._messages.help_not_found, resolve);
+        if (!helpExists) return resolve(this._messages.help_not_found);
         const helpDoc = this.lib.fs.readFileSync(helpPath, 'utf8');
-        this.state('finish', `help:${helpFile}`);
-        return this.finish(helpDoc, resolve);
+        this.state('resolve', `help:${helpFile}`);
+        return resolve(helpDoc);
       } catch (e) {
         this.state('catch', `help:${helpFile}`);
         return this.error(e, msg, reject);
