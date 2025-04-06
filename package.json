@@ -280,6 +280,7 @@
       "notext": "NO TEXT WAS PROVIDED",
       "nopacket": "NO PACKET WAS PROVIDED",
       "method_not_found": "METHOD NOT FOUND",
+      "help_not_found": "🚫 HELP NOT FOUND",
       "stop": "Stop Deva.",
       "exit": "Exit Deva"
     }

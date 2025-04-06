@@ -1486,23 +1486,27 @@ class Deva {
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
       if (!this._active) return resolve(this._messages.offline);
-      this.zone('help');
-      this.feature('help');
-      this.action('help');
-      this.state('help');
-      this.context('help');
-
       const params = msg.split(' ');
       let helpFile = 'main';
       if (params[0]) helpFile = params[0];
       if (params[1]) helpFile = `${params[0]}_${params[1]}`;
-      helpFile = this.lib.path.join(help_dir, 'help', `${helpFile}.feecting`);
+
+      this.context('help', helpFile);
+      this.zone('help', helpFile);
+      this.feature('help', helpFile);
+      this.action('help', helpFile);
+      this.state('help', helpFile);
+
+      const helpPath = this.lib.path.join(help_dir, 'help', `${helpFile}.feecting`);
       try {
-        this.state('resolve', 'help');
-        return resolve(this.lib.fs.readFileSync(helpFile, 'utf8'));
+        const helpExists = fs.existsSync(helpPath);
+        if (!helpExists) return resolve(this._messages.help_not_found);
+        const helpDoc = this.lib.fs.readFileSync(helpPath, 'utf8');
+        this.state('resolve', `help:${helpFile}`);
+        return resolve(helpDoc);
       } catch (e) {
-        this.state('reject', 'help');
-        return reject(e)
+        this.state('reject', `help:${helpFile}`);
+        return this.error(msg, e, reject);
       }
     });
   }
