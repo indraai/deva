@@ -1191,8 +1191,10 @@ class Deva {
   describe
   ***************/
   context(value=false, extra=false) {
+    this.state('try', `context:${value}`);
     try {
       if (!value) return;
+      this.state('set', `context:${value}`);
       this._context = value;
       const lookup = this.vars.context[value] || value;
       const text = extra ? `${lookup} ${extra}` : lookup;
@@ -1208,9 +1210,11 @@ class Deva {
       };
       data.hash = this.lib.hash(data);
       this.talk(config.events.context, data);
+      this.state('return', `context:${value}:${data.id}`);
       return data;
     } catch (e) {
-      return this.error(e);
+      this.state('catch', `context:${value}`);
+      return this.error(e, value);
     }
   }
 
@@ -1392,7 +1396,6 @@ class Deva {
     });
   }
 
-
   /**************
   func: prompt
   params:
@@ -1418,11 +1421,6 @@ class Deva {
     _data.hash = this.lib.hash(_data);
     return this.talk(config.events.prompt, _data);
   }
-
-
-
-
-
 
   /**************
   func: core
