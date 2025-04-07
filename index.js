@@ -1042,7 +1042,6 @@ class Deva {
 
     if (!value || !this._zones[value] || value === this._zone) return;
 
-    this.state('try', `zone:${value}:${id}`)
     try {
       this._zone = value;
       const lookup = this._zones[value]; // set the lookup value
@@ -1059,7 +1058,6 @@ class Deva {
       };
       data.hash = this.lib.hash(data);
       this.talk(config.events.zone, data);
-      this.state('return', `zone:${value}:${id}`);
       return data;
     } catch (e) {
       this.state('catch', `zone:${value}:${id}`);
@@ -1095,7 +1093,6 @@ class Deva {
   ***************/
   action(value=false, extra=false) {
     const id = this.lib.uid();
-    this.state('try', `action:${value}:${id}`);
     try {
       if (!value || !this._actions[value] || value === this._action) return;
       this._action = value; // set the local action variable
@@ -1116,7 +1113,6 @@ class Deva {
       };
       data.hash = this.lib.hash(data); // generate a hash of the action packet.
       this.talk(config.events.action, data); // talk the core action event
-      this.state('return', `action:${value}:${id}`);
       return data;
     } catch (e) { // catch any errors that occur
       this.state('catch', `action:${value}:${id}`);
@@ -1154,8 +1150,6 @@ class Deva {
   ***************/
   feature(value=false, extra=false) {
     const id = this.lib.uid();
-    this.action('feature', value);
-    this.state('try', `feature:${value}:${id}`);
     try {
       if (!value || !this._features[value]) return; // check feature value
 
@@ -1172,7 +1166,6 @@ class Deva {
       };
       data.hash = this.lib.hash(data); // generate the hash value of the data packet
       this.talk(config.events.feature, data); // talk the feature event with data
-      this.state('return', `feature:${value}:${id}`);
       return data;
     } catch (e) { // catch any errors
       this.state('catch', `feature:${value}:${id}`);
@@ -1210,11 +1203,8 @@ class Deva {
   ***************/
   context(value=false, extra=false) {
     const id = this.lib.uid();
-    this.action('context', `${value}:${id}`);
-    this.state('try', `context:${value}:${id}`);
     try {
       if (!value) return;
-      this.state('set', `context:${value}:${id}`);
       this._context = value;
       const lookup = this.vars.context[value] || value;
       const text = extra ? `${lookup} ${extra}` : lookup;
@@ -1230,7 +1220,6 @@ class Deva {
       };
       data.hash = this.lib.hash(data);
       this.talk(config.events.context, data);
-      this.state('return', `context:${value}:${id}`);
       return data;
     } catch (e) {
       this.state('catch', `context:${value}:${id}`);
@@ -1239,16 +1228,20 @@ class Deva {
   }
 
   contexts() {
+    const id = this.lib.uid();
+    this.action('contexts', id);
     if (!this._active) return this._messages.offline; // check the active status
-    this.state('return', 'contexts');
-    return {
-      id: this.lib.uid(),
+    const data = {
+      id,
       agent: this.agent(),
       client: this.client(),
       key: 'contexts',
       value: this.vars.context || false,
-      created: Date.now(),
-    }
+      created: Date.now(),      
+    };
+    data.hash = this.lib.hash(data);
+    this.state('return', `contexts:${id}`);
+    return data;
   }
 
   /**************
