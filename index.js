@@ -179,9 +179,11 @@ class Deva {
       },
       created: Date.now(),
     };
+    packet.a.hash = this.lib.hash(packet.a);
     delete packet.hash;
     packet.hash = this.lib.hash(packet);
-    this.state('invalid', `${method}:${packet.id}`);
+
+    this.state('invalid', `${packet.q.meta.method}:${packet.id}`);
     return packet;
   }
 
