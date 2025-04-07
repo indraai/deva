@@ -409,9 +409,7 @@ class Deva {
   ***************/
   talk(evt, packet=false) {
     this.action('talk', `${evt}:${packet.id}`);
-    this.state('talk', `${evt}:${packet.id}`);
-    this.events.emit(evt, packet);
-    return packet;
+    return this.events.emit(evt, packet);
   }
 
   /**************
@@ -1097,7 +1095,7 @@ class Deva {
   ***************/
   action(value=false, extra=false) {
     const id = this.lib.uid();
-    this.state('try', `${value}:${id}`);
+    this.state('try', `action:${value}:${id}`);
     try {
       if (!value || !this._actions[value] || value === this._action) return;
       this._action = value; // set the local action variable
