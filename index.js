@@ -562,20 +562,21 @@ class Deva {
     from the agent from the pre-determined method.
   ***************/
   answer(packet, resolve, reject) {
+    const id = this.lib.uid();
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.zone('answer'); // set zone to answer
+    this.zone('answer', id); // set zone to answer
     const agent = this.agent();
     const client = this.client();
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
-    this.action('answer', method);
+    this.action('answer', `${method}:${id}`);
         
-    this.state('try', `answer:${method}`);
+    this.state('try', `answer:${method}:${id}`);
     try {
       const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
       if (!isMethod) return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails      
 
-      this.action('method', `answer:${method}`);
+      this.action('method', `answer:${method}:${id}`);
       this.methods[method](packet).then(result => {
         // check the result for the text, html, and data object.          // this is for when answers are returned from nested Devas.
         const text = typeof result === 'object' ? result.text : result;
@@ -583,9 +584,9 @@ class Deva {
         // if the data passed is NOT an object it will FALSE
         const data = typeof result === 'object' ? result.data : false;
       
-        this.state('set', `answer:${method}:packet_answer`);
+        this.state('set', `answer:${method}:packet_answer:${id}`);
         const packet_answer = { // setup the packet.a container
-          id: this.lib.uid(),
+          id,
           agent, // set the agent who answered the question
           client, // set the client asking the question
           meta: { // setup the answer meta container
@@ -603,14 +604,14 @@ class Deva {
         packet.a = packet_answer; // set the packet.a to the packet_answer
         this.talk(config.events.answer, this.lib.copy(packet)); // global talk event
       
-        this.state('finish', `answer:${method}`); // set the state resolve answer
+        this.state('return', `answer:${method}:${id}`); // set the state resolve answer
         return this.finish(packet, resolve); // resolve the packet to the caller.
       }).catch(err => { // catch any errors in the method
-        this.state('catch', `answer:${method}`); // set the state reject answer
+        this.state('catch', `answer:${method}:${id}`); // set the state reject answer
         return this.error(err, packet, reject); // return this.error with err, packet, reject
       });
     } catch (e) {
-      this.state('catch', `answer:${method}`);
+      this.state('catch', `answer:${method}:${id}`);
       return this.error(e, packet, reject);
     }
   }
@@ -638,24 +639,10 @@ class Deva {
     const agent = this.agent();
     const client = this.client();
     // build the answer packet from this model
-    this.state('set', `ask:${method}:packet_answer:${packet.id}`);
-    const packet_answer = {
-      id: this.lib.uid(),
-      agent,
-      client,
-      meta: {
-        key: agent.key,
-        method,
-        params,
-      },
-      text: false,
-      html: false,
-      data: false,
-      created: Date.now(),
-    };
 
     this.state('try', `ask:${method}:${packet.id}`);
     try {
+
       if (typeof this.methods[method] !== 'function') {
         return setImmediate(() => {
           this.state('invalid', `${method}:${packet.id}`);
@@ -663,6 +650,21 @@ class Deva {
         });
       }
 
+      this.state('set', `ask:${method}:packet_answer:${packet.id}`);
+      const packet_answer = {
+        id: this.lib.uid(),
+        agent,
+        client,
+        meta: {
+          key: agent.key,
+          method,
+          params,
+        },
+        text: false,
+        html: false,
+        data: false,
+        created: Date.now(),
+      };
       // The method is parsed and depending on what method is asked for it returns
       // the response based on the passed through packet.
       this.methods[method](packet).then(result => {
