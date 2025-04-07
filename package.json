@@ -182,7 +182,8 @@
       "view": "👓 View",
       "insert": "👉 Insert",
       "update": "👆 Update",
-      "delete": "🗑️ Delete"
+      "delete": "🗑️ Delete",
+      "return": "🤿 Return"
     },
     "action": false,
     "actions": {
