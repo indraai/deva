@@ -1,6 +1,6 @@
 {
   "name": "@indra.ai/deva",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "The Deva Core",
   "main": "index.js",
   "copyright": "(c)2025 Quinn Michaels; All rights reserved.",
@@ -231,8 +231,6 @@
       "info": "💁‍♂️ Info",
       "status": "🚥 Status",
       "error": "🔴 ERROR!",
-
-
       "wait": "⏳ Waiting",
       "issue": "🎫 Issue",
       "find": "🔎 Find",
