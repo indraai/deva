@@ -782,7 +782,7 @@ class Deva {
   start(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     const id = this.lib.uid();
-    this.zone('start', data.id);
+    this.zone('start', packet.id);
     this.action('start');
     packet.value = 'start';
     delete packet.hash;
