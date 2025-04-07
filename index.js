@@ -179,6 +179,9 @@ class Deva {
       },
       created: Date.now(),
     };
+    delete packet.hash;
+    packet.hash = this.lib.hash(packet);
+    this.state('invalid', `${method}:${packet.id}`);
     return packet;
   }
 
@@ -386,13 +389,11 @@ class Deva {
   describe: The end of the workflow Client Feature Workflow
   ***************/
   Done(resolve, reject) {
-    this.action('done');
     try {
-      this.state('done');
       delete this._client.features; // delete the features key when done.
       return resolve(this.client()); // resolve an empty pr
     } catch (e) {
-      this.state('catch', 'done');
+      this.state('catch', 'Done');
       return this.error(e, false, reject);
     }
   }
@@ -633,19 +634,16 @@ class Deva {
   ***************/
   ask(packet) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-    const {method, params} = packet.q.meta;
-    this.zone('ask', `${method}:${packet.id}`);
-
     const agent = this.agent();
     const client = this.client();
+    const {method, params} = packet.q.meta;
+    this.zone('ask', `${method}:${packet.id}`);
+    this.action('ask', `${method}:${packet.id}`);
     // build the answer packet from this model
-
     this.state('try', `ask:${method}:${packet.id}`);
     try {
-
       if (typeof this.methods[method] !== 'function') {
         return setImmediate(() => {
-          this.state('invalid', `${method}:${packet.id}`);
           this.talk(`${this._agent.key}:ask:${packet.id}`, this._methodNotFound(packet));
         });
       }
@@ -781,16 +779,16 @@ class Deva {
     function or running the enter function.
   usage: this.start('msg')
   ***************/
-  start(data, resolve) {
+  start(packet, resolve) {
     this.zone('start');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('start');
-    data.value = 'start';
-    delete data.hash;
-    data.hash = this.lib.hash(data);
+    packet.value = 'start';
+    delete packet.hash;
+    packet.hash = this.lib.hash(packet);
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
     this.state('start');
-    return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
+    return hasOnStart ? this.onStart(packet, resolve) : this.enter(packet, resolve)
   }
 
   /**************
@@ -804,22 +802,22 @@ class Deva {
     If the Deva is offline it will return the offline message.
   usage: this.enter('msg')
   ***************/
-  enter(data, resolve) {
+  enter(packet, resolve) {
     this.zone('deva');
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('enter');
-    data.value = 'enter';
-    delete data.hash;
-    data.hash = this.lib.hash(data);
+    packet.value = 'enter';
+    delete packet.hash;
+    packet.hash = this.lib.hash(packet);
     this.state('enter');
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
-    return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
+    return hasOnEnter ? this.onEnter(packet, resolve) : this.done(packet, resolve)
   }
 
   /**************
   func: done
   params:
-  - msg: hte message from the caller incase need to use in calls
+  - data: hte message from the caller incase need to use in calls
   describe:
     When the done function is triggered the system will also set the state
     of hte Deva to done.
@@ -827,33 +825,30 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.done('msg')
   ***************/
-  done(data, resolve) {
+  done(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.action('done');
-    data.value = 'done';
-    delete data.hash;
-    data.hash = this.lib.hash(data);
+    packet.value = 'done';
+    delete packet.hash;
+    packet.hash = this.lib.hash(packet);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
-    this.state('done');
-    return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
+    this.state('done', packet.id);
+    return hasOnDone ? this.onDone(packet, resolve) : this.ready(packet, resolve);
   }
 
   /**************
   func: ready
   params:
-  - packet: the data to pass to the resolve
+  - data: the data to pass to the resolve
   - resolve: the complete resolve to pass back
   describe: This function is use to relay the to the ready state.
   usage: this.ready(data, resolve)
   ***************/
   ready(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.action('ready', packet.id); // set the complete action
-  
+    delete packet.hash;
     packet.hash = this.lib.hash(packet);// hash the entire packet before completeing.
     // check for agent on complete function in agent
-    const hasOnReady = this.onReady && typeof this.onReady === 'function';
-  
+    const hasOnReady = this.onReady && typeof this.onReady === 'function';  
     // return the provided resolve function or a promise resolve.
     this.state('ready', packet.id); // set the finish state
     return hasOnReady ? this.onReady(packet, resolve) : resolve(packet);
@@ -864,14 +859,13 @@ class Deva {
   /**************
   func: finish
   params:
-  - packet: the data to pass to the resolve
+  - data: the data to pass to the resolve
   - resolve: the finish resolve to pass back
   describe: This function is used to relay into the finish state when resolving a question or data.
   usage: this.finish(data, resolve)
   ***************/
   finish(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.action('finish', packet.id); // set the finish action
     // check for agent on finish function in agent
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
     // return the provided resolve function or a promise resolve.
@@ -882,7 +876,7 @@ class Deva {
   /**************
   func: complete
   params:
-  - packet: the data to pass to the resolve
+  - data: the data to pass to the resolve
   - resolve: the complete resolve to pass back
   describe: This function is use to relay into a complete state when
             resolving a question or data.
@@ -890,7 +884,6 @@ class Deva {
   ***************/
   complete(packet, resolve) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.action('complete', packet.id); // set the complete action
     packet.created = Date.now();// set the complete date on the whole packet.
     delete packet.hash;
     packet.hash = this.lib.hash(packet);// hash the entire packet before complete.
@@ -918,8 +911,6 @@ class Deva {
   stop() {
     const id = this.lib.uid();
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.zone('stop', id); // set the zone to stop
-    this.action('stop', id); // set the stop action
 
     const data = { // build the stop data
       id, // set the id
@@ -949,9 +940,6 @@ class Deva {
   ***************/
   exit() {
     const id = this.lib.uid();
-    this.zone('exit', id);
-    this.action('exit', id);
-
     const data = {
       id,
       key: 'exit',
@@ -1038,8 +1026,6 @@ class Deva {
   ***************/
   zone(value=false, extra=false) {
     const id = this.lib.uid();
-    this.action('zone', `zone:${value}:${id}`);
-
     if (!value || !this._zones[value] || value === this._zone) return;
 
     try {
@@ -1420,7 +1406,6 @@ class Deva {
   ***************/
   prompt(text) {
     const id = this.lib.uid();
-    this.action('prompt', id);
     if (!this._active) return Promise.resolve(this._messages.offline);
     // Talk a global prompt event for the client
     const agent = this.agent();
@@ -1436,7 +1421,6 @@ class Deva {
     }
     data.hash = this.lib.hash(data);
     this.talk(config.events.prompt, data);
-    this.state('return', `prompt:${id}`);
     return data;
   }
 
