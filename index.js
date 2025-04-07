@@ -407,9 +407,9 @@ class Deva {
     to and make a response. talk events can be then returned with a talk even id
     to create seamless collaboration between Devas.
   ***************/
-  talk(evt, resource=false) {
-    this.action('talk', evt);
-    return this.events.emit(evt, resource);
+  talk(evt, packet=false) {
+    this.action('talk', `${evt}:${packet.id}`);
+    return this.events.emit(evt, packet);
   }
 
   /**************
@@ -633,12 +633,12 @@ class Deva {
   ask(packet) {
     if (!this._active) return Promise.resolve(this._messages.offline);
     const {method, params} = packet.q.meta;
-    this.zone('ask', method);
+    this.zone('ask', `${method}:${packet.id}`);
 
     const agent = this.agent();
     const client = this.client();
     // build the answer packet from this model
-    this.state('set', `ask:${method}:packet_answer`);
+    this.state('set', `ask:${method}:packet_answer:${packet.id}`);
     const packet_answer = {
       id: this.lib.uid(),
       agent,
@@ -654,11 +654,11 @@ class Deva {
       created: Date.now(),
     };
 
-    this.state('try', `ask:${method}`);
+    this.state('try', `ask:${method}:${packet.id}`);
     try {
       if (typeof this.methods[method] !== 'function') {
         return setImmediate(() => {
-          this.state('invalid', method);
+          this.state('invalid', `${method}:${packet.id}`);
           this.talk(`${this._agent.key}:ask:${packet.id}`, this._methodNotFound(packet));
         });
       }
@@ -681,12 +681,12 @@ class Deva {
         this.talk(`${agent.key}:ask:${packet.id}`, packet);
       }).catch(err => {
         this.talk(`${agent.key}:ask:${packet.id}`, {error:err});
-        this.state('catch', `ask:${method}`);
+        this.state('catch', `ask:${method}:${packet.id}`);
         return this.error(err, packet);
       })
     }
     catch (e) {
-      this.state('catch', `ask:${method}`);
+      this.state('catch', `ask:${method}:${packet.id}`);
       this.talk(`${agent.key}:ask:${packet.id}`, {error:e});
       return this.error(e, packet)
     }
@@ -1206,8 +1206,8 @@ class Deva {
   ***************/
   context(value=false, extra=false) {
     const id = this.lib.uid();
-    this.action('context', value);
-    this.state('try', `context:${value}`);
+    this.action('context', `${value}:${id}`);
+    this.state('try', `context:${value}:${id}`);
     try {
       if (!value) return;
       this.state('set', `context:${value}:${id}`);
@@ -1226,7 +1226,7 @@ class Deva {
       };
       data.hash = this.lib.hash(data);
       this.talk(config.events.context, data);
-      this.state('return', `context:${value}:${data.id}`);
+      this.state('return', `context:${value}:${id}`);
       return data;
     } catch (e) {
       this.state('catch', `context:${value}:${id}`);
