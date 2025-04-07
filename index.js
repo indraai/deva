@@ -716,7 +716,7 @@ class Deva {
     this._active = Date.now();
     const agent = this.agent();
 
-    const _data = {
+    const data = {
       id: this.lib.uid(),
       key: 'init',
       value: agent.key,
@@ -725,7 +725,7 @@ class Deva {
       text: this._messages.init,
       created: Date.now(),
     }
-    _data.hash = this.lib.hash(_data);
+    data.hash = this.lib.hash(data);
     return new Promise((resolve, reject) => {
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -762,8 +762,10 @@ class Deva {
         return this.Done(resolve, reject);
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
-        return hasOnInit ? this.onInit(_data, resolve) : this.start(_data, resolve);
+        this.state('return', `init:${data.id}`);
+        return hasOnInit ? this.onInit(data, resolve) : this.start(data, resolve);
       }).catch(err => {
+        this.state('catch', `init:${data.id}`);
         return this.error(err, client, reject);
       });
     });
