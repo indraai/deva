@@ -242,20 +242,20 @@ class Deva {
     client presented data.
   ***************/
   Feature(feature, resolve, reject) {
-    const id = this.lib.uid();
-    this.feature(feature, id);
-    this.zone(feature, id);
+    const _id = this.lib.uid();
+    this.feature(feature, _id);
+    this.zone(feature, _id);
     const _cl = this.client(); // set local copy of client data
     try {
       if (!_cl.features[feature]) return resolve(); // if no security feature goto Support
       else {
-        this.action(feature, id); // set action to feature
+        this.action(feature, _id); // set action to feature
         const _fe = `_${feature}`;
         const {id, profile, features} = _cl; // make a copy the clinet data.
         const data = features[feature]; // make a copy the clinet data.
         this.state('set', `feature:${id}`);
         this[_fe] = { // set this_security with data
-          id, // uuid of the security feature
+          id: _id, // uuid of the security feature
           client_id: id, // client id for reference
           client_name: profile.name, // client name for personalization
           concerns: data.concerns, // any concerns for client
@@ -263,11 +263,11 @@ class Deva {
           personal: data.devas[this._agent.key], // Client personal features and rules.
         };
         delete this._client.features[feature]; // make a copy the clinet data.
-        this.state('resolve', `${feature}:${id}`);
+        this.state('resolve', `${feature}:${_id}`);
         return resolve(feature); // resolve when done
       }
     } catch (e) {
-      this.state('catch', `${feature}:${id}`);
+      this.state('catch', `${feature}:${_id}`);
       return this.error(e, feature, reject); // run error handling if an error is caught
     }
   }
