@@ -871,7 +871,7 @@ class Deva {
     // check for agent on finish function in agent
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
     // return the provided resolve function or a promise resolve.
-    this.state('finish', id); // set the finish state
+    this.state('finish', packet.id); // set the finish state
     return hasOnFinish ? this.onFinish(packet, resolve) : this.complete(packet, resolve);
   }
 
