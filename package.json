@@ -1,6 +1,6 @@
 {
   "name": "@indra.ai/deva",
-  "version": "1.5.22",
+  "version": "1.5.23",
   "description": "The Deva Core",
   "main": "index.js",
   "copyright": "(c)2025 Quinn Michaels; All rights reserved.",
@@ -78,7 +78,6 @@
       "unload": "devacore:unload",
       "context": "devacore:context"
     },
-
     "context": false,
     "zone": "deva",
     "zones": {
