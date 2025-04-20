@@ -1528,9 +1528,10 @@ class Deva {
   ***************/
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
+      const id = this.lib.uid();
       this.zone('help', id);
       if (!this._active) return resolve(this._messages.offline);
-      const id = this.lib.uid();
+
       this.feature('help', id);
       this.action('help', id);
       this.state('help', id);
