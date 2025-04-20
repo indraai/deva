@@ -1569,16 +1569,16 @@ class Deva {
     The error function provides the consistent error manage of the system.
   usage: this.error(err, data, reject);
   ***************/
-  error(err,data=false,reject=false) {
+  error(err,packet,reject=false) {
     const id = this.lib.uid();
     this.zone('error', id);
-    this.action('error', id);
-    this.state('error', id);
-    this.context('error', id);
-
     const agent = this.agent();
     const client = this.client();
-    const _data = {
+
+    this.action('error', id);
+    const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
+
+    const data = {
       id,
       key: 'error',
       value: agent.key,
@@ -1592,13 +1592,14 @@ class Deva {
       data,
       created: Date.now(),
     }
-    _data.hash = this.lib.hash(_data);
-    this.talk(config.events.error, this.lib.copy(_data));
-    const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
+    data.hash = this.lib.hash(data);
+    this.talk(config.events.error, this.lib.copy(data));
 
     this.state('return', `error:${id}`);
-    if (hasOnError) return this.onError(err, data, reject);
-    else return reject ? reject(err) : err;
+    this.state('error', id);
+    this.context('error', id);
+    if (hasOnError) return this.onError(err, packet, reject);
+    else return reject ? reject(err) : Promise.reject(err);
   }
 
 }
