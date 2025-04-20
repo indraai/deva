@@ -1436,8 +1436,8 @@ class Deva {
   usage: this.prompt('text')
   ***************/
   prompt(text) {
+    if (!this._active) return this._messages.offline;
     const id = this.lib.uid();
-    if (!this._active) return Promise.resolve(this._messages.offline);
     // Talk a global prompt event for the client
     const agent = this.agent();
     const client = this.client();

@@ -250,7 +250,7 @@
     },
     "message": "offline",
     "messages": {
-      "init": "🟠 INIT",
+      "init": "🟠  INIT",
       "start": "🟢  START",
       "enter": "🔵 ENTER",
       "done": "🟣  DONE",
