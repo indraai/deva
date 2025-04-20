@@ -964,7 +964,7 @@ class Deva {
       client: this.client(),
       created: Date.now(),
     }
-    data.hash = this.lib.hash(data);
+    data.hash = this.lib.hash(data); // set data hash
 
     this.state('exit', id); // set the state to stop
     // clear memory
