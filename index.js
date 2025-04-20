@@ -929,11 +929,11 @@ class Deva {
     this.stop()
   ***************/
   stop() {
+    const id = this.lib.uid();
     this.zone('stop', id);
     if (!this._active) return Promise.resolve(this._messages.offline);
 
     this.action('stop', id);
-    const id = this.lib.uid();
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
 
     const data = { // build the stop data
@@ -963,11 +963,12 @@ class Deva {
     function.
   ***************/
   exit() {
-    if (!this._active) return Promise.resolve(this._messages.offline);
     const id = this.lib.uid();
-    const hasOnExit = this.onExit && typeof this.onExit === 'function';
     this.zone('exit', id);
+    if (!this._active) return Promise.resolve(this._messages.offline);
+
     this.action('exit', id);
+    const hasOnExit = this.onExit && typeof this.onExit === 'function';
     
     const data = {
       id,
