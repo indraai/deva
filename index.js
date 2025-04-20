@@ -784,12 +784,14 @@ class Deva {
   start(data, resolve) {
     this.zone('start', data.id);
     if (!this._active) return resolve(this._messages.offline);
+
     this.action('start', data.id);
     const id = this.lib.uid();
     delete data.hash;
     data.value = 'start';
     data.hash = this.lib.hash(data);
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
+
     this.state('start', data.id);
     return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
   }
@@ -808,11 +810,13 @@ class Deva {
   enter(data, resolve) {
     this.zone('enter', data.id);
     if (!this._active) return resolve(this._messages.offline);
+
     this.action('enter', data.id);
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
     delete data.hash;
     data.value = 'enter';
     data.hash = this.lib.hash(data);
+
     this.state('enter', data.id);
     return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
   }
@@ -831,11 +835,13 @@ class Deva {
   done(data, resolve) {
     this.zone('done', data.id);
     if (!this._active) return resolve(this._messages.offline);
+
     this.action('done', data.id);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     delete data.hash;
     data.value = 'done';
     data.hash = this.lib.hash(data);
+
     this.state('done', data.id);
     return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
   }
@@ -851,11 +857,13 @@ class Deva {
   ready(data, resolve) {
     this.zone('ready', data.id);
     if (!this._active) return resolve(this._messages.offline);
+
     this.action('ready', data.id);
     const hasOnReady = this.onReady && typeof this.onReady === 'function';  
     delete data.hash;
     data.value = 'ready';
     data.hash = this.lib.hash(data);// hash the entire data before completeing.
+
     this.state('ready', data.id);
     return hasOnReady ? this.onReady(data, resolve) : resolve(data);
   }
@@ -873,11 +881,13 @@ class Deva {
   finish(packet, resolve) {
     this.zone('finish', packet.id); // enter finish zone
     if (!this._active) return resolve(this._messages.offline); //
+
     this.action('finish', packet.id); // start finish action
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
     delete packet.hash; // delete packet hash to update for finish time
     packet.finish = Date.now(); // set the finish timestamp
     packet.hash = this.lib.hash(packet); // rehash the packet;
+
     this.state('finish', packet.id); // set finish state
     return hasOnFinish ? this.onFinish(packet, resolve) : this.complete(packet, resolve);
   }
@@ -894,11 +904,13 @@ class Deva {
   complete(packet, resolve) {
     this.zone('complete', packet.id);
     if (!this._active) return Promise.resolve(this._messages.offline);
+
     this.action('complete', packet.id);
     const hasOnComplete = this.onComplete && typeof this.onComplete === 'function';
     delete packet.hash;
     packet.complete = Date.now();// set the complete date on the whole packet.
     packet.hash = this.lib.hash(packet);// hash the entire packet before complete.
+
     this.state('complete', packet.id);
     return hasOnComplete ? this.onComplete(packet, resolve) : resolve(packet);
   }
@@ -917,12 +929,12 @@ class Deva {
     this.stop()
   ***************/
   stop() {
+    this.zone('stop', id);
     if (!this._active) return Promise.resolve(this._messages.offline);
+
+    this.action('stop', id);
     const id = this.lib.uid();
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
-    this.zone('stop', id);
-    this.action('stop', id);
-    this.state('stop', id); // set the state to stop
 
     const data = { // build the stop data
       id, // set the id
@@ -935,6 +947,7 @@ class Deva {
     data.hash = this.lib.hash(data);
     // has stop function then set hasOnStop variable
     // if: has on stop then run on stop function or return exit function.
+    this.state('stop', id); // set the state to stop
     return hasOnStop ? this.onStop(data) : this.exit()
   }
 
