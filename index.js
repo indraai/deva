@@ -781,18 +781,17 @@ class Deva {
     function or running the enter function.
   usage: this.start('msg')
   ***************/
-  start(packet, resolve) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+  start(data, resolve) {
+    this.zone('start', data.id);
+    if (!this._active) return resolve(this._messages.offline);
+    this.action('start', data.id);
     const id = this.lib.uid();
-    this.zone('start', packet.id);
-    this.action('start');
-    packet.value = 'start';
-    delete packet.hash;
-    packet.hash = this.lib.hash(packet);
+    delete data.hash;
+    data.value = 'start';
+    data.hash = this.lib.hash(data);
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
-    this.state('start');
-    this.prompt(this._messages.start);
-    return hasOnStart ? this.onStart(packet, resolve) : this.enter(packet, resolve)
+    this.state('start', data.id);
+    return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
   }
 
   /**************
@@ -806,17 +805,16 @@ class Deva {
     If the Deva is offline it will return the offline message.
   usage: this.enter('msg')
   ***************/
-  enter(packet, resolve) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+  enter(data, resolve) {
+    this.zone('enter', data.id);
+    if (!this._active) return resolve(this._messages.offline);
+    this.action('enter', data.id);
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
-    this.zone('enter', packet.id);
-    this.action('enter', packet.id);
-    this.state('enter', packet.id);
-    delete packet.hash;
-    packet.value = 'enter';
-    packet.hash = this.lib.hash(packet);
-    this.prompt(this._messages.enter);
-    return hasOnEnter ? this.onEnter(packet, resolve) : this.done(packet, resolve)
+    delete data.hash;
+    data.value = 'enter';
+    data.hash = this.lib.hash(data);
+    this.state('enter', data.id);
+    return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
   }
 
   /**************
@@ -830,17 +828,16 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.done('msg')
   ***************/
-  done(packet, resolve) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+  done(data, resolve) {
+    this.zone('done', data.id);
+    if (!this._active) return resolve(this._messages.offline);
+    this.action('done', data.id);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
-    this.zone('done', packet.id);
-    this.action('done', packet.id);
-    this.state('done', packet.id);
-    packet.value = 'done';
-    delete packet.hash;
-    packet.hash = this.lib.hash(packet);
-    this.prompt(this._messages.done);
-    return hasOnDone ? this.onDone(packet, resolve) : this.ready(packet, resolve);
+    delete data.hash;
+    data.value = 'done';
+    data.hash = this.lib.hash(data);
+    this.state('done', data.id);
+    return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
   }
 
   /**************
@@ -851,17 +848,16 @@ class Deva {
   describe: This function is use to relay the to the ready state.
   usage: this.ready(data, resolve)
   ***************/
-  ready(packet, resolve) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+  ready(data, resolve) {
+    this.zone('ready', data.id);
+    if (!this._active) return resolve(this._messages.offline);
+    this.action('ready', data.id);
     const hasOnReady = this.onReady && typeof this.onReady === 'function';  
-    this.zone('ready', packet.id);
-    this.action('ready', packet.id);
-    this.state('ready', packet.id);
-    packet.value = 'ready';
-    delete packet.hash;
-    packet.hash = this.lib.hash(packet);// hash the entire packet before completeing.
-    this.prompt(this._messages.ready);
-    return hasOnReady ? this.onReady(packet, resolve) : resolve(packet);
+    delete data.hash;
+    data.value = 'ready';
+    data.hash = this.lib.hash(data);// hash the entire data before completeing.
+    this.state('ready', data.id);
+    return hasOnReady ? this.onReady(data, resolve) : resolve(data);
   }
   
 
@@ -875,11 +871,14 @@ class Deva {
   usage: this.finish(data, resolve)
   ***************/
   finish(packet, resolve) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+    this.zone('finish', packet.id); // enter finish zone
+    if (!this._active) return resolve(this._messages.offline); //
+    this.action('finish', packet.id); // start finish action
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
-    this.zone('finish', packet.id);
-    this.action('finish', packet.id);
-    this.state('finish', packet.id);
+    delete packet.hash; // delete packet hash to update for finish time
+    packet.finish = Date.now(); // set the finish timestamp
+    packet.hash = this.lib.hash(packet); // rehash the packet;
+    this.state('finish', packet.id); // set finish state
     return hasOnFinish ? this.onFinish(packet, resolve) : this.complete(packet, resolve);
   }
 
@@ -893,14 +892,14 @@ class Deva {
   usage: this.complete(data, resolve)
   ***************/
   complete(packet, resolve) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    const hasOnComplete = this.onComplete && typeof this.onComplete === 'function';
     this.zone('complete', packet.id);
+    if (!this._active) return Promise.resolve(this._messages.offline);
     this.action('complete', packet.id);
-    this.state('complete', packet.id);
-    packet.created = Date.now();// set the complete date on the whole packet.
+    const hasOnComplete = this.onComplete && typeof this.onComplete === 'function';
     delete packet.hash;
+    packet.complete = Date.now();// set the complete date on the whole packet.
     packet.hash = this.lib.hash(packet);// hash the entire packet before complete.
+    this.state('complete', packet.id);
     return hasOnComplete ? this.onComplete(packet, resolve) : resolve(packet);
   }
 
@@ -936,7 +935,6 @@ class Deva {
     data.hash = this.lib.hash(data);
     // has stop function then set hasOnStop variable
     // if: has on stop then run on stop function or return exit function.
-    this.prompt(this._messages.stop);
     return hasOnStop ? this.onStop(data) : this.exit()
   }
 
@@ -969,7 +967,6 @@ class Deva {
     data.hash = this.lib.hash(data);
 
     this.state('exit', id); // set the state to stop
-    this.prompt(this._messages.exit);
     // clear memory
     this._active = false;
     this._client = false;
@@ -981,7 +978,6 @@ class Deva {
     this._legal = false;
     this._authority = false;
     this._justice = false;
-
     return hasOnExit ? this.onExit(data) : Promise.resolve(data)
   }
 
