@@ -791,6 +791,7 @@ class Deva {
     packet.hash = this.lib.hash(packet);
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
     this.state('start');
+    this.prompt(this._messages.start);
     return hasOnStart ? this.onStart(packet, resolve) : this.enter(packet, resolve)
   }
 
@@ -814,6 +815,7 @@ class Deva {
     delete packet.hash;
     packet.value = 'enter';
     packet.hash = this.lib.hash(packet);
+    this.prompt(this._messages.enter);
     return hasOnEnter ? this.onEnter(packet, resolve) : this.done(packet, resolve)
   }
 
@@ -837,6 +839,7 @@ class Deva {
     packet.value = 'done';
     delete packet.hash;
     packet.hash = this.lib.hash(packet);
+    this.prompt(this._messages.done);
     return hasOnDone ? this.onDone(packet, resolve) : this.ready(packet, resolve);
   }
 
@@ -857,6 +860,7 @@ class Deva {
     packet.value = 'ready';
     delete packet.hash;
     packet.hash = this.lib.hash(packet);// hash the entire packet before completeing.
+    this.prompt(this._messages.ready);
     return hasOnReady ? this.onReady(packet, resolve) : resolve(packet);
   }
   
@@ -932,6 +936,7 @@ class Deva {
     data.hash = this.lib.hash(data);
     // has stop function then set hasOnStop variable
     // if: has on stop then run on stop function or return exit function.
+    this.prompt(this._messages.stop);
     return hasOnStop ? this.onStop(data) : this.exit()
   }
 
@@ -952,7 +957,6 @@ class Deva {
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
     this.zone('exit', id);
     this.action('exit', id);
-    this.state('exit', id); // set the state to stop
     
     const data = {
       id,
@@ -964,6 +968,8 @@ class Deva {
     }
     data.hash = this.lib.hash(data);
 
+    this.state('exit', id); // set the state to stop
+    this.prompt(this._messages.exit);
     // clear memory
     this._active = false;
     this._client = false;
@@ -1391,7 +1397,7 @@ class Deva {
   describe: Unload a currently loaded Deva.
   ***************/
   unload(key) {
-    this.zone('deva', key);
+    this.zone('unload', key);
     return new Promise((resolve, reject) => {
       try {
         this.action('uload', key);
@@ -1400,7 +1406,7 @@ class Deva {
           this.talk(config.events.unload, key);
         });
         this.state('unload', key)
-        return resolve(this._states.unload);
+        return resolve(`${this._states.unload}:${key}`);
       } catch (e) {
         return this.error(e, this.devas[key], reject)
       }
