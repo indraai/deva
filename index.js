@@ -1193,6 +1193,7 @@ class Deva {
   describe: return a list of features that are available to the system.
   ***************/
   features() {
+    if (!this._active) return this._messages.offline; // check the active status
     const id = this.lib.uid();
     this.action('features', id);
     const data = {
@@ -1216,6 +1217,7 @@ class Deva {
   describe
   ***************/
   context(value=false, extra=false) {
+    if (!this._active) return this._messages.offline; // check the active status
     const id = this.lib.uid();
     try {
       if (!value) return;
@@ -1242,6 +1244,7 @@ class Deva {
   }
 
   contexts() {
+    if (!this._active) return this._messages.offline; // check the active status
     const id = this.lib.uid();
     this.action('contexts', id);
     if (!this._active) return this._messages.offline; // check the active status
@@ -1458,9 +1461,9 @@ class Deva {
   describe: return core data.
   ***************/
   core() {
+    if (!this._active) return this._messages.offline;
     const id = this.lib.uid();
     this.action('core', id);    
-    if (!this._active) return Promise.resolve(this._messages.offline);
 
     // check the active status
     const data = this.lib.copy(this._core);
@@ -1477,9 +1480,9 @@ class Deva {
   describe: return info data.
   ***************/
   info() {
+    if (!this._active) return this._messages.offline;
     const id = this.lib.uid();
     this.action('info', id);    
-    if (!this._active) return Promise.resolve(this._messages.offline);
 
     const data = this.lib.copy(this._info);
     data.id = id;
@@ -1501,10 +1504,10 @@ class Deva {
   usage: this.status('msg')
   ***************/
   status() {
+    if (!this._active) return this._messages.offline;
     const id = this.lib.uid();
     this.action('status', id);    
     // check the active status
-    if (!this._active) return Promise.resolve(this._messages.offline);
 
     // format the date since active for output.
     const dateFormat = this.lib.formatDate(this._active, 'long', true);
@@ -1525,13 +1528,13 @@ class Deva {
   ***************/
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
-      const id = this.lib.uid();
-      this.context('help', id);
       this.zone('help', id);
+      if (!this._active) return resolve(this._messages.offline);
+      const id = this.lib.uid();
       this.feature('help', id);
       this.action('help', id);
       this.state('help', id);
-      if (!this._active) return resolve(this._messages.offline);
+      this.context('help', id);
       const params = msg.split(' '); // split the msg into an array by spaces.
       let helpFile = 'main'; // set default help file
       if (params[0]) helpFile = params[0]; // check the msg for a help file
@@ -1568,10 +1571,10 @@ class Deva {
   ***************/
   error(err,data=false,reject=false) {
     const id = this.lib.uid();
-    this.context('error', id);
     this.zone('error', id);
     this.action('error', id);
     this.state('error', id);
+    this.context('error', id);
 
     const agent = this.agent();
     const client = this.client();
