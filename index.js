@@ -1589,7 +1589,7 @@ class Deva {
         message: err.message,
         stack: err.stack,        
       },
-      data,
+      packet,
       created: Date.now(),
     }
     data.hash = this.lib.hash(data);
