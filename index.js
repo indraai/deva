@@ -927,8 +927,9 @@ class Deva {
       value: this._messages.stop, // set the value
       agent: this.agent(), // set the agent
       client: this.client(), // set the client
-      created: Date.now(), // set the created date
+      stop: Date.now(), // set the created date
     }
+    data.hash = this.lib.hash(data);
     // has stop function then set hasOnStop variable
     // if: has on stop then run on stop function or return exit function.
     return hasOnStop ? this.onStop(data) : this.exit()
