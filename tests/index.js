@@ -93,6 +93,7 @@ const DevaTest = new Deva({
 			const info = this.info();
 			const date = Date.now();
 			const hashstr = `${id}${uid}${date}`;
+			const signature = this.signature(hashstr);
 			const data = [
 				'🧪 TEST RESULTS',
 				`::BEGIN:CORE:${core.id}`,
@@ -101,14 +102,9 @@ const DevaTest = new Deva({
 				`::BEGIN:INFO:${info.id}`,
 				JSON.stringify(info,null,2),
 				`::END:INFO:${info.hash}`,
-				`::BEGIN:RESULTS:${id}`,
-				`id:     ${id}`,
-				`uid:    ${uid}`,
-				`md5:    ${this.lib.hash(hashstr)}`,
-				`sha256: ${this.lib.hash(hashstr, 'sha256')}`,
-				`sha512: ${this.lib.hash(hashstr, 'sha512')}`,
-				`date:   ${this.lib.formatDate(date, 'long', true)}`,				
-				`::END:RESULTS:${this.lib.hash(hashstr)}`,
+				`::BEGIN:SIGNATURE:${signature.id}`,
+				JSON.stringify(signature, null, 2),
+				`::END:SIGNATURE:${signature.md5}`,
 			];
 			return {
 				text: data.join('\n'),

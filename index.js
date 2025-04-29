@@ -507,8 +507,8 @@ class Deva {
         }
         else if (isCmd) { // determine if the question is a command
           //if:isCmd use text split index 1 as the parameter block
-          params = t_split[0] ? t_split[0].split(':').slice(1) : false;
-          method = t_split[0].substring(1); // if:isCmd use the 0 index as the command
+          params = t_split[0] ? t_split[0].split(':') : false;
+          method = t_split[0].split(':')[0].substring(1); // if:isCmd use the 0 index as the command
           text = t_split.slice(1).join(' ').trim(); // if:isCmd rejoin the string on the space after removing first index
           this.state('cmd', `${method}:${id}`); // set the state to cmd.
         }
@@ -1515,7 +1515,33 @@ class Deva {
     this.state('return', `status:${id}`);
     return `${this._agent.profile.name} active since ${dateFormat}`;                           // return final text string
   }
+  
+  /******
+  func: signature
+  params: 
+    - data: the data to sign
+  describe: function to provide a digital signature to data.
+  ******/
+  signature(data) {
+    if (!this._active) return this._messages.offline;
+    const id = this.lib.uid();
+    this.action('signature', id);
 
+    const client = this.client();
+    const agent = this.agent();    
+    this.state('set', `signature:${id}`);
+    const signature = {
+      id,
+      uid: this.lib.uid(true),
+      name: client.profile.name,
+      md5: this.lib.hash(data),
+      sha256: this.lib.hash(data, 'sha256'),
+      sha512: this.lib.hash(data, 'sha512'),
+      date: Date.now(),
+    };
+    this.state('return', `signature:${id}`);
+    return signature;
+  }
   /**************
   func: help
   params:
@@ -1537,9 +1563,12 @@ class Deva {
       this.state('help', id);
       this.context('help', id);
       const params = msg.split(' '); // split the msg into an array by spaces.
-      let helpFile = 'main'; // set default help file
+      let helpFile = 'main', helpDoc = false; // set default help file
       if (params[0]) helpFile = params[0]; // check the msg for a help file
       if (params[1]) helpFile = `${params[0]}_${params[1]}`;
+
+      const splitText = msg.split(':');
+      const part = splitText[1] ? splitText[1].toUpperCase() : 'MAIN';
 
 
       const helpPath = this.lib.path.join(help_dir, 'help', `${helpFile}.feecting`);
@@ -1550,7 +1579,8 @@ class Deva {
           this.state('return', `${this._messages.help_not_found}:${id}`);
           return resolve(this._messages.help_not_found);
         }
-        const helpDoc = this.lib.fs.readFileSync(helpPath, 'utf8');
+        helpDoc = this.lib.fs.readFileSync(helpPath, 'utf8');
+        helpDoc = helpDoc.split(`::BEGIN:${part}`)[1].split(`::END:${part}`)[0];
         this.state('return', `help:${id}`);
         return resolve(helpDoc);
       } catch (e) {
