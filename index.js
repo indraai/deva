@@ -1377,7 +1377,7 @@ class Deva {
   usage: this.systems()
   ***************/
   justice() {
-    return this._getFeature('legal', this._legal);
+    return this._getFeature('justice', this._justice);
   }
 
   /**************
