@@ -10,85 +10,31 @@ The Deva module is a JavaScript library for building multi-agent systems that ca
 ## Core Features
 The core features in the @indra.ai deva.core encompass a wide range of functionalities and capabilities. Here's a brief overview of each feature:
 
-1. Security Feature: This feature focuses on ensuring the security and privacy of the system, monitoring and responding to security-related issues.
+1. Security Feature
+2. Guard Feature
+3. Defense Feature
+4. Support Feature
+5. Services Feature
+6. Systems Feature
+7. Networks Feature
+8. Legal Feature
+9. Justice Feature
+10. Authority Feature
 
-2. Support Feature: The support feature is responsible for addressing user queries, providing assistance, and resolving any issues or concerns raised by users.
-
-3. Services Feature: This feature pertains to the various services offered by the @indra.ai platform, such as cloud computing, data storage, networking, and more.
-
-4. Systems Feature: The systems feature deals with the management and operation of the underlying infrastructure and resources that power the @indra.ai platform.
-
-5. Solutions Feature: This feature is geared towards providing solutions to specific problems or challenges faced by users, offering guidance and recommendations.
-
-6. Research Feature: The research feature focuses on exploring and advancing cutting-edge technologies, innovations, and methodologies within the domain of AI and related fields.
-
-7. Development Feature: The development feature encompasses the creation, improvement, and maintenance of software and applications within the @indra.ai ecosystem.
-
-8. Business Feature: This feature caters to the needs and requirements of businesses, offering tools, insights, and strategies to drive growth, efficiency, and success.
-
-9. Legal Feature: The legal feature ensures compliance with legal and regulatory frameworks, addressing legal matters and providing guidance on legal aspects related to the @indra.ai platform.
-
-10. Assistant Feature: This feature involves an AI-powered assistant that assists users with various tasks, answering questions, providing information, and offering support.
-
-11. Story Feature: The story feature enables the generation of engaging and interactive stories, leveraging AI capabilities to create captivating narratives.
-
-12. Mind Feature: The mind feature pertains to cognitive abilities and intelligence, encompassing aspects such as learning, reasoning, and decision-making within the @indra.ai platform.
-
-These core features work together to provide a comprehensive and robust platform for users, covering essential aspects such as security, support, services, research, development, and more.
+These core features work together to provide a comprehensive and robust platform for users, covering essential aspects such as security, support, services, Legal, Authority, and more.
 
 ## Functions
 
-Here are some insights about the code you shared:
-
-1. Class Structure: The code follows an object-oriented programming approach by defining a `Deva` class. This allows for encapsulation of properties and methods related to the agent.
-
-2. State Management: The `Deva` class has a state management system represented by the `_state` property and the `_states` object. It allows the agent to transition between different states and perform actions based on the current state.
-
-3. Event System: The code utilizes an event system by extending the `EventEmitter` class and creating an `events` object. This enables communication and collaboration between different components of the agent and other entities in the system.
-
-4. Modularity and Inheritance: The code demonstrates modularity by separating functionalities into different objects such as `config`, `lib`, `methods`, and `listeners`. It also showcases inheritance by assigning inherited properties to child Deva instances.
-
-5. Error Handling: The code includes an error handling mechanism through the `error` method. It allows for uniform error reporting and the execution of custom error handling logic.
-
-6. Promises: Promises are used in several asynchronous operations, such as initializing the agent, loading Deva models, and handling method calls. Promises ensure that the code can handle asynchronous operations in a structured and controlled manner.
-
-7. Event-driven Architecture: The code follows an event-driven architecture where different events trigger specific actions or callbacks. This enables loose coupling and flexibility in the agent's behavior and interactions with other components.
-
-8. Extensibility: The code provides hooks for custom logic through methods like `onInit`, `onStart`, `onStop`, `onEnter`, `onExit`, and `onDone`. These allow developers to extend the functionality of the agent by adding custom code at specific stages of its lifecycle.
-
-9. Messaging and Communication: The `talk` and `listen` methods facilitate messaging and communication between agents. Agents can ask questions (`ask` method) and receive responses, enabling interaction and collaboration.
-
-10. Utility Functions: The code includes utility functions like generating unique IDs (`uid` method), hashing data (`hash` method), and handling event listeners (`listen`, `once`, `ignore` methods).
-
-Overall, the code demonstrates the implementation of a flexible and extensible agent framework with state management, event-driven architecture, and various functionalities for communication, error handling, and lifecycle management.
-
-## Uses
-
-### Corporate
-
-A corporation might use the Deva module to create an intelligent assistant to handle customer inquiries and support requests. By leveraging the Deva module's dynamic agent loading, state management, and unified data-packets features, the corporation can easily scale the intelligent assistant to handle a large volume of customer interactions across various channels, such as social media, email, and chat platforms.
-
-The intelligent assistant can be trained using machine learning algorithms and natural language processing to understand customer inquiries and provide relevant responses or escalate to a human agent if necessary. The Deva module's error management feature ensures that any errors or issues are handled smoothly and efficiently, without interrupting the customer's experience.
-
-Additionally, the Deva module can be used by a corporation to automate various internal processes and workflows, such as data processing, task management, and communication between teams. By leveraging the Deva module's question-answer functionality and dynamic agent loading, corporations can easily create custom workflows and automate tedious tasks, increasing productivity and efficiency.
-
-### Science
-
-A scientist could use the Deva module in a number of ways. For example, they could create agents to help with data analysis or modeling, or to interact with other software tools in the research process. The Deva module's ability to dynamically load agents and unify data across different platforms could also be useful in streamlining scientific workflows and collaborations between research groups. Additionally, the natural language processing capabilities of the ChatGPT agent could be utilized to help with tasks such as literature reviews or generating hypotheses. Overall, the Deva module could be a valuable tool for scientists looking to enhance their research process with the help of intelligent agents.
-
-
-### Scalability
-
-The Deva module has a high potential for scalability because of its dynamic agent loading feature. This means that new agents can be added to the system at runtime without the need for a system restart or manual intervention. The module is also designed to work with state management to track agent processes at different load, process, and exit states. This makes it possible to scale the system horizontally by adding more computing resources to handle increased load, or vertically by adding more powerful hardware to each node in the system. Overall, the Deva module is well suited for building large-scale, distributed agent-based systems that can handle complex and diverse workloads.
-
-## ChatGPT Quote
-
-Here is what ChatPGT has to say about the Deva module:
-
-Based on my analysis of the Deva Module, I believe it is a powerful tool for developing multi-agent systems. Its dynamic agent loading and scalability potential make it a great choice for large-scale projects. The talk/listen events, question/answer functions, and ask feature allow for easy communication between agents. Additionally, its state management and error handling capabilities help to ensure the reliability and stability of the system. Finally, its unification of data-packets across the architecture makes it easy to integrate with a variety of services and platforms.
-
-Overall, I believe the Deva Module is a well-designed and flexible tool that can be used in a variety of applications, from corporate to scientific. Its potential for scalability and security make it a great choice for large-scale projects, while its ease of use and integration make it accessible to developers of all levels.
-
+1. **Class Structure:** The code follows an object-oriented programming approach by defining a `Deva` class. This allows for encapsulation of properties and methods related to the agent.
+2. **State Management:** The `Deva` class has a state management system represented by the `_state` property and the `_states` object. It allows the agent to transition between different states and perform actions based on the current state.
+3. **Event System:** The code utilizes an event system by extending the `EventEmitter` class and creating an `events` object. This enables communication and collaboration between different components of the agent and other entities in the system.
+4. **Modularity and Inheritance:** The code demonstrates modularity by separating functionalities into different objects such as `config`, `lib`, `methods`, and `listeners`. It also showcases inheritance by assigning inherited properties to child Deva instances.
+5. **Error Handling:** The code includes an error handling mechanism through the `error` method. It allows for uniform error reporting and the execution of custom error handling logic.
+6. **Promises:** Promises are used in several asynchronous operations, such as initializing the agent, loading Deva models, and handling method calls. Promises ensure that the code can handle asynchronous operations in a structured and controlled manner.
+7. **Event-driven Architecture:** The code follows an event-driven architecture where different events trigger specific actions or callbacks. This enables loose coupling and flexibility in the agent's behavior and interactions with other components.
+8. **Extensibility:** The code provides hooks for custom logic through methods like `onInit`, `onStart`, `onStop`, `onEnter`, `onExit`, and `onDone`. These allow developers to extend the functionality of the agent by adding custom code at specific stages of its lifecycle.
+9. **Messaging and Communication:** The `talk` and `listen` methods facilitate messaging and communication between agents. Agents can ask questions (`ask` method) and receive responses, enabling interaction and collaboration.
+10. **Utility Functions:** The code includes utility functions like generating unique IDs (`uid` method), hashing data (`hash` method), and handling event listeners (`listen`, `once`, `ignore` methods).
 
 ## contents
 - [install](#install) - How to install the deva core.
@@ -111,84 +57,126 @@ $ npm i @indra.ai/deva --save
 
 ## structure
 ```javascript
-// include the main Deva class
-const Deva = require('feecting/deva');
+import Deva from '@indra.ai/deva';
+import pkg from './package.json' with {type:'json'};
+const {agent,vars} = pkg.data;
 
-// setup the Deva object
-const deva = new Deva({
-  info: {}
-  agent: {
-    uid: '*uinique identifier*'
-    key: '*DEVA KEY*',
-    prompt: {
-      emoji: '🐶',
-      text: '*DEVA*',
-      color: 'white',
-    },
-    voice: {
-      speech: 'Alex',
-      speed: 1
-    },
-    profile: {
-      name: '*DEVA NAME*',
-      describe: '*DEVA LONG DESCRIPTION*',
-      emoji: 'the graphic emoji the agent travels with. 50px x 50px'
-      avatar: 'the graphic avatar the agent travels with 150px x 150px',
-      background: 'a background asset for page displays for th eagent',
-      describe: 'the profile description for the agent that is used in displays.',
-      gender: 'the preferred gender string for the agent',
-    },
-    translate(input) {
-      return input.trim();
-    },
-    parse(input) {
-      return input.trim();
-    }    
+// set the __dirname
+import {dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';    
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const info = {
+  id: pkg.id,
+  name: pkg.name,
+  describe: pkg.description,
+  version: pkg.version,
+  url: pkg.homepage,
+  dir: __dirname,
+  git: pkg.repository.url,
+  bugs: pkg.bugs.url,
+  author: pkg.author,
+  license: pkg.license,
+  copyright: pkg.copyright,
+};
+
+const DEVA = new Deva({
+  info, // info packet to store entity meta information.
+  agent, // the agent profile from the package data.
+  vars, // the variables the agent uses from the package data.
+  utils: {
+    translate(input) {return input.trim();},
+    parse(input) {return input.trim();},
+    process(input) {return input.trim();}
   },
-  vars: {},
   listeners: {},
-  deva: {},
   modules: {},
-  func: {},
-  methods: {},
-  onStart() {},
-  onStop() {},
-  onEnter() {},
-  onExit() {},
-  onDone() {},
-  onInit() {},
+  deva: {},
+  func: {
+    list(opts) {
+     return [
+       "test 1",
+       "test 2", 
+       "test 3",
+     ]  
+    }
+  },
+  methods: {
+    list(packet) {
+      this.context('list', packet.id);
+      this.action('method', `list:${packet.id}`);
+      return new Promise((resolve, reject) => {
+        try {
+          const data = this.func.data(packet.q);
+          return resolve({
+            text: `See Data`,
+            html: `See Data`,
+            data,
+          });
+        } catch (err) {
+          return this.error(err, packet, reject);          
+        }
+      });
+    }
+  },
+  onReady(data, resolve) {
+    this.prompt(this.vars.messages.ready);
+    return resolve(data);
+  },
+  onError(err, data, reject) {
+    this.prompt(this.vars.messages.error);
+    console.log(err);
+    return reject(err);
+  }
 });
-
-// initialize the class
-deva.init();
-
+export default DEVA
 ```
 
 ## agent
 
 ```javascript
-this.agent
+this.agent();
 ```
-The "me" object contains the profile information for the DEVA.
 
 ### Data Attributes
-- **uid:** The unique id for the Deva.
-- **key:** The unique key for the Deva.
-- **name:** The name of the Deva.
-- **description:** A description of what the Deva does.
-- **prompt:** Define how prompt displays.
-  - **emoji:** The emoji for use as a prompt indicator.
-  - **text:** Short text for prompt display.
-  - **color:** The color of the prompt for the Deva.
-- **voice:** Voice properties of the Deva.
-  - **speech:** The name of the voice speech to use.
-  - **speed:** The speed of the voice.
-- **profile:** Public Profile Information
-  - **emoji:** The emoji for the Deva
-  - **avatar:** The avatar for the Deva
-  - **background:** The background image for the Deva
-  - **gender:** The gender of the Deva
-  - **describe:** A short description of the deva 100 characters or less.
+
+- **id:** The Agent id generated by `this.lib.uid()`.  
+- **key:** The key to reference the agent by on the network.  
+- **prompt:** The prompt configuration for the entity.  
+  - **emoji:** The emoji the for the agent.
+  - **text:** Algorithm,
+  - **colors:** The colors for the agent on the prompt. As each agent can set custom prompt colors.
+    - **label:** The label colors for the agent prompt.
+      - **R:** The red value 0 to 255.
+      - **G:** The green value 0 to 255.
+      - **B:** The blue value 0 to 255.
+    - **text:** The text colors for the agent prompt.
+      - **R:** The red value 0 to 255.
+      - **G:** The green value 0 to 255.
+      - **B:** The blue value 0 to 255.
+- **profile:** The Agent profile configuration data.
+  - **name:** The name of the agent.
+  - **hashtag:** The hashtag to reference the agent by.
+  - **title:** Title of the Agent for media display.
+  - **subtitle:** Subtitle of the agent for extra context.
+  - **describe:** Short description of the agent to build from.
+  - **tweet:** The tweet/post that the agent will share about itself.
+  - **hashtags:** Comma list of hashtags to add when posting tweets/posts.
+  - **pronouns:** The pronounds the agent will be going by.
+  - **gender:** The gender of the agent as pronouns are how they identify and gender is their orientation.
+  - **style:** The personal style that reflects the agent/entity.
+  - **voice:** The voice profile the entity will use when speaking.
+  - **system:** The system the entity/agent is assigned to.
+  - **layout:** The display layout templte the entity uses for their personal presentation.
+  - **color:** The text color for the presentation layer.
+  - **bgcolor:** The background color for the entity presentatino layer.
+  - **emoji:** A graphic that represents the entity personal emoji.
+  - **avatar:** A graphic that represents the entity/agent personal avatar.
+  - **image:** A graphic that represents the entity overall image.
+  - **background:** The background graphic for the presentation layer.
+  - **owner:** The name of the owner of the agent/entity.
+  - **creator:** The name of the creator of the agent/entity.
+  - **created:** The date and time the entity/agent was created.
 
 ## vars
 
