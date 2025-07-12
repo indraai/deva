@@ -1554,6 +1554,7 @@ class Deva {
   ***************/
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
+      let helpDoc = false;
       const id = this.lib.uid();
       this.zone('help', id);
       if (!this._active) return resolve(this._messages.offline);
@@ -1563,29 +1564,41 @@ class Deva {
       this.state('help', id);
       this.context('help', id);
       const params = msg.split(' '); // split the msg into an array by spaces.
-      let helpFile = 'main', helpDoc = false; // set default help file
-      if (params[0]) helpFile = params[0]; // check the msg for a help file
-      if (params[1]) helpFile = `${params[0]}_${params[1]}`;
 
-      const splitText = msg.split(':');
+      const splitText = params[0].split(':');
       const part = splitText[1] ? splitText[1].toUpperCase() : 'MAIN';
-
-
+      const helpFile = splitText[0];
+            
       const helpPath = this.lib.path.join(help_dir, 'help', `${helpFile}.feecting`);
-      this.state('try', `help:${id}`);
+
       try {
+        this.state('try', `help:${id}`);
+
+        // check if help file exists first and resolve if no file
         const helpExists = this.lib.fs.existsSync(helpPath); // check if help file exists
         if (!helpExists) {
           this.state('return', `${this._messages.help_not_found}:${id}`);
           return resolve(this._messages.help_not_found);
         }
-        helpDoc = this.lib.fs.readFileSync(helpPath, 'utf8');
-        helpDoc = helpDoc.split(`::BEGIN:${part}`)[1].split(`::END:${part}`)[0];
-        this.state('return', `help:${id}`);
-        return resolve(helpDoc);
-      } catch (e) {
+        
+        // get the help file and check to make sure the part we are looking for exists.
+        const helpFile = this.lib.fs.readFileSync(helpPath, 'utf8');
+        const helpPart = helpFile.split(`::BEGIN:${part}`);
+        if (!helpPart[1]) {
+          this.state('return', `${this._messages.help_not_found}:${id}`);
+          resolve(this._messages.help_not_found);
+        }
+        
+        // last set the help doc and split out the selected part.
+        helpDoc = helpFile.split(`::BEGIN:${part}`)[1].split(`::END:${part}`)[0];
+      } 
+      catch(e) {
         this.state('catch', `help:${id}`);
         return this.error(e, msg, reject);
+      }
+      finally {
+        this.state('return', `help:${id}`);
+        return resolve(helpDoc);
       }
     });
   }
