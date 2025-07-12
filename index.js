@@ -1567,7 +1567,7 @@ class Deva {
 
       const splitText = params[0].split(':');
       const part = splitText[1] ? splitText[1].toUpperCase() : 'MAIN';
-      const helpFile = splitText[0];
+      const helpFile = splitText[0] ? splitText[0] : 'main';
             
       const helpPath = this.lib.path.join(help_dir, 'help', `${helpFile}.feecting`);
 
