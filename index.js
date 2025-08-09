@@ -182,7 +182,9 @@ class Deva {
     packet.a.hash = this.lib.hash(packet.a);
     delete packet.hash;
     packet.hash = this.lib.hash(packet);
-
+    packet.sha256 = this.lib.hash(packet, 'sha256');
+    packet.sha512 = this.lib.hash(packet, 'sha512');
+    
     this.state('invalid', `${packet.q.meta.method}:${packet.id}`);
     return packet;
   }
@@ -726,6 +728,9 @@ class Deva {
       created: Date.now(),
     }
     data.hash = this.lib.hash(data);
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
+
     return new Promise((resolve, reject) => {
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -790,6 +795,9 @@ class Deva {
     delete data.hash;
     data.value = 'start';
     data.hash = this.lib.hash(data);
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
+
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
 
     this.state('start', data.id);
@@ -816,6 +824,8 @@ class Deva {
     delete data.hash;
     data.value = 'enter';
     data.hash = this.lib.hash(data);
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
 
     this.state('enter', data.id);
     return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
@@ -841,6 +851,8 @@ class Deva {
     delete data.hash;
     data.value = 'done';
     data.hash = this.lib.hash(data);
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
 
     this.state('done', data.id);
     return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
@@ -863,6 +875,8 @@ class Deva {
     delete data.hash;
     data.value = 'ready';
     data.hash = this.lib.hash(data);// hash the entire data before completeing.
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
 
     this.state('ready', data.id);
     return hasOnReady ? this.onReady(data, resolve) : resolve(data);
@@ -887,6 +901,8 @@ class Deva {
     delete packet.hash; // delete packet hash to update for finish time
     packet.finish = Date.now(); // set the finish timestamp
     packet.hash = this.lib.hash(packet); // rehash the packet;
+    packet.sha256 = this.lib.hash(data, 'sha256');
+    packet.sha512 = this.lib.hash(data, 'sha512');
 
     this.state('finish', packet.id); // set finish state
     return hasOnFinish ? this.onFinish(packet, resolve) : this.complete(packet, resolve);
@@ -910,6 +926,8 @@ class Deva {
     delete packet.hash;
     packet.complete = Date.now();// set the complete date on the whole packet.
     packet.hash = this.lib.hash(packet);// hash the entire packet before complete.
+    packet.sha256 = this.lib.hash(data, 'sha256');
+    packet.sha512 = this.lib.hash(data, 'sha512');
 
     this.state('complete', packet.id);
     return hasOnComplete ? this.onComplete(packet, resolve) : resolve(packet);
@@ -945,12 +963,14 @@ class Deva {
       created: Date.now(), // set the created date
     }
     data.hash = this.lib.hash(data);
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
+
     // has stop function then set hasOnStop variable
     // if: has on stop then run on stop function or return exit function.
     this.state('stop', id); // set the state to stop
     return hasOnStop ? this.onStop(data) : this.exit()
   }
-
 
   /**************
   func: exit
@@ -1020,6 +1040,8 @@ class Deva {
         created: Date.now(), // set the data created date.
       };
       data.hash = this.lib.hash(data); // hash the data
+      data.sha256 = this.lib.hash(data, 'sha256');
+      data.sha512 = this.lib.hash(data, 'sha512');
       this.talk(config.events.state, data); // broadcasat the state event
       return data;
     } catch (e) { // catch any errors
@@ -1042,6 +1064,8 @@ class Deva {
       created: Date.now(),      
     }
     data.hash = this.lib.hash(data);    
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
     this.state('return', `states:${id}`);
     return data;
   }
@@ -1071,6 +1095,8 @@ class Deva {
         created: Date.now(),
       };
       data.hash = this.lib.hash(data);
+      data.sha256 = this.lib.hash(data, 'sha256');
+      data.sha512 = this.lib.hash(data, 'sha512');
       this.talk(config.events.zone, data);
       return data;
     } catch (e) {
@@ -1126,6 +1152,8 @@ class Deva {
         created: Date.now(), // action time stamp
       };
       data.hash = this.lib.hash(data); // generate a hash of the action packet.
+      data.sha256 = this.lib.hash(data, 'sha256');
+      data.sha512 = this.lib.hash(data, 'sha512');
       this.talk(config.events.action, data); // talk the core action event
       return data;
     } catch (e) { // catch any errors that occur
@@ -1150,7 +1178,9 @@ class Deva {
       value: this._actions, // set the value to the actions list
       created: Date.now(), // set the data created date      
     };
-    data.hash = this.lib.hash(data)
+    data.hash = this.lib.hash(data);
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
     this.state('return', `actions:${id}`);
     return data;
   }
@@ -1179,6 +1209,8 @@ class Deva {
         created: Date.now(), // set the creation date
       };
       data.hash = this.lib.hash(data); // generate the hash value of the data packet
+      data.sha256 = this.lib.hash(data, 'sha256');
+      data.sha512 = this.lib.hash(data, 'sha512');
       this.talk(config.events.feature, data); // talk the feature event with data
       return data;
     } catch (e) { // catch any errors
@@ -1205,6 +1237,8 @@ class Deva {
       created: Date.now(), // set the created date.
     };
     data.hash = this.lib.hash(data);
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
     this.state('return', `features:${id}`);
     return data;
   }
@@ -1235,6 +1269,8 @@ class Deva {
         created: Date.now(),
       };
       data.hash = this.lib.hash(data);
+      data.sha256 = this.lib.hash(data, 'sha256');
+      data.sha512 = this.lib.hash(data, 'sha512');
       this.talk(config.events.context, data);
       return data;
     } catch (e) {
@@ -1257,6 +1293,8 @@ class Deva {
       created: Date.now(),      
     };
     data.hash = this.lib.hash(data);
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
     this.state('return', `contexts:${id}`);
     return data;
   }
@@ -1269,9 +1307,12 @@ class Deva {
   ***************/
   client() {
     if (!this._active) return this._messages.offline; // check the active status
-    const client_copy = this.lib.copy(this._client); // create a copy of the client data
-    client_copy.hash = this.lib.hash(client_copy);
+    const client_copy = this.lib.copy(this._client); // create a copy of the client data    
     client_copy.created = Date.now();
+    client_copy.hash = this.lib.hash(client_copy);
+    client_copy.sha256 = this.lib.hash(data, 'sha256');
+    client_copy.sha512 = this.lib.hash(data, 'sha512');
+    
     return client_copy; // return the copy of the client data.
   }
 
@@ -1284,8 +1325,10 @@ class Deva {
   agent() {
     if (!this._active) return this._messages.offline; // check the active status
     const agent_copy = this.lib.copy(this._agent); // create a copy of the agent data.
-    agent_copy.hash = this.lib.hash(agent_copy);
     agent_copy.created = Date.now();
+    agent_copy.hash = this.lib.hash(agent_copy);
+    agent_copy.sha256 = this.lib.hash(data, 'sha256');
+    agent_copy.sha512 = this.lib.hash(data, 'sha512');
     return agent_copy; // return the copy of the agent data.
   }
 
@@ -1516,32 +1559,6 @@ class Deva {
     return `${this._agent.profile.name} active since ${dateFormat}`;                           // return final text string
   }
   
-  /******
-  func: signature
-  params: 
-    - data: the data to sign
-  describe: function to provide a digital signature to data.
-  ******/
-  signature(data) {
-    if (!this._active) return this._messages.offline;
-    const id = this.lib.uid();
-    this.action('signature', id);
-
-    const client = this.client();
-    const agent = this.agent();    
-    this.state('set', `signature:${id}`);
-    const signature = {
-      id,
-      uid: this.lib.uid(true),
-      name: client.profile.name,
-      md5: this.lib.hash(data),
-      sha256: this.lib.hash(data, 'sha256'),
-      sha512: this.lib.hash(data, 'sha512'),
-      date: Date.now(),
-    };
-    this.state('return', `signature:${id}`);
-    return signature;
-  }
   /**************
   func: help
   params:
