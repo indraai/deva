@@ -1310,8 +1310,8 @@ class Deva {
     const client_copy = this.lib.copy(this._client); // create a copy of the client data    
     client_copy.created = Date.now();
     client_copy.hash = this.lib.hash(client_copy);
-    client_copy.sha256 = this.lib.hash(data, 'sha256');
-    client_copy.sha512 = this.lib.hash(data, 'sha512');
+    client_copy.sha256 = this.lib.hash(client_copy, 'sha256');
+    client_copy.sha512 = this.lib.hash(client_copy, 'sha512');
     
     return client_copy; // return the copy of the client data.
   }
@@ -1327,8 +1327,8 @@ class Deva {
     const agent_copy = this.lib.copy(this._agent); // create a copy of the agent data.
     agent_copy.created = Date.now();
     agent_copy.hash = this.lib.hash(agent_copy);
-    agent_copy.sha256 = this.lib.hash(data, 'sha256');
-    agent_copy.sha512 = this.lib.hash(data, 'sha512');
+    agent_copy.sha256 = this.lib.hash(agent_copy, 'sha256');
+    agent_copy.sha512 = this.lib.hash(agent_copy, 'sha512');
     return agent_copy; // return the copy of the agent data.
   }
 
