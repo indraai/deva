@@ -186,7 +186,8 @@
       "insert": "👉 Insert",
       "update": "👆 Update",
       "delete": "🗑️ Delete",
-      "return": "🤿 Return"
+      "return": "🤿 Return",
+      "hash": "#️⃣ Hash"
     },
     "action": false,
     "actions": {

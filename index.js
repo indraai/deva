@@ -901,8 +901,8 @@ class Deva {
     delete packet.hash; // delete packet hash to update for finish time
     packet.finish = Date.now(); // set the finish timestamp
     packet.hash = this.lib.hash(packet); // rehash the packet;
-    packet.sha256 = this.lib.hash(data, 'sha256');
-    packet.sha512 = this.lib.hash(data, 'sha512');
+    packet.sha256 = this.lib.hash(packet, 'sha256');
+    packet.sha512 = this.lib.hash(packet, 'sha512');
 
     this.state('finish', packet.id); // set finish state
     return hasOnFinish ? this.onFinish(packet, resolve) : this.complete(packet, resolve);
@@ -926,8 +926,8 @@ class Deva {
     delete packet.hash;
     packet.complete = Date.now();// set the complete date on the whole packet.
     packet.hash = this.lib.hash(packet);// hash the entire packet before complete.
-    packet.sha256 = this.lib.hash(data, 'sha256');
-    packet.sha512 = this.lib.hash(data, 'sha512');
+    packet.sha256 = this.lib.hash(packet, 'sha256');
+    packet.sha512 = this.lib.hash(packet, 'sha512');
 
     this.state('complete', packet.id);
     return hasOnComplete ? this.onComplete(packet, resolve) : resolve(packet);
