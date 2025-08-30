@@ -811,6 +811,8 @@ class Deva {
       }).then(() => {
         return this.Wall(resolve, reject);
       }).then(() => {
+        return this.Shield(resolve, reject);
+      }).then(() => {
         return this.Proxy(resolve, reject);
       }).then(() => {
         return this.Legal(resolve, reject);
