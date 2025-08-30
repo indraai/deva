@@ -93,18 +93,15 @@ const DevaTest = new Deva({
 			const info = this.info();
 			const date = Date.now();
 			const hashstr = `${id}${uid}${date}`;
-			const signature = this.signature(hashstr);
+			const proxy = this.proxy(hashstr);
 			const data = [
 				'🧪 TEST RESULTS',
 				`::BEGIN:CORE:${core.id}`,
 				JSON.stringify(core,null,2),
-				`::END:CORE:${core.hash}`,
+				`::END:CORE:${core.id}`,
 				`::BEGIN:INFO:${info.id}`,
 				JSON.stringify(info,null,2),
-				`::END:INFO:${info.hash}`,
-				`::BEGIN:SIGNATURE:${signature.id}`,
-				JSON.stringify(signature, null, 2),
-				`::END:SIGNATURE:${signature.md5}`,
+				`::END:INFO:${info.id}`,
 			];
 			return {
 				text: data.join('\n'),

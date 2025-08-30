@@ -34,6 +34,11 @@
       "currency": "USD"
     },
     "features": {
+      "vector": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "security": {
         "hash": "md5",
         "cipher": {
@@ -46,6 +51,41 @@
         "devas": {}
       },
       "guard": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "defense": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "wall": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "shield": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "proxy": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "legal": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "authority": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "justice": {
         "concerns": [],
         "global": [],
         "devas": {}
@@ -73,26 +113,6 @@
         "devas": {}
       },
       "networks": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "legal": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "justice": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "authority": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "defense": {
         "concerns": [],
         "global": [],
         "devas": {}

@@ -236,9 +236,9 @@
     },
     "feature": false,
     "features": {
+      "init": "🟠 Init",
       "agent": "🦾 Agent",
       "client": "💪 Client",
-      "init": "🟠 Init",
       "vector": "🛤️ Vector",
       "security": "🔐 Security",
       "guard": "💂 Guard",
