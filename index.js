@@ -17,15 +17,19 @@ class Deva {
     this._agent = opts.agent || false; // Agent profile object
     this._client = {}; // this will be set on init.
     this._active = false; // the active/birth date.
+    this._vector = false; // inherited Vector features.
     this._security = false; // inherited Security features.
+    this._guard = false; // inherited Guard features.
     this._defense = false; // inherited Security features.
+    this._wall = false; // inherited Wall features.
+    this._proxy = false; // inherited Proxy features.
+    this._legal = false; // inherited Legal features.
+    this._authority = false; // inherited Justice features.
+    this._justice = false; // inherited Justice features.
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
     this._systems = false; // inherited Systems features.
     this._networks = false; // inherited Systems features.
-    this._legal = false; // inherited Legal features.
-    this._justice = false; // inherited Justice features.
-    this._authority = false; // inherited Justice features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = new lib({}); // used for loading library functions
     this.utils = opts.utils || {}; // parse function
@@ -266,6 +270,7 @@ class Deva {
           concerns: data.concerns, // any concerns for client
           global: data.global, // the global policies for client
           personal: data.devas[this._agent.key], // Client personal features and rules.
+          created: Date.now(),
         };
         delete this._client.features[feature]; // make a copy the clinet data.
         this.state('resolve', `${feature}:${_id}`);
@@ -275,6 +280,17 @@ class Deva {
       this.state('catch', `${feature}:${_id}`);
       return this.error(e, feature, reject); // run error handling if an error is caught
     }
+  }
+
+  /**************
+  func: Vector
+  params: client: false
+  describe:
+    The Vector feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Vector(resolve, reject) {
+    return this.Feature('vector', resolve, reject);
   }
 
   /**************
@@ -308,6 +324,72 @@ class Deva {
   ***************/
   Defense(resolve, reject) {
     return this.Feature('defense', resolve, reject);
+  }
+
+  /**************
+  func: Wall
+  params: client: false
+  describe:
+    The Defense feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Wall(resolve, reject) {
+    return this.Feature('wall', resolve, reject);
+  }
+
+  /**************
+  func: Shield
+  params: client: false
+  describe:
+    The Shield feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Shield(resolve, reject) {
+    return this.Feature('shield', resolve, reject);
+  }
+
+  /**************
+  func: Proxy
+  params: client: false
+  describe:
+    The Defense feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Proxy(resolve, reject) {
+    return this.Feature('proxy', resolve, reject);
+  }
+
+  /**************
+  func: Legal
+  params: client: false
+  describe:
+    The Legal feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Legal(resolve, reject) {
+    return this.Feature('legal', resolve, reject);
+  }
+  
+  /**************
+  func: Justice
+  params: client: false
+  describe:
+    The Justice feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Justice(resolve, reject) {
+    return this.Feature('justice', resolve, reject);
+  }
+  
+  /**************
+  func: Authority
+  params: client: false
+  describe:
+    The Authority feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Authority(resolve, reject) {
+    return this.Feature('authority', resolve, reject);
   }
 
   /**************
@@ -352,39 +434,6 @@ class Deva {
   ***************/
   Networks(resolve, reject) {
     return this.Feature('networks', resolve, reject);
-  }
-
-  /**************
-  func: Legal
-  params: client: false
-  describe:
-    The Legal feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Legal(resolve, reject) {
-    return this.Feature('legal', resolve, reject);
-  }
-
-  /**************
-  func: Justice
-  params: client: false
-  describe:
-    The Justice feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Justice(resolve, reject) {
-    return this.Feature('justice', resolve, reject);
-  }
-
-  /**************
-  func: Authority
-  params: client: false
-  describe:
-    The Authority feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Authority(resolve, reject) {
-    return this.Feature('authority', resolve, reject);
   }
 
   /**************
@@ -752,11 +801,17 @@ class Deva {
         this.state('init');
         return this.Client(client, resolve, reject);
       }).then(() => {
+        return this.Vector(resolve, reject);
+      }).then(() => {
         return this.Security(resolve, reject);
       }).then(() => {
         return this.Guard(resolve, reject);
       }).then(() => {
         return this.Defense(resolve, reject);
+      }).then(() => {
+        return this.Wall(resolve, reject);
+      }).then(() => {
+        return this.Proxy(resolve, reject);
       }).then(() => {
         return this.Legal(resolve, reject);
       }).then(() => {
@@ -1045,14 +1100,20 @@ class Deva {
     // clear memory
     this._active = false;
     this._client = false;
+    this._vector = false;
     this._security = false;
+    this._guard = false;
+    this._defense = false;
+    this._wall = false;
+    this._shield = false;
+    this._proxy = false;
+    this._legal = false;
+    this._authority = false;
+    this._justice = false;
     this._support = false;
     this._services = false;
     this._systems = false;
     this._networks = false;
-    this._legal = false;
-    this._authority = false;
-    this._justice = false;
     return hasOnExit ? this.onExit(data) : Promise.resolve(data)
   }
 
@@ -1403,6 +1464,16 @@ class Deva {
 
   // FEATURE FUNCTIONS
   /**************
+  func: vector
+  params: none
+  describe: basic vector features available in a Deva.
+  usage: this.vector()
+  ***************/
+  vector() {
+    return this._getFeature('vector', this._vector);
+  }
+
+  /**************
   func: security
   params: none
   describe: basic security features available in a Deva.
@@ -1432,6 +1503,56 @@ class Deva {
     return this._getFeature('defense', this._defense);
   }
 
+  /**************
+  func: wall
+  params: none
+  describe: basic wall features available in a Deva.
+  usage: this.wall()
+  ***************/
+  wall() {
+    return this._getFeature('wall', this._wall);
+  }
+
+  /**************
+  func: proxy
+  params: none
+  describe: basic proxy features available in a Deva.
+  usage: this.proxy()
+  ***************/
+  proxy() {
+    return this._getFeature('proxy', this._proxy);
+  }
+
+  /**************
+  func: legal
+  params: none
+  describe: basic legal features available in a Deva.
+  usage: this.systems()
+  ***************/
+  legal() {
+    return this._getFeature('legal', this._legal);
+  }
+  
+  /**************
+  func: authority
+  params: none
+  describe: basic authority features available in a Deva.
+  usage: this.systems()
+  ***************/
+  authority() {
+    return this._getFeature('authority', this._authority);
+  }
+  
+  /**************
+  func: justice
+  params: none
+  describe: basic justice features available in a Deva.
+  usage: this.systems()
+  ***************/
+  justice() {
+    return this._getFeature('justice', this._justice);
+  }
+  
   /**************
   func: support
   params: none
@@ -1470,36 +1591,6 @@ class Deva {
   ***************/
   networks() {
     return this._getFeature('networks', this._networks);
-  }
-
-  /**************
-  func: legal
-  params: none
-  describe: basic legal features available in a Deva.
-  usage: this.systems()
-  ***************/
-  legal() {
-    return this._getFeature('legal', this._legal);
-  }
-
-  /**************
-  func: justice
-  params: none
-  describe: basic justice features available in a Deva.
-  usage: this.systems()
-  ***************/
-  justice() {
-    return this._getFeature('justice', this._justice);
-  }
-
-  /**************
-  func: authority
-  params: none
-  describe: basic authority features available in a Deva.
-  usage: this.systems()
-  ***************/
-  authority() {
-    return this._getFeature('authority', this._authority);
   }
 
   /**************
