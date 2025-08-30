@@ -1516,6 +1516,16 @@ class Deva {
   }
 
   /**************
+  func: shield
+  params: none
+  describe: basic shield features available in a Deva.
+  usage: this.shield()
+  ***************/
+  shield() {
+    return this._getFeature('shield', this._shield);
+  }
+
+  /**************
   func: proxy
   params: none
   describe: basic proxy features available in a Deva.
