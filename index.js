@@ -172,20 +172,31 @@ class Deva {
     This will return a not found text string preventing any furhter processing.
   ***************/
   _methodNotFound(packet) {
+    const id = this.lib.uid();
+    const agent = this.agent() || false;
+    const client = this.client() || false;
+    const {meta, params} = packet.q;
+    const text = `${this._messages.method_not_found} ${agent.key} ${meta.method}`
     packet.a = {
-      id: this.lib.uid(),
-      agent: this.agent() || false,
-      client: this.client() || false,
-      text: `${this._messages.method_not_found}`,
+      id,
+      agent,
+      client,
+      text,
       meta: {
-        key: this._agent.key,
-        method: packet.q.meta.method,
+        key: agent.key,
+        method: meta.method,
       },
       created: Date.now(),
     };
-    packet.a.hash = this.lib.hash(packet.a);
-    delete packet.hash;
-    packet.md5 = this.lib.hash(packet);
+    packet.a.md5 = this.lib.hash(packet.a, 'md5');
+    packet.a.sha256 = this.lib.hash(packet.a, 'sha256');
+    packet.a.sha512 = this.lib.hash(packet.a, 'sha512');
+
+    delete packet.md5;
+    delete packet.sha256;
+    delete packet.sha512;
+    
+    packet.md5 = this.lib.hash(packet, 'md5');
     packet.sha256 = this.lib.hash(packet, 'sha256');
     packet.sha512 = this.lib.hash(packet, 'sha512');
     
