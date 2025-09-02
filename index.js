@@ -172,6 +172,7 @@ class Deva {
     This will return a not found text string preventing any furhter processing.
   ***************/
   _methodNotFound(packet) {
+    if (!this._active) return this._messages.offline; // check the active status
     const id = this.lib.uid();
     const agent = this.agent() || false;
     const client = this.client() || false;
@@ -200,7 +201,7 @@ class Deva {
     packet.sha256 = this.lib.hash(packet, 'sha256');
     packet.sha512 = this.lib.hash(packet, 'sha512');
     
-    this.state('invalid', `${packet.q.meta.method}:${packet.id}`);
+    this.state('invalid', `${meta.method}:${packet.id}`);
     return packet;
   }
 
