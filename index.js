@@ -18,6 +18,7 @@ class Deva {
     this._client = {}; // this will be set on init.
     this._active = false; // the active/birth date.
     this._vector = false; // inherited Vector features.
+    this._treasury = false; // inherited Vector features.
     this._security = false; // inherited Security features.
     this._guard = false; // inherited Guard features.
     this._defense = false; // inherited Security features.
@@ -303,6 +304,17 @@ class Deva {
   ***************/
   Vector(resolve, reject) {
     return this.Feature('vector', resolve, reject);
+  }
+
+  /**************
+  func: Treasury
+  params: client: false
+  describe:
+    The Treasury feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Treasury(resolve, reject) {
+    return this.Feature('treasury', resolve, reject);
   }
 
   /**************
@@ -815,6 +827,8 @@ class Deva {
       }).then(() => {
         return this.Vector(resolve, reject);
       }).then(() => {
+        return this.Treasury(resolve, reject);
+      }).then(() => {
         return this.Security(resolve, reject);
       }).then(() => {
         return this.Guard(resolve, reject);
@@ -1115,6 +1129,7 @@ class Deva {
     this._active = false;
     this._client = false;
     this._vector = false;
+    this._treasury = false;
     this._security = false;
     this._guard = false;
     this._defense = false;
@@ -1485,6 +1500,16 @@ class Deva {
   ***************/
   vector() {
     return this._getFeature('vector', this._vector);
+  }
+
+  /**************
+  func: treasury
+  params: none
+  describe: basic treasury features available in a Deva.
+  usage: this.treasury()
+  ***************/
+  treasury() {
+    return this._getFeature('treasury', this._treasury);
   }
 
   /**************

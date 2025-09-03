@@ -39,6 +39,11 @@
         "global": [],
         "devas": {}
       },
+      "treasury": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "security": {
         "hash": "md5",
         "cipher": {
