@@ -8,23 +8,25 @@ import Agent from './agent.json' with {type:'json'};
 const agent = Agent.DATA;
 
 import Deva from '../index.js';
+import pkg from '../package.json' with {type:'json'};
 
 import {dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';    
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const info = {
-  id: '00000',
-  name: 'Deva Core Test',
-  describe: 'Deva Core Test Package',
-  version: '0.0.0',
+  id: pkg.id,
+  name: pkg.name,
+  describe: pkg.description,
+  version: pkg.version,
+	author: pkg.author.name,
+	email: pkg.author.email,
+	url: pkg.authorurl,
+  copyright: pkg.copyright,
   dir: __dirname,
-  url: 'https://deva.world/test',
-  git: 'git+https://github.com/indraai/deva.git',
-  bugs: 'git+https://github.com/indraai/deva.git#bugs',
-  author: 'Quinn Michaels',
+  git: pkg.repository.url,
+  bugs: pkg.bugs.url,
   license: 'TESTING ONLY',
-  copyright: 2025,
 };
 
 const DevaTest = new Deva({

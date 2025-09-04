@@ -297,7 +297,18 @@ class Deva {
 
   /**************
   func: Vector
-  params: client: false
+  params: resolve, reject
+  describe:
+    The Veda feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Veda(resolve, reject) {
+    return this.Feature('veda', resolve, reject);
+  }
+
+  /**************
+  func: Vector
+  params: resolve, reject
   describe:
     The Vector feature sets the correct variables and necessary rules for the
     client presented data.
@@ -308,7 +319,7 @@ class Deva {
 
   /**************
   func: Treasury
-  params: client: false
+  params: resolve, reject
   describe:
     The Treasury feature sets the correct variables and necessary rules for the
     client presented data.
@@ -319,7 +330,7 @@ class Deva {
 
   /**************
   func: Security
-  params: client: false
+  params: resolve, reject
   describe:
     The Security feature sets the correct variables and necessary rules for the
     client presented data.
@@ -330,7 +341,7 @@ class Deva {
 
   /**************
   func: Guard
-  params: client: false
+  params: resolve, reject
   describe:
     The Guard feature sets the correct variables and necessary rules for the
     client presented data.
@@ -341,7 +352,7 @@ class Deva {
 
   /**************
   func: Defense
-  params: client: false
+  params: resolve, reject
   describe:
     The Defense feature sets the correct variables and necessary rules for the
     client presented data.
@@ -352,7 +363,7 @@ class Deva {
 
   /**************
   func: Wall
-  params: client: false
+  params: resolve, reject
   describe:
     The Defense feature sets the correct variables and necessary rules for the
     client presented data.
@@ -363,7 +374,7 @@ class Deva {
 
   /**************
   func: Shield
-  params: client: false
+  params: resolve, reject
   describe:
     The Shield feature sets the correct variables and necessary rules for the
     client presented data.
@@ -374,7 +385,7 @@ class Deva {
 
   /**************
   func: Proxy
-  params: client: false
+  params: resolve, reject
   describe:
     The Defense feature sets the correct variables and necessary rules for the
     client presented data.
@@ -385,7 +396,7 @@ class Deva {
 
   /**************
   func: Legal
-  params: client: false
+  params: resolve, reject
   describe:
     The Legal feature sets the correct variables and necessary rules for the
     client presented data.
@@ -396,7 +407,7 @@ class Deva {
   
   /**************
   func: Justice
-  params: client: false
+  params: resolve, reject
   describe:
     The Justice feature sets the correct variables and necessary rules for the
     client presented data.
@@ -407,7 +418,7 @@ class Deva {
   
   /**************
   func: Authority
-  params: client: false
+  params: resolve, reject
   describe:
     The Authority feature sets the correct variables and necessary rules for the
     client presented data.
@@ -418,7 +429,7 @@ class Deva {
 
   /**************
   func: Support
-  params: client: false
+  params: resolve, reject
   describe:
     The Support feature sets the correct variables and necessary rules for the
     client presented data.
@@ -429,7 +440,7 @@ class Deva {
 
   /**************
   func: Services
-  params: client: false
+  params: resolve, reject
   describe:
     The Services feature sets the correct variables and necessary rules for the
     client presented data.
@@ -824,6 +835,8 @@ class Deva {
         this.action('init');
         this.state('init');
         return this.Client(client, resolve, reject);
+      }).then(() => {
+        return this.Veda(resolve, reject);
       }).then(() => {
         return this.Vector(resolve, reject);
       }).then(() => {
@@ -1492,6 +1505,16 @@ class Deva {
   }
 
   // FEATURE FUNCTIONS
+  /**************
+  func: veda
+  params: none
+  describe: basic veda features available in a Deva.
+  usage: this.veda()
+  ***************/
+  veda() {
+    return this._getFeature('veda', this._vector);
+  }
+
   /**************
   func: vector
   params: none

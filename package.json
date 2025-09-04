@@ -1,4 +1,5 @@
 {
+  "id": "9f0bc743-d720-4320-832e-cf5edc3b7cf",
   "name": "@indra.ai/deva",
   "version": "1.5.52",
   "description": "The Deva Core",
@@ -23,8 +24,8 @@
   "license": "Unlicense",
   "author": {
     "name": "Quinn Michaels",
-    "email": "quinn@quinnmichaels.com",
-    "url": "https://quinnmichaels.com/"
+    "email": "quinn@indra.ai",
+    "url": "https://indra.ai/"
   },
   "funding": [
     {
@@ -39,7 +40,7 @@
   "bugs": {
     "url": "https://github.com/indraai/deva/issues"
   },
-  "homepage": "https://deva.world",
+  "homepage": "https://indra.ai",
   "eslintConfig": {
     "parserOptions": {
       "ecmaVersion": 6
@@ -98,20 +99,22 @@
       "deva": "⚡️ Deva",
       "agent": "🤖 Agent",
       "client": "👨 Client",
+      "veda": "🕉️ Veda",
       "vector": "🛤️ Vector",
       "treasury": "🏦️ Treasury",
-      "security": "🔐 Security",
+      "security": "🚨 Security",
       "guard": "💂 Guard",
       "wall": "🧱 Wall",
+      "shield": "🛡️ Shield",
       "defense": "🪖  Defense",
-      "proxy": "🔗 Proxy",
+      "proxy": "👾️ Proxy",
       "legal": "🏛️ Legal",
       "authority": "🚔 Authority",
       "justice": "⚖️  Justice",
-      "support": "🚑 Support",
-      "services": "🚚 Services",
-      "systems": "🚛 Systems",
-      "networks": "🛰️ Networks",
+      "support": "💼 Support",
+      "services": "🛠️ Services",
+      "systems": "🖥️️ Systems",
+      "networks": "📡 Networks",
       "help": "💚 Help",
       "error": "❌ Error!"
     },
@@ -197,16 +200,22 @@
     "actions": {
       "client": "👨 Client",
       "agent": "🕵️‍♂️ Agent",
-      "security": "🔐 Security",
+      "veda": "🕉️ Veda",
+      "vector": "👽 Vector",
+      "security": "🚨 Security",
       "guard": "💂 Guard",
+      "shield": "🛡️ Shield",
+      "wall": "🧱 Wall",
+      "proxy": "👾️ Proxy",
       "defense": "🪖  Defense",
-      "support": "🩹  Support",
+      "support": "💼 Support",
       "services": "🛠️ Services",
       "systems": "🖥️ Systems",
       "networks": "📡 Networks",
-      "legal": "🗃️ Legal",
-      "justice": "🗄️ Justice",
-      "authority": "👮 Authority",
+      "legal": "🏛️ Legal",
+      "justice": "⚖️  Justice",
+      "authority": "🚔 Authority",
+      "treasury": "🏦 Treasury",
       "talk": "📢 Talk",
       "listen": "👂 Listen",
       "once": "👂 Once",
@@ -243,21 +252,22 @@
       "init": "🟠 Init",
       "agent": "🦾 Agent",
       "client": "💪 Client",
+      "veda": "🕉️ Veda",
       "vector": "🛤️ Vector",
-      "treasury": "🪙️  Treasury",
-      "security": "🔐 Security",
+      "treasury": "🏦 Treasury",
+      "security": "🚨 Security",
       "guard": "💂 Guard",
       "defense": "🪖️️  Defense",
       "wall": "🧱 Wall",
       "shield": "🛡️ Shield",
-      "proxy": "🤝 Proxy",
-      "legal": "🗂️️️ Legal",
-      "authority": "🚓️️ Authority",
-      "justice": "🏛️️ Justice",
+      "proxy": "👾️ Proxy",
+      "legal": "🏛️ Legal",
+      "authority": "🚔 Authority",
+      "justice": "⚖️  Justice",
       "support": "💼 Support",
       "services": "🛠️ Services",
       "systems": "🖥️️ Systems",
-      "networks": "🛜️️ Networks"
+      "networks": "📡 Networks"
     },
     "message": "offline",
     "messages": {
