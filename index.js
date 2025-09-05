@@ -19,6 +19,7 @@ class Deva {
     this._active = false; // the active/birth date.
     this._vector = false; // inherited Vector features.
     this._veda = false; // inherited Veda features.
+    this._god = false; // inherited God features.
     this._king = false; // inherited King features.
     this._treasury = false; // inherited Vector features.
     this._security = false; // inherited Security features.
@@ -34,7 +35,7 @@ class Deva {
     this._systems = false; // inherited Systems features.
     this._networks = false; // inherited Systems features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
-    this.lib = new lib({}); // used for loading library functions
+    this.lib = new lib({config}); // used for loading library functions
     this.utils = opts.utils || {}; // parse function
     this.devas = opts.devas || {}; // Devas which are loaded
     this.vars = opts.vars || {}; // Variables object
@@ -204,7 +205,7 @@ class Deva {
     packet.sha256 = this.lib.hash(packet, 'sha256');
     packet.sha512 = this.lib.hash(packet, 'sha512');
     
-    this.state('invalid', `${meta.method}:${packet.id}`);
+    this.state('invalid', `${meta.method}:${packet.id.uid}`);
     return packet;
   }
 
@@ -267,19 +268,19 @@ class Deva {
   ***************/
   Feature(feature, resolve, reject) {
     const _id = this.lib.uid();
-    this.feature(feature, _id);
-    this.zone(feature, _id);
+    this.feature(feature, _id.uid);
+    this.zone(feature, _id.uid);
     const _cl = this.client(); // set local copy of client data
     try {
       if (!_cl.features[feature]) return resolve(); // if no security feature goto Support
       else {
-        this.action(feature, _id); // set action to feature
+        this.action(feature, _id.uid); // set action to feature
         const _fe = `_${feature}`;
         const {id, profile, features} = _cl; // make a copy the clinet data.
         const data = features[feature]; // make a copy the clinet data.
         this.state('set', `feature:${id}`);
-        this[_fe] = { // set this_security with data
-          id: _id, // uuid of the security feature
+        this[_fe] = { // set this feature with data
+          id: _id, // uid of the feature
           client_id: id, // client id for reference
           client_name: profile.name, // client name for personalization
           concerns: data.concerns, // any concerns for client
@@ -288,11 +289,11 @@ class Deva {
           created: Date.now(),
         };
         delete this._client.features[feature]; // make a copy the clinet data.
-        this.state('resolve', `${feature}:${_id}`);
+        this.state('resolve', `${feature}:${_id.uid}`);
         return resolve(feature); // resolve when done
       }
     } catch (e) {
-      this.state('catch', `${feature}:${_id}`);
+      this.state('catch', `${feature}:${_id.uid}`);
       return this.error(e, feature, reject); // run error handling if an error is caught
     }
   }
@@ -317,6 +318,17 @@ class Deva {
   ***************/
   Veda(resolve, reject) {
     return this.Feature('veda', resolve, reject);
+  }
+
+  /**************
+  func: God
+  params: resolve, reject
+  describe:
+    The God feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  God(resolve, reject) {
+    return this.Feature('god', resolve, reject);
   }
 
   /**************
@@ -510,7 +522,7 @@ class Deva {
     to create seamless collaboration between Devas.
   ***************/
   talk(evt, packet=false) {
-    this.action('talk', `${evt}:${packet.id}`);
+    this.action('talk', `${evt}:${packet.id.uid}`);
     return this.events.emit(evt, packet);
   }
 
@@ -637,14 +649,14 @@ class Deva {
         if (isAsk) { // isAsk check if the question isAsk and talk
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
           this.talk(`${key}:ask`, packet);
-          this.once(`${key}:ask:${packet.id}`, answer => {
+          this.once(`${key}:ask:${packet.id.uid}`, answer => {
             this.talk(config.events.ask, this.lib.copy(answer));
-            this.state('return', `${key}:ask:${id}`);
+            this.state('return', `${key}:ask:${packet.id.uid}`);
             return this.finish(answer, resolve); // if:isAsk resolve the answer from the call
           });
         }
         else { // else: answer the question locally
-          this.state('answer', `${method}:${id}`); //set the answer state to the method
+          this.state('answer', `${method}:${id.uid}`); //set the answer state to the method
           return this.answer(packet, resolve, reject);
         }
       }
@@ -743,18 +755,18 @@ class Deva {
     const agent = this.agent();
     const client = this.client();
     const {method, params} = packet.q.meta;
-    this.zone('ask', `${method}:${packet.id}`);
-    this.action('ask', `${method}:${packet.id}`);
+    this.zone('ask', `${method}:${packet.id.uid}`);
+    this.action('ask', `${method}:${packet.id.uid}`);
     // build the answer packet from this model
-    this.state('try', `ask:${method}:${packet.id}`);
+    this.state('try', `ask:${method}:${packet.id.uid}`);
     try {
       if (typeof this.methods[method] !== 'function') {
         return setImmediate(() => {
-          this.talk(`${this._agent.key}:ask:${packet.id}`, this._methodNotFound(packet));
+          this.talk(`${this._agent.key}:ask:${packet.id.uid}`, this._methodNotFound(packet));
         });
       }
 
-      this.state('set', `ask:${method}:packet_answer:${packet.id}`);
+      this.state('set', `ask:${method}:packet_answer:${packet.id.uid}`);
       const packet_answer = {
         id: this.lib.uid(),
         agent,
@@ -787,16 +799,16 @@ class Deva {
 
         packet.a = packet_answer;
         this.talk(config.events.answer, this.lib.copy(packet)); // global talk event
-        this.talk(`${agent.key}:ask:${packet.id}`, packet);
+        this.talk(`${agent.key}:ask:${packet.id.uid}`, packet);
       }).catch(err => {
-        this.talk(`${agent.key}:ask:${packet.id}`, {error:err});
-        this.state('catch', `ask:${method}:${packet.id}`);
+        this.talk(`${agent.key}:ask:${packet.id.uid}`, {error:err});
+        this.state('catch', `ask:${method}:${packet.id.uid}`);
         return this.error(err, packet);
       })
     }
     catch (e) {
-      this.state('catch', `ask:${method}:${packet.id}`);
-      this.talk(`${agent.key}:ask:${packet.id}`, {error:e});
+      this.state('catch', `ask:${method}:${packet.id.uid}`);
+      this.talk(`${agent.key}:ask:${packet.id.uid}`, {error:e});
       return this.error(e, packet)
     }
     // now when we ask the meta params[0] should be the method
@@ -853,6 +865,8 @@ class Deva {
       }).then(() => {
         return this.Veda(resolve, reject);
       }).then(() => {
+        return this.God(resolve, reject);
+      }).then(() => {
         return this.King(resolve, reject);
       }).then(() => {
         return this.Treasury(resolve, reject);
@@ -886,10 +900,10 @@ class Deva {
         return this.Done(resolve, reject);
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
-        this.state('return', `init:${data.id}`);
+        this.state('return', `init:${data.id.uid}`);
         return hasOnInit ? this.onInit(data, resolve) : this.start(data, resolve);
       }).catch(err => {
-        this.state('catch', `init:${data.id}`);
+        this.state('catch', `init:${data.id.uid}`);
         return this.error(err, client, reject);
       });
     });
@@ -906,10 +920,10 @@ class Deva {
   usage: this.start('msg')
   ***************/
   start(data, resolve) {
-    this.zone('start', data.id);
+    this.zone('start', data.id.uid);
     if (!this._active) return resolve(this._messages.offline);
 
-    this.action('start', data.id);
+    this.action('start', data.id.uid);
     const id = this.lib.uid();
     
     delete data.md5;
@@ -924,7 +938,7 @@ class Deva {
     
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
 
-    this.state('start', data.id);
+    this.state('start', data.id.uid);
     this.talk(config.events.start, data);
     return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
   }
@@ -941,10 +955,10 @@ class Deva {
   usage: this.enter('msg')
   ***************/
   enter(data, resolve) {
-    this.zone('enter', data.id);
+    this.zone('enter', data.id.uid);
     if (!this._active) return resolve(this._messages.offline);
 
-    this.action('enter', data.id);
+    this.action('enter', data.id.uid);
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
     
     delete data.md5;
@@ -957,7 +971,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
     
-    this.state('enter', data.id);
+    this.state('enter', data.id.uid);
     this.talk(config.events.enter, data);
     return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
   }
@@ -974,10 +988,10 @@ class Deva {
   usage: this.done('msg')
   ***************/
   done(data, resolve) {
-    this.zone('done', data.id);
+    this.zone('done', data.id.uid);
     if (!this._active) return resolve(this._messages.offline);
 
-    this.action('done', data.id);
+    this.action('done', data.id.uid);
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
     
     delete data.md5;
@@ -990,7 +1004,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
     
-    this.state('done', data.id);
+    this.state('done', data.id.uid);
     this.talk(config.events.done, data);
     return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
   }
@@ -1004,10 +1018,10 @@ class Deva {
   usage: this.ready(data, resolve)
   ***************/
   ready(data, resolve) {
-    this.zone('ready', data.id);
+    this.zone('ready', data.id.uid);
     if (!this._active) return resolve(this._messages.offline);
 
-    this.action('ready', data.id);
+    this.action('ready', data.id.uid);
     const hasOnReady = this.onReady && typeof this.onReady === 'function';  
     
     delete data.md5;
@@ -1020,7 +1034,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
     
-    this.state('ready', data.id);
+    this.state('ready', data.id.uid);
     this.talk(config.events.ready, data);    
     return hasOnReady ? this.onReady(data, resolve) : resolve(data);
   }
@@ -1036,10 +1050,10 @@ class Deva {
   usage: this.finish(data, resolve)
   ***************/
   finish(data, resolve) {
-    this.zone('finish', data.id); // enter finish zone
+    this.zone('finish', data.id.uid); // enter finish zone
     if (!this._active) return resolve(this._messages.offline); //
 
-    this.action('finish', data.id); // start finish action
+    this.action('finish', data.id.uid); // start finish action
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
 
     delete data.md5;
@@ -1052,7 +1066,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
     
-    this.state('finish', data.id); // set finish state
+    this.state('finish', data.id.uid); // set finish state
     this.talk(config.events.finish, data);    
     return hasOnFinish ? this.onFinish(data, resolve) : this.complete(data, resolve);
   }
@@ -1067,10 +1081,10 @@ class Deva {
   usage: this.complete(data, resolve)
   ***************/
   complete(data, resolve) {
-    this.zone('complete', data.id);
+    this.zone('complete', data.id.uid);
     if (!this._active) return Promise.resolve(this._messages.offline);
 
-    this.action('complete', data.id);
+    this.action('complete', data.id.uid);
     const hasOnComplete = this.onComplete && typeof this.onComplete === 'function';
 
     delete data.md5;
@@ -1082,7 +1096,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
     
-    this.state('complete', data.id);
+    this.state('complete', data.id.uid);
     this.talk(config.events.complete, data);
     return hasOnComplete ? this.onComplete(data, resolve) : resolve(data);
   }
@@ -1466,7 +1480,7 @@ class Deva {
       this.talk(config.events.context, data);
       return data;
     } catch (e) {
-      this.state('catch', `context:${value}:${id}`);
+      this.state('catch', `context:${value}:${id.guid}`);
       return this.error(e, value);
     }
   }
@@ -1537,6 +1551,16 @@ class Deva {
   ***************/
   veda() {
     return this._getFeature('veda', this._vector);
+  }
+
+  /**************
+  func: god
+  params: none
+  describe: basic god features available in a Deva.
+  usage: this.god()
+  ***************/
+  god() {
+    return this._getFeature('god', this._vector);
   }
 
   /**************
@@ -1787,7 +1811,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
     
-    this.state('return', `core:${id}`);
+    this.state('return', `core:${id.uid}`);
     return data;
   }
 
@@ -1809,7 +1833,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
 
-    this.state('return', `info:${id}`);
+    this.state('return', `info:${id.uid}`);
     return data;
   }
 

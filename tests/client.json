@@ -34,17 +34,22 @@
       "currency": "USD"
     },
     "features": {
+      "vector": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "veda": {
         "concerns": [],
         "global": [],
         "devas": {}
       },
-      "king": {
+      "god": {
         "concerns": [],
         "global": [],
         "devas": {}
       },
-      "vector": {
+      "king": {
         "concerns": [],
         "global": [],
         "devas": {}

@@ -110,12 +110,12 @@ const DevaTest = new Deva({
 			const info = this.info();
 			const data = [
 				'🧪 TEST RESULTS',
-				`::BEGIN:CORE:${core.id}`,
+				`::BEGIN:CORE:${core.id.uid}`,
 				JSON.stringify(core,null,2),
-				`::END:CORE:${core.id}`,
-				`::BEGIN:INFO:${info.id}`,
+				`::END:CORE:${core.id.uid}`,
+				`::BEGIN:INFO:${info.id.uid}`,
 				JSON.stringify(info,null,2),
-				`::END:INFO:${info.id}`,
+				`::END:INFO:${info.id.uid}`,
 			];
 			return {
 				text: data.join('\n'),
@@ -130,19 +130,19 @@ const DevaTest = new Deva({
 		}
 	},
 	onStart(data, resolve) {
-		this.context('start', data.id);
+		this.context('start', data.id.uid);
 		return this.enter(data, resolve);
 	},
 	onEnter(data, resolve) {
-		this.context('enter', data.id);
+		this.context('enter', data.id.uid);
 		return this.done(data, resolve);
 	},
 	onDone(data, resolve) {
-		this.context('done', data.id);
+		this.context('done', data.id.uid);
 		return this.ready(data, resolve);
 	},
 	onReady(data, resolve) {
-		this.context('ready', data.id);
+		this.context('ready', data.id.uid);
 		const test = this.methods.test(data);		
 		this.prompt(test.text);
 		setTimeout(() => {
@@ -150,11 +150,11 @@ const DevaTest = new Deva({
 		}, 10000);
 	},
 	onFinish(data, resolve) {
-		this.context('finish', data.id);
+		this.context('finish', data.id.uid);
 		return this.complete(data, resolve);
 	},
 	onComplete(data, resolve) {
-		this.context('complete', data.id);
+		this.context('complete', data.id.uid);
 		return resolve(data);
 	},
 	onError(e) {
