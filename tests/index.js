@@ -57,6 +57,24 @@ const DevaTest = new Deva({
 		'devacore:question'(packet) {
 			console.log(`🙋‍♂️️  question: ${packet.text}`);
 		},
+		'devacore:start'(packet) {
+			console.log(`🟢    start: ${packet.text}`);
+		},
+		'devacore:enter'(packet) {
+			console.log(`🚪   enter: ${packet.text}`);
+		},
+		'devacore:done'(packet) {
+			console.log(`☑️     done: ${packet.text}`);
+		},
+		'devacore:ready'(packet) {
+			console.log(`⭐️   ready: ${packet.text}`);
+		},
+		'devacore:finish'(packet) {
+			console.log(`🏁   finish: ${packet.text}`);
+		},
+		'devacore:complete'(packet) {
+			console.log(`✅  complete: ${packet.text}`);
+		},
 		'devacore:answer'(packet) {
 			console.log(`👨‍🔬  answer: ${packet.text}`);
 		},
@@ -73,12 +91,11 @@ const DevaTest = new Deva({
 			console.log(`💥  action: ${packet.text}`);
 		},
 		'devacore:feature'(packet) {
-			console.log(`---`);
 			this.context('feature');
 			console.log(`🍿 feature: ${packet.text}`);
 		},
 		'devacore:context'(packet) {
-			console.log(`🛹 context: ${packet.text}`);
+			console.log(`\n🛹 context: ${packet.text}`);
 		},
 		'devacore:error'(packet) {
 			console.log(`❌ error: ${packet.text}`);
@@ -89,13 +106,8 @@ const DevaTest = new Deva({
 	func: {
 		test(packet) {
 			const text = this._state
-			const id = this.lib.uid();
-			const uid = this.lib.uid(true);
 			const core = this.core();
 			const info = this.info();
-			const date = Date.now();
-			const hashstr = `${id}${uid}${date}`;
-			const proxy = this.proxy(hashstr);
 			const data = [
 				'🧪 TEST RESULTS',
 				`::BEGIN:CORE:${core.id}`,
@@ -117,9 +129,32 @@ const DevaTest = new Deva({
 			return this.func.test(packet);
 		}
 	},
+	onStart(data, resolve) {
+		this.context('start', data.id);
+		return this.enter(data, resolve);
+	},
+	onEnter(data, resolve) {
+		this.context('enter', data.id);
+		return this.done(data, resolve);
+	},
+	onDone(data, resolve) {
+		this.context('done', data.id);
+		return this.ready(data, resolve);
+	},
 	onReady(data, resolve) {
-		this.context('ready');
-		this.prompt(this.methods.test(data).text);
+		this.context('ready', data.id);
+		const test = this.methods.test(data);		
+		this.prompt(test.text);
+		setTimeout(() => {
+			return resolve(data);			
+		}, 10000);
+	},
+	onFinish(data, resolve) {
+		this.context('finish', data.id);
+		return this.complete(data, resolve);
+	},
+	onComplete(data, resolve) {
+		this.context('complete', data.id);
 		return resolve(data);
 	},
 	onError(e) {

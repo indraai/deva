@@ -18,6 +18,8 @@ class Deva {
     this._client = {}; // this will be set on init.
     this._active = false; // the active/birth date.
     this._vector = false; // inherited Vector features.
+    this._veda = false; // inherited Veda features.
+    this._king = false; // inherited King features.
     this._treasury = false; // inherited Vector features.
     this._security = false; // inherited Security features.
     this._guard = false; // inherited Guard features.
@@ -299,6 +301,17 @@ class Deva {
   func: Vector
   params: resolve, reject
   describe:
+    The Vector feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Vector(resolve, reject) {
+    return this.Feature('vector', resolve, reject);
+  }
+
+  /**************
+  func: Veda
+  params: resolve, reject
+  describe:
     The Veda feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
@@ -307,14 +320,14 @@ class Deva {
   }
 
   /**************
-  func: Vector
+  func: King
   params: resolve, reject
   describe:
-    The Vector feature sets the correct variables and necessary rules for the
+    The King feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Vector(resolve, reject) {
-    return this.Feature('vector', resolve, reject);
+  King(resolve, reject) {
+    return this.Feature('king', resolve, reject);
   }
 
   /**************
@@ -836,9 +849,11 @@ class Deva {
         this.state('init');
         return this.Client(client, resolve, reject);
       }).then(() => {
+        return this.Vector(resolve, reject);
+      }).then(() => {
         return this.Veda(resolve, reject);
       }).then(() => {
-        return this.Vector(resolve, reject);
+        return this.King(resolve, reject);
       }).then(() => {
         return this.Treasury(resolve, reject);
       }).then(() => {
@@ -910,15 +925,16 @@ class Deva {
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
 
     this.state('start', data.id);
+    this.talk(config.events.start, data);
     return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
   }
 
   /**************
   func: enter
   params:
-    - msg: hte message from the caller incase need to use in calls
+    - msg: the message from the caller incase need to use in calls
   describe:
-    The ener function will check the actie status of the Deva and set it to
+    The enter function will check the active status of the Deva and set it to
     offline or enter.
 
     If the Deva is offline it will return the offline message.
@@ -942,6 +958,7 @@ class Deva {
     data.sha512 = this.lib.hash(data, 'sha512');
     
     this.state('enter', data.id);
+    this.talk(config.events.enter, data);
     return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
   }
 
@@ -974,6 +991,7 @@ class Deva {
     data.sha512 = this.lib.hash(data, 'sha512');
     
     this.state('done', data.id);
+    this.talk(config.events.done, data);
     return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
   }
 
@@ -1003,6 +1021,7 @@ class Deva {
     data.sha512 = this.lib.hash(data, 'sha512');
     
     this.state('ready', data.id);
+    this.talk(config.events.ready, data);    
     return hasOnReady ? this.onReady(data, resolve) : resolve(data);
   }
   
@@ -1034,6 +1053,7 @@ class Deva {
     data.sha512 = this.lib.hash(data, 'sha512');
     
     this.state('finish', data.id); // set finish state
+    this.talk(config.events.finish, data);    
     return hasOnFinish ? this.onFinish(data, resolve) : this.complete(data, resolve);
   }
 
@@ -1063,6 +1083,7 @@ class Deva {
     data.sha512 = this.lib.hash(data, 'sha512');
     
     this.state('complete', data.id);
+    this.talk(config.events.complete, data);
     return hasOnComplete ? this.onComplete(data, resolve) : resolve(data);
   }
 
@@ -1103,6 +1124,7 @@ class Deva {
     // has stop function then set hasOnStop variable
     // if: has on stop then run on stop function or return exit function.
     this.state('stop', id); // set the state to stop
+    this.talk(config.events.stop, data);    
     return hasOnStop ? this.onStop(data) : this.exit()
   }
 
@@ -1138,6 +1160,8 @@ class Deva {
     data.sha512 = this.lib.hash(data, 'sha512');
 
     this.state('exit', id); // set the state to stop
+    this.talk(config.events.exit, data);    
+    
     // clear memory
     this._active = false;
     this._client = false;
@@ -1513,6 +1537,16 @@ class Deva {
   ***************/
   veda() {
     return this._getFeature('veda', this._vector);
+  }
+
+  /**************
+  func: king
+  params: none
+  describe: basic king features available in a Deva.
+  usage: this.king()
+  ***************/
+  king() {
+    return this._getFeature('king', this._vector);
   }
 
   /**************

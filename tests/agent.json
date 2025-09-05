@@ -30,6 +30,12 @@
       "gender": "M"
     },
     "features": {
+      "vector": {
+        "label": "🛤️VECTOR",
+        "name": "@VECTOR",
+        "tag": "#VECTOR",
+        "loc": "$VECTOR"
+      },
       "security": {
         "label": "🚨SECURITY",
         "name": "@SECURITY",
@@ -88,11 +94,16 @@
     "vars": {
       "hello": "Hellow World",
       "context": {
-        "ready": "🤝 Everything is ready!",
+        "start": "🏎️ Start",
+        "enter": "🚪️ Enter",
+        "done": "✅ Done",
+        "ready": "👍 Ready",
+        "finish": "🏁 Finish",
+        "complete": "🤝 Complete",
         "test": "💿 Test Data",
         "prompt": "💻 Prompt",
-        "feature": "🍿 Accessing Feature",
-        "zone": "🗻 Accessing Zone"
+        "feature": "🍿 Feature",
+        "zone": "🗻 Zone"
       }
     }
   }
