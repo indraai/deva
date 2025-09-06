@@ -91,7 +91,7 @@ const DevaTest = new Deva({
 			console.log(`💥  action: ${packet.text}`);
 		},
 		'devacore:feature'(packet) {
-			this.context('feature');
+			this.context('feature', `${packet.value}:${packet.id.uid}`);
 			console.log(`🍿 feature: ${packet.text}`);
 		},
 		'devacore:context'(packet) {

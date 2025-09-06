@@ -278,7 +278,7 @@ class Deva {
         const _fe = `_${feature}`;
         const {id, profile, features} = _cl; // make a copy the clinet data.
         const data = features[feature]; // make a copy the clinet data.
-        this.state('set', `feature:${id}`);
+        this.state('set', `${feature}:${_id.uid}`);
         this[_fe] = { // set this feature with data
           id: _id, // uid of the feature
           client_id: id, // client id for reference
@@ -340,6 +340,17 @@ class Deva {
   ***************/
   King(resolve, reject) {
     return this.Feature('king', resolve, reject);
+  }
+
+  /**************
+  func: Owner
+  params: resolve, reject
+  describe:
+    The Owner feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Owner(resolve, reject) {
+    return this.Feature('owner', resolve, reject);
   }
 
   /**************
@@ -685,14 +696,14 @@ class Deva {
     const client = this.client();
     // check if method exists and is of type function
     const {method,params} = packet.q.meta;
-    this.action('answer', `${method}:${id}`);
+    this.action('answer', `${method}:${id.uid}`);
         
-    this.state('try', `answer:${method}:${id}`);
+    this.state('try', `answer:${method}:${id.uid}`);
     try {
       const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
       if (!isMethod) return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails      
 
-      this.action('method', `answer:${method}:${id}`);
+      this.action('method', `answer:${method}:${id.uid}`);
       this.methods[method](packet).then(result => {
         // check the result for the text, html, and data object.          // this is for when answers are returned from nested Devas.
         const text = typeof result === 'object' ? result.text : result;
@@ -700,7 +711,7 @@ class Deva {
         // if the data passed is NOT an object it will FALSE
         const data = typeof result === 'object' ? result.data : false;
       
-        this.state('set', `answer:${method}:packet_answer:${id}`);
+        this.state('set', `answer:${method}:packet_answer:${id.uid}`);
         const packet_answer = { // setup the packet.a container
           id,
           agent, // set the agent who answered the question
@@ -723,14 +734,14 @@ class Deva {
         packet.a = packet_answer; // set the packet.a to the packet_answer
         this.talk(config.events.answer, this.lib.copy(packet)); // global talk event
       
-        this.state('return', `answer:${method}:${id}`); // set the state resolve answer
+        this.state('return', `answer:${method}:${id.uid}`); // set the state resolve answer
         return this.finish(packet, resolve); // resolve the packet to the caller.
       }).catch(err => { // catch any errors in the method
-        this.state('catch', `answer:${method}:${id}`); // set the state reject answer
+        this.state('catch', `answer:${method}:${id.uid}`); // set the state reject answer
         return this.error(err, packet, reject); // return this.error with err, packet, reject
       });
     } catch (e) {
-      this.state('catch', `answer:${method}:${id}`);
+      this.state('catch', `answer:${method}:${id.uid}`);
       return this.error(e, packet, reject);
     }
   }
@@ -868,6 +879,8 @@ class Deva {
         return this.God(resolve, reject);
       }).then(() => {
         return this.King(resolve, reject);
+      }).then(() => {
+        return this.Owner(resolve, reject);
       }).then(() => {
         return this.Treasury(resolve, reject);
       }).then(() => {
@@ -1252,7 +1265,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
 
-    this.state('return', `states:${id}`);
+    this.state('return', `states:${id.uid}`);
     return data;
   }
 
@@ -1288,7 +1301,7 @@ class Deva {
       this.talk(config.events.zone, data);
       return data;
     } catch (e) {
-      this.state('catch', `zone:${value}:${id}`);
+      this.state('catch', `zone:${value}:${id.uid}`);
       return this.error(e, value);
     }
   }
@@ -1300,8 +1313,8 @@ class Deva {
   ***************/
   zones() {
     const id = this.lib.uid();
-    this.action('zones', id);
-    this.state('return', `zones:${id}`);
+    this.action('zones', id.uid);
+    this.state('return', `zones:${id.uid}`);
     
     const data = {
       id, // set the uuid of the data
@@ -1355,7 +1368,7 @@ class Deva {
       this.talk(config.events.action, data); // talk the core action event
       return data;
     } catch (e) { // catch any errors that occur
-      this.state('catch', `action:${value}:${id}`);
+      this.state('catch', `action:${value}:${id.uid}`);
       return this.error(e); // return error on error catch
     }
   }
@@ -1367,7 +1380,7 @@ class Deva {
   ***************/
   actions() {
     const id = this.lib.uid();
-    this.action('actions', id);
+    this.action('actions', id.uid);
     const data = {
       id, // set the id with a uuid
       agent: this.agent(), // set the agent value
@@ -1381,7 +1394,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
 
-    this.state('return', `actions:${id}`);
+    this.state('return', `actions:${id.uid}`);
     return data;
   }
 
@@ -1416,7 +1429,7 @@ class Deva {
       this.talk(config.events.feature, data); // talk the feature event with data
       return data;
     } catch (e) { // catch any errors
-      this.state('catch', `feature:${value}:${id}`);
+      this.state('catch', `feature:${value}:${id.uid}`);
       return this.error(e); // retun this.error when an error is caught.
     }
   }
@@ -1429,7 +1442,7 @@ class Deva {
   features() {
     if (!this._active) return this._messages.offline; // check the active status
     const id = this.lib.uid();
-    this.action('features', id);
+    this.action('features', id.uid);
     const data = {
       id, // set the object id
       agent: this.agent(), // set the agent value.
@@ -1443,7 +1456,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
 
-    this.state('return', `features:${id}`);
+    this.state('return', `features:${id.uid}`);
     return data;
   }
 
@@ -1480,7 +1493,7 @@ class Deva {
       this.talk(config.events.context, data);
       return data;
     } catch (e) {
-      this.state('catch', `context:${value}:${id.guid}`);
+      this.state('catch', `context:${value}:${id.uid}`);
       return this.error(e, value);
     }
   }
@@ -1503,7 +1516,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
 
-    this.state('return', `contexts:${id}`);
+    this.state('return', `contexts:${id.uid}`);
     return data;
   }
 
@@ -1544,36 +1557,6 @@ class Deva {
 
   // FEATURE FUNCTIONS
   /**************
-  func: veda
-  params: none
-  describe: basic veda features available in a Deva.
-  usage: this.veda()
-  ***************/
-  veda() {
-    return this._getFeature('veda', this._vector);
-  }
-
-  /**************
-  func: god
-  params: none
-  describe: basic god features available in a Deva.
-  usage: this.god()
-  ***************/
-  god() {
-    return this._getFeature('god', this._vector);
-  }
-
-  /**************
-  func: king
-  params: none
-  describe: basic king features available in a Deva.
-  usage: this.king()
-  ***************/
-  king() {
-    return this._getFeature('king', this._vector);
-  }
-
-  /**************
   func: vector
   params: none
   describe: basic vector features available in a Deva.
@@ -1581,6 +1564,46 @@ class Deva {
   ***************/
   vector() {
     return this._getFeature('vector', this._vector);
+  }
+
+/**************
+  func: veda
+  params: none
+  describe: basic veda features available in a Deva.
+  usage: this.veda()
+  ***************/
+  veda() {
+    return this._getFeature('veda', this._veda);
+  }
+  
+  /**************
+  func: god
+  params: none
+  describe: basic god features available in a Deva.
+  usage: this.god()
+  ***************/
+  god() {
+    return this._getFeature('god', this._god);
+  }
+  
+  /**************
+  func: king
+  params: none
+  describe: basic king features available in a Deva.
+  usage: this.king()
+  ***************/
+  king() {
+    return this._getFeature('king', this._king);
+  }
+
+  /**************
+  func: owner
+  params: none
+  describe: basic owner features available in a Deva.
+  usage: this.owner()
+  ***************/
+  owner() {
+    return this._getFeature('owner', this._king);
   }
 
   /**************
@@ -1646,7 +1669,7 @@ class Deva {
   /**************
   func: proxy
   params: none
-  describe: basic proxy features available in a Deva.
+  describe: basic proxy features availcoable in a Deva.
   usage: this.proxy()
   ***************/
   proxy() {
@@ -1857,7 +1880,7 @@ class Deva {
     // format the date since active for output.
     const dateFormat = this.lib.formatDate(this._active, 'long', true);
     // create the text msg string
-    this.state('return', `status:${id}`);
+    this.state('return', `status:${id.uid}`);
     return `${this._agent.profile.name} active since ${dateFormat}`;                           // return final text string
   }
   
@@ -1878,10 +1901,10 @@ class Deva {
       this.zone('help', id);
       if (!this._active) return resolve(this._messages.offline);
 
-      this.feature('help', id);
-      this.action('help', id);
-      this.state('help', id);
-      this.context('help', id);
+      this.feature('help', id.uid);
+      this.action('help', id.uid);
+      this.state('help', id.uid);
+      this.context('help', id.uid);
       const params = msg.split(' '); // split the msg into an array by spaces.
 
       const splitText = params[0].split(':');
@@ -1891,12 +1914,12 @@ class Deva {
       const helpPath = this.lib.path.join(help_dir, 'help', `${helpFile}.feecting`);
 
       try {
-        this.state('try', `help:${id}`);
+        this.state('try', `help:${id.uid}`);
 
         // check if help file exists first and resolve if no file
         const helpExists = this.lib.fs.existsSync(helpPath); // check if help file exists
         if (!helpExists) {
-          this.state('return', `${this._messages.help_not_found}:${id}`);
+          this.state('return', `${this._messages.help_not_found}:${id.uid}`);
           return resolve(this._messages.help_not_found);
         }
         
@@ -1904,7 +1927,7 @@ class Deva {
         const helpFile = this.lib.fs.readFileSync(helpPath, 'utf8');
         const helpPart = helpFile.split(`::BEGIN:${part}`);
         if (!helpPart[1]) {
-          this.state('return', `${this._messages.help_not_found}:${id}`);
+          this.state('return', `${this._messages.help_not_found}:${id.uid}`);
           resolve(this._messages.help_not_found);
         }
         
@@ -1912,11 +1935,11 @@ class Deva {
         helpDoc = helpFile.split(`::BEGIN:${part}`)[1].split(`::END:${part}`)[0];
       } 
       catch(e) {
-        this.state('catch', `help:${id}`);
+        this.state('catch', `help:${id.uid}`);
         return this.error(e, msg, reject);
       }
       finally {
-        this.state('return', `help:${id}`);
+        this.state('return', `help:${id.uid}`);
         return resolve(helpDoc);
       }
     });
@@ -1934,11 +1957,11 @@ class Deva {
   ***************/
   error(err,packet,reject=false) {
     const id = this.lib.uid();
-    this.zone('error', id);
+    this.zone('error', id.uid);
     const agent = this.agent();
     const client = this.client();
 
-    this.action('error', id);
+    this.action('error', id.uid);
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
 
     const data = {
@@ -1961,9 +1984,9 @@ class Deva {
 
     this.talk(config.events.error, this.lib.copy(data));
 
-    this.state('return', `error:${id}`);
-    this.state('error', id);
-    this.context('error', id);
+    this.state('return', `error:${id.uid}`);
+    this.state('error', id.uid);
+    this.context('error', id.uid);
     if (hasOnError) return this.onError(err, packet, reject);
     else return reject ? reject(err) : Promise.reject(err);
   }

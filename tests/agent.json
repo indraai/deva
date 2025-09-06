@@ -4,10 +4,10 @@
   "copyright": "Copyright (c)2025 Quinn Michaels. All rights reserved.",
   "DATA": {
     "id": 5380514963421,
-    "key": "deva",
+    "key": "test",
     "prompt": {
       "emoji": "🍏",
-      "text": "deva",
+      "text": "test",
       "colors": {
         "label": {
           "R": 0,
@@ -22,77 +22,15 @@
       }
     },
     "profile": {
-      "name": "Deva",
-      "describe": "The Indra interface into deva.world.",
+      "name": "Test Deva",
+      "describe": "The Test Deva.",
       "emoji": "/public/devas/deva/emoji.png",
       "avatar": "/public/devas/deva/avatar.png",
       "background": "/public/devas/deva/background.png",
       "gender": "M"
     },
-    "features": {
-      "vector": {
-        "label": "🛤️VECTOR",
-        "name": "@VECTOR",
-        "tag": "#VECTOR",
-        "loc": "$VECTOR"
-      },
-      "security": {
-        "label": "🚨SECURITY",
-        "name": "@SECURITY",
-        "tag": "#SECURITY",
-        "loc": "$SECURITY"
-      },
-      "support": {
-        "label": "🆘SUPPORT",
-        "name": "@SUPPORT",
-        "tag": "#SUPPORT",
-        "loc": "$SUPPORT"
-      },
-      "services": {
-        "label": "📞SERVICES",
-        "name": "@SERVICES",
-        "tag": "#SERVICES",
-        "loc": "$SERVICES"
-      },
-      "systems": {
-        "label": "🔧SYSTEMS",
-        "name": "@SYSTEMS",
-        "tag": "#SYSTEMS",
-        "loc": "$SYSTEMS"
-      },
-      "networks": {
-        "label": "📡NETWORKS",
-        "name": "@NETWORKS",
-        "tag": "#NETWORKS",
-        "loc": "$NETWORKS"
-      },
-      "legal": {
-        "label": "🏛️LEGAL",
-        "name": "@LEGAL",
-        "tag": "#LEGAL",
-        "loc": "$LEGAL"
-      },
-      "justice": {
-        "label": "⚖️JUSTICE",
-        "name": "@JUSTICE",
-        "tag": "#JUSTICE",
-        "loc": "$JUSTICE"
-      },
-      "defense": {
-        "label": "🪖DEFENSE",
-        "name": "@DEFENSE",
-        "tag": "#DEFENSE",
-        "loc": "$DEFENSE"
-      },
-      "defense": {
-        "label": "💂GUARD",
-        "name": "@GUARD",
-        "tag": "#GUARD",
-        "loc": "$GUARD"
-      }
-    },
     "vars": {
-      "hello": "Hellow World",
+      "hello": "Hello World",
       "context": {
         "start": "🏎️ Start",
         "enter": "🚪️ Enter",
