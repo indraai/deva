@@ -50,3 +50,4 @@ This Agreement constitutes the entire understanding between you and the Owner co
 By using the Software, you acknowledge that you have read, understood, and agree to be bound by this Agreement.
 
 
+©2025 Quinn A Michaels; All rights reserved.

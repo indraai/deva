@@ -1,5 +1,7 @@
-// Copyright (c)2025 Quinn Michaels; All Rights Reserved; Legal Signature Required.
-// Distributed under the Restricted software license, see the accompanying file LICENSE.md
+// ©2025 Quinn A Michaels; All rights reserved. 
+// Legal Signature Required For Lawful Use.
+// Distributed under the Vedic License Agreement LICENSE.md
+
 import {EventEmitter} from 'node:events';
 import {randomUUID} from 'crypto';
 import lib from './lib/index.js';
@@ -80,6 +82,7 @@ class Deva {
   describe:
     The assign bind function will bind the translate functions and parse functions
     of the agent and bind their functionality to the state machine.
+  
   ***************/
   _assignBind() {
     return new Promise((resolve, reject) => {

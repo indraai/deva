@@ -1,7 +1,8 @@
+// ©2025 Quinn A Michaels; All rights reserved. 
+// Legal Signature Required For Lawful Use.
+// Distributed under the Vedic License Agreement LICENSE.md
+
 "use strict"
-// Copyright (c)2025 Quinn Michaels; All rights reserved.
-// Private License
-// file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
 import Client from './client.json' with {type:'json'};
 const client = Client.DATA;
 import Agent from './agent.json' with {type:'json'};
