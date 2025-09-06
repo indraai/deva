@@ -34,6 +34,11 @@
       "currency": "USD"
     },
     "features": {
+      "data": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "vector": {
         "concerns": [],
         "global": [],

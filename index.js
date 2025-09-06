@@ -17,6 +17,7 @@ class Deva {
     this._agent = opts.agent || false; // Agent profile object
     this._client = {}; // this will be set on init.
     this._active = false; // the active/birth date.
+    this._data = false; // inherited Vector features.
     this._vector = false; // inherited Vector features.
     this._veda = false; // inherited Veda features.
     this._god = false; // inherited God features.
@@ -296,6 +297,17 @@ class Deva {
       this.state('catch', `${feature}:${_id.uid}`);
       return this.error(e, feature, reject); // run error handling if an error is caught
     }
+  }
+
+  /**************
+  func: Data
+  params: resolve, reject
+  describe:
+    The Data feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Data(resolve, reject) {
+    return this.Feature('data', resolve, reject);
   }
 
   /**************
@@ -872,6 +884,8 @@ class Deva {
         this.state('init');
         return this.Client(client, resolve, reject);
       }).then(() => {
+        return this.Data(resolve, reject);
+      }).then(() => {
         return this.Vector(resolve, reject);
       }).then(() => {
         return this.Veda(resolve, reject);
@@ -1193,6 +1207,7 @@ class Deva {
     this._active = false;
     this._client = false;
     this._vector = false;
+    this._data = false;
     this._treasury = false;
     this._security = false;
     this._guard = false;
@@ -1556,6 +1571,16 @@ class Deva {
   }
 
   // FEATURE FUNCTIONS
+  /**************
+  func: data
+  params: none
+  describe: basic data features available in a Deva.
+  usage: this.data()
+  ***************/
+  data() {
+    return this._getFeature('data', this._data);
+  }
+
   /**************
   func: vector
   params: none
