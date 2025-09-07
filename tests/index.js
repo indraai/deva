@@ -146,9 +146,7 @@ const DevaTest = new Deva({
 		this.context('ready', data.id.uid);
 		const test = this.methods.test(data);		
 		this.prompt(test.text);
-		setTimeout(() => {
-			return resolve(data);			
-		}, 10000);
+		return resolve(data);			
 	},
 	onFinish(data, resolve) {
 		this.context('finish', data.id.uid);
