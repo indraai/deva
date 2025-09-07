@@ -98,7 +98,7 @@ class Deva {
         });
       }
       catch (e) {
-        return this.error(e, false, reject); // trigger the this.error for errors
+        return this.err(e, false, reject); // trigger the this.err for errors
       }
       finally {
         return resolve(); // when the configuration is complete then return an empty resolve.
@@ -133,7 +133,7 @@ class Deva {
         }
       }
       catch (e) {
-        return this.error(e, false, reject); // pass errors to this.error
+        return this.err(e, false, reject); // pass errors to this.err
       }
       finally {
         return resolve(); // resolve the function after everything is done.
@@ -161,7 +161,7 @@ class Deva {
         return resolve();
       }
       catch (e) {
-        return this.error(e, false, reject);
+        return this.err(e, false, reject);
       }
     });
   }
@@ -225,7 +225,7 @@ class Deva {
       return data; // return the security feature
     } catch (e) {
       this.state('catch', key);
-      return this.error(e);
+      return this.err(e);
     }    
   }
 
@@ -261,7 +261,7 @@ class Deva {
       this.state('resolve', 'client');
       return resolve();
     } catch (e) {
-      return this.error(e, false, reject);
+      return this.err(e, false, reject);
     }
   }
 
@@ -300,7 +300,7 @@ class Deva {
       }
     } catch (e) {
       this.state('catch', `${feature}:${_id.uid}`);
-      return this.error(e, feature, reject); // run error handling if an error is caught
+      return this.err(e, feature, reject); // run error handling if an error is caught
     }
   }
 
@@ -568,7 +568,7 @@ class Deva {
       return resolve(this.client()); // resolve an empty pr
     } catch (e) {
       this.state('catch', 'Done');
-      return this.error(e, false, reject);
+      return this.err(e, false, reject);
     }
   }
 
@@ -723,7 +723,7 @@ class Deva {
       }
       catch(e) {
         this.state('catch', 'question');
-        return this.error(e); // if a overall error happens this witll call this.error
+        return this.err(e); // if a overall error happens this witll call this.err
       }
     });
   }
@@ -788,11 +788,11 @@ class Deva {
         return this.finish(packet, resolve); // resolve the packet to the caller.
       }).catch(err => { // catch any errors in the method
         this.state('catch', `answer:${method}:${id.uid}`); // set the state reject answer
-        return this.error(err, packet, reject); // return this.error with err, packet, reject
+        return this.err(err, packet, reject); // return this.err with err, packet, reject
       });
     } catch (e) {
       this.state('catch', `answer:${method}:${id.uid}`);
-      return this.error(e, packet, reject);
+      return this.err(e, packet, reject);
     }
   }
 
@@ -864,13 +864,13 @@ class Deva {
       }).catch(err => {
         this.talk(`${agent.key}:ask:${packet.id.uid}`, {error:err});
         this.state('catch', `ask:${method}:${packet.id.uid}`);
-        return this.error(err, packet);
+        return this.err(err, packet);
       })
     }
     catch (e) {
       this.state('catch', `ask:${method}:${packet.id.uid}`);
       this.talk(`${agent.key}:ask:${packet.id.uid}`, {error:e});
-      return this.error(e, packet)
+      return this.err(e, packet)
     }
     // now when we ask the meta params[0] should be the method
   }
@@ -975,7 +975,7 @@ class Deva {
         return hasOnInit ? this.onInit(data, resolve) : this.start(data, resolve);
       }).catch(err => {
         this.state('catch', `init:${data.id.uid}`);
-        return this.error(err, client, reject);
+        return this.err(err, client, reject);
       });
     });
   }
@@ -1301,7 +1301,7 @@ class Deva {
       this.talk(config.events.state, data); // broadcasat the state event
       return data;
     } catch (e) { // catch any errors
-      return this.error(e); // return if an error happens
+      return this.err(e); // return if an error happens
     }
   }
 
@@ -1361,7 +1361,7 @@ class Deva {
       return data;
     } catch (e) {
       this.state('catch', `zone:${value}:${id.uid}`);
-      return this.error(e, value);
+      return this.err(e, value);
     }
   }
 
@@ -1428,7 +1428,7 @@ class Deva {
       return data;
     } catch (e) { // catch any errors that occur
       this.state('catch', `action:${value}:${id.uid}`);
-      return this.error(e); // return error on error catch
+      return this.err(e); // return error on error catch
     }
   }
 
@@ -1489,7 +1489,7 @@ class Deva {
       return data;
     } catch (e) { // catch any errors
       this.state('catch', `feature:${value}:${id.uid}`);
-      return this.error(e); // retun this.error when an error is caught.
+      return this.err(e); // retun this.err when an error is caught.
     }
   }
 
@@ -1553,7 +1553,7 @@ class Deva {
       return data;
     } catch (e) {
       this.state('catch', `context:${value}:${id.uid}`);
-      return this.error(e, value);
+      return this.err(e, value);
     }
   }
 
@@ -1637,51 +1637,14 @@ class Deva {
 
   /**************
   func: error
-  params:
-    - err: The error to process
-    - data: Any additional data associated with the error
-    - reject: An associated promise reject if the caller requires.
-  describe:
-    The error function provides the consistent error manage of the system.
-  usage: this.error(err, data, reject);
+  params: none
+  describe: basic error features available in a Deva.
+  usage: this.error()
   ***************/
-  error(err,packet,reject=false) {
-    const id = this.lib.uid();
-    this.zone('error', id.uid);
-    this.feature('error', id.uid);
-    
-    const agent = this.agent();
-    const client = this.client();
-        
-    this.action('error', id.uid);
-    const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
-  
-    const data = {
-      id,
-      key: 'error',
-      value: agent.key,
-      agent,
-      client,
-      error: {
-        name: err.name,
-        message: err.message,
-        stack: err.stack,        
-      },
-      packet,
-      created: Date.now(),
-    }
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
-  
-    this.talk(config.events.error, this.lib.copy(data));
-  
-    this.state('return', `error:${id.uid}`);
-    this.state('error', id.uid);
-    this.context('error', id.uid);
-    if (hasOnError) return this.onError(err, packet, reject);
-    else return reject ? reject(err) : Promise.reject(err);
+  error() {
+    return this._getFeature('error', this._error);
   }
+
 
   /**************
   func: vector
@@ -1895,7 +1858,7 @@ class Deva {
         this.state('unload', key)
         return resolve(`${this._states.unload}:${key}`);
       } catch (e) {
-        return this.error(e, this.devas[key], reject)
+        return this.err(e, this.devas[key], reject)
       }
     });
   }
@@ -2054,7 +2017,7 @@ class Deva {
       } 
       catch(e) {
         this.state('catch', `help:${id.uid}`);
-        return this.error(e, msg, reject);
+        return this.err(e, msg, reject);
       }
       finally {
         this.state('return', `help:${id.uid}`);
@@ -2062,5 +2025,53 @@ class Deva {
       }
     });
   }
+  
+  /**************
+  func: err
+  params:
+    - err: The error to process
+    - data: Any additional data associated with the error
+    - reject: An associated promise reject if the caller requires.
+  describe:
+    The err function provides the consistent error manage of the system.
+  usage: this.err(err, data, reject);
+  ***************/
+  err(err,packet,reject=false) {
+    const id = this.lib.uid();
+    this.zone('error', id.uid);
+    this.feature('error', id.uid);
+    
+    const agent = this.agent();
+    const client = this.client();
+        
+    this.action('error', id.uid);
+    const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
+  
+    const data = {
+      id,
+      key: 'error',
+      value: agent.key,
+      agent,
+      client,
+      error: {
+        name: err.name,
+        message: err.message,
+        stack: err.stack,        
+      },
+      packet,
+      created: Date.now(),
+    }
+    data.md5 = this.lib.hash(data);
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
+  
+    this.talk(config.events.error, this.lib.copy(data));
+  
+    this.state('return', `error:${id.uid}`);
+    this.state('error', id.uid);
+    this.context('error', id.uid);
+    if (hasOnError) return this.onError(err, packet, reject);
+    else return reject ? reject(err) : Promise.reject(err);
+  }  
 }
 export default Deva;
