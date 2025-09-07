@@ -1645,6 +1645,26 @@ class Deva {
     return this._getFeature('error', this._error);
   }
 
+  /**************
+  func: log
+  params: none
+  describe: basic log features available in a Deva.
+  usage: this.log()
+  ***************/
+  log() {
+    return this._getFeature('log', this._error);
+  }
+
+  /**************
+  func: report
+  params: none
+  describe: basic report features available in a Deva.
+  usage: this.report()
+  ***************/
+  report() {
+    return this._getFeature('report', this._error);
+  }
+
 
   /**************
   func: vector
