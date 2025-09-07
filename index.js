@@ -19,9 +19,12 @@ class Deva {
     this._agent = opts.agent || false; // Agent profile object
     this._client = {}; // this will be set on init.
     this._active = false; // the active/birth date.
-    this._data = false; // inherited Vector features.
-    this._vector = false; // inherited Vector features.
     this._veda = false; // inherited Veda features.
+    this._data = false; // inherited Data features.
+    this._error = false; // inherited Error features.
+    this._log = false; // inherited Log features.
+    this._report = false; // inherited Report features.
+    this._vector = false; // inherited Vector features.
     this._god = false; // inherited God features.
     this._king = false; // inherited King features.
     this._treasury = false; // inherited Vector features.
@@ -72,7 +75,6 @@ class Deva {
 
     this._context = opts.context || false; // set the local context
 
-    this._message = config.message; // current message of agent.
     this._messages = config.messages; // set the messages from config
   }
 
@@ -303,6 +305,17 @@ class Deva {
   }
 
   /**************
+  func: Veda
+  params: resolve, reject
+  describe:
+    The Veda feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Veda(resolve, reject) {
+    return this.Feature('veda', resolve, reject);
+  }
+
+  /**************
   func: Data
   params: resolve, reject
   describe:
@@ -314,6 +327,39 @@ class Deva {
   }
 
   /**************
+  func: Error
+  params: resolve, reject
+  describe:
+    The Error feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Error(resolve, reject) {
+    return this.Feature('error', resolve, reject);
+  }
+
+  /**************
+  func: Log
+  params: resolve, reject
+  describe:
+    The Log feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Log(resolve, reject) {
+    return this.Feature('log', resolve, reject);
+  }
+
+  /**************
+  func: Report
+  params: resolve, reject
+  describe:
+    The Report feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Report(resolve, reject) {
+    return this.Feature('report', resolve, reject);
+  }
+
+  /**************
   func: Vector
   params: resolve, reject
   describe:
@@ -322,17 +368,6 @@ class Deva {
   ***************/
   Vector(resolve, reject) {
     return this.Feature('vector', resolve, reject);
-  }
-
-  /**************
-  func: Veda
-  params: resolve, reject
-  describe:
-    The Veda feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Veda(resolve, reject) {
-    return this.Feature('veda', resolve, reject);
   }
 
   /**************
@@ -887,11 +922,17 @@ class Deva {
         this.state('init');
         return this.Client(client, resolve, reject);
       }).then(() => {
+        return this.Veda(resolve, reject);
+      }).then(() => {
         return this.Data(resolve, reject);
       }).then(() => {
-        return this.Vector(resolve, reject);
+        return this.Error(resolve, reject);
       }).then(() => {
-        return this.Veda(resolve, reject);
+        return this.Log(resolve, reject);
+      }).then(() => {
+        return this.Report(resolve, reject);
+      }).then(() => {
+        return this.Vector(resolve, reject);
       }).then(() => {
         return this.God(resolve, reject);
       }).then(() => {
@@ -1575,6 +1616,16 @@ class Deva {
 
   // FEATURE FUNCTIONS
   /**************
+  func: veda
+  params: none
+  describe: basic veda features available in a Deva.
+  usage: this.veda()
+  ***************/
+  veda() {
+    return this._getFeature('veda', this._veda);
+  }
+
+  /**************
   func: data
   params: none
   describe: basic data features available in a Deva.
@@ -1582,6 +1633,54 @@ class Deva {
   ***************/
   data() {
     return this._getFeature('data', this._data);
+  }
+
+  /**************
+  func: error
+  params:
+    - err: The error to process
+    - data: Any additional data associated with the error
+    - reject: An associated promise reject if the caller requires.
+  describe:
+    The error function provides the consistent error manage of the system.
+  usage: this.error(err, data, reject);
+  ***************/
+  error(err,packet,reject=false) {
+    const id = this.lib.uid();
+    this.zone('error', id.uid);
+    this.feature('error', id.uid);
+    
+    const agent = this.agent();
+    const client = this.client();
+        
+    this.action('error', id.uid);
+    const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
+  
+    const data = {
+      id,
+      key: 'error',
+      value: agent.key,
+      agent,
+      client,
+      error: {
+        name: err.name,
+        message: err.message,
+        stack: err.stack,        
+      },
+      packet,
+      created: Date.now(),
+    }
+    data.md5 = this.lib.hash(data);
+    data.sha256 = this.lib.hash(data, 'sha256');
+    data.sha512 = this.lib.hash(data, 'sha512');
+  
+    this.talk(config.events.error, this.lib.copy(data));
+  
+    this.state('return', `error:${id.uid}`);
+    this.state('error', id.uid);
+    this.context('error', id.uid);
+    if (hasOnError) return this.onError(err, packet, reject);
+    else return reject ? reject(err) : Promise.reject(err);
   }
 
   /**************
@@ -1594,15 +1693,6 @@ class Deva {
     return this._getFeature('vector', this._vector);
   }
 
-/**************
-  func: veda
-  params: none
-  describe: basic veda features available in a Deva.
-  usage: this.veda()
-  ***************/
-  veda() {
-    return this._getFeature('veda', this._veda);
-  }
   
   /**************
   func: god
@@ -1972,52 +2062,5 @@ class Deva {
       }
     });
   }
-
-  /**************
-  func: error
-  params:
-    - err: The error to process
-    - data: Any additional data associated with the error
-    - reject: An associated promise reject if the caller requires.
-  describe:
-    The error function provides the consistent error manage of the system.
-  usage: this.error(err, data, reject);
-  ***************/
-  error(err,packet,reject=false) {
-    const id = this.lib.uid();
-    this.zone('error', id.uid);
-    const agent = this.agent();
-    const client = this.client();
-
-    this.action('error', id.uid);
-    const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
-
-    const data = {
-      id,
-      key: 'error',
-      value: agent.key,
-      agent,
-      client,
-      error: {
-        name: err.name,
-        message: err.message,
-        stack: err.stack,        
-      },
-      packet,
-      created: Date.now(),
-    }
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
-
-    this.talk(config.events.error, this.lib.copy(data));
-
-    this.state('return', `error:${id.uid}`);
-    this.state('error', id.uid);
-    this.context('error', id.uid);
-    if (hasOnError) return this.onError(err, packet, reject);
-    else return reject ? reject(err) : Promise.reject(err);
-  }
-
 }
 export default Deva;

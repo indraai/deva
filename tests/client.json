@@ -34,17 +34,32 @@
       "currency": "USD"
     },
     "features": {
+      "veda": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "data": {
         "concerns": [],
         "global": [],
         "devas": {}
       },
-      "vector": {
+      "error": {
         "concerns": [],
         "global": [],
         "devas": {}
       },
-      "veda": {
+      "log": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "report": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "vector": {
         "concerns": [],
         "global": [],
         "devas": {}
