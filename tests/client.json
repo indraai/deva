@@ -34,6 +34,11 @@
       "currency": "USD"
     },
     "features": {
+      "indra": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "veda": {
         "concerns": [],
         "global": [],
@@ -60,11 +65,6 @@
         "devas": {}
       },
       "vector": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "god": {
         "concerns": [],
         "global": [],
         "devas": {}

@@ -29,13 +29,13 @@ class Deva {
     this._agent = opts.agent || false; // Agent profile object
     this._client = {}; // this will be set on init.
     this._active = false; // the active/birth date.
+    this._indra = false; // inherited Indra features.
     this._veda = false; // inherited Veda features.
     this._data = false; // inherited Data features.
     this._error = false; // inherited Error features.
     this._log = false; // inherited Log features.
     this._report = false; // inherited Report features.
     this._vector = false; // inherited Vector features.
-    this._god = false; // inherited God features.
     this._king = false; // inherited King features.
     this._treasury = false; // inherited Vector features.
     this._security = false; // inherited Security features.
@@ -229,6 +229,8 @@ class Deva {
     if (!this._active) return this._messages.offline; // check the active status
     this.zone(key);
     this.feature(key); // set the security state
+    this.action(key);
+    this.state(key);
     try {
       const data = this.lib.copy(value);
       this.state('return', key); // set the security state
@@ -294,7 +296,7 @@ class Deva {
         const _fe = `_${feature}`;
         const {id, profile, features} = _cl; // make a copy the clinet data.
         const data = features[feature]; // make a copy the clinet data.
-        this.state('set', `${feature}:${_id.uid}`);
+        this.state(feature, _id.uid);
         this[_fe] = { // set this feature with data
           id: _id, // uid of the feature
           client_id: id, // client id for reference
@@ -312,6 +314,18 @@ class Deva {
       this.state('catch', `${feature}:${_id.uid}`);
       return this.err(e, feature, reject); // run error handling if an error is caught
     }
+  }
+
+
+  /**************
+  func: Indra
+  params: resolve, reject
+  describe:
+    The Indra feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Indra(resolve, reject) {
+    return this.Feature('indra', resolve, reject);
   }
 
   /**************
@@ -378,17 +392,6 @@ class Deva {
   ***************/
   Vector(resolve, reject) {
     return this.Feature('vector', resolve, reject);
-  }
-
-  /**************
-  func: God
-  params: resolve, reject
-  describe:
-    The God feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  God(resolve, reject) {
-    return this.Feature('god', resolve, reject);
   }
 
   /**************
@@ -932,6 +935,8 @@ class Deva {
         this.state('init');
         return this.Client(client, resolve, reject);
       }).then(() => {
+        return this.Indra(resolve, reject);
+      }).then(() => {
         return this.Veda(resolve, reject);
       }).then(() => {
         return this.Data(resolve, reject);
@@ -943,8 +948,6 @@ class Deva {
         return this.Report(resolve, reject);
       }).then(() => {
         return this.Vector(resolve, reject);
-      }).then(() => {
-        return this.God(resolve, reject);
       }).then(() => {
         return this.King(resolve, reject);
       }).then(() => {
@@ -1625,6 +1628,18 @@ class Deva {
   }
 
   // FEATURE FUNCTIONS
+
+  /**************
+  func: indra
+  params: none
+  describe: basic indra features available in a Deva.
+  usage: this.indra()
+  ***************/
+  indra() {
+    return this._getFeature('indra', this._indra);
+  }
+  
+
   /**************
   func: veda
   params: none
@@ -1686,16 +1701,6 @@ class Deva {
     return this._getFeature('vector', this._vector);
   }
 
-  
-  /**************
-  func: god
-  params: none
-  describe: basic god features available in a Deva.
-  usage: this.god()
-  ***************/
-  god() {
-    return this._getFeature('god', this._god);
-  }
   
   /**************
   func: king
