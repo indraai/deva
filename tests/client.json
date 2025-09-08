@@ -35,6 +35,11 @@
       "currency": "USD"
     },
     "features": {
+      "license": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "indra": {
         "concerns": [],
         "global": [],

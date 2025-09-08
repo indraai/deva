@@ -22,6 +22,7 @@ class Deva {
     this._active = false; // the active/birth date.
     this._indra = false; // inherited Indra features.
     this._veda = false; // inherited Veda features.
+    this._license = false; // inherited License features.
     this._data = false; // inherited Data features.
     this._error = false; // inherited Error features.
     this._log = false; // inherited Log features.
@@ -328,6 +329,17 @@ class Deva {
   ***************/
   Veda(resolve, reject) {
     return this.Feature('veda', resolve, reject);
+  }
+
+  /**************
+  func: License
+  params: resolve, reject
+  describe:
+    The License feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  License(resolve, reject) {
+    return this.Feature('license', resolve, reject);
   }
 
   /**************
@@ -929,6 +941,8 @@ class Deva {
         return this.Indra(resolve, reject);
       }).then(() => {
         return this.Veda(resolve, reject);
+      }).then(() => {
+        return this.License(resolve, reject);
       }).then(() => {
         return this.Data(resolve, reject);
       }).then(() => {
@@ -1639,6 +1653,16 @@ class Deva {
   ***************/
   veda() {
     return this._getFeature('veda', this._veda);
+  }
+
+  /**************
+  func: license
+  params: none
+  describe: basic license features available in a Deva.
+  usage: this.license()
+  ***************/
+  license() {
+    return this._getFeature('license', this._license);
   }
 
   /**************
