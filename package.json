@@ -4,6 +4,22 @@
   "version": "1.6.7",
   "description": "The Deva Core",
   "main": "index.js",
+  "license": "VLA:21524957441626894690 LICENSE.md",
+  "author": {
+    "name": "Quinn A Michaels",
+    "email": "quinn@indra.ai",
+    "url": "https://indra.ai/"
+  },
+  "funding": [
+    {
+      "type": "paypal",
+      "url": "https://paypal.me/rahulaclub"
+    },
+    {
+      "type": "patreon",
+      "url": "https://patreon.com/rahulaclub"
+    }
+  ],
   "copyright": "(c)2025 Quinn A Michaels; All rights reserved.",
   "type": "module",
   "scripts": {
@@ -21,22 +37,6 @@
     "Indra.ai",
     "Deva",
     "AI Framework"
-  ],
-  "license": "VLA:21524957441626894690 LICENSE.md",
-  "author": {
-    "name": "Quinn A Michaels",
-    "email": "quinn@indra.ai",
-    "url": "https://indra.ai/"
-  },
-  "funding": [
-    {
-      "type": "paypal",
-      "url": "https://paypal.me/rahulaclub"
-    },
-    {
-      "type": "patreon",
-      "url": "https://patreon.com/rahulaclub"
-    }
   ],
   "bugs": {
     "url": "https://github.com/indraai/deva/issues"

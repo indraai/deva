@@ -1,16 +1,7 @@
 "use strict";
 // ©2025 Quinn A Michaels; All rights reserved. 
 // Legal Signature Required For Lawful Use.
-// Distributed under the Vedic License Agreement LICENSE.md
-/**
-::begin:uid:indra:21524957441626894690
-uid: 21524957441626894690
-created: 1757290615444
-md5: 8EHZEL6OWUT3cKAnvrBXaQ==
-sha256: 6DXkbquJ6JHHThY+9eV2eFqybBRK/KiFuwXQHCxr7fw=
-sha512: mkY6DDFKRf1yUMm4FzfbajM+3LcMnCAUoKwJtmlhTzNin8HUQBOWLaAU1Yb7msZZz7e24at7CL5Ry4MYzdbjGA==
-::end:uid:indra:21524957441626894690
-**/
+// Distributed under VLA:21524957441626894690 LICENSE.md
 
 import {EventEmitter} from 'node:events';
 import {randomUUID} from 'crypto';
