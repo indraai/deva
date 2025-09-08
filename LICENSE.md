@@ -1,6 +1,6 @@
 # Vedic License Agreement
 
-**Version:** 1.1  
+**Version:** 1.2  
 **Effective:** Sunday - September 7, 2025  
 **Owner:** Quinn A Michaels  
 **Email:** quinn@indra.ai
@@ -67,6 +67,31 @@ This Agreement shall be governed by and construed in accordance with the Laws of
 
 - That agreement which has been made contrary to the law or to the settled usage of the virtuous, can have no legal force, though it be established by proofs.
 
+## Fine Collection
+
+**Fines:** 1 pana = 3.5 grams of gold in modern market value. 
+
+### Base Fines
+
+- Perjury through covetousness fined one thousand panas.
+- Perjury through distraction fined 100 panas.
+- Pergury through fear fine is 500 panas.
+- Perjury through friendship the fine is 400 panas.
+- Perjury through lust payes ten times the lowest amercement.
+- Perjury through wrath three times the middle amercement.
+- Perjury through ignorance fine is 100 panas.
+- Perjury from childishness the fine is 100 panas.
+
+The Vedic Fines for the current day can be collected by Owner/Brahmana where fines for all previous days must be collected by the Internal Revenue Service (IRS) and Federal Investigation Bureau (FBI) to ensure proper chain of custody as Vedic Law as evasion of taxes laws the IRS and Federal Law Enforcement under Constitutional Law is chose as the Authority Enforcement Body for Past Fine Collection.
+
+**Vedic Laws:**
+
+- His peculiar duty is conquest, and he must not turn back in danger; having protected the Vaisyas by his weapons, he may cause the legal tax to be collected;
+- As the Sun during eight months (imperceptibly) draws up the water with his rays, even so let him gradually draw his taxes from his kingdom; for that is the office in which he resembles the Sun.
+- A trader on reaching a toll-house should pay the legal duty. A prudent man must not try to evade it, (because) it is called the (king's) tax.
+- If he evades a toll-house, or if he buys or sells at another than the legal hour, or if he does not state the value (of his goods) correctly, he shall be fined eight times the amount which he tried to evade.
+- He who avoids a tax, or he who makes a false statement in enumerating his goods shall be fined eight times the amount of duty which he tried to evade.
+
 ## Entire Agreement
 
 This Agreement constitutes the entire understanding between you and the Owner concerning the Software and supersedes all prior agreements.
@@ -76,10 +101,10 @@ By using the Software, you acknowledge that you have read, understood, and agree
 
 ©2025 Quinn A Michaels; All rights reserved.
 
-::begin:uid:indra:38452632759374611262  
-uid: 38452632759374611262  
-created: 1757258450213  
-md5: A0Xnl8IiH7RDm12gNWcUYw==  
-sha256: vcD0Q3sIHH/HiLl6RGxrJU3IPz22aRQWMCrzQ8eaCQw=  
-sha512: lfVtjQaogd/DL/uE2Bx3MbYD42nptB2yteoQX4v8ZxxUYSY3L5dicO7+u3vGUCIaV/DubyVFxFcPUoSP5SKBog==  
-::end:uid:indra:38452632759374611262
+::begin:uid:indra:21524957441626894690
+uid: 21524957441626894690
+created: 1757290615444
+md5: 8EHZEL6OWUT3cKAnvrBXaQ==
+sha256: 6DXkbquJ6JHHThY+9eV2eFqybBRK/KiFuwXQHCxr7fw=
+sha512: mkY6DDFKRf1yUMm4FzfbajM+3LcMnCAUoKwJtmlhTzNin8HUQBOWLaAU1Yb7msZZz7e24at7CL5Ry4MYzdbjGA==
+::end:uid:indra:21524957441626894690
