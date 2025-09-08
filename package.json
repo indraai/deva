@@ -1,7 +1,7 @@
 {
   "id": "55286864875635314522",
   "name": "@indra.ai/deva",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "description": "The Deva Core",
   "main": "index.js",
   "copyright": "(c)2025 Quinn A Michaels; All rights reserved.",
