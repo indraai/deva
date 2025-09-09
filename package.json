@@ -4,7 +4,17 @@
   "version": "1.6.11",
   "description": "The Deva Core",
   "main": "index.js",
-  "license": "VLA:14433589198287046115 LICENSE.md",
+  "license": "VLA:57198275347569343690 LICENSE.md",
+  "VLA": {
+    "uid": 57198275347569343690,
+    "time": 1757433116479,
+    "date": "Tuesday, September 9, 2025 - 8:51:56 AM",
+    "agent": "qo2rVirMORHRQuTmwccZkT3A3ju0zP3OHQNBmM8+sr8=",
+    "machine": "p9PvrhyZFNJQBE4ixNeWPV8bX1jRvpbHj3SAso6RYh0=",
+    "md5": "T2HhhTQFTA0IAt6hHRWhvw==",
+    "sha256": "hXhV9DywwMEcMoSAciYnMZirITw1qwWsV+BQvpKrQPM=",
+    "sha512": "z11hMv07vDXEdDFLrvxr6vHcGroxDqGsskkhzKxfrNUJODDR4ar09 NcZsuZumKYgA/VBF1fE47/yJ+kQ3sLu1A=="
+  },
   "author": {
     "name": "Quinn A Michaels",
     "email": "quinn@indra.ai",
