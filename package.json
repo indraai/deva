@@ -1,12 +1,12 @@
 {
   "id": "55286864875635314522",
   "name": "@indra.ai/deva",
-  "version": "1.6.15",
+  "version": "1.6.16",
   "description": "The Deva Core",
   "main": "index.js",
   "license": "VLA:15127963876514842820 LICENSE.md",
   "VLA": {
-    "uid": 15127963876514842820,
+    "uid": 15127963876514843000,
     "time": 1757442747269,
     "date": "Tuesday, September 9, 2025 - 11:32:27 AM",
     "agent": "qo2rVirMORHRQuTmwccZkT3A3ju0zP3OHQNBmM8+sr8=",
