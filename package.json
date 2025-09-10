@@ -4,19 +4,23 @@
   "version": "1.6.26",
   "description": "The Deva Core",
   "main": "index.js",
-  "license": "VLA:15127963876514842820 LICENSE.md",
+  "license": "VLA:65806832807751943525 LICENSE.md",
   "VLA": {
-    "uid": 28417667220817228000,
-    "time": 1757474652340,
-    "date": "Tuesday, September 9, 2025 - 8:24:12 PM",
+    "uid": 65806832807751943525,
+    "time": 1757541710316,
+    "date": "Wednesday, September 10, 2025 - 3:01:50 PM",
     "agent": "qo2rVirMORHRQuTmwccZkT3A3ju0zP3OHQNBmM8+sr8=",
-    "client": " 0x1k3HCBX/SD+hi7/c17T7jiSmRuKXAsmblTZA/hhoM=",
-    "pkg": "Ywzy6VgeBbFxbnOeA3gK82a7YbjhQ/IDYx3h6ZH9Rps=",
-    "machine": "gRxmHH+UMs5yYYlxnshh4h8fTqjrHEGTL7j+PWABwNE=",
-    "warning": "⚠️ Unlawful use constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation and Restiuttion to the Rightful Owner of the Machine of Origin.",
-    "md5": "bidVTbk+DTwY7rwyfvbTWA==",
-    "sha256": "dxLk35SnUaeC04H+il9X2Q9iyM6tHadvNHtVK4guu70=",
-    "sha512": "OLOHv/uDFWBn1hCD1xvNj8L2Rn9Wse5CAdKBMRjuCyRIormiTAYviBIo6abx7wYeVWL4VPTXzeii0LePl3IAjA=="
+    "client": "ECVWhcOcgvjEOXXAvBtmOe9ze9iwsMRT+I3w96aCHhQ=",
+    "pkg": "PdHx3qg69O8aeKeD7YhiCAXWZHQRzB649tnx2FRrkxM=",
+    "machine": "HVAXMPi3ZuGzuf53nqmlXvOAHwBwJaS3R4Ogu00qdY4=",
+    "warning": "⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation and Restiuttion to the Rightful Owner of the Machine of Origin.",
+    "md5": "FPBl03xV2Q2odIFRJMcC0g==",
+    "sha256": "7NW3VXHL9BXx7GSEaHx0TowCSgHgfiTmcrncyXDfxyw=",
+    "sha512": "w97v3mGudPHPntmCwfQPz907xVKbyVpiaBEtazjdNkF1V+IIQb+EdAsS176KcCqFsUZOilXG/2+4/caA9ApbTQ=="
+  },
+  "signature": {
+    "transport": 38967858327326471130,
+    "time": 1757541938580
   },
   "author": {
     "name": "Quinn A Michaels",
