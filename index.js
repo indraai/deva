@@ -1889,7 +1889,7 @@ class Deva {
   describe: This function will enable fast loading of Deva into the system.
   ***************/
   load(key, client) {
-    this.zone('deva', key);
+    this.zone('load', key);
     this.action('load', key);
     this.state('load', key);
     return this.devas[key].init(client);
@@ -1905,12 +1905,12 @@ class Deva {
     this.zone('unload', key);
     return new Promise((resolve, reject) => {
       try {
-        this.action('uload', key);
+        this.action('unload', key);
         this.devas[key].stop().then(exit => {
           delete this.devas[key];
           this.talk(config.events.unload, key);
         });
-        this.state('unload', key)
+        this.state('unload', key);
         return resolve(`${this._states.unload}:${key}`);
       } catch (e) {
         return this.err(e, this.devas[key], reject)
