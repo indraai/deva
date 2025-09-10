@@ -1,12 +1,12 @@
 {
   "id": 55286864875635310000,
   "name": "@indra.ai/deva",
-  "version": "1.6.26",
+  "version": "1.6.27",
   "description": "The Deva Core",
   "main": "index.js",
   "license": "VLA:65806832807751943525 LICENSE.md",
   "VLA": {
-    "uid": 65806832807751943525,
+    "uid": 65806832807751940000,
     "time": 1757541710316,
     "date": "Wednesday, September 10, 2025 - 3:01:50 PM",
     "agent": "qo2rVirMORHRQuTmwccZkT3A3ju0zP3OHQNBmM8+sr8=",
@@ -19,7 +19,7 @@
     "sha512": "w97v3mGudPHPntmCwfQPz907xVKbyVpiaBEtazjdNkF1V+IIQb+EdAsS176KcCqFsUZOilXG/2+4/caA9ApbTQ=="
   },
   "signature": {
-    "transport": 38967858327326471130,
+    "transport": 38967858327326474000,
     "time": 1757541938580
   },
   "author": {
