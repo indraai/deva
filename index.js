@@ -1,19 +1,19 @@
 "use strict";
 // ©2025 Quinn A Michaels; All rights reserved. 
 // Legal Signature Required For Lawful Use.
-// Distributed under VLA:57198275347569343690 LICENSE.md
+// Distributed under VLA:28417667220817228506 LICENSE.md
 
 import {EventEmitter} from 'node:events';
 import {randomUUID} from 'crypto';
 import lib from './lib/index.js';
 import pkg from './package.json' with {type:'json'};
 
-const {name,version,repository,author,bugs,homepage,license,config} = pkg;
+const {name,version,repository,author,bugs,homepage,license,config,VLA} = pkg;
 
 class Deva {
   constructor(opts) {
     opts = opts || {}; // set opts to provided opts or an empty object.
-    this._core = {name,version,repository,author,bugs,homepage,license};
+    this._core = {name,version,repository,author,bugs,homepage,license,VLA};
     this._id = opts.id || randomUUID(); // the unique id assigned to the agent at load
     this._info = opts.info || false; // the deva information from the package file.
     this._config = opts.config || {}; // local Config Object
@@ -43,7 +43,7 @@ class Deva {
     this._systems = false; // inherited Systems features.
     this._networks = false; // inherited Systems features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
-    this.lib = new lib({config, agent:opts.agent}); // used for loading library functions
+    this.lib = new lib({pkg, agent:opts.agent}); // used for loading library functions
     this.utils = opts.utils || {}; // parse function
     this.devas = opts.devas || {}; // Devas which are loaded
     this.vars = opts.vars || {}; // Variables object
@@ -581,7 +581,10 @@ class Deva {
   Done(resolve, reject) {
     try {
       delete this._client.features; // delete the features key when done.
-      return resolve(this.client()); // resolve an empty pr
+      const client = this.client();
+      this.lib.setClient(client, 'sha256');
+      this.state('Done', 'Done');
+      return resolve(client); // resolve an empty pr
     } catch (e) {
       this.state('catch', 'Done');
       return this.err(e, false, reject);
@@ -910,7 +913,10 @@ class Deva {
   init(client) {
     // set client
     this._active = Date.now();
+    this.lib.setClient(this.lib.hash(client, 'sha256'));
+
     const agent = this.agent();
+
     const data = {
       id: this.lib.uid(),
       key: 'init',
