@@ -308,7 +308,8 @@
       "help": "💜 Help",
       "done": "☑️  Done",
       "ready": "⭐️ Ready",
-      "complete": "✅ Complete"
+      "complete": "✅ Complete",
+      "parse": "🐩 Parse"
     },
     "feature": false,
     "features": {
