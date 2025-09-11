@@ -360,6 +360,8 @@
       "nopacket": "⛔️ NO PACKET PROVIDED",
       "method_not_found": "⛔️ METHOD NOT FOUND",
       "help_not_found": "⛔️ HELP NOT FOUND",
+      "invalid_agent": "⛔️ Agent Hash Invalid",
+      "invalid_client": "⛔️ Client Hash Invalid",
       "load": "📦 Load",
       "unload": "🥡 Unload",
       "uid_warning": "⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation and Restiuttion to the Rightful Owner of the Machine of Origin."
