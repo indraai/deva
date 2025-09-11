@@ -1610,13 +1610,10 @@ class Deva {
   ***************/
   client() {
     if (!this._active) return this._messages.offline; // check the active status
-    const data = this.lib.copy(this._client); // create a copy of the client data    
-    data.created = Date.now();
-    
+    const data = this.lib.copy(this._client); // create a copy of the client data        
     data.md5 = this.lib.hash(data);
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
-    
     return data; // return the copy of the client data.
   }
 
@@ -1629,8 +1626,6 @@ class Deva {
   agent() {
     if (!this._active) return this._messages.offline; // check the active status
     const data = this.lib.copy(this._agent); // create a copy of the agent data.
-    data.created = Date.now();
-
     data.md5 = this.lib.hash(data);
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
