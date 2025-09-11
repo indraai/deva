@@ -24,7 +24,9 @@
     },
     "profile": {
       "name": "Test User",
+      "fullname": "Test User Client Profile",
       "eamil": "test@example.com",
+      "company": "Inside The Net, Inc.",
       "describe": "The Test User",
       "emoji": "/public/devas/test/avatar.png",
       "avatar": "/public/devas/test/avatar.png",
@@ -32,7 +34,8 @@
       "gender": "splendid",
       "lang": "en",
       "locale": "en-US",
-      "currency": "USD"
+      "currency": "USD",
+      "copyright": "©2025 Quinn A Michaels; All rights reserved."
     },
     "features": {
       "license": {

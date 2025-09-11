@@ -42,11 +42,8 @@ class Deva {
     this._systems = false; // inherited Systems features.
     this._networks = false; // inherited Systems features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
-    
-    const _lib = new lib({pkg, agent:opts.agent});
-    this.lib = _lib; // used for loading library functions
-    
-    this.utils = opts.utils || {}; // parse function
+    this.lib = new lib({pkg}); // used for loading library functions    
+    this.utils = opts.utils || {}; // parse functions inside the deva
     this.devas = opts.devas || {}; // Devas which are loaded
     this.vars = opts.vars || {}; // Variables object
     this.listeners = opts.listeners || {}; // local Listeners
@@ -187,7 +184,7 @@ class Deva {
   ***************/
   _methodNotFound(packet) {
     if (!this._active) return this._messages.offline; // check the active status
-    const id = this.lib.uid();
+    const id = this.uid();
     const agent = this.agent() || false;
     const client = this.client() || false;
     const {meta, params} = packet.q;
@@ -279,7 +276,7 @@ class Deva {
     client presented data.
   ***************/
   Feature(feature, resolve, reject) {
-    const _id = this.lib.uid();
+    const _id = this.uid();
     this.feature(feature, _id.uid);
     this.zone(feature, _id.uid);
     const _cl = this.client(); // set local copy of client data
@@ -655,11 +652,11 @@ class Deva {
   describe:
   ***************/
   question(TEXT=false, DATA=false) {
-    const id = this.lib.uid(); // generate a unique id for transport.
+    const id = this.uid(); // generate a unique id for transport.
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.zone('question', id);
-    this.action('question', id);
+    this.zone('question', id.uid);
+    this.action('question', id.uid);
     const t_split = TEXT.split(' '); // split the text on spaces to get words.
     const data = DATA; // set the DATA to data
 
@@ -685,7 +682,7 @@ class Deva {
     return new Promise((resolve, reject) => {
       // resolve with the no text message if the client says nothing.
       if (!TEXT) return resolve(this._messages.notext, resolve);
-      this.state('try', `question:${id}`);
+      this.state('try', `question:${id.uid}`);
       try { // try to answer the question
         if (isAsk) { // determine if hte question isAsk
           // if:isAsk split the agent key and remove first command character
@@ -694,19 +691,19 @@ class Deva {
           params = t_split[1] ? t_split[1].split(':') : false;
           method = params[0]; // the method to check is then params index 0
           text = t_split.slice(2).join(' ').trim(); // rejoin the text with space
-          this.state('ask', `${key}:${method}:${id}`);
+          this.state('ask', `${key}:${method}:${id.uid}`);
         }
         else if (isCmd) { // determine if the question is a command
           //if:isCmd use text split index 1 as the parameter block
           params = t_split[0] ? t_split[0].split(':') : false;
           method = t_split[0].split(':')[0].substring(1); // if:isCmd use the 0 index as the command
           text = t_split.slice(1).join(' ').trim(); // if:isCmd rejoin the string on the space after removing first index
-          this.state('cmd', `${method}:${id}`); // set the state to cmd.
+          this.state('cmd', `${method}:${id.uid}`); // set the state to cmd.
         }
 
-        this.state('set', `question:${method}:${id}`)
+        this.state('set', `question:${method}:${id.uid}`)
         packet.q = { // build packet.q container
-          id: this.lib.uid(), // set the transport id for the question.
+          id: this.uid(), // set the transport id for the question.
           agent: this.agent(), // set the agent
           client: this.client(), // set the client
           meta: { // build the meta container
@@ -720,7 +717,7 @@ class Deva {
         }
 
         // hash the question
-        packet.q.md5 = this.lib.hash(packet.q);
+        packet.q.md5 = this.lib.hash(packet.q, 'md5');
         packet.q.sha256 = this.lib.hash(packet.q, 'sha256');
         packet.q.sha512 = this.lib.hash(packet.q, 'sha512');
 
@@ -741,7 +738,7 @@ class Deva {
         }
       }
       catch(e) {
-        this.state('catch', 'question');
+        this.state('catch', `${id.uid}`);
         return this.err(e); // if a overall error happens this witll call this.err
       }
     });
@@ -758,9 +755,9 @@ class Deva {
     from the agent from the pre-determined method.
   ***************/
   answer(packet, resolve, reject) {
-    const id = this.lib.uid();
+    const id = this.uid();
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.zone('answer', id); // set zone to answer
+    this.zone('answer', id.uid); // set zone to answer
     const agent = this.agent();
     const client = this.client();
     // check if method exists and is of type function
@@ -848,7 +845,7 @@ class Deva {
 
       this.state('set', `ask:${method}:packet_answer:${packet.id.uid}`);
       const packet_answer = {
-        id: this.lib.uid(),
+        id: this.uid(),
         agent,
         client,
         meta: {
@@ -929,7 +926,7 @@ class Deva {
     const agent = this.agent();
 
     const data = {
-      id: this.lib.uid(),
+      id: this.uid(),
       key: 'init',
       value: agent.key,
       agent,
@@ -1029,7 +1026,7 @@ class Deva {
     if (!this._active) return resolve(this._messages.offline);
 
     this.action('start', data.id.uid);
-    const id = this.lib.uid();
+    const id = this.uid();
     
     delete data.md5;
     delete data.sha256;
@@ -1140,9 +1137,6 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
 
-    this.lib.setClient(this.client());
-    this.lib.setAgent(this.agent());
-
     this.state('ready', data.id.uid);
     this.talk(config.events.ready, data);    
     return hasOnReady ? this.onReady(data, resolve) : resolve(data);
@@ -1222,7 +1216,7 @@ class Deva {
     this.stop()
   ***************/
   stop() {
-    const id = this.lib.uid();
+    const id = this.uid();
     this.zone('stop', id);
     if (!this._active) return Promise.resolve(this._messages.offline);
 
@@ -1260,7 +1254,7 @@ class Deva {
     function.
   ***************/
   exit() {
-    const id = this.lib.uid();
+    const id = this.uid();
     this.zone('exit', id);
     if (!this._active) return Promise.resolve(this._messages.offline);
 
@@ -1321,7 +1315,7 @@ class Deva {
       const lookup = this._states[value]; // set the local states lookup
       const text = extra ? `${lookup} ${extra}` : lookup; // set text from lookup with extra
       const data = { // build the data object
-        id: this.lib.uid(), // set the data id
+        id: this.uid(), // set the data id
         agent: this.agent(), // set the agent
         client: this.client(), // set the client
         key: 'state', // set the key to state
@@ -1347,7 +1341,7 @@ class Deva {
   describe: returns the avaiable staets values.
   ***************/
   states() {
-    const id = this.lib.uid();    
+    const id = this.uid();    
     this.action('states', id);
     const data = {
       id,
@@ -1371,7 +1365,7 @@ class Deva {
   describe
   ***************/
   zone(value=false, extra=false) {
-    const id = this.lib.uid();
+    const id = this.uid();
     if (!value || !this._zones[value] || value === this._zone) return;
 
     try {
@@ -1407,7 +1401,7 @@ class Deva {
   describe: returns a listing of zones currently in the system.
   ***************/
   zones() {
-    const id = this.lib.uid();
+    const id = this.uid();
     this.action('zones', id.uid);
     this.state('return', `zones:${id.uid}`);
     
@@ -1435,7 +1429,7 @@ class Deva {
   describe
   ***************/
   action(value=false, extra=false) {
-    const id = this.lib.uid();
+    const id = this.uid();
     try {
       if (!value || !this._actions[value] || value === this._action) return;
       this._action = value; // set the local action variable
@@ -1474,7 +1468,7 @@ class Deva {
   describe: Returns a list of available actions in the system.
   ***************/
   actions() {
-    const id = this.lib.uid();
+    const id = this.uid();
     this.action('actions', id.uid);
     const data = {
       id, // set the id with a uuid
@@ -1501,7 +1495,7 @@ class Deva {
   describe
   ***************/
   feature(value=false, extra=false) {
-    const id = this.lib.uid();
+    const id = this.uid();
     try {
       if (!value || !this._features[value]) return; // check feature value
 
@@ -1536,7 +1530,7 @@ class Deva {
   ***************/
   features() {
     if (!this._active) return this._messages.offline; // check the active status
-    const id = this.lib.uid();
+    const id = this.uid();
     this.action('features', id.uid);
     const data = {
       id, // set the object id
@@ -1564,7 +1558,7 @@ class Deva {
   ***************/
   context(value=false, extra=false) {
     if (!this._active) return this._messages.offline; // check the active status
-    const id = this.lib.uid();
+    const id = this.uid();
     try {
       if (!value) return;
       this._context = value;
@@ -1595,7 +1589,7 @@ class Deva {
 
   contexts() {
     if (!this._active) return this._messages.offline; // check the active status
-    const id = this.lib.uid();
+    const id = this.uid();
     this.action('contexts', id);
     if (!this._active) return this._messages.offline; // check the active status
     const data = {
@@ -1937,7 +1931,7 @@ class Deva {
   ***************/
   prompt(text) {
     if (!this._active) return this._messages.offline;
-    const id = this.lib.uid();
+    const id = this.uid();
     // Talk a global prompt event for the client
     const agent = this.agent();
     const client = this.client();
@@ -1966,7 +1960,7 @@ class Deva {
   ***************/
   core() {
     if (!this._active) return this._messages.offline;
-    const id = this.lib.uid();
+    const id = this.uid();
     this.action('core', id);    
 
     // check the active status
@@ -1989,7 +1983,7 @@ class Deva {
   ***************/
   info() {
     if (!this._active) return this._messages.offline;
-    const id = this.lib.uid();
+    const id = this.uid();
     this.action('info', id);    
 
     const data = this.lib.copy(this._info);
@@ -2017,7 +2011,7 @@ class Deva {
   ***************/
   status() {
     if (!this._active) return this._messages.offline;
-    const id = this.lib.uid();
+    const id = this.uid();
     this.action('status', id);    
     // check the active status
 
@@ -2041,7 +2035,7 @@ class Deva {
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
       let helpDoc = false;
-      const id = this.lib.uid();
+      const id = this.uid();
       this.zone('help', id);
       if (!this._active) return resolve(this._messages.offline);
 
@@ -2100,7 +2094,7 @@ class Deva {
   usage: this.err(err, data, reject);
   ***************/
   err(err,packet,reject=false) {
-    const id = this.lib.uid();
+    const id = this.uid();
     this.zone('error', id.uid);
     this.feature('error', id.uid);
     
@@ -2135,6 +2129,116 @@ class Deva {
     this.context('error', id.uid);
     if (hasOnError) return this.onError(err, packet, reject);
     else return reject ? reject(err) : Promise.reject(err);
+  }
+  
+  /**************
+  func: uid
+  params:
+    - guid: This is a true false flag for generating a guid.
+  describe:
+    The uid function can create two types of id for you.
+    1. random GUID - this is good for when you need a uinique record id returned
+    2. transport uid - The transport id is a number generated to provide a
+                      secure numerical number used for transporting records
+                      across networks without collision or needing to store system uuid.
+    3. the uid is then returned with a created, md5, sha256, and sha512 hash of the value
+  copyright: 2025 Quinn A Michaels. All rights reserved.
+  ***************/
+  uid(guid=false) {
+    const time = Date.now(); // set time to local constant
+    const date = this.lib.formatDate(time, 'long', true); // set date to local constant
+
+    const pkg_hash = this.lib.hash(pkg, 'sha256');
+    const client_hash = this.client().sha256 || false;
+    const agent_hash = this.agent().sha256 || false;
+    const machine_hash = this.lib.machine();
+    
+    const data = {
+      uid: false,
+      time,
+      date,
+      client: client_hash,
+      agent: agent_hash,
+      pkg: pkg_hash,
+      machine: machine_hash,
+      warning: config.messages.uid_warning,
+    }
+    if (guid) {
+      const uid = randomUUID(); // set uid into local constant.
+      data.uid = uid; // set base data object.
+    }
+    else {
+      const min = Math.floor(time - (time / Math.PI)); // generate min time from Math.PI divisor.
+      const max = Math.ceil(time + (time * Math.PI)); // generate max time form Math.PI multiplier.
+      const begin_random = Math.floor(Math.random() * (max - min) + min); // generate random number between min and max.
+      const {end_min, end_max} = config.uid; // set end min and max in to constant
+      const end_random = Math.ceil(Math.random() * (end_max - end_min) + end_min); // generate the 5 digit end salt on the number for added randomness.
+      
+      const uid = `${begin_random}${end_random}`; // set uid to local constant
+      data.uid = uid; // set base data object.
+    }
+    data.md5 = this.lib.hash(data, 'md5'); // md5 the uid and created. 
+    data.sha256 = this.lib.hash(data, 'sha256'); // sha256 the uid, created, md5
+    data.sha512 = this.lib.hash(data, 'sha512'); // sha512 the uid, created, md5, sha256.
+    return data; // return the complete uid data.
   }  
+  
+  sign(packet) {
+    const time = Date.now();
+    const client = this.client();
+    const agent = this.agent();
+    const {q, id} = packet;
+    const transport = id.uid; // set the transport id from the packet id.
+    
+    const {meta, text} = q;
+    const {key, method, params} = meta;
+    const opts = this.lib.copy(params); // copy the params and set as opts.
+
+    const {invalid_agent,invalid_client} = config.messages;
+
+    const agent_hash = agent.sha256 === packet.q.agent.sha256 ? agent.sha256 : invalid_agent;
+    const client_hash = client.sha256 === packet.q.client.sha256 ? client.sha256 : invalid_client;
+  
+    const created = this.lib.formatDate(time, 'long', true); // Formatted created date.
+    
+    const container = `OM:O:${key.toUpperCase()}:${transport}`; // set container string.
+    const {write} = client.profile; // set write string.
+
+    const token = this.lib.hash(`${key} client:${client.profile.id} fullname:${client.profile.fullname} transport:${transport}`, 'sha256');
+    
+    // build the main data packet.
+    const data = {
+      id,
+      text,
+      time,
+      container,
+      write,
+      cient: {
+        key: client.key,
+        name: client.profile.name,
+        fullname: client.profile.fullname,
+        emojis: client.profile.emojis,
+        company: client.profile.company,
+        expires: client.expires ? time + client.expires : 'none',
+        caseid: client.profile.caseid || 'none',
+        token,
+        sha256: client.sha256,
+      },
+      agent: {
+        key: agent.key,
+        name: agent.profile.name,
+        sha256: agent.sha256,
+      },
+      created,
+      warning: client.warning || agent.warning || 'none',
+      copyright: client.profile.copyright || agent.profile.copyright,
+    };
+    data.md5 = this.lib.hash(data, 'md5'); // hash data packet into md5 and inert into data.
+    data.sha256 = this.lib.hash(data, 'sha256'); // hash data into sha 256 then set in data.
+    data.sha512 = this.lib.hash(data, 'sha512'); // hash data into sha 512 then set in data.
+    console.log('sign data', data);
+    return data;
+  }
+  
 }
 export default Deva;

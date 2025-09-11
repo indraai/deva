@@ -109,14 +109,42 @@ const DevaTest = new Deva({
 			const text = this._state
 			const core = this.core();
 			const info = this.info();
+			const uid = this.uid();
+			
+			const sign_packet = {
+				id: this.uid(),
+				created: Date.now(),
+				q: {
+					id: this.uid(),
+					client: this.client(),
+					agent: this.agent(),
+					meta: {
+						key: 'test',
+						method: 'sign',
+						params: ['/sign', 'test'],
+					},
+					text: `Test text`,
+					data: false,
+					md5: packet.md5,
+					sha256: packet.sha256,
+					sha512: packet.sha512,
+				}
+			};
+			const sign = this.sign(sign_packet);
 			const data = [
 				'🧪 TEST RESULTS',
+				`::BEGIN:UID:${info.id.uid}`,
+				JSON.stringify(uid,null,2),
+				`::END:UID:${info.id.uid}`,
 				`::BEGIN:CORE:${core.id.uid}`,
 				JSON.stringify(core,null,2),
 				`::END:CORE:${core.id.uid}`,
 				`::BEGIN:INFO:${info.id.uid}`,
 				JSON.stringify(info,null,2),
-				`::END:INFO:${info.id.uid}`,
+				`::END:INFO:${info.id.uid}`,				
+				`::BEGIN:SIGN:${info.id.uid}`,
+				JSON.stringify(sign,null,2),
+				`::END:SIGN:${info.id.uid}`,
 			];
 			return {
 				text: data.join('\n'),
@@ -127,8 +155,9 @@ const DevaTest = new Deva({
 	methods: {
 		test(packet) {
 			this.context('test');
-			return this.func.test(packet);
-		}
+			const test = this.func.test(packet)
+			return test;			
+		},
 	},
 	onStart(data, resolve) {
 		this.context('start', data.id.uid);
