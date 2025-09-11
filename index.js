@@ -1115,6 +1115,7 @@ class Deva {
     this.action('ready', data.id.uid);
     const hasOnReady = this.onReady && typeof this.onReady === 'function';  
     
+    // Delete previous data hashes
     delete data.md5;
     delete data.sha256;
     delete data.sha512;
@@ -1127,6 +1128,7 @@ class Deva {
 
     const client = this.client();
     this.lib.setClient(client.sha256);
+
     const agent = this.agent();
     this.lib.setAgent(agent.sha256);
 
@@ -1626,7 +1628,7 @@ class Deva {
   agent() {
     if (!this._active) return this._messages.offline; // check the active status
     const data = this.lib.copy(this._agent); // create a copy of the agent data.
-    data.md5 = this.lib.hash(data);
+    data.md5 = this.lib.hash(data, 'md5');
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
     return data; // return the copy of the agent data.
