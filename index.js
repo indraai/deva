@@ -9,7 +9,6 @@ import lib from './lib/index.js';
 import pkg from './package.json' with {type:'json'};
 
 const {name,version,repository,author,bugs,homepage,license,config,VLA} = pkg;
-
 class Deva {
   constructor(opts) {
     opts = opts || {}; // set opts to provided opts or an empty object.
@@ -43,7 +42,10 @@ class Deva {
     this._systems = false; // inherited Systems features.
     this._networks = false; // inherited Systems features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
-    this.lib = new lib({pkg,agent:opts.agent}); // used for loading library functions
+    
+    const _lib = new lib({pkg, agent:opts.agent});
+    this.lib = _lib; // used for loading library functions
+    
     this.utils = opts.utils || {}; // parse function
     this.devas = opts.devas || {}; // Devas which are loaded
     this.vars = opts.vars || {}; // Variables object
