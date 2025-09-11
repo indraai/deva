@@ -43,7 +43,7 @@ class Deva {
     this._systems = false; // inherited Systems features.
     this._networks = false; // inherited Systems features.
     this.events = opts.events || new EventEmitter({}); // Event Bus
-    this.lib = new lib({pkg, agent:opts.agent}); // used for loading library functions
+    this.lib = new lib({pkg}); // used for loading library functions
     this.utils = opts.utils || {}; // parse function
     this.devas = opts.devas || {}; // Devas which are loaded
     this.vars = opts.vars || {}; // Variables object
@@ -1128,9 +1128,6 @@ class Deva {
 
     const client = this.client();
     this.lib.setClient(client.sha256);
-
-    const agent = this.agent();
-    this.lib.setAgent(agent.sha256);
 
     this.state('ready', data.id.uid);
     this.talk(config.events.ready, data);    
