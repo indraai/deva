@@ -582,7 +582,7 @@ class Deva {
     try {
       delete this._client.features; // delete the features key when done.
       const client = this.client();
-      this.lib.setClient(client, 'sha256');
+      this.lib.setClient(client.sha256);
       this.state('Done', 'Done');
       return resolve(client); // resolve an empty pr
     } catch (e) {
