@@ -1125,7 +1125,8 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
 
-    this.lib.setClient(this.client().sha256); // set the client for the library when everything is ready.
+    const client = this.client();
+    this.lib.setClient(client.sha256); // set the client for the library when everything is ready.
     
     this.state('ready', data.id.uid);
     this.talk(config.events.ready, data);    
