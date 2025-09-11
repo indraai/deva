@@ -1126,8 +1126,8 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
 
-    const client = this.client();
-    this.lib.setClient(client.sha256);
+    this.lib.setClient(this.client());
+    this.lib.setAgent(this.agent());
 
     this.state('ready', data.id.uid);
     this.talk(config.events.ready, data);    
