@@ -1126,15 +1126,15 @@ class Deva {
     data.sha512 = this.lib.hash(data, 'sha512');
 
     const client = this.client();
-    console.log('client sha256 at ready', client.sha256);
-    
+    this.lib.setClient(client.sha256);
+    const agent = this.agent();
+    this.lib.setAgent(agent.sha256);
+
     this.state('ready', data.id.uid);
     this.talk(config.events.ready, data);    
     return hasOnReady ? this.onReady(data, resolve) : resolve(data);
   }
   
-
-
   /**************
   func: finish
   params:
