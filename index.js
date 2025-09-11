@@ -872,12 +872,21 @@ class Deva {
         else {
           packet_answer.text = result;
         }
-
-        packet_answer.md5 = this.lib.hash(packet_answer);
+        
+        packet_answer.md5 = this.lib.hash(packet_answer 'md5');
         packet_answer.sha256 = this.lib.hash(packet_answer, 'sha256');
         packet_answer.sha512 = this.lib.hash(packet_answer, 'sha512');
 
+        packet.q.agent = agent;
         packet.a = packet_answer;
+        
+        delete packet.md5;
+        delete packet.sha256;
+        delete packet.sha512;
+        packet.md5 = this.lib.hash(packet 'md5');
+        packet.sha256 = this.lib.hash(packet, 'sha256');
+        packet.sha512 = this.lib.hash(packet, 'sha512');
+        
         this.talk(config.events.answer, this.lib.copy(packet)); // global talk event
         this.talk(`${agent.key}:ask:${packet.id.uid}`, packet);
       }).catch(err => {
