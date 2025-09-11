@@ -581,8 +581,6 @@ class Deva {
   Done(resolve, reject) {
     try {
       delete this._client.features; // delete the features key when done.
-      const client = this.client();
-      this.lib.setClient(client.sha256);
       this.state('Done', 'Done');
       return resolve(client); // resolve an empty pr
     } catch (e) {
@@ -913,7 +911,6 @@ class Deva {
   init(client) {
     // set client
     this._active = Date.now();
-    this.lib.setClient(this.lib.hash(client, 'sha256'));
 
     const agent = this.agent();
 
@@ -1127,6 +1124,8 @@ class Deva {
     data.md5 = this.lib.hash(data);
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
+
+    this.lib.setClient(data.sha256); // set the client for the library when everything is ready.
     
     this.state('ready', data.id.uid);
     this.talk(config.events.ready, data);    
