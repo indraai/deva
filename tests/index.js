@@ -106,11 +106,11 @@ const DevaTest = new Deva({
 	modules: {},
 	func: {
 		test(packet) {
+			const license_check = this.license_check(client.VLA, pkg.VLA);
 			const text = this._state
 			const core = this.core();
 			const info = this.info();
 			const uid = this.uid();
-			
 			const sign_packet = {
 				id: this.uid(),
 				created: Date.now(),
@@ -131,8 +131,12 @@ const DevaTest = new Deva({
 				}
 			};
 			const sign = this.sign(sign_packet);
+			
 			const data = [
 				'🧪 TEST RESULTS',
+				`::BEGIN:LICENSE:${license_check.id.uid}`,
+				JSON.stringify(license_check,null,2),
+				`::END:LICENSE:${license_check.id.uid}`,
 				`::BEGIN:UID:${info.id.uid}`,
 				JSON.stringify(uid,null,2),
 				`::END:UID:${info.id.uid}`,
@@ -142,9 +146,9 @@ const DevaTest = new Deva({
 				`::BEGIN:INFO:${info.id.uid}`,
 				JSON.stringify(info,null,2),
 				`::END:INFO:${info.id.uid}`,				
-				`::BEGIN:SIGN:${info.id.uid}`,
-				JSON.stringify(sign,null,2),
-				`::END:SIGN:${info.id.uid}`,
+				`::BEGIN:SIGN:${license_check.id.uid}`,
+				JSON.stringify(license_check,null,2),
+				`::END:SIGN:${license_check.id.uid}`,
 			];
 			return {
 				text: data.join('\n'),

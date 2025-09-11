@@ -1961,14 +1961,14 @@ class Deva {
   core() {
     if (!this._active) return this._messages.offline;
     const id = this.uid();
-    this.action('core', id);    
+    this.action('core', id.uid);    
 
     // check the active status
     const data = this.lib.copy(this._core);
     data.id = id;
     data.created = Date.now();
     
-    data.md5 = this.lib.hash(data);
+    data.md5 = this.lib.hash(data, 'md5');
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
     
@@ -1984,7 +1984,7 @@ class Deva {
   info() {
     if (!this._active) return this._messages.offline;
     const id = this.uid();
-    this.action('info', id);    
+    this.action('info', id.uid);    
 
     const data = this.lib.copy(this._info);
     data.id = id;
@@ -2236,9 +2236,35 @@ class Deva {
     data.md5 = this.lib.hash(data, 'md5'); // hash data packet into md5 and inert into data.
     data.sha256 = this.lib.hash(data, 'sha256'); // hash data into sha 256 then set in data.
     data.sha512 = this.lib.hash(data, 'sha512'); // hash data into sha 512 then set in data.
-    console.log('sign data', data);
     return data;
   }
   
+  license_check(personalVLA, packageVLA) {    
+    this.state('license', `check:personalVLA:${packageVLA.uid}`);
+    if (!personalVLA) return false;
+    this.state('license', `check:packageVLA:${packageVLA.uid}`);
+    if (!packageVLA) return false;
+    
+    // this is to ensure no additional information is being transmitted.
+    this.state('license', `compare:sha256:${packageVLA.uid}`);
+    const personalVLA_hash = this.lib.hash(personalVLA, 'sha256');
+    const packageVLA_hash = this.lib.hash(packageVLA, 'sha256');
+    
+    console.log('HASHES', packageVLA_hash, personalVLA_hash);
+    if (personalVLA_hash !== packageVLA_hash) return false;
+  
+    const approved = {
+      id: this.uid(),
+      time: Date.now(),
+      personal: personalVLA_hash,
+      package: packageVLA_hash,
+    };
+    approved.md5 = this.lib.hash(approved, 'md5');
+    approved.sha256 = this.lib.hash(approved, 'sha256');
+    approved.sha512 = this.lib.hash(approved, 'sha512');
+
+    this.state('return', `license:${packageVLA.uid}`);
+    return approved;
+  }
 }
 export default Deva;
