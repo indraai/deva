@@ -1125,7 +1125,7 @@ class Deva {
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
 
-    this.lib.setClient(data.sha256); // set the client for the library when everything is ready.
+    this.lib.setClient(this.client().sha256); // set the client for the library when everything is ready.
     
     this.state('ready', data.id.uid);
     this.talk(config.events.ready, data);    
@@ -1610,7 +1610,7 @@ class Deva {
   client() {
     if (!this._active) return this._messages.offline; // check the active status
     const data = this.lib.copy(this._client); // create a copy of the client data        
-    data.md5 = this.lib.hash(data);
+    data.md5 = this.lib.hash(data, 'md5');
     data.sha256 = this.lib.hash(data, 'sha256');
     data.sha512 = this.lib.hash(data, 'sha512');
     return data; // return the copy of the client data.
