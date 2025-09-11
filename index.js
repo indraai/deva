@@ -796,7 +796,7 @@ class Deva {
           created: Date.now(), // set the created date for the answer
         };
         // create a hash for the answer and insert into answer meta.
-        packet_answer.md5 = this.lib.hash(packet_answer);
+        packet_answer.md5 = this.lib.hash(packet_answer, 'md5');
         packet_answer.sha256 = this.lib.hash(packet_answer, 'sha256');
         packet_answer.sha512 = this.lib.hash(packet_answer, 'sha512');
 
@@ -873,7 +873,7 @@ class Deva {
           packet_answer.text = result;
         }
         
-        packet_answer.md5 = this.lib.hash(packet_answer 'md5');
+        packet_answer.md5 = this.lib.hash(packet_answer, 'md5');
         packet_answer.sha256 = this.lib.hash(packet_answer, 'sha256');
         packet_answer.sha512 = this.lib.hash(packet_answer, 'sha512');
 
@@ -883,7 +883,7 @@ class Deva {
         delete packet.md5;
         delete packet.sha256;
         delete packet.sha512;
-        packet.md5 = this.lib.hash(packet 'md5');
+        packet.md5 = this.lib.hash(packet, 'md5');
         packet.sha256 = this.lib.hash(packet, 'sha256');
         packet.sha512 = this.lib.hash(packet, 'sha512');
         
