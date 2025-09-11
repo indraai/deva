@@ -873,16 +873,19 @@ class Deva {
           packet_answer.text = result;
         }
         
-        packet_answer.md5 = this.lib.hash(packet_answer, 'md5');
-        packet_answer.sha256 = this.lib.hash(packet_answer, 'sha256');
-        packet_answer.sha512 = this.lib.hash(packet_answer, 'sha512');
+        packet_answer.md5 = this.lib.hash(packet_answer, 'md5'); // md5 the answer.
+        packet_answer.sha256 = this.lib.hash(packet_answer, 'sha256'); // sha256 the answer.
+        packet_answer.sha512 = this.lib.hash(packet_answer, 'sha512'); // sha512 the answer
 
-        packet.q.agent = agent;
-        packet.a = packet_answer;
+        packet.q.agent = agent; // set the question agent as the ask agent.
+        packet.a = packet_answer; // set the packet answer.
         
+        // delete previous hashes before creating new ones.
         delete packet.md5;
         delete packet.sha256;
         delete packet.sha512;
+        
+        // create new hashes for the packet before return.
         packet.md5 = this.lib.hash(packet, 'md5');
         packet.sha256 = this.lib.hash(packet, 'sha256');
         packet.sha512 = this.lib.hash(packet, 'sha512');
