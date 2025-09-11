@@ -581,7 +581,7 @@ class Deva {
   Done(resolve, reject) {
     try {
       delete this._client.features; // delete the features key when done.
-      this.state('Done', 'Done');
+      this.state('Done', 'Done'); // set the done state.
       return resolve(this._client); // resolve an empty pr
     } catch (e) {
       this.state('catch', 'Done');
