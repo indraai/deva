@@ -1129,6 +1129,7 @@ class Deva {
     data.sha512 = this.lib.hash(data, 'sha512');
 
     this.lib.setClient(this.client());
+    this.lib.setAgent(this.agent());
 
     this.state('ready', data.id.uid);
     this.talk(config.events.ready, data);    
