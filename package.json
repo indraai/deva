@@ -1,7 +1,7 @@
 {
   "id": 45958588982385560000,
   "name": "@indra.ai/deva",
-  "version": "1.6.54",
+  "version": "1.6.55",
   "description": "The Deva Core",
   "main": "index.js",
   "license": "VLA:45958588982385558603 LICENSE.md",
