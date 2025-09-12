@@ -2209,7 +2209,6 @@ class Deva {
     const created = this.lib.formatDate(time, 'long', true); // Formatted created date.
     
     const container = `OM:O:${key.toUpperCase()}:${transport}`; // set container string.
-    const {write} = client.profile; // set write string.
 
     const packet_hash = this.lib.hash(packet, 'sha256');
     const token = this.lib.hash(`${key} client:${client.profile.id} fullname:${client.profile.fullname} transport:${transport}`, 'sha256');
@@ -2223,7 +2222,6 @@ class Deva {
       text,
       time,
       container,
-      write,
       client: {
         key: client.key,
         name: client.profile.name,
