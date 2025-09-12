@@ -2200,27 +2200,31 @@ class Deva {
     const {meta, text} = q;
     const {key, method, params} = meta;
     const opts = this.lib.copy(params); // copy the params and set as opts.
-
+    const command = opts.shift();
+    
     const {invalid_agent,invalid_client} = config.messages;
 
     const agent_hash = agent.sha256 === packet.q.agent.sha256 ? agent.sha256 : invalid_agent;
     const client_hash = client.sha256 === packet.q.client.sha256 ? client.sha256 : invalid_client;
-  
     const created = this.lib.formatDate(time, 'long', true); // Formatted created date.
     
     const container = `OM:O:${key.toUpperCase()}:${transport}`; // set container string.
     const {write} = client.profile; // set write string.
 
+    const packet_hash = this.lib.hash(packet, 'sha256');
     const token = this.lib.hash(`${key} client:${client.profile.id} fullname:${client.profile.fullname} transport:${transport}`, 'sha256');
     
     // build the main data packet.
     const data = {
       id,
+      key,
+      method,
+      opts,
       text,
       time,
       container,
       write,
-      cient: {
+      client: {
         key: client.key,
         name: client.profile.name,
         fullname: client.profile.fullname,
@@ -2236,6 +2240,7 @@ class Deva {
         name: agent.profile.name,
         sha256: agent.sha256,
       },
+      packet: packet_hash,
       created,
       warning: client.warning || agent.warning || 'none',
       copyright: client.profile.copyright || agent.profile.copyright,
