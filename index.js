@@ -598,7 +598,7 @@ class Deva {
     to create seamless collaboration between Devas.
   ***************/
   talk(evt, packet=false) {
-    this.action('talk', `${evt}:${packet.id.uid}`);
+    this.action('talk', `${evt}`);
     return this.events.emit(evt, packet);
   }
 
@@ -2259,6 +2259,7 @@ class Deva {
     
     if (personalVLA_hash !== packageVLA_hash) return false;
   
+
     const approved = {
       id: this.uid(),
       time: Date.now(),
