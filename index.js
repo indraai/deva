@@ -941,7 +941,7 @@ class Deva {
       
       const license_check = this.license_check(client.VLA, pkg.VLA);
       if (!license_check) {
-        this.prompt(config.messages.client_license_invalid);
+        console.log(config.messages.client_license_invalid);
         return resolve(config.messages.client_license_invalid); // return if} license check fails
       }
       
