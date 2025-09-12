@@ -940,7 +940,10 @@ class Deva {
     return new Promise((resolve, reject) => {
       
       const license_check = this.license_check(client.VLA, pkg.VLA);
-      if (!license_check) return resolve(config.messages.client_license_invalid); // return if license check fails
+      if (!license_check) {
+        this.prompt(config.messages.client_license_invalid);
+        return resolve(config.messages.client_license_invalid); // return if} license check fails
+      }
       
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
