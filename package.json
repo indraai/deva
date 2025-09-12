@@ -364,7 +364,9 @@
       "invalid_client": "⛔️ Client Hash Invalid",
       "load": "📦 Load",
       "unload": "🥡 Unload",
-      "uid_warning": "⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation and Restiuttion to the Rightful Owner of the Machine of Origin."
+      "uid_warning": "⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation and Restiuttion to the Rightful Owner of the Machine of Origin.",
+      "client_license_check": "🪪 Check Client License",
+      "client_license_invalid": "❌ The Provided Client License Is Invalid"
     }
   }
 }

@@ -231,8 +231,7 @@ class Deva {
       return this.err(e);
     }    
   }
-
-
+  
   /**************
   func: Client
   params: client - client provided data.
@@ -939,6 +938,10 @@ class Deva {
     data.sha512 = this.lib.hash(data, 'sha512');
 
     return new Promise((resolve, reject) => {
+      
+      const license_check = this.license_check(client.VLA, pkg.VLA);
+      if (!license_check) return resolve(config.messages.client_license_invalid); // return if license check fails
+      
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
         return this._assignBind();
@@ -949,6 +952,7 @@ class Deva {
         this.zone('init');
         this.action('init');
         this.state('init');
+      }).then(() => {
         return this.Client(client, resolve, reject);
       }).then(() => {
         return this.Indra(resolve, reject);
@@ -2250,7 +2254,6 @@ class Deva {
     const personalVLA_hash = this.lib.hash(personalVLA, 'sha256');
     const packageVLA_hash = this.lib.hash(packageVLA, 'sha256');
     
-    console.log('HASHES', packageVLA_hash, personalVLA_hash);
     if (personalVLA_hash !== packageVLA_hash) return false;
   
     const approved = {
