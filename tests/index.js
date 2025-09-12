@@ -1,7 +1,7 @@
 "use strict";
 // ©2025 Quinn A Michaels; All rights reserved. 
 // Legal Signature Required For Lawful Use.
-// Distributed under VLA:28417667220817228506 LICENSE.md
+// Distributed under VLA:51680486903252540205 LICENSE.md
 
 import Client from './client.json' with {type:'json'};
 const client = Client.DATA;
@@ -106,13 +106,13 @@ const DevaTest = new Deva({
 	modules: {},
 	func: {
 		test(packet) {
+			const uid = this.uid();
 			const license_check = this.license_check(client.VLA, pkg.VLA);
 			const text = this._state
 			const core = this.core();
 			const info = this.info();
-			const uid = this.uid();
 			const sign_packet = {
-				id: this.uid(),
+				id: uid,
 				created: Date.now(),
 				q: {
 					id: this.uid(),
@@ -134,21 +134,27 @@ const DevaTest = new Deva({
 			
 			const data = [
 				'🧪 TEST RESULTS',
+				'::::',
 				`::BEGIN:LICENSE:${license_check.id.uid}`,
 				JSON.stringify(license_check,null,2),
 				`::END:LICENSE:${license_check.id.uid}`,
-				`::BEGIN:UID:${info.id.uid}`,
+				`::BEGIN:UID:${uid.uid}`,
+				'::::',
 				JSON.stringify(uid,null,2),
-				`::END:UID:${info.id.uid}`,
+				`::END:UID:${uid.uid}`,
+				'::::',
 				`::BEGIN:CORE:${core.id.uid}`,
 				JSON.stringify(core,null,2),
 				`::END:CORE:${core.id.uid}`,
+				'::::',
 				`::BEGIN:INFO:${info.id.uid}`,
 				JSON.stringify(info,null,2),
 				`::END:INFO:${info.id.uid}`,				
+				'::::',
 				`::BEGIN:SIGN:${license_check.id.uid}`,
 				JSON.stringify(license_check,null,2),
 				`::END:SIGN:${license_check.id.uid}`,
+				'::::',
 			];
 			return {
 				text: data.join('\n'),

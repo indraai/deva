@@ -6,6 +6,19 @@
   "DATA": {
     "id": 5380514963421,
     "key": "deva",
+    "VLA": {
+      "uid": "51680486903252540205",
+      "time": 1757700983322,
+      "date": "Friday, September 12, 2025 - 11:16:23 AM",
+      "client": "2FW/gbrbEHmgR607F3lKzVyjkhd3kM0dgdS5ISlyXJE=",
+      "agent": "zjy7PmGouOv0TxrZXHhb9LyaI/7IAQ6J1d9srLPs65s=",
+      "pkg": "k5kElPKV7s2yXk2c347L1IFjoqmxrpxDVrcajEv4+Uo=",
+      "machine": "6HPrb0BL4wzKyTRSesXOvKL3/eHYpyWwxUm8mLD0ilY=",
+      "warning": "⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation, Investigation, and Restitution to the Rightful Legal Owner.",
+      "md5": "9+rAix3HOj+aBfFp/0MmlQ==",
+      "sha256": "Po6Ek3YUDN6a3e0rq0dBa1pfHLu1ojOF7D+nLa6d9zk=",
+      "sha512": "84OLCmawuM3GtxAykX0sKe+XxFcD1L0wXvux+oGbi6RaQ9Aht0v/4N3IIkGZAgMUlucEOdCgLjkQKDt1iHUuuw=="
+    },
     "prompt": {
       "emoji": "🍏",
       "text": "deva",

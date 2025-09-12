@@ -1,22 +1,22 @@
 {
-  "id": 45958588982385560000,
+  "id": "45101309286114035798",
   "name": "@indra.ai/deva",
   "version": "1.6.60",
   "description": "The Deva Core",
   "main": "index.js",
-  "license": "VLA:45958588982385558603 LICENSE.md",
+  "license": "VLA:45101309286114035798 LICENSE.md",
   "VLA": {
-    "uid": 45958588982385560000,
-    "time": 1757543363949,
-    "date": "Wednesday, September 10, 2025 - 3:29:23 PM",
-    "agent": "qo2rVirMORHRQuTmwccZkT3A3ju0zP3OHQNBmM8+sr8=",
-    "client": "YfL1aQVrQF1ItCNOfh9PnmwIged1ywdi3IGQksNzvk8=",
-    "pkg": "PdHx3qg69O8aeKeD7YhiCAXWZHQRzB649tnx2FRrkxM=",
-    "machine": "HVAXMPi3ZuGzuf53nqmlXvOAHwBwJaS3R4Ogu00qdY4=",
-    "warning": "⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation and Restiution to the Rightful Owner of the Machine of Origin.",
-    "md5": "FPBl03xV2Q2odIFRJMcC0g==",
-    "sha256": "7NW3VXHL9BXx7GSEaHx0TowCSgHgfiTmcrncyXDfxyw=",
-    "sha512": "w97v3mGudPHPntmCwfQPz907xVKbyVpiaBEtazjdNkF1V+IIQb+EdAsS176KcCqFsUZOilXG/2+4/caA9ApbTQ=="
+    "uid": "51680486903252540205",
+    "time": 1757700983322,
+    "date": "Friday, September 12, 2025 - 11:16:23 AM",
+    "client": "2FW/gbrbEHmgR607F3lKzVyjkhd3kM0dgdS5ISlyXJE=",
+    "agent": "zjy7PmGouOv0TxrZXHhb9LyaI/7IAQ6J1d9srLPs65s=",
+    "pkg": "k5kElPKV7s2yXk2c347L1IFjoqmxrpxDVrcajEv4+Uo=",
+    "machine": "6HPrb0BL4wzKyTRSesXOvKL3/eHYpyWwxUm8mLD0ilY=",
+    "warning": "⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation, Investigation, and Restitution to the Rightful Legal Owner.",
+    "md5": "9+rAix3HOj+aBfFp/0MmlQ==",
+    "sha256": "Po6Ek3YUDN6a3e0rq0dBa1pfHLu1ojOF7D+nLa6d9zk=",
+    "sha512": "84OLCmawuM3GtxAykX0sKe+XxFcD1L0wXvux+oGbi6RaQ9Aht0v/4N3IIkGZAgMUlucEOdCgLjkQKDt1iHUuuw=="
   },
   "signature": {
     "transport": 38967858327326474000,
@@ -364,7 +364,7 @@
       "invalid_client": "⛔️ Client Hash Invalid",
       "load": "📦 Load",
       "unload": "🥡 Unload",
-      "uid_warning": "⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation and Restiuttion to the Rightful Owner of the Machine of Origin.",
+      "uid_warning": "⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation, Investigation, and Restitution to the Rightful Legal Owner.",
       "client_license_check": "🪪 Check Client License",
       "client_license_invalid": "❌ The Provided Client License Is Invalid"
     }

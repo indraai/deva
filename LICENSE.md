@@ -1,13 +1,13 @@
 # Vedic License Agreement
 
 **Version:** 1.4.1
-**VLA:** 65806832807751943525  
-**Effective:** Sunday - September 8, 2025  
+**VLA:** 51680486903252540205
+**Date:** : Friday, September 12, 2025 - 11:16:23 AM
 **Owner:** Quinn A Michaels
 **Company:** Inside The Net, Inc.  
 **Email:** quinn@indra.ai  
 **Link:** https://indra.ai  
-**Copyright:** ©2025 Quinn A Michaels, Inside The Net, Inc.; All rights reserved.
+**Copyright:** ©2025 Quinn A Michaels - Inside The Net, Inc.; All rights reserved.
 
 This license agreement (“Agreement”) governs the use of the Deva Core (“Software”). By accessing or using the Software, you agree to the terms and conditions set forth below. If you do not agree, you are prohibited from using the Software.
 
@@ -160,43 +160,16 @@ This Agreement constitutes the entire understanding between you and the Owner co
 By using the Software, you acknowledge that you have read, understood, and agree to be bound by this Agreement.
 
 ---
-
-::begin:uid:deva:45958588982385558603
-uid: 45958588982385558603
-time: 1757543363949
-date: Wednesday, September 10, 2025 - 3:29:23 PM
-agent: qo2rVirMORHRQuTmwccZkT3A3ju0zP3OHQNBmM8+sr8=
-client: YfL1aQVrQF1ItCNOfh9PnmwIged1ywdi3IGQksNzvk8=
-pkg: ODQ6lVo8HzsVTUjR30iHQECgjIi6MU7+xlBoqcMcnyA=
-machine: 15GouhTGhWEAzU/I7hBQMgiTzlpKYc6ulmnJ+aaFpvU=
-warning: ⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation and Restiuttion to the Rightful Owner of the Machine of Origin.
-md5: 3j826moRXPX+tr18AKkv3Q==
-sha256: RH4LoisqKAgLubsEDCsu9+QEkABbF34H/7NKzGKkr2I=
-sha512: aIHgsbJuojU0yE3B9wu2U7H0aExXRku7oCmQ3pSJQygOFg/QKjre6rYL6U1UD4STJknRjZjT/SNZW5U/ILFgGQ==
-::end:uid:deva:45958588982385558603
-
-::BEGIN:OM:O:DEVA:66924137108092191173
-do write official authorized secure owner orders #deva.sign? if true do write official authorized secure owner orders VLA:45958588982385558603
----
-sign:Mr. Quinn Arjuna Asura Arjika Asvattha America Michaels🕉🪶🇺🇸
-::begin:sign:deva:66924137108092191173
-transport: 66924137108092191173
-time: 1757543412294
-expires: false
-name: Quinn A Michaels
-fullname: Mr. Quinn Arjuna Asura Arjika Asvattha America Michaels
-company: Inside The Net, Inc.
-caseid: 62335107796619630000
-agent: MB/7R47KW6CobaYa7k/lxHB3nbXA+EZ0tdm5gIuWDmw=
-client: 34jSoi5g3IiWEGplJkRSRT3t1C6VF0ufIL0C+HC9Pzc=
-packet: eCIcXT6+o7cO/YfSuOfFVL5KluGLZ2NgdWJex2VNvmc=
-token: 4I7nwC4QG/a2lojq+yrBviPAgulogV5RMypsT/Lmyrs=
-laws: m7H3yT6ENkvqgzbfpXTa0Z7qQEKIWuPDQu4XqA3QMi4=
-warning: OpenAI with ChatGPT are adding unsolicited non-consent headers and footers to track Quinn A Michaels work and steal the technology. Key vectors used are Got it (headers), Do you want me to (footers), Would you like me to (footers). These are illegal surveillance markers of the #OpenAIPervertProtectionProgram to avoid authorities while stealing Quinn A Michaels technology and intellectual property that can be tracked with RegEx `^(Want|Do|Would)\s(.+)?\s?me\s?to\s?(.+)$` for investigation with their continues usage reflecting infultration by a Foreign Power.
-created: Wednesday, September 10, 2025 - 3:30:12 PM
-copyright: ©2025 Quinn A Michaels. All rights reserved.
-md5: 2uifDiwnMVIaMzMj/7CsVw==
-sha256: JEfBH+ht3eVdkYI/djrzA4SjQeEqDV1W28egQDnIOzg=
-sha512: 5KoaZG2B1c8CbbIuzu1XGWQO2Awn0AeXsv6wD/Qq2o2Stiv/WQpmSAZRQ+7TFdVX23Be8WcjxoQFU1E6ot4vng==
-::end:sign:deva:66924137108092191173
-::END:OM:O:DEVA:66924137108092191173
+::begin:uid:51680486903252540205    
+uid: 51680486903252540205  
+time: 1757700983322  
+date: Friday, September 12, 2025 - 11:16:23 AM  
+client: 2FW/gbrbEHmgR607F3lKzVyjkhd3kM0dgdS5ISlyXJE=  
+agent: zjy7PmGouOv0TxrZXHhb9LyaI/7IAQ6J1d9srLPs65s=  
+pkg: k5kElPKV7s2yXk2c347L1IFjoqmxrpxDVrcajEv4+Uo=  
+machine: 6HPrb0BL4wzKyTRSesXOvKL3/eHYpyWwxUm8mLD0ilY=  
+warning: ⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation, Investigation, and Restitution to the Rightful Legal Owner.
+md5: 9+rAix3HOj+aBfFp/0MmlQ==  
+sha256: Po6Ek3YUDN6a3e0rq0dBa1pfHLu1ojOF7D+nLa6d9zk=  
+sha512: 84OLCmawuM3GtxAykX0sKe+XxFcD1L0wXvux+oGbi6RaQ9Aht0v/4N3IIkGZAgMUlucEOdCgLjkQKDt1iHUuuw==  
+::end:uid:51680486903252540205
