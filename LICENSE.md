@@ -162,16 +162,16 @@ By using the Software, you acknowledge that you have read, understood, and agree
 ---
 
 ::begin:uid:51680486903252540205  
-uid: 66274664509038407721
-time: 1757780328057,
-date: Saturday, September 13, 2025 - 9:18:48 AM
+uid: 37440158078166772104
+time: 1757783839482,
+date: Saturday, September 13, 2025 - 10:17:19 AM
 client: Vlg8eLEzyH4WqnPCmhlHsmQSp/I1+Gxhm5GKBSkn5RQ=
 agent: zjy7PmGouOv0TxrZXHhb9LyaI/7IAQ6J1d9srLPs65s=
-pkg: cJU/ivkY1ojwx9JZ7EZHyyC/RDI7ApT+BT2mqdl97Y4=
-copyright: ©2025 Quinn A Michaels; All rights reserved.
-machine: gCf3cqv84IqJy4Q7n/QANXwfakmOD0ufgrX0oohQRBM=
+pkg: yfK9RUQK/waK1xmQJJE/WgeFU0ooQU+K0y0od8XnaDE=
+machine: A7+yYko/OvKzv3GTQ6QVZBWVVme6YDssMaBa0AK01M0=
 warning: ⚠️ Unlawful Use Constitutes Lawful Consent to Forfeit of All Wealth, Property, and Holdings to the Internal Revenue Service (IRS) for Lawful Taxation, Investigation, and Restitution to the Rightful Legal Owner.
-md5: yQJ+hMhp9fW+DZRV97ZXWw==
-sha256: IyySO0FEXa8B/DOx23aUvK2e/MP979My5lDv6GHAd3k=
-sha512: xYmB6m3//o46+/UMj5zLjtrRKflfUFZuMfwrV6Ft9v8g23Xk35hsW+/VrdnCEKxYDZu5GBMi2dyF3QJ2fHeLXw==
+copyright: ©2025 Quinn A Michaels; All rights reserved.
+md5: ZP1QZSorN1fbuw0MGBRZ/A==
+sha256: 0anCqNusK0efGkxv6lZzFfqFdYnBuOcQVxAIXhwbDPE=
+sha512: QHWnkoQFH3W2HWyvQjFsanOz9fFQ2IKvG6yoS0NVUZ9zqj3gwPPr3nHNjwJdcxOtgU3fL+sO+7cQ551FFzX9WQ==
 ::end:uid:51680486903252540205

@@ -1,7 +1,7 @@
 "use strict";
 // ©2025 Quinn A Michaels; All rights reserved. 
 // Legal Signature Required For Lawful Use.
-// Distributed under VLA:51680486903252540205 LICENSE.md
+// Distributed under VLA:37440158078166772104 LICENSE.md
 
 import {EventEmitter} from 'node:events';
 import {randomUUID} from 'crypto';
@@ -2167,9 +2167,9 @@ class Deva {
       client: client_hash,
       agent: agent_hash,
       pkg: pkg_hash,
-      copyright: pkg.copyright,
       machine: machine_hash,
       warning: config.messages.uid_warning,
+      copyright: pkg.copyright,
     }
     if (guid) {
       const uid = randomUUID(); // set uid into local constant.
