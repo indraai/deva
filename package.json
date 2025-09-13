@@ -38,7 +38,7 @@
       "url": "https://patreon.com/rahulaclub"
     }
   ],
-  "copyright": "(c)2025 Quinn A Michaels; All rights reserved.",
+  "copyright": "©2025 Quinn A Michaels; All rights reserved.",
   "type": "module",
   "scripts": {
     "test": "node tests"

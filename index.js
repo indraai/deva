@@ -2167,6 +2167,7 @@ class Deva {
       client: client_hash,
       agent: agent_hash,
       pkg: pkg_hash,
+      copyright: pkg.copyright,
       machine: machine_hash,
       warning: config.messages.uid_warning,
     }
@@ -2218,7 +2219,7 @@ class Deva {
       id,
       key,
       method,
-      opts,
+      opts: opts.join('.'),
       text,
       time,
       container,
