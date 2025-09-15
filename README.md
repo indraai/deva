@@ -488,4 +488,4 @@ The `initDeva()` function will initialize the Deva located under the current Dev
 
 ©2025 Quinn A Michaels; All rights reserved.  
 Legal Signature Required For Lawful Use.  
-Distributed under VLA:37440158078166772104 LICENSE.md
+Distributed under VLA:36108595015758507093 LICENSE.md
