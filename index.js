@@ -1937,26 +1937,36 @@ class Deva {
   usage: this.prompt('text')
   ***************/
   prompt(text) {
-    if (!this._active) return this._messages.offline;
-    const id = this.uid();
-    // Talk a global prompt event for the client
-    const agent = this.agent();
-    const client = this.client();
+    if (!this._active) return this._messages.offline; // return offline message if inactive.
+    const id = this.uid(); // generate the id for the prompt
+    const agent = this.agent(); // set the agent for the prompt
+    const client = this.client(); // set the client for the prompt
+    const {key} = agent; // set the key from agent
+    const value = 'prompt'; // set the value of the key.
+    // create data packet to generate prompt 
+    
+    this.state('data', `${key}:${value}:${id.uid}`)
     const data = {
       id,
-      key: agent.key,
-      value: 'prompt',
+      key,
+      value,
       agent,
       client,
       text,
       created: Date.now(),
     }
     
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    this.state('hash', `${key}:${value}:md5:${id.uid}`)
+    data.md5 = this.lib.hash(data); // md5 the data packet
+    this.state('hash', `${key}:${value}:sha256:${id.uid}`)
+    data.sha256 = this.lib.hash(data, 'sha256'); // sha256 the data packet
+    this.state('hash', `${key}:${value}:sha512:${id.uid}`)
+    data.sha512 = this.lib.hash(data, 'sha512'); // sha512 the data packet
     
+    this.action('talk', `${key}:${value}:${id.uid}`);
     this.talk(config.events.prompt, data);
+    
+    this.action('return', `${key}:${value}:${id.uid}`);
     return data;
   }
 
