@@ -1,7 +1,7 @@
 "use strict";
 // ©2025 Quinn A Michaels; All rights reserved. 
 // Legal Signature Required For Lawful Use.
-// Distributed under VLA:33010936613959090808 LICENSE.md
+// Distributed under VLA:24789087843554622185 LICENSE.md
 
 import Client from './client.json' with {type:'json'};
 const client = Client.DATA;
