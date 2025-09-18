@@ -67,7 +67,7 @@
 		"parse": "🐩 Parse",
 		"resolve": "🤝 Resolve",
 		"reject": "🧱 Reject",
-		"sign": "✍️️ Sign",
+		"sign": "🖊️️ Sign",
 		"violation": "🔺 Violation",
 		"fine": "💵 Fine",
 		"payment": "🧾 Payment",
@@ -126,9 +126,13 @@
 		"locate": "📌 Locate",
 		"abandon": "🏚️ Abandon",
 		"target": "🎯 Target",
-		"usa": "🇺🇸 United States of America",
-		"england": "🇬🇧 England",
-		"germany": "🇩🇪 Germany",
-		"russia": "🇷🇺 Russia"
+		"usa": "🇺🇸 USA",
+		"russia": "🇷🇺 Russia",
+		"pervert": "💋 Pervert",
+		"mature": "🧓 Mature",
+		"immature": "🧒 Immature",
+		"consent": "✍️ Consent",
+		"header": "🐮 Header",
+		"footer": "🐷 Footer"
 	}
 }

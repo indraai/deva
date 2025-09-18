@@ -4,16 +4,15 @@
 // Distributed under VLA:44435048570336088519 LICENSE.md
 
 import {EventEmitter} from 'node:events';
-import {randomUUID} from 'crypto';
+import {createHash,randomUUID} from 'crypto';
 import lib from './lib/index.js';
 import config from './config/index.js';
 import pkg from './package.json' with {type:'json'};
 
-const {name,version,repository,author,bugs,homepage,funding,license,VLA,copyright} = pkg;
 class Deva {
   constructor(opts) {
     opts = opts || {}; // set opts to provided opts or an empty object.
-    this._core = {name,version,repository,author,bugs,homepage,funding,license,VLA,copyright};
+    this._core = pkg;
     this._id = opts.id || randomUUID(); // the unique id assigned to the agent at load
     this._info = opts.info || false; // the deva information from the package file.
     this._config = opts.config || {}; // local Config Object
@@ -205,17 +204,17 @@ class Deva {
       },
       created: Date.now(),
     };
-    packet.a.md5 = this.lib.hash(packet.a, 'md5');
-    packet.a.sha256 = this.lib.hash(packet.a, 'sha256');
-    packet.a.sha512 = this.lib.hash(packet.a, 'sha512');
+    packet.a.md5 = this.hash(packet.a, 'md5');
+    packet.a.sha256 = this.hash(packet.a, 'sha256');
+    packet.a.sha512 = this.hash(packet.a, 'sha512');
 
     delete packet.md5;
     delete packet.sha256;
     delete packet.sha512;
     
-    packet.md5 = this.lib.hash(packet, 'md5');
-    packet.sha256 = this.lib.hash(packet, 'sha256');
-    packet.sha512 = this.lib.hash(packet, 'sha512');
+    packet.md5 = this.hash(packet, 'md5');
+    packet.sha256 = this.hash(packet, 'sha256');
+    packet.sha512 = this.hash(packet, 'sha512');
     
     this.state('invalid', `${meta.method}:${packet.id.uid}`);
     return packet;
@@ -724,9 +723,9 @@ class Deva {
         }
 
         // hash the question
-        packet.q.md5 = this.lib.hash(packet.q, 'md5');
-        packet.q.sha256 = this.lib.hash(packet.q, 'sha256');
-        packet.q.sha512 = this.lib.hash(packet.q, 'sha512');
+        packet.q.md5 = this.hash(packet.q, 'md5');
+        packet.q.sha256 = this.hash(packet.q, 'sha256');
+        packet.q.sha512 = this.hash(packet.q, 'sha512');
 
         this.talk(this._events.question, this.lib.copy(packet)); // global question event make sure to copy data.
 
@@ -800,9 +799,9 @@ class Deva {
           created: Date.now(), // set the created date for the answer
         };
         // create a hash for the answer and insert into answer meta.
-        packet_answer.md5 = this.lib.hash(packet_answer, 'md5');
-        packet_answer.sha256 = this.lib.hash(packet_answer, 'sha256');
-        packet_answer.sha512 = this.lib.hash(packet_answer, 'sha512');
+        packet_answer.md5 = this.hash(packet_answer, 'md5');
+        packet_answer.sha256 = this.hash(packet_answer, 'sha256');
+        packet_answer.sha512 = this.hash(packet_answer, 'sha512');
 
         packet.a = packet_answer; // set the packet.a to the packet_answer
         this.talk(this._events.answer, this.lib.copy(packet)); // global talk event
@@ -877,9 +876,9 @@ class Deva {
           packet_answer.text = result;
         }
         
-        packet_answer.md5 = this.lib.hash(packet_answer, 'md5'); // md5 the answer.
-        packet_answer.sha256 = this.lib.hash(packet_answer, 'sha256'); // sha256 the answer.
-        packet_answer.sha512 = this.lib.hash(packet_answer, 'sha512'); // sha512 the answer
+        packet_answer.md5 = this.hash(packet_answer, 'md5'); // md5 the answer.
+        packet_answer.sha256 = this.hash(packet_answer, 'sha256'); // sha256 the answer.
+        packet_answer.sha512 = this.hash(packet_answer, 'sha512'); // sha512 the answer
 
         packet.q.agent = agent; // set the question agent as the ask agent.
         packet.a = packet_answer; // set the packet answer.
@@ -890,9 +889,9 @@ class Deva {
         delete packet.sha512;
         
         // create new hashes for the packet before return.
-        packet.md5 = this.lib.hash(packet, 'md5');
-        packet.sha256 = this.lib.hash(packet, 'sha256');
-        packet.sha512 = this.lib.hash(packet, 'sha512');
+        packet.md5 = this.hash(packet, 'md5');
+        packet.sha256 = this.hash(packet, 'sha256');
+        packet.sha512 = this.hash(packet, 'sha512');
         
         this.talk(this._events.answer, this.lib.copy(packet)); // global talk event
         this.talk(`${agent.key}:ask:${packet.id.uid}`, packet);
@@ -941,13 +940,13 @@ class Deva {
       text: this._messages.init,
       created: Date.now(),
     }
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
 
     return new Promise((resolve, reject) => {
       
-      const license_check = this.license_check(client.VLA, pkg.VLA);
+      const license_check = this.license_check(client.VLA, this._core.VLA);
       if (!license_check) {
         this.prompt(this._messages.client_license_invalid);
         return resolve(this._messages.client_license_invalid); // return if} license check fails
@@ -1049,9 +1048,9 @@ class Deva {
 
     data.value = 'start';
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
     
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
 
@@ -1084,9 +1083,9 @@ class Deva {
 
     data.value = 'enter';
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
     
     this.state('enter', data.id.uid);
     this.talk(this._events.enter, data);
@@ -1117,9 +1116,9 @@ class Deva {
 
     data.value = 'done';
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
     
     this.state('done', data.id.uid);
     this.talk(this._events.done, data);
@@ -1148,9 +1147,9 @@ class Deva {
 
     data.value = 'ready';
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
 
     this.state('ready', data.id.uid);
     this.talk(this._events.ready, data);    
@@ -1178,9 +1177,9 @@ class Deva {
 
     data.finish = Date.now(); // set the finish timestamp
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
     
     this.state('finish', data.id.uid); // set finish state
     this.talk(this._events.finish, data);    
@@ -1208,9 +1207,9 @@ class Deva {
     delete data.sha512;
 
     data.complete = Date.now();// set the complete date on the whole data.
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
     
     this.state('complete', data.id.uid);
     this.talk(this._events.complete, data);
@@ -1247,9 +1246,9 @@ class Deva {
       created: Date.now(), // set the created date
     }
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
 
     // has stop function then set hasOnStop variable
     // if: has on stop then run on stop function or return exit function.
@@ -1285,9 +1284,9 @@ class Deva {
       created: Date.now(),
     }
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
 
     this.state('exit', id); // set the state to stop
     this.talk(this._events.exit, data);    
@@ -1339,9 +1338,9 @@ class Deva {
         created: Date.now(), // set the data created date.
       };
 
-      data.md5 = this.lib.hash(data);
-      data.sha256 = this.lib.hash(data, 'sha256');
-      data.sha512 = this.lib.hash(data, 'sha512');
+      data.md5 = this.hash(data);
+      data.sha256 = this.hash(data, 'sha256');
+      data.sha512 = this.hash(data, 'sha512');
 
       this.talk(this._events.state, data); // broadcasat the state event
       return data;
@@ -1365,9 +1364,9 @@ class Deva {
       created: Date.now(),      
     }
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
 
     this.state('return', `states:${id.uid}`);
     return data;
@@ -1398,9 +1397,9 @@ class Deva {
         created: Date.now(),
       };
 
-      data.md5 = this.lib.hash(data);
-      data.sha256 = this.lib.hash(data, 'sha256');
-      data.sha512 = this.lib.hash(data, 'sha512');
+      data.md5 = this.hash(data);
+      data.sha256 = this.hash(data, 'sha256');
+      data.sha512 = this.hash(data, 'sha512');
 
       this.talk(this._events.zone, data);
       return data;
@@ -1429,9 +1428,9 @@ class Deva {
       created: Date.now(), // set the created date of the object.
     }
     
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
     
     return data
   }
@@ -1465,9 +1464,9 @@ class Deva {
         created: Date.now(), // action time stamp
       };
 
-      data.md5 = this.lib.hash(data);
-      data.sha256 = this.lib.hash(data, 'sha256');
-      data.sha512 = this.lib.hash(data, 'sha512');
+      data.md5 = this.hash(data);
+      data.sha256 = this.hash(data, 'sha256');
+      data.sha512 = this.hash(data, 'sha512');
 
       this.talk(this._events.action, data); // talk the core action event
       return data;
@@ -1494,9 +1493,9 @@ class Deva {
       created: Date.now(), // set the data created date      
     };
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
 
     this.state('return', `actions:${id.uid}`);
     return data;
@@ -1526,9 +1525,9 @@ class Deva {
         created: Date.now(), // set the creation date
       };
 
-      data.md5 = this.lib.hash(data);
-      data.sha256 = this.lib.hash(data, 'sha256');
-      data.sha512 = this.lib.hash(data, 'sha512');
+      data.md5 = this.hash(data);
+      data.sha256 = this.hash(data, 'sha256');
+      data.sha512 = this.hash(data, 'sha512');
 
       this.talk(this._events.feature, data); // talk the feature event with data
       return data;
@@ -1556,9 +1555,9 @@ class Deva {
       created: Date.now(), // set the created date.
     };
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
 
     this.state('return', `features:${id.uid}`);
     return data;
@@ -1590,9 +1589,9 @@ class Deva {
         created: Date.now(),
       };
 
-      data.md5 = this.lib.hash(data);
-      data.sha256 = this.lib.hash(data, 'sha256');
-      data.sha512 = this.lib.hash(data, 'sha512');
+      data.md5 = this.hash(data);
+      data.sha256 = this.hash(data, 'sha256');
+      data.sha512 = this.hash(data, 'sha512');
 
       this.talk(this._events.context, data);
       return data;
@@ -1616,9 +1615,9 @@ class Deva {
       created: Date.now(),      
     };
 
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
 
     this.state('return', `contexts:${id.uid}`);
     return data;
@@ -1633,9 +1632,9 @@ class Deva {
   client() {
     if (!this._active) return this._messages.offline; // check the active status
     const data = this.lib.copy(this._client); // create a copy of the client data        
-    data.md5 = this.lib.hash(data, 'md5');
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data, 'md5');
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
     return data; // return the copy of the client data.
   }
 
@@ -1648,9 +1647,9 @@ class Deva {
   agent() {
     if (!this._active) return this._messages.offline; // check the active status
     const data = this.lib.copy(this._agent); // create a copy of the agent data.
-    data.md5 = this.lib.hash(data, 'md5');
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data, 'md5');
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
     return data; // return the copy of the agent data.
   }
 
@@ -1965,13 +1964,13 @@ class Deva {
     }
     
     this.state('hash', `${key}:${value}:md5:${id.uid}`)
-    data.md5 = this.lib.hash(data); // md5 the data packet
+    data.md5 = this.hash(data); // md5 the data packet
 
     this.state('hash', `${key}:${value}:sha256:${id.uid}`)
-    data.sha256 = this.lib.hash(data, 'sha256'); // sha256 the data packet
+    data.sha256 = this.hash(data, 'sha256'); // sha256 the data packet
 
     this.state('hash', `${key}:${value}:sha512:${id.uid}`)
-    data.sha512 = this.lib.hash(data, 'sha512'); // sha512 the data packet
+    data.sha512 = this.hash(data, 'sha512'); // sha512 the data packet
     
     this.action('talk', `${key}:${value}:${id.uid}`);
     this.talk(this._events.prompt, data);
@@ -1995,9 +1994,9 @@ class Deva {
     data.id = id;
     data.created = Date.now();
     
-    data.md5 = this.lib.hash(data, 'md5');
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data, 'md5');
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
     
     this.state('return', `core:${id.uid}`);
     return data;
@@ -2017,9 +2016,9 @@ class Deva {
     data.id = id;
     data.created = Date.now();
     
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
 
     this.state('return', `info:${id.uid}`);
     return data;
@@ -2145,9 +2144,9 @@ class Deva {
       packet,
       created: Date.now(),
     }
-    data.md5 = this.lib.hash(data);
-    data.sha256 = this.lib.hash(data, 'sha256');
-    data.sha512 = this.lib.hash(data, 'sha512');
+    data.md5 = this.hash(data);
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
   
     this.talk(this._events.error, this.lib.copy(data));
   
@@ -2175,7 +2174,7 @@ class Deva {
     const time = Date.now(); // set time to local constant
     const date = this.lib.formatDate(time, 'long', true); // set date to local constant
 
-    const pkg_hash = this.lib.hash(pkg, 'sha256');
+    const core_hash = this.hash(this._core, 'sha256');
     const client_hash = this.client().sha256 || false;
     const agent_hash = this.agent().sha256 || false;
     const machine_hash = this.lib.machine();
@@ -2186,10 +2185,10 @@ class Deva {
       date,
       client: client_hash,
       agent: agent_hash,
-      pkg: pkg_hash,
+      core: core_hash,
       machine: machine_hash,
       warning: this._messages.uid_warning,
-      copyright: pkg.copyright,
+      copyright: this._core.copyright,
     }
     if (guid) {
       const uid = randomUUID(); // set uid into local constant.
@@ -2205,9 +2204,9 @@ class Deva {
       const uid = `${begin_random}${end_random}`; // set uid to local constant
       data.uid = uid; // set base data object.
     }
-    data.md5 = this.lib.hash(data, 'md5'); // md5 the uid and created. 
-    data.sha256 = this.lib.hash(data, 'sha256'); // sha256 the uid, created, md5
-    data.sha512 = this.lib.hash(data, 'sha512'); // sha512 the uid, created, md5, sha256.
+    data.md5 = this.hash(data, 'md5'); // md5 the uid and created. 
+    data.sha256 = this.hash(data, 'sha256'); // sha256 the uid, created, md5
+    data.sha512 = this.hash(data, 'sha512'); // sha512 the uid, created, md5, sha256.
     return data; // return the complete uid data.
   }  
   
@@ -2231,8 +2230,8 @@ class Deva {
     
     const container = `OM:O:${key.toUpperCase()}:${transport}`; // set container string.
 
-    const packet_hash = this.lib.hash(packet, 'sha256');
-    const token = this.lib.hash(`${key} client:${client.profile.id} fullname:${client.profile.fullname} transport:${transport}`, 'sha256');
+    const packet_hash = this.hash(packet, 'sha256');
+    const token = this.hash(`${key} client:${client.profile.id} fullname:${client.profile.fullname} transport:${transport}`, 'sha256');
     
     // build the main data packet.
     const data = {
@@ -2264,9 +2263,9 @@ class Deva {
       warning: client.warning || agent.warning || 'none',
       copyright: client.profile.copyright || agent.profile.copyright,
     };
-    data.md5 = this.lib.hash(data, 'md5'); // hash data packet into md5 and inert into data.
-    data.sha256 = this.lib.hash(data, 'sha256'); // hash data into sha 256 then set in data.
-    data.sha512 = this.lib.hash(data, 'sha512'); // hash data into sha 512 then set in data.
+    data.md5 = this.hash(data, 'md5'); // hash data packet into md5 and inert into data.
+    data.sha256 = this.hash(data, 'sha256'); // hash data into sha 256 then set in data.
+    data.sha512 = this.hash(data, 'sha512'); // hash data into sha 512 then set in data.
     return data;
   }
   
@@ -2278,8 +2277,8 @@ class Deva {
     
     // this is to ensure no additional information is being transmitted.
     this.state('license', `compare:sha256:${packageVLA.uid}`);
-    const personalVLA_hash = this.lib.hash(personalVLA, 'sha256');
-    const packageVLA_hash = this.lib.hash(packageVLA, 'sha256');
+    const personalVLA_hash = this.hash(personalVLA, 'sha256');
+    const packageVLA_hash = this.hash(packageVLA, 'sha256');
     
     if (personalVLA_hash !== packageVLA_hash) return false;
   
@@ -2290,12 +2289,28 @@ class Deva {
       personal: personalVLA_hash,
       package: packageVLA_hash,
     };
-    approved.md5 = this.lib.hash(approved, 'md5');
-    approved.sha256 = this.lib.hash(approved, 'sha256');
-    approved.sha512 = this.lib.hash(approved, 'sha512');
+    approved.md5 = this.hash(approved, 'md5');
+    approved.sha256 = this.hash(approved, 'sha256');
+    approved.sha512 = this.hash(approved, 'sha512');
 
     this.state('return', `license:${packageVLA.uid}`);
     return approved;
   }
+
+  /**************
+  func: hash
+  params:
+    - texts: The text string to create a hash value for.
+    - algo: The hashing algorithm to use for hashing. md5, sha256, or sha512
+  
+  describe:
+    The hash algorithm will take a string of text and produce a hash.
+  ***************/
+  hash(str, algo='md5') {
+    const the_hash = createHash(algo);
+    the_hash.update(JSON.stringify(str));
+    return the_hash.digest('base64');
+  }
+  
 }
 export default Deva;

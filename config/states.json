@@ -116,7 +116,6 @@
 		"dharma": "🧘 Dharma",
 		"adharma": "👿 Adharma",
 		"bullshit": "🐂 Bullshit",
-		"pervert": "💋 Pervert",
 		"threat": "🗡️ Threat",
 		"protect": "🥽️ Protect",
 		"conceal": "🫣️ Conceal",
@@ -151,6 +150,11 @@
 		"compromised": "🥹 Compromised",
 		"crisis": "😱 Crisis",
 		"fake": "🥸 Fake",
-		"real": "😲 Real"
+		"real": "😲 Real",
+		"pervert": "💋 Pervert",
+		"mature": "🧓 Mature",
+		"immature": "🧒 Immature",
+		"consent": "✍️ Consent",
+		"hostile": "😖 Hostile"
 	}
 }
