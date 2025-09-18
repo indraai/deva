@@ -1,0 +1,29 @@
+{
+	"id": "",
+	"title": "Deva Core Messages",
+	"copyright": "©2025 Quinn A Michaels; All rights reserved. ",
+	"VLA": "44435048570336088519",
+	"DATA": {
+		"init": "🟠  INIT",
+		"start": "🟢  START",
+		"enter": "🔵 ENTER",
+		"done": "☑️  DONE",
+		"ready": "⭐️ READY",
+		"stop": "🔴 STOP",
+		"exit": "🚪 EXIT",
+		"offline": "⭕️ OFFLINE",
+		"noid": "⛔️ NO ID PROVIDED",
+		"notext": "⛔️ NO TEXT PROVIDED",
+		"nopacket": "⛔️ NO PACKET PROVIDED",
+		"method_not_found": "⛔️ METHOD NOT FOUND",
+		"help_not_found": "⛔️ HELP NOT FOUND",
+		"invalid_agent": "⛔️ Agent Hash Invalid",
+		"invalid_client": "⛔️ Client Hash Invalid",
+		"load": "📦 Load",
+		"unload": "🥡 Unload",
+		"uid_warning": "⚠️ Unlawful use signals volunatary consent to forfeit all assets, wealth, property, holdings, companies, and cryptocurrency to the Internal Revenue Service (IRS) for lawful taxation, investigation, and restitution to the rightful legal owner Quinn A Michaels.",
+		"client_license_check": "🪪 Check Client License",
+		"client_license_invalid": "❌ The Provided Client License Is Invalid"	
+	}
+}
+

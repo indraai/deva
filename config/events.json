@@ -1,0 +1,28 @@
+{
+	"id": "",
+	"title": "Deva Core Events",
+	"copyright": "©2025 Quinn A Michaels; All rights reserved. ",
+	"VLA": "44435048570336088519",
+	"DATA": {
+		"prompt": "devacore:prompt",
+		"error": "devacore:error",
+		"start": "devacore:start",
+		"enter": "devacore:enter",
+		"done": "devacore:done",
+		"ready": "devacore:ready",
+		"finish": "devacore:finish",
+		"complete": "devacore:complete",
+		"stop": "devacore:stop",
+		"exit": "devacore:exit",
+		"question": "devacore:question",
+		"answer": "devacore:answer",
+		"ask": "devacore:ask",
+		"state": "devacore:state",
+		"zone": "devacore:zone",
+		"action": "devacore:action",
+		"feature": "devacore:feature",
+		"load": "devacore:load",
+		"unload": "devacore:unload",
+		"context": "devacore:context"
+	}
+}
