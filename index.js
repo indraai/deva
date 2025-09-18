@@ -71,16 +71,45 @@ class Deva {
 
     this._zone = config.zone; // set the current zone from config data.
     this._zones = config.zones; // set the zones from config data.
+    // load any custom zones from the agent file
+    if (this._agent.zones) {
+      for (let item in this._agent.zones) {
+        if (!this._zones[item]) this._zones[item] = this._agent.zones[item];
+      }
+      delete this._agent.zones;
+    }
     
     this._action = config.action; // set the action from config data.
     this._actions = config.actions; // set the actions from config data.
+    // load any custom actions from the agent file
+    if (this._agent.actions) {
+      for (let item in this._agent.actions) {
+        if (!this._actions[item]) this._actions[item] = this._agent.actions[item];
+      }
+      delete this._agent.actions;
+    }
 
     this._state = config.state; // set the current state from config data.
     this._states = config.states; // set the states from options
+    // load any custom actions from the agent file
+    if (this._agent.actions) {
+      for (let item in this._agent.actions) {
+        if (!this._actions[item]) this._actions[item] = this._agent.actions[item];
+      }
+      delete this._agent.actions;
+    }
 
     this._context = config.context || false; // set the local context
 
     this._messages = config.messages; // set the messages from config data.
+    // load any custom actions from the agent file
+    if (this._agent.messages) {
+      for (let item in this._agent.messages) {
+        if (!this._messages[item]) this._messages[item] = this._agent.messages[item];
+      }
+      delete this._agent.messages;
+    }
+
   }
 
   /**************
