@@ -233,8 +233,12 @@ class Deva {
       },
       created: Date.now(),
     };
+    
+    this.action('hash', `md5:${packet.a.id.uid}`);
     packet.a.md5 = this.hash(packet.a, 'md5');
+    this.action('hash', `sha256:${packet.a.id.uid}`);
     packet.a.sha256 = this.hash(packet.a, 'sha256');
+    this.action('hash', `sha512:${packet.a.id.uid}`);
     packet.a.sha512 = this.hash(packet.a, 'sha512');
 
     delete packet.md5;
@@ -634,7 +638,6 @@ class Deva {
     to create seamless collaboration between Devas.
   ***************/
   talk(evt, packet=false) {
-    this.action('talk', evt)
     return this.events.emit(evt, packet);
   }
 
@@ -1181,7 +1184,8 @@ class Deva {
     data.sha512 = this.hash(data, 'sha512');
 
     this.state('ready', data.id.uid);
-    this.talk(this._events.ready, data);    
+    this.talk(this._events.ready, data);   
+    this.zone('home', `client:home:${data.id.uid}`);
     return hasOnReady ? this.onReady(data, resolve) : resolve(data);
   }
   
@@ -1992,13 +1996,13 @@ class Deva {
       created: Date.now(),
     }
     
-    this.state('hash', `${key}:${value}:md5:${id.uid}`)
+    this.action('hash', `md5:${data.id.uid}`);    
     data.md5 = this.hash(data); // md5 the data packet
 
-    this.state('hash', `${key}:${value}:sha256:${id.uid}`)
+    this.action('hash', `sha256:${data.id.uid}`);
     data.sha256 = this.hash(data, 'sha256'); // sha256 the data packet
 
-    this.state('hash', `${key}:${value}:sha512:${id.uid}`)
+    this.action('hash', `sha512:${data.id.uid}`);
     data.sha512 = this.hash(data, 'sha512'); // sha512 the data packet
     
     this.action('talk', `${key}:${value}:${id.uid}`);
@@ -2027,7 +2031,29 @@ class Deva {
     data.sha256 = this.hash(data, 'sha256');
     data.sha512 = this.hash(data, 'sha512');
     
-    this.state('return', `core:${id.uid}`);
+    this.action('return', `core:${id.uid}`);
+    return data;
+  }
+
+  // machine returns the sha256 machine fingerprint 
+  machine() {
+    const {os} = this.lib;
+    const data = {
+      arch: os.arch(),
+      hostname: os.hostname(),
+      network: os.networkInterfaces(),
+      platform: os.platform(),
+      release: os.release(),
+      type: os.type(),
+      user: os.userInfo(),
+      version: os.version(),
+      uptime: os.uptime(),
+      cpus: os.cpus(),
+      created: Date.now(),
+    };
+    data.md5 = this.hash(data, 'md5');
+    data.sha256 = this.hash(data, 'sha256');
+    data.sha512 = this.hash(data, 'sha512');
     return data;
   }
 
@@ -2204,10 +2230,11 @@ class Deva {
     const date = this.lib.formatDate(time, 'long', true); // set date to local constant
 
     const core_hash = this.hash(this._core, 'sha256');
+    const machine_hash = this.machine().sha256;
+
     const client_hash = this.client().sha256 || false;
     const agent_hash = this.agent().sha256 || false;
-    const machine_hash = this.lib.machine();
-    
+
     const data = {
       uid: false,
       time,
@@ -2329,15 +2356,15 @@ class Deva {
   /**************
   func: hash
   params:
-    - texts: The text string to create a hash value for.
+    - data: The data packet to create a hash value for.
     - algo: The hashing algorithm to use for hashing. md5, sha256, or sha512
   
   describe:
     The hash algorithm will take a string of text and produce a hash.
   ***************/
-  hash(str, algo='md5') {
+  hash(data, algo='md5') {
     const the_hash = createHash(algo);
-    the_hash.update(JSON.stringify(str));
+    the_hash.update(JSON.stringify(data));
     return the_hash.digest('base64');
   }
   
