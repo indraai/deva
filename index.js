@@ -12,7 +12,7 @@ import pkg from './package.json' with {type:'json'};
 class Deva {
   constructor(opts) {
     opts = opts || {}; // set opts to provided opts or an empty object.
-    this._core = pkg;
+    this._core = pkg; // set the core from the package data.
     this._id = opts.id || randomUUID(); // the unique id assigned to the agent at load
     this._info = opts.info || false; // the deva information from the package file.
     this._config = opts.config || {}; // local Config Object
