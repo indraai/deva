@@ -1068,6 +1068,7 @@ class Deva {
   usage: this.start('msg')
   ***************/
   start(data, resolve) {
+    this.context('start', data.id.uid);
     this.zone('start', data.id.uid);
     if (!this._active) return resolve(this._messages.offline);
 
@@ -1103,6 +1104,7 @@ class Deva {
   usage: this.enter('msg')
   ***************/
   enter(data, resolve) {
+    this.context('enter', data.id.uid);
     this.zone('enter', data.id.uid);
     if (!this._active) return resolve(this._messages.offline);
 
@@ -1136,6 +1138,7 @@ class Deva {
   usage: this.done('msg')
   ***************/
   done(data, resolve) {
+    this.context('done', data.id.uid);
     this.zone('done', data.id.uid);
     if (!this._active) return resolve(this._messages.offline);
 
@@ -1166,6 +1169,7 @@ class Deva {
   usage: this.ready(data, resolve)
   ***************/
   ready(data, resolve) {
+    this.context('ready', data.id.uid);
     this.zone('ready', data.id.uid);
     if (!this._active) return resolve(this._messages.offline);
 
@@ -1198,8 +1202,9 @@ class Deva {
   usage: this.finish(data, resolve)
   ***************/
   finish(data, resolve) {
-    this.zone('finish', data.id.uid); // enter finish zone
     if (!this._active) return resolve(this._messages.offline); //
+    this.context('finish', data.id.uid);
+    this.zone('finish', data.id.uid); // enter finish zone
 
     this.action('finish', data.id.uid); // start finish action
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
@@ -1229,8 +1234,9 @@ class Deva {
   usage: this.complete(data, resolve)
   ***************/
   complete(data, resolve) {
-    this.zone('complete', data.id.uid);
     if (!this._active) return Promise.resolve(this._messages.offline);
+    this.context('complete', data.id.uid);
+    this.zone('complete', data.id.uid);
 
     this.action('complete', data.id.uid);
     const hasOnComplete = this.onComplete && typeof this.onComplete === 'function';
@@ -1263,9 +1269,10 @@ class Deva {
     this.stop()
   ***************/
   stop() {
-    const id = this.uid();
-    this.zone('stop', id);
     if (!this._active) return Promise.resolve(this._messages.offline);
+    const id = this.uid();
+    this.context('stop', id);
+    this.zone('stop', id);
 
     this.action('stop', id);
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
@@ -1301,9 +1308,10 @@ class Deva {
     function.
   ***************/
   exit() {
-    const id = this.uid();
-    this.zone('exit', id);
     if (!this._active) return Promise.resolve(this._messages.offline);
+    const id = this.uid();
+    this.context('exit', id);
+    this.zone('exit', id);
 
     this.action('exit', id);
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
@@ -1357,7 +1365,7 @@ class Deva {
   ***************/
   state(value=false, extra=false) {
     try {
-      if (!value || !this._states[value] || value === this._state) return; // return if no matching value
+      if (!value || !this._states[value]) return; // return if no matching value
       this._state = value; // set the local state variable.
       const lookup = this._states[value]; // set the local states lookup
       const text = extra ? `${lookup} ${extra}` : lookup; // set text from lookup with extra
@@ -1413,7 +1421,7 @@ class Deva {
   ***************/
   zone(value=false, extra=false) {
     const id = this.uid();
-    if (!value || !this._zones[value] || value === this._zone) return;
+    if (!value || !this._zones[value]) return;
 
     try {
       this._zone = value;
@@ -1478,7 +1486,7 @@ class Deva {
   action(value=false, extra=false) {
     const id = this.uid();
     try {
-      if (!value || !this._actions[value] || value === this._action) return;
+      if (!value || !this._actions[value]) return;
       this._action = value; // set the local action variable
       // check local vars for custom actions
       const var_action = this.vars.actions ? this.vars.actions[value] : false;
@@ -1996,13 +2004,13 @@ class Deva {
       created: Date.now(),
     }
     
-    this.action('hash', `md5:${data.id.uid}`);    
+    this.action('hash', `${key}:${value}:md5:${data.id.uid}`);    
     data.md5 = this.hash(data); // md5 the data packet
 
-    this.action('hash', `sha256:${data.id.uid}`);
+    this.action('hash', `${key}:${value}:sha256:${data.id.uid}`);
     data.sha256 = this.hash(data, 'sha256'); // sha256 the data packet
 
-    this.action('hash', `sha512:${data.id.uid}`);
+    this.action('hash', `${key}:${value}:sha512:${data.id.uid}`);
     data.sha512 = this.hash(data, 'sha512'); // sha512 the data packet
     
     this.action('talk', `${key}:${value}:${id.uid}`);
@@ -2230,10 +2238,10 @@ class Deva {
     const date = this.lib.formatDate(time, 'long', true); // set date to local constant
 
     const core_hash = this.hash(this._core, 'sha256');
-    const machine_hash = this.machine().sha256;
-
-    const client_hash = this.client().sha256 || false;
-    const agent_hash = this.agent().sha256 || false;
+    const machine_hash = this.machine().sha256; // get the machine hash
+    
+    const client_hash = this.client().sha256 || false; // get client hash
+    const agent_hash = this.agent().sha256 || false; // get agent hash
 
     const data = {
       uid: false,

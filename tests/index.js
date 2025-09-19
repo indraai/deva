@@ -92,11 +92,10 @@ const DevaTest = new Deva({
 			console.log(`💥  action: ${packet.text}`);
 		},
 		'devacore:feature'(packet) {
-			this.context('feature', `${packet.value}:${packet.id.uid}`);
-			console.log(`🍿 feature: ${packet.text}`);
+			console.log(`\n🍿 feature: ${packet.text}`);
 		},
 		'devacore:context'(packet) {
-			console.log(`\n🛹 context: ${packet.text}`);
+			console.log(`🛹 context: ${packet.text}`);
 		},
 		'devacore:error'(packet) {
 			console.log(`❌ error: ${packet.text}`);
@@ -169,30 +168,12 @@ const DevaTest = new Deva({
 			return test;			
 		},
 	},
-	onStart(data, resolve) {
-		this.context('start', data.id.uid);
-		return this.enter(data, resolve);
-	},
-	onEnter(data, resolve) {
-		this.context('enter', data.id.uid);
-		return this.done(data, resolve);
-	},
-	onDone(data, resolve) {
-		this.context('done', data.id.uid);
-		return this.ready(data, resolve);
-	},
 	onReady(data, resolve) {
-		this.context('ready', data.id.uid);
 		const test = this.methods.test(data);		
 		this.prompt(test.text);
 		return resolve(data);			
 	},
-	onFinish(data, resolve) {
-		this.context('finish', data.id.uid);
-		return this.complete(data, resolve);
-	},
 	onComplete(data, resolve) {
-		this.context('complete', data.id.uid);
 		return resolve(data);
 	},
 	onError(e) {
