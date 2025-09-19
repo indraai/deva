@@ -485,4 +485,4 @@ The `init()` function will initialize the Deva and run the `onInit()` state func
 
 ©2025 Quinn A Michaels; All rights reserved.  
 Legal Signature Required For Lawful Use.  
-Distributed under VLA:25552873878502387963 LICENSE.md
+Distributed under VLA:19341514494262600745 LICENSE.md
