@@ -1,8 +1,8 @@
 {
 	"id": "53350871362784776361",
 	"title": "Deva Core Events",
-	"copyright": "©2025 Quinn A Michaels; All rights reserved. ",
-	"VLA": "71443370153036576517",
+	"copyright": "Copyright ©2025 Quinn A Michaels; All rights reserved. ",
+	"VLA": "44091450722329207445",
 	"DATA": {
 		"prompt": "devacore:prompt",
 		"error": "devacore:error",
