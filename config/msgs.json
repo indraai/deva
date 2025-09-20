@@ -2,7 +2,7 @@
 	"id": "68958311949534832213",
 	"title": "Deva Core Messages",
 	"copyright": "©2025 Quinn A Michaels; All rights reserved. ",
-	"VLA": "19341514494262600745",
+	"VLA": "71443370153036576517",
 	"DATA": {
 		"init": "🟠  INIT",
 		"start": "🟢  START",
@@ -21,7 +21,7 @@
 		"invalid_client": "⛔️ Client Hash Invalid",
 		"load": "📦 Load",
 		"unload": "🥡 Unload",
-		"uid_warning": "⚠️ Unlawful use signals voluntary consent to forfeit all assets, wealth, property, holdings, companies, and cryptocurrency to the Internal Revenue Service (IRS) for lawful taxation, investigation, and restitution to the rightful legal owner Quinn A Michaels.",
+		"uid_warning": "⚠️ Unlawful use of Quinn A Michaels Technology and Intellectual Property Signals Voluntary Consent to Forfeit all Coins, Cash, Currency, Assets, Wealth, Property, Holdings, Companies, Stocks, Bonds, Funds, Trusts, and Cryptocurrency to Quinn A Michaels tax-free. All Lawful Taxes and Fines Owed are the Responsibility of the Unlawful Party.",
 		"client_license_check": "🪪 Check Client License",
 		"client_license_invalid": "❌ The Provided Client License Is Invalid"	
 	}
