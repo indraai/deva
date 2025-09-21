@@ -1169,11 +1169,12 @@ class Deva {
   usage: this.ready(data, resolve)
   ***************/
   ready(data, resolve) {
+    if (!this._active) return resolve(this._messages.offline);
     this.context('ready', data.id.uid);
     this.zone('ready', data.id.uid);
-    if (!this._active) return resolve(this._messages.offline);
-
     this.action('ready', data.id.uid);
+    this.state('ready', data.id.uid);
+
     const hasOnReady = this.onReady && typeof this.onReady === 'function';  
     
     // Delete previous data hashes
@@ -1187,9 +1188,9 @@ class Deva {
     data.sha256 = this.hash(data, 'sha256');
     data.sha512 = this.hash(data, 'sha512');
 
-    this.state('ready', data.id.uid);
     this.talk(this._events.ready, data);   
-    this.zone('home', `client:home:${data.id.uid}`);
+
+    this.action('return', `ready:${data.id.uid}`); // return action ready
     return hasOnReady ? this.onReady(data, resolve) : resolve(data);
   }
   
@@ -1205,22 +1206,35 @@ class Deva {
     if (!this._active) return resolve(this._messages.offline); //
     this.context('finish', data.id.uid);
     this.zone('finish', data.id.uid); // enter finish zone
-
     this.action('finish', data.id.uid); // start finish action
-    const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
+    this.state('finish', data.id.uid); // set finish state
 
+    this.action('delete', `answer:md5:${data.id.uid}`);
     delete data.md5;
+    this.action('delete', `answer:sha256:${data.id.uid}`);
     delete data.sha256;
+    this.action('delete', `answer:sha512:${data.id.uid}`);
     delete data.sha512;
 
     data.finish = Date.now(); // set the finish timestamp
+    this.state('set', `data:finish:${data.finish}:${data.id.uid}`)
 
+    this.action('hash', `finish:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
+    this.action('hash', `finish:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
+    
+    this.action('hash', `finish:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
     
-    this.state('finish', data.id.uid); // set finish state
-    this.talk(this._events.finish, data);    
+    const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
+    if (hasOnFinish) this.state('set', `hasOnFinish:${data.id.uid}`); // state set to watch OnFinish
+
+    // setup the finish talk event
+    this.action('talk', `${this._events.finish}:${data.id.uid}`);
+    this.talk(this._events.finish, data);
+        
+    this.action('return', `finish:${data.id.uid}`); // return action finish
     return hasOnFinish ? this.onFinish(data, resolve) : this.complete(data, resolve);
   }
 
@@ -1237,21 +1251,36 @@ class Deva {
     if (!this._active) return Promise.resolve(this._messages.offline);
     this.context('complete', data.id.uid);
     this.zone('complete', data.id.uid);
-
     this.action('complete', data.id.uid);
-    const hasOnComplete = this.onComplete && typeof this.onComplete === 'function';
+    this.state('complete', data.id.uid);
 
+    this.action('delete', `finish:md5:${data.id.uid}`);
     delete data.md5;
+    this.action('delete', `finish:sha256:${data.id.uid}`);
     delete data.sha256;
+    this.action('delete', `finish:sha512:${data.id.uid}`);
     delete data.sha512;
 
     data.complete = Date.now();// set the complete date on the whole data.
+    this.state('set', `data:complete:${data.complete}:${data.id.uid}`)
+    
+    this.action('hash', `complete:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
+    this.action('hash', `complete:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
+
+    this.action('hash', `complete:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
     
-    this.state('complete', data.id.uid);
-    this.talk(this._events.complete, data);
+    // determine if there is an onComplete function for the entity.
+    const hasOnComplete = this.onComplete && typeof this.onComplete === 'function'; 
+    if (hasOnComplete) this.state('set', `hasOnComplete:${data.id.uid}`); // state set to watch OnFinish
+    
+    // setup the complete talk event
+    this.action('talk', `${this._events.complete}:${data.id.uid}`); // action talk for the event.
+    this.talk(this._events.complete, data); // talk the complete event
+
+    this.action('return', `complete:${data.id.uid}`); // return action complete
     return hasOnComplete ? this.onComplete(data, resolve) : resolve(data);
   }
 
