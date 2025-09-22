@@ -2134,7 +2134,6 @@ class Deva {
       this.zone('unload', key);
       this.action('unload', key);
       this.state('unload', key);
-  
       this.state('try', `unload:${key}`);
       try {
         this.devas[key].stop().then(exit => {
@@ -2143,7 +2142,7 @@ class Deva {
           this.talk(this._events.unload, key);
         });
         this.action('resolve', `unload:${key}`);
-        return resolve(exit);
+        return resolve(`${this._messages.unload}:${key}`);
       } catch (e) {
         this.state('catch', `unload:${key}`);
         return this.err(e, this.devas[key], reject)
