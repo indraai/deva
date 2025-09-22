@@ -1496,23 +1496,33 @@ class Deva {
   /**************
   func: states
   params: none
-  describe: returns the avaiable staets values.
+  describe: returns the available states values.
   ***************/
   states() {
+    if (!this._active) return Promise.resolve(this._messages.offline);
     const id = this.uid();    
-    this.action('states', id);
+    const key = 'states';    
+    this.action(key, id.uid);
+
+    // set the data packet for the states
+    this.state('data', `${key}:${id.uid}`);
     const data = {
       id,
-      key: 'states',
+      key,
       value: this._states,
+      agent: this.agent(),
+      client: this.client(),
       created: Date.now(),      
     }
 
+    this.action('hash', `${data.key}:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
-    data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
+    data.sha256 = this.hash(data, 'sha256');    
+    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
     data.sha512 = this.hash(data, 'sha512');
 
-    this.state('return', `states:${id.uid}`);
+    this.action('return', `${data.key}:${id.uid}`);
     return data;
   }
 
@@ -1548,7 +1558,6 @@ class Deva {
       this.talk(this._events.zone, data);
       return data;
     } catch (e) {
-      this.state('catch', `zone:${value}:${id.uid}`);
       return this.err(e, value);
     }
   }
@@ -1559,23 +1568,29 @@ class Deva {
   describe: returns a listing of zones currently in the system.
   ***************/
   zones() {
+    if (!this._active) return Promise.resolve(this._messages.offline);
     const id = this.uid();
-    this.action('zones', id.uid);
-    this.state('return', `zones:${id.uid}`);
-    
+    const key = 'zones';
+    this.action(key, id.uid);
+
+    this.state('data', `${key}:${id.uid}`);    
     const data = {
       id, // set the uuid of the data
-      agent: this.agent(), // set the agent value
-      cleint: this.client(), // set the client value
-      key: 'zones', // set the key return value
+      key, // set the key return value
       value: this._zones, // set the list of zones
+      agent: this.agent(), // set the agent value
+      client: this.client(), // set the client value
       created: Date.now(), // set the created date of the object.
     }
     
+    this.action('hash', `${data.key}:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
-    data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
+    data.sha256 = this.hash(data, 'sha256');    
+    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
     data.sha512 = this.hash(data, 'sha512');
     
+    this.action('return', `${data.key}:${id.uid}`);
     return data
   }
 
@@ -1626,19 +1641,26 @@ class Deva {
   describe: Returns a list of available actions in the system.
   ***************/
   actions() {
+    if (!this._active) return Promise.resolve(this._messages.offline);
     const id = this.uid();
-    this.action('actions', id.uid);
+    const key = 'actions';
+    this.action(key, id.uid);
+    
+    this.state('data', `${key}:${id.uid}`);    
     const data = {
       id, // set the id with a uuid
+      key, // set the data key
+      value: this._actions, // set the value to the actions list
       agent: this.agent(), // set the agent value
       client: this.client(), // set the client value
-      key: 'actions', // set the data key
-      value: this._actions, // set the value to the actions list
       created: Date.now(), // set the data created date      
     };
 
+    this.action('hash', `${data.key}:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
-    data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
+    data.sha256 = this.hash(data, 'sha256');    
+    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
     data.sha512 = this.hash(data, 'sha512');
 
     this.state('return', `actions:${id.uid}`);
