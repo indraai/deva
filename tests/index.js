@@ -168,9 +168,18 @@ const DevaTest = new Deva({
 			return test;			
 		},
 	},
+	onInit(data, resolve) {
+		return this.start(data, resolve);
+	},
+	onStart(data, resolve) {
+		return this.enter(data, resolve);
+	},
+	onEnter(data, resolve) {
+		return this.ready(data, resolve);
+	},
 	onReady(data, resolve) {
 		const test = this.methods.test(data);		
-		this.prompt(test.text);
+		this.prompt(this._messages.ready);
 		return resolve(data);			
 	},
 	onComplete(data, resolve) {

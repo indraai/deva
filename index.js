@@ -1055,7 +1055,10 @@ class Deva {
         return this.Done(resolve, reject);
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
-        if (hasOnInit) this.state('set', `hasOnInit:${data.id.uid}`); // state set to watch onInit
+        if (hasOnInit) {
+          this.action('onfunc', `hasOnInit:${data.id.uid}`); // state set to watch onInit
+          this.state('onfunc', `hasOnInit:${data.id.uid}`); // state set to watch onInit
+        }
         this.action('return', `init:${data.id.uid}`);
         return hasOnInit ? this.onInit(data, resolve) : this.start(data, resolve);
       }).catch(err => {
@@ -1104,7 +1107,10 @@ class Deva {
     this.talk(this._events.start, data);
 
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
-    if (hasOnStart) this.state('set', `hasOnStart:${data.id.uid}`); // state set to watch OnFinish
+    if (hasOnStart) {
+      this.action('onfunc', `hasOnStart:${data.id.uid}`); // set action to onfunc
+      this.state('onfunc', `hasOnStart:${data.id.uid}`); // set state to onfunc
+    }
     
     this.action('return', `start:${data.id.uid}`); // return action finish
     return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
@@ -1149,7 +1155,10 @@ class Deva {
     this.talk(this._events.enter, data);
 
     const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
-    if (hasOnEnter) this.state('set', `hasOnEnter:${data.id.uid}`); // state set to watch OnFinish
+    if (hasOnEnter) {
+      this.action('onfunc', `hasOnEnter:${data.id.uid}`); // action onfunc set
+      this.state('onfunc', `hasOnEnter:${data.id.uid}`); // state onfunc set
+    }
 
     this.action('return', `enter:${data.id.uid}`); // return action finish
     return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
@@ -1194,7 +1203,10 @@ class Deva {
     this.talk(this._events.done, data);
 
     const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
-    if (hasOnDone) this.state('set', `hasOnDone:${data.id.uid}`); // state set to watch OnFinish
+    if (hasOnDone) {
+      this.action('onfunc', `hasOnDone:${data.id.uid}`); // state onfunc
+      this.state('onfunc', `hasOnDone:${data.id.uid}`); // state onfunc
+    }
     
     this.action('return', `done:${data.id.uid}`); // return action finish
     return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
@@ -1237,7 +1249,10 @@ class Deva {
     this.talk(this._events.ready, data);   
 
     const hasOnReady = this.onReady && typeof this.onReady === 'function';  
-    if (hasOnReady) this.state('set', `hasOnReady:${data.id.uid}`); // state set to watch OnFinish
+    if (hasOnReady) {
+      this.action('onfunc', `hasOnReady:${data.id.uid}`); // action onfunc
+      this.state('onfunc', `hasOnReady:${data.id.uid}`); // state onfunc
+    }
 
     this.action('resolve', `ready:${data.id.uid}`); // return action ready
     return hasOnReady ? this.onReady(data, resolve) : resolve(data);
@@ -1280,7 +1295,10 @@ class Deva {
     this.talk(this._events.finish, data);
 
     const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
-    if (hasOnFinish) this.state('set', `hasOnFinish:${data.id.uid}`); // state set to watch OnFinish
+    if (hasOnFinish) {
+      this.action('onfunc', `hasOnFinish:${data.id.uid}`); // action onfunc
+      this.state('onfunc', `hasOnFinish:${data.id.uid}`); // state onfunc
+    }
         
     this.action('return', `finish:${data.id.uid}`); // return action finish
     return hasOnFinish ? this.onFinish(data, resolve) : this.complete(data, resolve);
@@ -1326,7 +1344,10 @@ class Deva {
 
     // determine if there is an onComplete function for the entity.
     const hasOnComplete = this.onComplete && typeof this.onComplete === 'function'; 
-    if (hasOnComplete) this.state('set', `hasOnComplete:${data.id.uid}`); // state set to watch OnFinish
+    if (hasOnComplete) {
+      this.action('onfunc', `hasOnComplete:${data.id.uid}`); // action onfunc
+      this.state('onfunc', `hasOnComplete:${data.id.uid}`); // state onfunc
+    }
 
     this.action('return', `complete:${data.id.uid}`); // return action complete
     return hasOnComplete ? this.onComplete(data, resolve) : resolve(data);
@@ -1383,7 +1404,10 @@ class Deva {
     
     // determine if there is an onComplete function for the entity.
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
-    if (hasOnStop) this.state('set', `hasOnStop:${data.id.uid}`); // state set to watch OnFinish
+    if (hasOnStop) {
+      this.action('onfunc', `hasOnStop:${data.id.uid}`); // action onfunc
+      this.state('onfunc', `hasOnStop:${data.id.uid}`); // state onfunc
+    }
     return hasOnStop ? this.onStop(data) : this.exit(data)
   }
 
@@ -1451,7 +1475,10 @@ class Deva {
     this.talk(this._events.exit, data);    
 
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
-    if (hasOnExit) this.state('set', `hasOnExit:${data.id.uid}`); // state set to watch OnFinish
+    if (hasOnExit) {
+      this.action('onfunc', `hasOnExit:${data.id.uid}`); // action onfunc
+      this.state('onfunc', `hasOnExit:${data.id.uid}`); // state onfunc
+    }
 
     this.action('resolve', `exit:${data.uid}`);
     return hasOnExit ? this.onExit(data) : Promise.resolve(data)
@@ -2275,27 +2302,28 @@ class Deva {
       if (!this._active) return resolve(this._messages.offline);
       let helpDoc = false;
       const id = this.uid();
-      this.zone('help', id);
+      const key = 'help';
+      this.zone(key, id);
 
-      this.feature('help', id.uid);
-      this.action('help', id.uid);
-      this.state('help', id.uid);
-      this.context('help', id.uid);
+      this.feature(key, id.uid);
+      this.action(key, id.uid);
+      this.state(key, id.uid);
+      this.context(key, id.uid);
       const params = msg.split(' '); // split the msg into an array by spaces.
 
       const splitText = params[0].split(':');
       const part = splitText[1] ? splitText[1].toUpperCase() : 'MAIN';
       const helpFile = splitText[0] ? splitText[0] : 'main';
             
-      const helpPath = this.lib.path.join(help_dir, 'help', `${helpFile}.feecting`);
+      const helpPath = this.lib.path.join(help_dir, key, `${helpFile}.feecting`);
 
       try {
-        this.state('try', `help:${id.uid}`);
+        this.state('try', `${key}:${id.uid}`);
 
         // check if help file exists first and resolve if no file
         const helpExists = this.lib.fs.existsSync(helpPath); // check if help file exists
         if (!helpExists) {
-          this.state('return', `${this._messages.help_not_found}:${id.uid}`);
+          this.action('resolve', `${key}:not:found:${id.uid}`);
           return resolve(this._messages.help_not_found);
         }
         
@@ -2303,7 +2331,7 @@ class Deva {
         const helpFile = this.lib.fs.readFileSync(helpPath, 'utf8');
         const helpPart = helpFile.split(`::BEGIN:${part}`);
         if (!helpPart[1]) {
-          this.state('return', `${this._messages.help_not_found}:${id.uid}`);
+          this.action('resolve', `${this._messages.help_not_found}:${id.uid}`);
           resolve(this._messages.help_not_found);
         }
         
@@ -2311,11 +2339,11 @@ class Deva {
         helpDoc = helpFile.split(`::BEGIN:${part}`)[1].split(`::END:${part}`)[0];
       } 
       catch(e) {
-        this.state('catch', `help:${id.uid}`);
+        this.state('catch', `${key}:${id.uid}`);
         return this.err(e, msg, reject);
       }
       finally {
-        this.state('return', `help:${id.uid}`);
+        this.action('resolve', `help:${id.uid}`);
         return resolve(helpDoc);
       }
     });
@@ -2333,18 +2361,20 @@ class Deva {
   ***************/
   err(err,packet,reject=false) {
     const id = this.uid();
-    this.zone('error', id.uid);
-    this.feature('error', id.uid);
+    const key = 'error';
+    this.context(key, id.uid);
+    this.feature(key, id.uid);
+    this.zone(key, id.uid);
+    this.action(key, id.uid);
+    this.state(key, id.uid);
     
     const agent = this.agent();
     const client = this.client();
-        
-    this.action('error', id.uid);
-    const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
-  
+    
+    this.state('data', `${key}:${id.uid}`);
     const data = {
       id,
-      key: 'error',
+      key,
       value: agent.key,
       agent,
       client,
@@ -2356,17 +2386,33 @@ class Deva {
       packet,
       created: Date.now(),
     }
-    data.md5 = this.hash(data, 'md5');
-    data.sha256 = this.hash(data, 'sha256');
-    data.sha512 = this.hash(data, 'sha512');
+    
+    this.action('hash', `${data.key}:${data.value}:md5:${data.id.uid}`);    
+    data.md5 = this.hash(data, 'md5'); // md5 the data packet
+    
+    this.action('hash', `${data.key}:${data.value}:sha256:${data.id.uid}`);
+    data.sha256 = this.hash(data, 'sha256'); // sha256 the data packet
+    
+    
+    this.action('hash', `${data.key}:${data.value}:sha512:${data.id.uid}`);
+    data.sha512 = this.hash(data, 'sha512'); // sha512 the data packet
   
+    // set the action to talk and emit the talk error.
+    this.action('talk', `${this._events.error}:${data.id.uid}`);
     this.talk(this._events.error, this.lib.copy(data));
   
-    this.state('return', `error:${id.uid}`);
-    this.state('error', id.uid);
-    this.context('error', id.uid);
-    if (hasOnError) return this.onError(err, packet, reject);
-    else return reject ? reject(err) : Promise.reject(err);
+    const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
+    // if block handles returning the onError and setting the state to hasOnError
+    if (hasOnError) {
+      this.action('onfunc', `hasOnError:${data.value}:${data.id.uid}`);
+      this.state('onfunc', `hasOnError:${data.value}:${data.id.uid}`);
+      return this.onError(err, packet, reject);
+    }
+    // else block handled the reject if there is no onError function.
+    else {
+      this.action('reject', `${data.value}:${id.uid}`);
+      return reject ? reject(err) : Promise.reject(err);
+    }
   }
   
   /**************
