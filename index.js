@@ -959,23 +959,6 @@ class Deva {
   ***************/
   init(client) {
     // set client
-    this._active = Date.now();
-
-    const agent = this.agent();
-
-    const data = {
-      id: this.uid(),
-      key: 'init',
-      value: agent.key,
-      agent,
-      client,
-      text: this._messages.init,
-      created: Date.now(),
-    }
-    data.md5 = this.hash(data);
-    data.sha256 = this.hash(data, 'sha256');
-    data.sha512 = this.hash(data, 'sha512');
-
     return new Promise((resolve, reject) => {
       
       const license_check = this.license_check(client.VLA, this._core.VLA);
@@ -983,6 +966,30 @@ class Deva {
         this.prompt(this._messages.client_license_invalid);
         return resolve(this._messages.client_license_invalid); // return if} license check fails
       }
+ 
+      this._active = Date.now();
+      const id = this.uid();
+      const agent = this.agent();
+      
+      this.state('data', `init:${id.uid}`);
+      const data = {
+        id,
+        key: agent.key,
+        value: 'init',
+        agent,
+        client,
+        text: this._messages.init,
+        created: Date.now(),
+      }
+ 
+      this.action('hash', `start:md5:${data.id.uid}`);
+      data.md5 = this.hash(data);
+ 
+      this.action('hash', `start:sha256:${data.id.uid}`)
+      data.sha256 = this.hash(data, 'sha256');
+ 
+      this.action('hash', `start:sha512:${data.id.uid}`)
+      data.sha512 = this.hash(data, 'sha512');
       
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -990,10 +997,10 @@ class Deva {
       }).then(() => {
         return this._assignListeners();
       }).then(() => {
-        this.feature('init');
-        this.zone('init');
-        this.action('init');
-        this.state('init');
+        this.feature('init', data.id.uid);
+        this.zone('init', data.id.uid);
+        this.action('init', data.id.uid);
+        this.state('init', data.id.uid);
       }).then(() => {
         return this.Client(client, resolve, reject);
       }).then(() => {
@@ -1048,7 +1055,8 @@ class Deva {
         return this.Done(resolve, reject);
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
-        this.state('return', `init:${data.id.uid}`);
+        if (hasOnInit) this.state('set', `hasOnInit:${data.id.uid}`); // state set to watch onInit
+        this.action('return', `init:${data.id.uid}`);
         return hasOnInit ? this.onInit(data, resolve) : this.start(data, resolve);
       }).catch(err => {
         this.state('catch', `init:${data.id.uid}`);
@@ -1068,27 +1076,37 @@ class Deva {
   usage: this.start('msg')
   ***************/
   start(data, resolve) {
+    if (!this._active) return resolve(this._messages.offline);
     this.context('start', data.id.uid);
     this.zone('start', data.id.uid);
-    if (!this._active) return resolve(this._messages.offline);
-
     this.action('start', data.id.uid);
-    const id = this.uid();
+    this.state('start', data.id.uid);
     
+    this.action('delete', `init:md5:${data.id.uid}`);
     delete data.md5;
+    this.action('delete', `init:sha256:${data.id.uid}`);
     delete data.sha256;
+    this.action('delete', `init:sha512:${data.id.uid}`);
     delete data.sha512;
 
+    this.state('set', `data:value:start:${data.id.uid}`); // state set to watch OnFinish
     data.value = 'start';
 
+    this.action('hash', `start:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
+    this.action('hash', `start:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `start:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
     
-    const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
-
-    this.state('start', data.id.uid);
+    // setup the finish talk event
+    this.action('talk', `${this._events.start}:${data.id.uid}`);
     this.talk(this._events.start, data);
+
+    const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
+    if (hasOnStart) this.state('set', `hasOnStart:${data.id.uid}`); // state set to watch OnFinish
+        
+    this.action('return', `start:${data.id.uid}`); // return action finish
     return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
   }
 
@@ -1104,25 +1122,36 @@ class Deva {
   usage: this.enter('msg')
   ***************/
   enter(data, resolve) {
+    if (!this._active) return resolve(this._messages.offline);
     this.context('enter', data.id.uid);
     this.zone('enter', data.id.uid);
-    if (!this._active) return resolve(this._messages.offline);
-
     this.action('enter', data.id.uid);
-    const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
+    this.state('enter', data.id.uid);
     
+    this.action('delete', `start:md5:${data.id.uid}`);
     delete data.md5;
+    this.action('delete', `start:sha256:${data.id.uid}`);
     delete data.sha256;
+    this.action('delete', `start:sha512:${data.id.uid}`);
     delete data.sha512;
 
+    this.state('set', `data:value:enter:${data.id.uid}`); // state set to watch OnFinish
     data.value = 'enter';
 
+    this.action('hash', `enter:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
+    this.action('hash', `enter:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `enter:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
     
-    this.state('enter', data.id.uid);
+    this.action('talk', `${this._events.enter}:${data.id.uid}`);
     this.talk(this._events.enter, data);
+
+    const hasOnEnter = this.onEnter && typeof this.onEnter === 'function' ? true : false;
+    if (hasOnEnter) this.state('set', `hasOnEnter:${data.id.uid}`); // state set to watch OnFinish
+
+    this.action('return', `enter:${data.id.uid}`); // return action finish
     return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
   }
 
@@ -1138,25 +1167,36 @@ class Deva {
   usage: this.done('msg')
   ***************/
   done(data, resolve) {
+    if (!this._active) return resolve(this._messages.offline);
     this.context('done', data.id.uid);
     this.zone('done', data.id.uid);
-    if (!this._active) return resolve(this._messages.offline);
-
     this.action('done', data.id.uid);
-    const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
+    this.state('done', data.id.uid);
     
+    this.action('delete', `enter:md5:${data.id.uid}`);
     delete data.md5;
+    this.action('delete', `enter:sha256:${data.id.uid}`);
     delete data.sha256;
+    this.action('delete', `enter:sha512:${data.id.uid}`);
     delete data.sha512;
 
+    this.state('set', `data:value:done:${data.id.uid}`); // state set to watch OnFinish
     data.value = 'done';
 
+    this.action('hash', `done:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
+    this.action('hash', `done:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `done:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
     
-    this.state('done', data.id.uid);
+    this.action('talk', `${this._events.done}:${data.id.uid}`);    
     this.talk(this._events.done, data);
+
+    const hasOnDone = this.onDone && typeof this.onDone === 'function' ? true : false;
+    if (hasOnDone) this.state('set', `hasOnDone:${data.id.uid}`); // state set to watch OnFinish
+    
+    this.action('return', `done:${data.id.uid}`); // return action finish
     return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
   }
 
@@ -1174,23 +1214,32 @@ class Deva {
     this.zone('ready', data.id.uid);
     this.action('ready', data.id.uid);
     this.state('ready', data.id.uid);
-
-    const hasOnReady = this.onReady && typeof this.onReady === 'function';  
     
     // Delete previous data hashes
+    this.action('delete', `done:md5:${data.id.uid}`);
     delete data.md5;
+    this.action('delete', `done:sha256:${data.id.uid}`);
     delete data.sha256;
+    this.action('delete', `done:sha512:${data.id.uid}`);
     delete data.sha512;
 
+    this.state('set', `data:value:ready:${data.id.uid}`); // state set to watch OnFinish
     data.value = 'ready';
 
+    this.action('hash', `ready:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
+    this.action('hash', `ready:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `ready:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
 
+    this.action('talk', `${this._events.ready}:${data.id.uid}`);    
     this.talk(this._events.ready, data);   
 
-    this.action('return', `ready:${data.id.uid}`); // return action ready
+    const hasOnReady = this.onReady && typeof this.onReady === 'function';  
+    if (hasOnReady) this.state('set', `hasOnReady:${data.id.uid}`); // state set to watch OnFinish
+
+    this.action('resolve', `ready:${data.id.uid}`); // return action ready
     return hasOnReady ? this.onReady(data, resolve) : resolve(data);
   }
   
@@ -1223,16 +1272,15 @@ class Deva {
     data.md5 = this.hash(data);
     this.action('hash', `finish:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
-    
     this.action('hash', `finish:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
     
-    const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
-    if (hasOnFinish) this.state('set', `hasOnFinish:${data.id.uid}`); // state set to watch OnFinish
-
     // setup the finish talk event
     this.action('talk', `${this._events.finish}:${data.id.uid}`);
     this.talk(this._events.finish, data);
+
+    const hasOnFinish = this.onFinish && typeof this.onFinish === 'function';
+    if (hasOnFinish) this.state('set', `hasOnFinish:${data.id.uid}`); // state set to watch OnFinish
         
     this.action('return', `finish:${data.id.uid}`); // return action finish
     return hasOnFinish ? this.onFinish(data, resolve) : this.complete(data, resolve);
@@ -1271,14 +1319,14 @@ class Deva {
 
     this.action('hash', `complete:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
-    
-    // determine if there is an onComplete function for the entity.
-    const hasOnComplete = this.onComplete && typeof this.onComplete === 'function'; 
-    if (hasOnComplete) this.state('set', `hasOnComplete:${data.id.uid}`); // state set to watch OnFinish
-    
+        
     // setup the complete talk event
     this.action('talk', `${this._events.complete}:${data.id.uid}`); // action talk for the event.
     this.talk(this._events.complete, data); // talk the complete event
+
+    // determine if there is an onComplete function for the entity.
+    const hasOnComplete = this.onComplete && typeof this.onComplete === 'function'; 
+    if (hasOnComplete) this.state('set', `hasOnComplete:${data.id.uid}`); // state set to watch OnFinish
 
     this.action('return', `complete:${data.id.uid}`); // return action complete
     return hasOnComplete ? this.onComplete(data, resolve) : resolve(data);
@@ -1300,30 +1348,44 @@ class Deva {
   stop() {
     if (!this._active) return Promise.resolve(this._messages.offline);
     const id = this.uid();
-    this.context('stop', id);
-    this.zone('stop', id);
+    this.context('stop', id.uid);
+    this.zone('stop', id.uid);
+    this.action('stop', id.uid);    
+    this.state('stop', id.uid); // set the state to stop
+    
+    this.state('set', `stop:agent:${id.uid}`); // state stop agent
+    const agent = this.agent(); // get the current agent
 
-    this.action('stop', id);
-    const hasOnStop = this.onStop && typeof this.onStop === 'function';
+    this.state('set', `stop:client:${id.uid}`); // state stop agent
+    const client = this.client(); // set the current client
 
+    this.state('data', `stop:${id.uid}`);
     const data = { // build the stop data
       id, // set the id
-      key: 'stop', // set the key
-      value: this._messages.stop, // set the value
+      key: agent.key, // set the key
+      value: 'stop', // set the value
       agent: this.agent(), // set the agent
       client: this.client(), // set the client
-      created: Date.now(), // set the created date
+      stop: Date.now(), // set the created date
     }
 
+    this.action('hash', `stop:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
-    data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `stop:sha256:${data.id.uid}`)
+    data.sha256 = this.hash(data, 'sha256');    
+    this.action('hash', `stop:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
 
     // has stop function then set hasOnStop variable
     // if: has on stop then run on stop function or return exit function.
-    this.state('stop', id); // set the state to stop
+    this.action('talk', `${this._events.stop}:${data.id.uid}`); // action talk for the event.
     this.talk(this._events.stop, data);    
-    return hasOnStop ? this.onStop(data) : this.exit()
+    
+    // determine if there is an onComplete function for the entity.
+    const hasOnStop = this.onStop && typeof this.onStop === 'function';
+    if (hasOnStop) this.state('set', `hasOnStop:${data.id.uid}`); // state set to watch OnFinish
+
+    return hasOnStop ? this.onStop(data) : this.exit(data)
   }
 
   /**************
@@ -1336,50 +1398,62 @@ class Deva {
     The return will check for a custom onExit function or run the done
     function.
   ***************/
-  exit() {
+  exit(data) {
     if (!this._active) return Promise.resolve(this._messages.offline);
-    const id = this.uid();
-    this.context('exit', id);
-    this.zone('exit', id);
-
-    this.action('exit', id);
-    const hasOnExit = this.onExit && typeof this.onExit === 'function';
+    this.context('exit', data.id.uid);
+    this.zone('exit', data.id.uid);
+    this.action('exit', data.id.uid);
+    this.state('exit', data.id.uid); // set the state to stop
     
-    const data = {
-      id,
-      key: 'exit',
-      value: this._messages.exit,
-      agent: this.agent(),
-      client: this.client(),
-      created: Date.now(),
-    }
+    this.action('delete', `stop:md5:${data.id.uid}`);
+    delete data.md5;
+    this.action('delete', `stop:sha256:${data.id.uid}`);
+    delete data.sha256;
+    this.action('delete', `stop:sha512:${data.id.uid}`);
+    delete data.sha512;
 
+    this.state('set', `exit:time:${id.uid}`); // state stop agent    
+    data.exit = Date.now();
+    
+    this.action('hash', `stop:md5:${data.id.uid}`);
     data.md5 = this.hash(data);
-    data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `stop:sha256:${data.id.uid}`)
+    data.sha256 = this.hash(data, 'sha256');    
+    this.action('hash', `stop:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
-
-    this.state('exit', id); // set the state to stop
-    this.talk(this._events.exit, data);    
     
     // clear memory
-    this._active = false;
-    this._client = false;
-    this._vector = false;
-    this._data = false;
-    this._treasury = false;
-    this._security = false;
-    this._guard = false;
-    this._defense = false;
-    this._wall = false;
-    this._shield = false;
-    this._proxy = false;
-    this._legal = false;
-    this._authority = false;
-    this._justice = false;
-    this._support = false;
-    this._services = false;
-    this._systems = false;
-    this._networks = false;
+    this._active = false; // the active/birth date.
+    this._indra = false; // inherited Indra features.
+    this._veda = false; // inherited Veda features.
+    this._license = false; // inherited License features.
+    this._data = false; // inherited Data features.
+    this._error = false; // inherited Error features.
+    this._log = false; // inherited Log features.
+    this._report = false; // inherited Report features.
+    this._vector = false; // inherited Vector features.
+    this._king = false; // inherited King features.
+    this._treasury = false; // inherited Vector features.
+    this._security = false; // inherited Security features.
+    this._guard = false; // inherited Guard features.
+    this._defense = false; // inherited Security features.
+    this._wall = false; // inherited Wall features.
+    this._proxy = false; // inherited Proxy features.
+    this._legal = false; // inherited Legal features.
+    this._authority = false; // inherited Justice features.
+    this._justice = false; // inherited Justice features.
+    this._support = false; // inherited Support features.
+    this._services = false; // inherited Service features.
+    this._systems = false; // inherited Systems features.
+    this._networks = false; // inherited Systems features.
+
+    this.action('talk', `${this._events.stop}:${data.id.uid}`); // action talk for the event.
+    this.talk(this._events.exit, data);    
+
+    const hasOnExit = this.onExit && typeof this.onExit === 'function';
+    if (hasOnExit) this.state('set', `hasOnExit:${data.id.uid}`); // state set to watch OnFinish
+
+    this.action('return', `exit:${data.uid}`);
     return hasOnExit ? this.onExit(data) : Promise.resolve(data)
   }
 
