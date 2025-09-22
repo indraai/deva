@@ -1384,7 +1384,6 @@ class Deva {
     // determine if there is an onComplete function for the entity.
     const hasOnStop = this.onStop && typeof this.onStop === 'function';
     if (hasOnStop) this.state('set', `hasOnStop:${data.id.uid}`); // state set to watch OnFinish
-
     return hasOnStop ? this.onStop(data) : this.exit(data)
   }
 
@@ -1400,11 +1399,12 @@ class Deva {
   ***************/
   exit(data) {
     if (!this._active) return Promise.resolve(this._messages.offline);
+
     this.context('exit', data.id.uid);
     this.zone('exit', data.id.uid);
     this.action('exit', data.id.uid);
     this.state('exit', data.id.uid); // set the state to stop
-    
+
     this.action('delete', `stop:md5:${data.id.uid}`);
     delete data.md5;
     this.action('delete', `stop:sha256:${data.id.uid}`);
@@ -1412,7 +1412,7 @@ class Deva {
     this.action('delete', `stop:sha512:${data.id.uid}`);
     delete data.sha512;
 
-    this.state('set', `exit:time:${id.uid}`); // state stop agent    
+    this.state('set', `exit:time:${data.id.uid}`); // state stop agent    
     data.exit = Date.now();
     
     this.action('hash', `stop:md5:${data.id.uid}`);
