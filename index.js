@@ -255,13 +255,13 @@ class Deva {
 
   _getFeature(key, value) {
     if (!this._active) return this._messages.offline; // check the active status
-    this.zone(key);
     this.feature(key); // set the security state
+    this.zone(key);
     this.action(key);
     this.state(key);
     try {
       const data = this.lib.copy(value);
-      this.state('return', key); // set the security state
+      this.action('return', key); // set the security state
       return data; // return the security feature
     } catch (e) {
       this.state('catch', key);
@@ -983,7 +983,7 @@ class Deva {
       }
  
       this.action('hash', `start:md5:${data.id.uid}`);
-      data.md5 = this.hash(data);
+      data.md5 = this.hash(data, 'md5');
  
       this.action('hash', `start:sha256:${data.id.uid}`)
       data.sha256 = this.hash(data, 'sha256');
@@ -1093,7 +1093,7 @@ class Deva {
     data.value = 'start';
 
     this.action('hash', `start:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `start:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
     this.action('hash', `start:sha512:${data.id.uid}`)
@@ -1139,7 +1139,7 @@ class Deva {
     data.value = 'enter';
 
     this.action('hash', `enter:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `enter:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
     this.action('hash', `enter:sha512:${data.id.uid}`)
@@ -1184,7 +1184,7 @@ class Deva {
     data.value = 'done';
 
     this.action('hash', `done:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `done:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
     this.action('hash', `done:sha512:${data.id.uid}`)
@@ -1227,7 +1227,7 @@ class Deva {
     data.value = 'ready';
 
     this.action('hash', `ready:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `ready:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
     this.action('hash', `ready:sha512:${data.id.uid}`)
@@ -1269,7 +1269,7 @@ class Deva {
     this.state('set', `data:finish:${data.finish}:${data.id.uid}`)
 
     this.action('hash', `finish:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `finish:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
     this.action('hash', `finish:sha512:${data.id.uid}`)
@@ -1296,7 +1296,7 @@ class Deva {
   usage: this.complete(data, resolve)
   ***************/
   complete(data, resolve) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+    if (!this._active) return resolve(this._messages.offline);
     this.context('complete', data.id.uid);
     this.zone('complete', data.id.uid);
     this.action('complete', data.id.uid);
@@ -1313,7 +1313,7 @@ class Deva {
     this.state('set', `data:complete:${data.complete}:${data.id.uid}`)
     
     this.action('hash', `complete:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `complete:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');
 
@@ -1346,7 +1346,7 @@ class Deva {
     this.stop()
   ***************/
   stop() {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+    if (!this._active) return this._messages.offline;
     const id = this.uid();
     this.context('stop', id.uid);
     this.zone('stop', id.uid);
@@ -1370,7 +1370,7 @@ class Deva {
     }
 
     this.action('hash', `stop:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `stop:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');    
     this.action('hash', `stop:sha512:${data.id.uid}`)
@@ -1398,7 +1398,7 @@ class Deva {
     function.
   ***************/
   exit(data) {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+    if (!this._active) return this._messages.offline;
 
     this.context('exit', data.id.uid);
     this.zone('exit', data.id.uid);
@@ -1416,7 +1416,7 @@ class Deva {
     data.exit = Date.now();
     
     this.action('hash', `stop:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `stop:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');    
     this.action('hash', `stop:sha512:${data.id.uid}`)
@@ -1453,7 +1453,7 @@ class Deva {
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
     if (hasOnExit) this.state('set', `hasOnExit:${data.id.uid}`); // state set to watch OnFinish
 
-    this.action('return', `exit:${data.uid}`);
+    this.action('resolve', `exit:${data.uid}`);
     return hasOnExit ? this.onExit(data) : Promise.resolve(data)
   }
 
@@ -1464,29 +1464,32 @@ class Deva {
   func: state
   params:
     - value: The state value to set for the Deva that matches to this._states
-    - extra: any extra text to add ot the state change.
+    - extra: any extra text to add to the state change.
   ***************/
   state(value=false, extra=false) {
+    if (!this._active) return this._messages.offline;
+    const id = this.uid();
+    const key = 'state';
     try {
       if (!value || !this._states[value]) return; // return if no matching value
       this._state = value; // set the local state variable.
       const lookup = this._states[value]; // set the local states lookup
       const text = extra ? `${lookup} ${extra}` : lookup; // set text from lookup with extra
       const data = { // build the data object
-        id: this.uid(), // set the data id
-        agent: this.agent(), // set the agent
-        client: this.client(), // set the client
-        key: 'state', // set the key to state
+        id, // set the data id
+        key, // set the key to state
         value, // set the value to the passed in value
         text, // set the text value of the data
+        agent: this.agent(), // set the agent
+        client: this.client(), // set the client
         created: Date.now(), // set the data created date.
       };
 
-      data.md5 = this.hash(data);
+      data.md5 = this.hash(data, 'md5');
       data.sha256 = this.hash(data, 'sha256');
       data.sha512 = this.hash(data, 'sha512');
 
-      this.talk(this._events.state, data); // broadcasat the state event
+      this.talk(this._events.state, data); // broadcast the state event
       return data;
     } catch (e) { // catch any errors
       return this.err(e); // return if an error happens
@@ -1499,7 +1502,7 @@ class Deva {
   describe: returns the available states values.
   ***************/
   states() {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+    if (!this._active) return this._messages.offline;
     const id = this.uid();    
     const key = 'states';    
     this.action(key, id.uid);
@@ -1516,7 +1519,7 @@ class Deva {
     }
 
     this.action('hash', `${data.key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `${data.key}:sha256:${data.id.uid}`);
     data.sha256 = this.hash(data, 'sha256');    
     this.action('hash', `${data.key}:sha512:${data.id.uid}`);
@@ -1533,7 +1536,9 @@ class Deva {
   describe
   ***************/
   zone(value=false, extra=false) {
+    if (!this._active) return this._messages.offline;
     const id = this.uid();
+    const key = 'zone';
     if (!value || !this._zones[value]) return;
 
     try {
@@ -1543,15 +1548,15 @@ class Deva {
 
       const data = { // build the zone data
         id, // set the packetid
-        agent: this.agent(),
-        client: this.client(),
-        key: 'zone',
+        key,
         value,
         text,
+        agent: this.agent(),
+        client: this.client(),
         created: Date.now(),
       };
 
-      data.md5 = this.hash(data);
+      data.md5 = this.hash(data, 'md5');
       data.sha256 = this.hash(data, 'sha256');
       data.sha512 = this.hash(data, 'sha512');
 
@@ -1568,7 +1573,7 @@ class Deva {
   describe: returns a listing of zones currently in the system.
   ***************/
   zones() {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+    if (!this._active) return this._messages.offline;
     const id = this.uid();
     const key = 'zones';
     this.action(key, id.uid);
@@ -1584,7 +1589,7 @@ class Deva {
     }
     
     this.action('hash', `${data.key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `${data.key}:sha256:${data.id.uid}`);
     data.sha256 = this.hash(data, 'sha256');    
     this.action('hash', `${data.key}:sha512:${data.id.uid}`);
@@ -1602,7 +1607,9 @@ class Deva {
   describe
   ***************/
   action(value=false, extra=false) {
+    if (!this._active) return this._messages.offline;
     const id = this.uid();
+    const key = 'action'
     try {
       if (!value || !this._actions[value]) return;
       this._action = value; // set the local action variable
@@ -1615,22 +1622,22 @@ class Deva {
 
       const data = { // build the data object for the action.
         id, // generate a guid for the action transmitssion.
-        agent: this.agent(), // the agent data to send with the action
-        client: this.client(), // the client data to send with the action
-        key: 'action', // the key for event to transmit action type
+        key, // the key for event to transmit action type
         value, // the value key which is the action passed
         text, // text of the action to send
+        agent: this.agent(), // the agent data to send with the action
+        client: this.client(), // the client data to send with the action
         created: Date.now(), // action time stamp
       };
 
-      data.md5 = this.hash(data);
+      data.md5 = this.hash(data, 'md5');
       data.sha256 = this.hash(data, 'sha256');
       data.sha512 = this.hash(data, 'sha512');
 
       this.talk(this._events.action, data); // talk the core action event
       return data;
     } catch (e) { // catch any errors that occur
-      this.state('catch', `action:${value}:${id.uid}`);
+      this.state('catch', `${key}:${id.uid}`);
       return this.err(e); // return error on error catch
     }
   }
@@ -1641,7 +1648,7 @@ class Deva {
   describe: Returns a list of available actions in the system.
   ***************/
   actions() {
-    if (!this._active) return Promise.resolve(this._messages.offline);
+    if (!this._active) return this._messages.offline;
     const id = this.uid();
     const key = 'actions';
     this.action(key, id.uid);
@@ -1657,13 +1664,13 @@ class Deva {
     };
 
     this.action('hash', `${data.key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     this.action('hash', `${data.key}:sha256:${data.id.uid}`);
     data.sha256 = this.hash(data, 'sha256');    
     this.action('hash', `${data.key}:sha512:${data.id.uid}`);
     data.sha512 = this.hash(data, 'sha512');
 
-    this.state('return', `actions:${id.uid}`);
+    this.state('return', `${key}:${id.uid}`);
     return data;
   }
 
@@ -1691,7 +1698,7 @@ class Deva {
         created: Date.now(), // set the creation date
       };
 
-      data.md5 = this.hash(data);
+      data.md5 = this.hash(data, 'md5');
       data.sha256 = this.hash(data, 'sha256');
       data.sha512 = this.hash(data, 'sha512');
 
@@ -1711,21 +1718,27 @@ class Deva {
   features() {
     if (!this._active) return this._messages.offline; // check the active status
     const id = this.uid();
-    this.action('features', id.uid);
+    const key = 'features';
+    this.action(key, id.uid);
+    
+    this.state('data', `${key}:${id.uid}`);
     const data = {
       id, // set the object id
+      key, // set the key
+      value: this._features, // set the value to the features list
       agent: this.agent(), // set the agent value.
       client: this.client(), // set the client value.
-      key: 'features', // set the key
-      value: this._features, // set the value to the features list
       created: Date.now(), // set the created date.
     };
 
-    data.md5 = this.hash(data);
-    data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `${data.key}:md5:${data.id.uid}`);
+    data.md5 = this.hash(data, 'md5');
+    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
+    data.sha256 = this.hash(data, 'sha256');    
+    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
     data.sha512 = this.hash(data, 'sha512');
-
-    this.state('return', `features:${id.uid}`);
+    
+    this.state('return', `${data.key}:${data.id.uid}`);
     return data;
   }
 
@@ -1755,7 +1768,7 @@ class Deva {
         created: Date.now(),
       };
 
-      data.md5 = this.hash(data);
+      data.md5 = this.hash(data, 'md5');
       data.sha256 = this.hash(data, 'sha256');
       data.sha512 = this.hash(data, 'sha512');
 
@@ -1770,22 +1783,27 @@ class Deva {
   contexts() {
     if (!this._active) return this._messages.offline; // check the active status
     const id = this.uid();
-    this.action('contexts', id);
-    if (!this._active) return this._messages.offline; // check the active status
+    const key = 'contexts';
+    this.action(key, id.uid);
+    
+    this.state('data', `${key}:${id.uid}`);
     const data = {
       id,
+      key,
+      value: this.vars.context || false,
       agent: this.agent(),
       client: this.client(),
-      key: 'contexts',
-      value: this.vars.context || false,
       created: Date.now(),      
     };
 
-    data.md5 = this.hash(data);
-    data.sha256 = this.hash(data, 'sha256');
+    this.action('hash', `${data.key}:md5:${data.id.uid}`);
+    data.md5 = this.hash(data, 'md5');
+    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
+    data.sha256 = this.hash(data, 'sha256');    
+    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
     data.sha512 = this.hash(data, 'sha512');
 
-    this.state('return', `contexts:${id.uid}`);
+    this.state('return', `${data.key}:${id.uid}`);
     return data;
   }
 
@@ -2084,17 +2102,23 @@ class Deva {
   describe: Unload a currently loaded Deva.
   ***************/
   unload(key) {
-    this.zone('unload', key);
     return new Promise((resolve, reject) => {
+      if (!this._active) return resolve(this._messages.offline); // check the active status
+      this.zone('unload', key);
+      this.action('unload', key);
+      this.state('unload', key);
+  
+      this.state('try', `unload:${key}`);
       try {
-        this.action('unload', key);
         this.devas[key].stop().then(exit => {
           delete this.devas[key];
+          this.action('talk', `${this._events.unload}:${key}`);
           this.talk(this._events.unload, key);
         });
-        this.state('unload', key);
-        return resolve(`${this._states.unload}:${key}`);
+        this.action('resolve', `unload:${key}`);
+        return resolve(exit);
       } catch (e) {
+        this.state('catch', `unload:${key}`);
         return this.err(e, this.devas[key], reject)
       }
     });
@@ -2130,7 +2154,7 @@ class Deva {
     }
     
     this.action('hash', `${key}:${value}:md5:${data.id.uid}`);    
-    data.md5 = this.hash(data); // md5 the data packet
+    data.md5 = this.hash(data, 'md5'); // md5 the data packet
 
     this.action('hash', `${key}:${value}:sha256:${data.id.uid}`);
     data.sha256 = this.hash(data, 'sha256'); // sha256 the data packet
@@ -2204,7 +2228,7 @@ class Deva {
     data.id = id;
     data.created = Date.now();
     
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     data.sha256 = this.hash(data, 'sha256');
     data.sha512 = this.hash(data, 'sha512');
 
@@ -2248,10 +2272,10 @@ class Deva {
   ***************/
   help(msg, help_dir) {
     return new Promise((resolve, reject) => {
+      if (!this._active) return resolve(this._messages.offline);
       let helpDoc = false;
       const id = this.uid();
       this.zone('help', id);
-      if (!this._active) return resolve(this._messages.offline);
 
       this.feature('help', id.uid);
       this.action('help', id.uid);
@@ -2332,7 +2356,7 @@ class Deva {
       packet,
       created: Date.now(),
     }
-    data.md5 = this.hash(data);
+    data.md5 = this.hash(data, 'md5');
     data.sha256 = this.hash(data, 'sha256');
     data.sha512 = this.hash(data, 'sha512');
   
