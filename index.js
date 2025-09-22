@@ -1105,7 +1105,7 @@ class Deva {
 
     const hasOnStart = this.onStart && typeof this.onStart === 'function' ? true : false;
     if (hasOnStart) this.state('set', `hasOnStart:${data.id.uid}`); // state set to watch OnFinish
-        
+    
     this.action('return', `start:${data.id.uid}`); // return action finish
     return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
   }
