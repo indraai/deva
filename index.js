@@ -1369,12 +1369,13 @@ class Deva {
   stop() {
     if (!this._active) return this._messages.offline;
     const id = this.uid();
-    this.context('stop', id.uid);
-    this.zone('stop', id.uid);
-    this.action('stop', id.uid);    
-    this.state('stop', id.uid); // set the state to stop
+    const key = 'stop';
+    this.context(key, id.uid);
+    this.zone(key, id.uid);
+    this.action(key, id.uid);    
+    this.state(key, id.uid); // set the state to stop
     
-    this.state('set', `stop:agent:${id.uid}`); // state stop agent
+    this.state('set', `${key}:agent:${id.uid}`); // state stop agent
     const agent = this.agent(); // get the current agent
 
     this.state('set', `stop:client:${id.uid}`); // state stop agent
@@ -1383,10 +1384,10 @@ class Deva {
     this.state('data', `stop:${id.uid}`);
     const data = { // build the stop data
       id, // set the id
-      key: agent.key, // set the key
-      value: 'stop', // set the value
-      agent: this.agent(), // set the agent
-      client: this.client(), // set the client
+      key, // set the key
+      value: agent.key, // set the value
+      agent: agent.sha256, // set the agent
+      client: client.sha256, // set the client
       stop: Date.now(), // set the created date
     }
 
@@ -1423,27 +1424,28 @@ class Deva {
   ***************/
   exit(data) {
     if (!this._active) return this._messages.offline;
+    data.key_prev = data.key;
+    data.key = 'exit';
+    this.context(data.key, data.id.uid);
+    this.zone(data.key, data.id.uid);
+    this.action(data.key, data.id.uid);
+    this.state(data.key, data.id.uid); // set the state to stop
 
-    this.context('exit', data.id.uid);
-    this.zone('exit', data.id.uid);
-    this.action('exit', data.id.uid);
-    this.state('exit', data.id.uid); // set the state to stop
-
-    this.action('delete', `stop:md5:${data.id.uid}`);
+    this.action('delete', `${data.key_prev}:md5:${data.id.uid}`);
     delete data.md5;
-    this.action('delete', `stop:sha256:${data.id.uid}`);
+    this.action('delete', `${data.key_prev}:sha256:${data.id.uid}`);
     delete data.sha256;
-    this.action('delete', `stop:sha512:${data.id.uid}`);
+    this.action('delete', `${data.key_prev}:sha512:${data.id.uid}`);
     delete data.sha512;
 
-    this.state('set', `exit:time:${data.id.uid}`); // state stop agent    
+    this.state('set', `${data.key}:time:${data.id.uid}`); // state stop agent    
     data.exit = Date.now();
     
-    this.action('hash', `stop:md5:${data.id.uid}`);
+    this.action('hash', `${data.key}:md5:${data.id.uid}`);
     data.md5 = this.hash(data, 'md5');
-    this.action('hash', `stop:sha256:${data.id.uid}`)
+    this.action('hash', `${data.key}:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');    
-    this.action('hash', `stop:sha512:${data.id.uid}`)
+    this.action('hash', `${data.key}:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
     
     // clear memory
