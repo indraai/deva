@@ -16,6 +16,7 @@ class Deva {
     this._id = opts.id || randomUUID(); // the unique id assigned to the agent at load
     this._info = opts.info || false; // the deva information from the package file.
     this._config = opts.config || {}; // local Config Object
+    this._config.ready_hash = config.ready_hash; // items to hash at ready
     this._agent = opts.agent || false; // Agent profile object
     this._client = {}; // this will be set on init.
     this._active = false; // the active/birth date.
@@ -64,7 +65,6 @@ class Deva {
 
     this._uid = config.uid; // set the uid options
 
-    
     this._events = config.events; // set the core system events
     this._feature = config.feature; // set the feature from config data.
     this._features = config.features; // set the features from config data.
@@ -1227,6 +1227,9 @@ class Deva {
     this.action('ready', data.id.uid);
     this.state('ready', data.id.uid);
     
+    const agent = this.agent();
+    const client = this.client();
+    
     // Delete previous data hashes
     this.action('delete', `done:md5:${data.id.uid}`);
     delete data.md5;
@@ -1238,6 +1241,16 @@ class Deva {
     this.state('set', `data:value:ready:${data.id.uid}`); // state set to watch OnFinish
     data.value = 'ready';
 
+    this.state('set', `config:hash:${data.id.uid}`); // state set to watch OnFinish
+    this.config.hash[agent.key] = {};
+    for (let item of this._config.ready_hash) {
+      if (this[item]) {
+        const this_item = this[item];      
+        this.action('hash', `${agent.key}:config:${item}:${data.id.uid}`);
+        this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
+      }
+    }
+
     this.action('hash', `ready:md5:${data.id.uid}`);
     data.md5 = this.hash(data, 'md5');
     this.action('hash', `ready:sha256:${data.id.uid}`)
@@ -1248,6 +1261,7 @@ class Deva {
     this.action('talk', `${this._events.ready}:${data.id.uid}`);    
     this.talk(this._events.ready, data);   
 
+    
     const hasOnReady = this.onReady && typeof this.onReady === 'function';  
     if (hasOnReady) {
       this.action('onfunc', `hasOnReady:${data.id.uid}`); // action onfunc

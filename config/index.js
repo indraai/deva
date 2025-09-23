@@ -29,6 +29,14 @@ export default {
 		'func',
 		'lib'
 	],
+	ready_hash: [
+		"vars",
+		"utils",
+		"listeners",
+		"modules",
+		"func",
+		"methods"
+	],
 	context: false,
 	events: events.DATA,
 	feature: false,
