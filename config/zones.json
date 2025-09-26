@@ -57,6 +57,7 @@
 		"kshatriya": "🛡️ Kshatriya",
 		"vaisya": "💼️ Vaisya",
 		"sudra": "️🧺 Sudra",
+		"outcast": "🏚️ Outcast",
 		"help": "💚 Help",
 		"emergency": "🛟 Emergency",
 		"danger": "⛔️ Danger",
@@ -65,7 +66,7 @@
 		"public": "😀 Public",
 		"merit": "➕ Merit",
 		"demerit": "➖ Demerit",
-		"outcast": "🏚️ Outcast",
-		"camera": "🤳 Camera"
+		"camera": "🤳 Camera",
+		"victim": "❤️‍🩹 Victim"
 	}
 }
