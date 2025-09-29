@@ -1164,6 +1164,7 @@ class Deva {
         return this.Done(resolve, reject);
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
+        this.belief('vedic', `init:${data.id.uid}`);
         if (hasOnInit) {
           this.action('onfunc', `hasOnInit:${data.id.uid}`); // state set to watch onInit
           this.state('onfunc', `hasOnInit:${data.id.uid}`); // state set to watch onInit

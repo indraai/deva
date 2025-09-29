@@ -178,7 +178,6 @@ const DevaTest = new Deva({
 		},
 	},
 	onInit(data, resolve) {
-		this.belief('vedic', `${data.id.uid}`);
 		return this.start(data, resolve);
 	},
 	onStart(data, resolve) {
