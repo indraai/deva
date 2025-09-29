@@ -49,6 +49,9 @@ const DevaTest = new Deva({
 			return input.trim();
 		}
 	},
+	config: {
+		hash: {}
+	},
 	vars: agent.vars,
 	listeners: {
 		'devacore:prompt'(packet) {
@@ -82,8 +85,8 @@ const DevaTest = new Deva({
 		'devacore:ask'(packet) {
 			console.log(`🤝  ask: ${packet.text}`);
 		},
-		'devacore:state'(packet) {
-			console.log(`🍪   state: ${packet.text}`);
+		'devacore:feature'(packet) {
+			console.log(`\n🍿 feature: ${packet.text}`);
 		},
 		'devacore:zone'(packet) {
 			console.log(`🗺️    zone: ${packet.text}`);
@@ -91,8 +94,14 @@ const DevaTest = new Deva({
 		'devacore:action'(packet) {
 			console.log(`💥  action: ${packet.text}`);
 		},
-		'devacore:feature'(packet) {
-			console.log(`\n🍿 feature: ${packet.text}`);
+		'devacore:state'(packet) {
+			console.log(`🍪   state: ${packet.text}`);
+		},
+		'devacore:intent'(packet) {
+			console.log(`🫸   intent: ${packet.text}`);
+		},
+		'devacore:belief'(packet) {
+			console.log(`🧠  belief: ${packet.text}`);
 		},
 		'devacore:context'(packet) {
 			console.log(`🛹 context: ${packet.text}`);
@@ -169,17 +178,22 @@ const DevaTest = new Deva({
 		},
 	},
 	onInit(data, resolve) {
+		this.belief('vedic', `${data.id.uid}`);
 		return this.start(data, resolve);
 	},
 	onStart(data, resolve) {
 		return this.enter(data, resolve);
 	},
 	onEnter(data, resolve) {
+		return this.done(data, resolve);
+	},
+	onDone(data, resolve) {
 		return this.ready(data, resolve);
 	},
 	onReady(data, resolve) {
 		const test = this.methods.test(data);		
 		this.prompt(this._messages.ready);
+		this.intent('good', `tests:ready`);		
 		return resolve(data);			
 	},
 	onComplete(data, resolve) {

@@ -8,6 +8,8 @@ import features from './features.json' with {type:'json'};
 import zones from './zones.json' with {type:'json'};
 import actions from './actions.json' with {type:'json'};
 import states from './states.json' with {type:'json'};
+import intents from './intents.json' with {type:'json'};
+import beliefs from './beliefs.json' with {type:'json'};
 import msgs from './msgs.json' with {type:'json'};
 
 export default {
@@ -47,5 +49,9 @@ export default {
 	actions: actions.DATA,
 	state: false,
 	states: states.DATA,
+	intent: false,
+	intents: intents.DATA,
+	belief: false,
+	beliefs: beliefs.DATA,
 	messages: msgs.DATA,
 }

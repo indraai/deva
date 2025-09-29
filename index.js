@@ -99,6 +99,26 @@ class Deva {
       delete this._agent.actions;
     }
 
+    this._intent = config.intent; // set the current intent from config data.
+    this._intents = config.intents; // set the states from options
+    // load any custom actions from the agent file
+    if (this._agent.intents) {
+      for (let item in this._agent.intents) {
+        if (!this._intents[item]) this._intents[item] = this._agent.intents[item];
+      }
+      delete this._agent.intents;
+    }
+
+    this._belief = config.belief; // set the current belief from config data.
+    this._beliefs = config.beliefs; // set the states from options
+    // load any custom actions from the agent file
+    if (this._agent.beliefs) {
+      for (let item in this._agent.beliefs) {
+        if (!this._beliefs[item]) this._beliefs[item] = this._agent.beliefs[item];
+      }
+      delete this._agent.beliefs;
+    }
+
     this._context = config.context || false; // set the local context
 
     this._messages = config.messages; // set the messages from config data.
@@ -259,12 +279,15 @@ class Deva {
     this.zone(key);
     this.action(key);
     this.state(key);
+    this.state('try', key);
     try {
       const data = this.lib.copy(value);
       this.action('return', key); // set the security state
+      this.intent('good', key);
       return data; // return the security feature
     } catch (e) {
       this.state('catch', key);
+      this.intent('bad', key);
       return this.err(e);
     }    
   }
@@ -284,8 +307,9 @@ class Deva {
     this.zone('client', `client:${client.id}`);
     this.action('client', `client:${client.id}`);
     // setup any custom methods for the features
-    this.state('set', `client:feature:methods:${client.id}`);
+    this.state('try', `client:${client.id}`);
     try {
+      this.state('set', `client:methods:${client.id}`);
       for (const x in client.features) {
         const methods = client.features[x].methods || false;
         if (methods) for (const y in methods) {
@@ -300,9 +324,11 @@ class Deva {
       this._client = _client;                           // set local _client to this scope
 
       this.action('return', `client:${client.id}`);
+      this.intent('good', `client:${client.id}`);
       return resolve();
     } catch (e) {
-      this.action('investigate', `client:${client.id}`);
+      this.state('catch', `client:${client.id}`);
+      this.intent('bad', `client:${client.id}`);
       return this.err(e, false, reject);
     }
   }
@@ -338,10 +364,12 @@ class Deva {
         };
         delete this._client.features[feature]; // make a copy the clinet data.
         this.state('resolve', `${feature}:${_id.uid}`);
+        this.intent('good', `${feature}:${_id.uid}`);
         return resolve(feature); // resolve when done
       }
     } catch (e) {
       this.state('catch', `${feature}:${_id.uid}`);
+      this.intent('bad', `${feature}:${_id.uid}`);
       return this.err(e, feature, reject); // run error handling if an error is caught
     }
   }
@@ -650,6 +678,7 @@ class Deva {
   ***************/
   listen(evt, callback) {
     this.action('listen', evt);
+    this.intent('good', `listen:${evt}`);
     this.listeners[evt] = callback;
     return this.events.on(evt, packet => {
       return this.listeners[evt](packet);
@@ -664,7 +693,8 @@ class Deva {
   describe:
   ***************/
   once(evt, callback) {
-    this.action('once', evt)
+    this.action('once', evt);
+    this.intent('good', `once:${evt}`);
     return this.events.once(evt, callback);
   }
 
@@ -677,6 +707,7 @@ class Deva {
   ***************/
   ignore(evt, callback) {
     this.action('ignore', evt);
+    this.intent('bad', `ignore:${evt}`);
     return this.events.removeListener(evt, callback);
   }
 
@@ -720,7 +751,7 @@ class Deva {
     return new Promise((resolve, reject) => {
       // resolve with the no text message if the client says nothing.
       if (!TEXT) return resolve(this._messages.notext, resolve);
-      this.state('try', `question:${id.uid}`);
+      this.state('try', `${method}:${id.uid}`);
       try { // try to answer the question
         if (isAsk) { // determine if hte question isAsk
           // if:isAsk split the agent key and remove first command character
@@ -739,7 +770,7 @@ class Deva {
           this.state('cmd', `${method}:${id.uid}`); // set the state to cmd.
         }
 
-        this.state('set', `question:${method}:${id.uid}`)
+        this.state('data', `${method}:q:${id.uid}`);
         packet.q = { // build packet.q container
           id: this.uid(), // set the transport id for the question.
           agent: this.agent(), // set the agent
@@ -755,28 +786,44 @@ class Deva {
         }
 
         // hash the question
+
+        this.action('hash', `${method}:md5:${id.uid}`);
         packet.q.md5 = this.hash(packet.q, 'md5');
+        
+        this.action('hash', `${method}:sha256:${id.uid}`)
         packet.q.sha256 = this.hash(packet.q, 'sha256');
+        
+        this.action('hash', `${method}:sha512:${id.uid}`)
         packet.q.sha512 = this.hash(packet.q, 'sha512');
 
+        this.action('talk', `${this._events.question}:${id.uid}`);
+        this.intent('good', `${this._events.question}:${id.uid}`);
         this.talk(this._events.question, this.lib.copy(packet)); // global question event make sure to copy data.
 
         if (isAsk) { // isAsk check if the question isAsk and talk
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
+          this.action('ask', `${key}:${id.uid}`);
+          this.intent('good', `ask:${key}:${id.uid}`);
           this.talk(`${key}:ask`, packet);
           this.once(`${key}:ask:${packet.id.uid}`, answer => {
+            this.action('talk', `${this._events.ask}:${id.uid}`);
+            this.intent('good', `${this.events.ask}:${id.uid}`);
             this.talk(this._events.ask, this.lib.copy(answer));
-            this.state('return', `${key}:ask:${packet.id.uid}`);
+            this.action('return', `finish:${key}:ask:${id.uid}`);
+            this.intent('good', `finish:${method}:${id.uid}`);
             return this.finish(answer, resolve); // if:isAsk resolve the answer from the call
           });
         }
         else { // else: answer the question locally
           this.state('answer', `${method}:${id.uid}`); //set the answer state to the method
+          this.action('return', `${method}:answer:${id.uid}`); //set the answer state to the method
+          this.intent('good', `${method}:answer:${id.uid}`); //set the answer state to the method
           return this.answer(packet, resolve, reject);
         }
       }
       catch(e) {
-        this.state('catch', `${id.uid}`);
+        this.state('catch', `${method}:${id.uid}`);
+        this.intent('bad', `${method}:${id.uid}`); //set the answer state to the method
         return this.err(e); // if a overall error happens this witll call this.err
       }
     });
@@ -793,29 +840,45 @@ class Deva {
     from the agent from the pre-determined method.
   ***************/
   answer(packet, resolve, reject) {
-    const id = this.uid();
     if (!this._active) return Promise.resolve(this._messages.offline);
-    this.zone('answer', id.uid); // set zone to answer
+    const id = this.uid();
+    const key = 'answer';
+    const subkey = 'packet_answer';
+
     const agent = this.agent();
     const client = this.client();
-    // check if method exists and is of type function
     const {method,params} = packet.q.meta;
-    this.action('answer', `${method}:${id.uid}`);
+
+    this.zone(key, `${method}:${id.uid}`); // set zone to answer
+    this.action(key, `${method}:${id.uid}`);
+    this.state(key, `${method}:${id.uid}`);
+
+    // check if method exists and is of type function
         
-    this.state('try', `answer:${method}:${id.uid}`);
+    this.state('try', `${key}:${method}:${id.uid}`);
     try {
       const isMethod = this.methods[method] && typeof this.methods[method] == 'function';
-      if (!isMethod) return resolve(this._methodNotFound(packet)); // resolve method not found if check if check fails      
+      if (!isMethod) {
+        this.action('resolve', `${key}:${method}:not_found:${packet.id.uid}`);
+        this.state('invalid', `${key}:${method}:${packet.id.uid}`);
+        this.intent('bad', `${key}:${method}:not_found:${packet.id.uid}`);
+        return resolve(this._methodNotFound(packet)); // resolve method not found if check if} check fails
+      }
 
-      this.action('method', `answer:${method}:${id.uid}`);
+      this.action('method', `${key}:${method}:${id.uid}`);
       this.methods[method](packet).then(result => {
         // check the result for the text, html, and data object.          // this is for when answers are returned from nested Devas.
+        this.state('set', `${key}:${method}:text:${id.uid}`);
         const text = typeof result === 'object' ? result.text : result;
+
+        this.state('set', `${key}:${method}:html:${id.uid}`);
         const html = typeof result === 'object' ? result.html : result;
+
         // if the data passed is NOT an object it will FALSE
+        this.state('set', `${key}:${method}:data:${id.uid}`);
         const data = typeof result === 'object' ? result.data : false;
-      
-        this.state('set', `answer:${method}:packet_answer:${id.uid}`);
+        
+        this.state('data', `${key}:${method}:${sub_key}:${id.uid}`);
         const packet_answer = { // setup the packet.a container
           id,
           agent, // set the agent who answered the question
@@ -831,21 +894,33 @@ class Deva {
           created: Date.now(), // set the created date for the answer
         };
         // create a hash for the answer and insert into answer meta.
+        this.action('hash', `${key}:${method}:${sub_key}:md5:${id.uid}`);
         packet_answer.md5 = this.hash(packet_answer, 'md5');
+
+        this.action('hash', `${key}:${method}:${sub_key}:sha256:${id.uid}`);
         packet_answer.sha256 = this.hash(packet_answer, 'sha256');
+
+        this.action('hash', `${key}:${method}:${sub_key}:sha512:${id.uid}`);
         packet_answer.sha512 = this.hash(packet_answer, 'sha512');
 
+        this.state('set', `${key}:${method}:${sub_key}:${id.uid}`);
         packet.a = packet_answer; // set the packet.a to the packet_answer
+
+        this.action('talk', `${this._events.answer}:${id.uid}`);
         this.talk(this._events.answer, this.lib.copy(packet)); // global talk event
       
-        this.state('return', `answer:${method}:${id.uid}`); // set the state resolve answer
+        this.action('return', `${key}:${method}:finish:${id.uid}`); // set the state resolve answer
+        this.state('valid', `${key}:${method}:finish:${id.uid}`);
+        this.intent('good', `${key}:${method}:finish:${id.uid}`);
         return this.finish(packet, resolve); // resolve the packet to the caller.
       }).catch(err => { // catch any errors in the method
-        this.state('catch', `answer:${method}:${id.uid}`); // set the state reject answer
+        this.state('catch', `${key}:${method}:${id.uid}`); // set the state reject answer
+        this.intent('bad', `${key}:${method}:${id.uid}`);
         return this.err(err, packet, reject); // return this.err with err, packet, reject
       });
     } catch (e) {
-      this.state('catch', `answer:${method}:${id.uid}`);
+      this.state('catch', `${key}:${method}:${id.uid}`);
+      this.intent('bad', `${key}:${method}:${id.uid}`);
       return this.err(e, packet, reject);
     }
   }
@@ -867,23 +942,29 @@ class Deva {
   ***************/
   ask(packet) {
     if (!this._active) return Promise.resolve(this._messages.offline);
+    const id = this.uid();
+    const key = 'ask';
+    const sub_key = 'packet_answer';
     const agent = this.agent();
     const client = this.client();
     const {method, params} = packet.q.meta;
-    this.zone('ask', `${method}:${packet.id.uid}`);
-    this.action('ask', `${method}:${packet.id.uid}`);
+    this.zone(key, `${method}:${packet.id.uid}`);
+    this.action(key, `${method}:${packet.id.uid}`);
     // build the answer packet from this model
-    this.state('try', `ask:${method}:${packet.id.uid}`);
+    this.state('try', `${key}:${method}:${packet.id.uid}`);
     try {
       if (typeof this.methods[method] !== 'function') {
         return setImmediate(() => {
-          this.talk(`${this._agent.key}:ask:${packet.id.uid}`, this._methodNotFound(packet));
+          this.action('talk', `${key}:${method}:${packet.id.uid}`);
+          this.state('invalid', `${key}:${method}:${packet.id.uid}`);
+          this.intent('bad', `${key}:${method}:${packet.id.uid}`);
+          return this.talk(`${this._agent.key}:ask:${packet.id.uid}`, this._methodNotFound(packet));
         });
       }
 
-      this.state('set', `ask:${method}:packet_answer:${packet.id.uid}`);
+      this.state('data', `ask:${method}:${sub_key}:${packet.id.uid}`);
       const packet_answer = {
-        id: this.uid(),
+        id,
         agent,
         client,
         meta: {
@@ -900,41 +981,69 @@ class Deva {
       // the response based on the passed through packet.
       this.methods[method](packet).then(result => {
         if (typeof result === 'object') {
+          this.state('set', `${key}:${method}:${sub_key}:text:${packet.id.uid}`);
           packet_answer.text = result.text || false;
+          this.state('set', `${key}:${method}:${sub_key}:text:${packet.id.uid}`);
           packet_answer.html = result.html || false;
+          this.state('set', `${key}:${method}:${sub_key}:data:${packet.id.uid}`);
           packet_answer.data = result.data || false;
         }
         else {
+          this.state('set', `${key}:${method}:${sub_key}:result:${packet.id.uid}`);
           packet_answer.text = result;
         }
-        
-        packet_answer.md5 = this.hash(packet_answer, 'md5'); // md5 the answer.
-        packet_answer.sha256 = this.hash(packet_answer, 'sha256'); // sha256 the answer.
-        packet_answer.sha512 = this.hash(packet_answer, 'sha512'); // sha512 the answer
 
-        packet.q.agent = agent; // set the question agent as the ask agent.
-        packet.a = packet_answer; // set the packet answer.
-        
         // delete previous hashes before creating new ones.
+        this.action('delete', `${key}:${method}:packet:md5:${packet.id.uid}`);
         delete packet.md5;
+        this.action('delete', `${key}:${method}:packet:sha256:${packet.id.uid}`);
         delete packet.sha256;
+        this.action('delete', `${key}:${method}:packet:sha512:${packet.id.uid}`);
         delete packet.sha512;
         
+        this.action('hash', `${key}:${method}:${sub_key}:md5:${packet.id.uid}`);
+        packet_answer.md5 = this.hash(packet_answer, 'md5'); // md5 the answer.
+        this.action('hash', `${key}:${method}:${sub_key}:sha256:${packet.id.uid}`);
+        packet_answer.sha256 = this.hash(packet_answer, 'sha256'); // sha256 the answer.
+        this.action('hash', `${key}:${method}:${sub_key}:sha512:${packet.id.uid}`);
+        packet_answer.sha512 = this.hash(packet_answer, 'sha512'); // sha512 the answer
+
+        this.state('set', `${key}:${method}:packet:q:agent:${packet.id.uid}`);
+        packet.q.agent = agent; // set the question agent as the ask agent.
+
+        this.state('set', `${key}:${method}:packet:a:${packet.id.uid}`);
+        packet.a = packet_answer; // set the packet answer.
+                
         // create new hashes for the packet before return.
+        // delete previous hashes before creating new ones.
+        this.action('hash', `${key}:${method}:packet:md5:${packet.id.uid}`);
         packet.md5 = this.hash(packet, 'md5');
+        this.action('hash', `${key}:${method}:packet:sha256:${packet.id.uid}`);
         packet.sha256 = this.hash(packet, 'sha256');
+        this.action('hash', `${key}:${method}:packet:sha512:${packet.id.uid}`);
         packet.sha512 = this.hash(packet, 'sha512');
         
+        this.action('talk', `${this.events.answer}:${key}:${method}:${packet.id.uid}`);
+        this.state('valid', `${this.events.answer}:${key}:${method}:${packet.id.uid}`);
+        this.intent('good', `${this.events.answer}:${key}:${method}:${packet.id.uid}`);
         this.talk(this._events.answer, this.lib.copy(packet)); // global talk event
+
+        this.action('talk', `${agent.key}:${key}:${method}:${packet.id.uid}`);
+        this.state('valid', `${agent.key}:${key}:${method}:${packet.id.uid}`);
+        this.intent('good', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.talk(`${agent.key}:ask:${packet.id.uid}`, packet);
       }).catch(err => {
-        this.talk(`${agent.key}:ask:${packet.id.uid}`, {error:err});
-        this.state('catch', `ask:${method}:${packet.id.uid}`);
+        this.action('talk', `${agent.key}:${key}:${method}:err:${packet.id.uid}`);
+        this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
+        this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
+        this.talk(`${agent.key}:${key}:${method}:${packet.id.uid}`, {error:err});
         return this.err(err, packet);
       })
     }
     catch (e) {
-      this.state('catch', `ask:${method}:${packet.id.uid}`);
+      this.action('talk', `${agent.key}:${key}:${method}:err:${packet.id.uid}`);
+      this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
+      this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
       this.talk(`${agent.key}:ask:${packet.id.uid}`, {error:e});
       return this.err(e, packet)
     }
@@ -1058,10 +1167,15 @@ class Deva {
         if (hasOnInit) {
           this.action('onfunc', `hasOnInit:${data.id.uid}`); // state set to watch onInit
           this.state('onfunc', `hasOnInit:${data.id.uid}`); // state set to watch onInit
+          this.intent('good', `onInit:${data.id.uid}`); // state set to watch onInit
+          this.action('return', `onInit:${data.id.uid}`);
+          return this.onInit(data, resolve);
         }
+        this.intent('good', `init:${data.id.uid}`); // state set to watch onInit
         this.action('return', `init:${data.id.uid}`);
-        return hasOnInit ? this.onInit(data, resolve) : this.start(data, resolve);
+        return this.start(data, resolve);
       }).catch(err => {
+        this.intent('bad', `init:${data.id.uid}`); // state set to watch onInit
         this.state('catch', `init:${data.id.uid}`);
         return this.err(err, client, reject);
       });
@@ -1110,10 +1224,14 @@ class Deva {
     if (hasOnStart) {
       this.action('onfunc', `hasOnStart:${data.id.uid}`); // set action to onfunc
       this.state('onfunc', `hasOnStart:${data.id.uid}`); // set state to onfunc
+      this.intent('good', `onStart:${data.id.uid}`); // set the good intent
+      this.action('return', `onStart:${data.id.uid}`); // return action finish
+      return this.onStart(data, resolve)
     }
-    
+
+    this.intent('good', `start:${data.id.uid}`); // set the good intent
     this.action('return', `start:${data.id.uid}`); // return action finish
-    return hasOnStart ? this.onStart(data, resolve) : this.enter(data, resolve)
+    return this.enter(data, resolve)
   }
 
   /**************
@@ -1158,10 +1276,14 @@ class Deva {
     if (hasOnEnter) {
       this.action('onfunc', `hasOnEnter:${data.id.uid}`); // action onfunc set
       this.state('onfunc', `hasOnEnter:${data.id.uid}`); // state onfunc set
+      this.intent('good', `onEnter:${data.id.uid}`); // set good intent on enter
+      this.action('return', `onEnter:${data.id.uid}`); // set return actions
+      return this.onEnter(data, resolve); // set return on enter.
     }
 
+    this.intent('good', `enter:${data.id.uid}`); // set good intent enter
     this.action('return', `enter:${data.id.uid}`); // return action finish
-    return hasOnEnter ? this.onEnter(data, resolve) : this.done(data, resolve)
+    return this.done(data, resolve)
   }
 
   /**************
@@ -1206,10 +1328,14 @@ class Deva {
     if (hasOnDone) {
       this.action('onfunc', `hasOnDone:${data.id.uid}`); // state onfunc
       this.state('onfunc', `hasOnDone:${data.id.uid}`); // state onfunc
+      this.intent('good', `onDone:${data.id.uid}`); // set the onDone intent
+      this.action('return', `onDone:${data.id.uid}`); // set the return action
+      return this.onDone(data, resolve);
     }
     
+    this.intent('good', `done:${data.id.uid}`); // set done intent
     this.action('return', `done:${data.id.uid}`); // return action finish
-    return hasOnDone ? this.onDone(data, resolve) : this.ready(data, resolve);
+    return this.ready(data, resolve);
   }
 
   /**************
@@ -1266,10 +1392,14 @@ class Deva {
     if (hasOnReady) {
       this.action('onfunc', `hasOnReady:${data.id.uid}`); // action onfunc
       this.state('onfunc', `hasOnReady:${data.id.uid}`); // state onfunc
+      this.intent('good', `onReady:${data.id.uis}`); // set ready intent
+      this.action('return', `onReady:${data.id.uid}`); // set action onReady return
+      return this.onReady(data, resolve);
     }
 
+    this.intent('good', `ready:${data.id.uid}`); // set read intent good
     this.action('resolve', `ready:${data.id.uid}`); // return action ready
-    return hasOnReady ? this.onReady(data, resolve) : resolve(data);
+    return resolve(data);
   }
   
   /**************
@@ -1503,287 +1633,6 @@ class Deva {
 
   ////////////////////////////
 
-  /**************
-  func: state
-  params:
-    - value: The state value to set for the Deva that matches to this._states
-    - extra: any extra text to add to the state change.
-  ***************/
-  state(value=false, extra=false) {
-    if (!this._active) return this._messages.offline;
-    const id = this.uid();
-    const key = 'state';
-    try {
-      if (!value || !this._states[value]) return; // return if no matching value
-      this._state = value; // set the local state variable.
-      const lookup = this._states[value]; // set the local states lookup
-      const text = extra ? `${lookup} ${extra}` : lookup; // set text from lookup with extra
-      const data = { // build the data object
-        id, // set the data id
-        key, // set the key to state
-        value, // set the value to the passed in value
-        text, // set the text value of the data
-        agent: this.agent(), // set the agent
-        client: this.client(), // set the client
-        created: Date.now(), // set the data created date.
-      };
-
-      data.md5 = this.hash(data, 'md5');
-      data.sha256 = this.hash(data, 'sha256');
-      data.sha512 = this.hash(data, 'sha512');
-
-      this.talk(this._events.state, data); // broadcast the state event
-      return data;
-    } catch (e) { // catch any errors
-      return this.err(e); // return if an error happens
-    }
-  }
-
-  /**************
-  func: states
-  params: none
-  describe: returns the available states values.
-  ***************/
-  states() {
-    if (!this._active) return this._messages.offline;
-    const id = this.uid();    
-    const key = 'states';    
-    this.action(key, id.uid);
-
-    // set the data packet for the states
-    this.state('data', `${key}:${id.uid}`);
-    const data = {
-      id,
-      key,
-      value: this._states,
-      agent: this.agent(),
-      client: this.client(),
-      created: Date.now(),      
-    }
-
-    this.action('hash', `${data.key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5');
-    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
-    data.sha256 = this.hash(data, 'sha256');    
-    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
-    data.sha512 = this.hash(data, 'sha512');
-
-    this.action('return', `${data.key}:${id.uid}`);
-    return data;
-  }
-
-  /**************
-  func: zone
-  params:
-    - st: The zone flag to set for the Deva that matches to this._zones
-  describe
-  ***************/
-  zone(value=false, extra=false) {
-    if (!this._active) return this._messages.offline;
-    const id = this.uid();
-    const key = 'zone';
-    if (!value || !this._zones[value]) return;
-
-    try {
-      this._zone = value;
-      const lookup = this._zones[value]; // set the lookup value
-      const text = extra ? `${lookup} ${extra}` : lookup; // set the text value
-
-      const data = { // build the zone data
-        id, // set the packetid
-        key,
-        value,
-        text,
-        agent: this.agent(),
-        client: this.client(),
-        created: Date.now(),
-      };
-
-      data.md5 = this.hash(data, 'md5');
-      data.sha256 = this.hash(data, 'sha256');
-      data.sha512 = this.hash(data, 'sha512');
-
-      this.talk(this._events.zone, data);
-      return data;
-    } catch (e) {
-      return this.err(e, value);
-    }
-  }
-
-  /**************
-  func: zones
-  params: none
-  describe: returns a listing of zones currently in the system.
-  ***************/
-  zones() {
-    if (!this._active) return this._messages.offline;
-    const id = this.uid();
-    const key = 'zones';
-    this.action(key, id.uid);
-
-    this.state('data', `${key}:${id.uid}`);    
-    const data = {
-      id, // set the uuid of the data
-      key, // set the key return value
-      value: this._zones, // set the list of zones
-      agent: this.agent(), // set the agent value
-      client: this.client(), // set the client value
-      created: Date.now(), // set the created date of the object.
-    }
-    
-    this.action('hash', `${data.key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5');
-    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
-    data.sha256 = this.hash(data, 'sha256');    
-    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
-    data.sha512 = this.hash(data, 'sha512');
-    
-    this.action('return', `${data.key}:${id.uid}`);
-    return data
-  }
-
-  /**************
-  func: action
-  params:
-    - value: The state flag to set for the Deva that matches to this._states
-    - extra: Any extra text to send with the action value.
-  describe
-  ***************/
-  action(value=false, extra=false) {
-    if (!this._active) return this._messages.offline;
-    const id = this.uid();
-    const key = 'action'
-    try {
-      if (!value || !this._actions[value]) return;
-      this._action = value; // set the local action variable
-      // check local vars for custom actions
-      const var_action = this.vars.actions ? this.vars.actions[value] : false;
-      // check the message action
-      const msg_action = var_action || this._actions[value];
-      const msg = msg_action || action; // set the correct message
-      const text = extra ? `${msg} ${extra}` : msg; // set the text of the action
-
-      const data = { // build the data object for the action.
-        id, // generate a guid for the action transmitssion.
-        key, // the key for event to transmit action type
-        value, // the value key which is the action passed
-        text, // text of the action to send
-        agent: this.agent(), // the agent data to send with the action
-        client: this.client(), // the client data to send with the action
-        created: Date.now(), // action time stamp
-      };
-
-      data.md5 = this.hash(data, 'md5');
-      data.sha256 = this.hash(data, 'sha256');
-      data.sha512 = this.hash(data, 'sha512');
-
-      this.talk(this._events.action, data); // talk the core action event
-      return data;
-    } catch (e) { // catch any errors that occur
-      this.state('catch', `${key}:${id.uid}`);
-      return this.err(e); // return error on error catch
-    }
-  }
-
-  /**************
-  func: actions
-  params: none
-  describe: Returns a list of available actions in the system.
-  ***************/
-  actions() {
-    if (!this._active) return this._messages.offline;
-    const id = this.uid();
-    const key = 'actions';
-    this.action(key, id.uid);
-    
-    this.state('data', `${key}:${id.uid}`);    
-    const data = {
-      id, // set the id with a uuid
-      key, // set the data key
-      value: this._actions, // set the value to the actions list
-      agent: this.agent(), // set the agent value
-      client: this.client(), // set the client value
-      created: Date.now(), // set the data created date      
-    };
-
-    this.action('hash', `${data.key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5');
-    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
-    data.sha256 = this.hash(data, 'sha256');    
-    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
-    data.sha512 = this.hash(data, 'sha512');
-
-    this.state('return', `${key}:${id.uid}`);
-    return data;
-  }
-
-  /**************
-  func: feature
-  params:
-    - value: The feature flag to set for the Deva that matches to this._features
-    - extra: Any extra text to send with the feature value.
-  describe
-  ***************/
-  feature(value=false, extra=false) {
-    const id = this.uid();
-    try {
-      if (!value || !this._features[value]) return; // check feature value
-
-      const lookup = this._features[value]; // set the lookup value
-      const text = extra ? `${lookup} ${extra}` : lookup; // set the text value
-
-      const data = { // build data object
-        id, // set the id
-        agent: this.agent(), // set the agent transporting the packet.
-        key: 'feature', // set the key for transport
-        value, // set the value of the key
-        text, // set the text value
-        created: Date.now(), // set the creation date
-      };
-
-      data.md5 = this.hash(data, 'md5');
-      data.sha256 = this.hash(data, 'sha256');
-      data.sha512 = this.hash(data, 'sha512');
-
-      this.talk(this._events.feature, data); // talk the feature event with data
-      return data;
-    } catch (e) { // catch any errors
-      this.state('catch', `feature:${value}:${id.uid}`);
-      return this.err(e); // retun this.err when an error is caught.
-    }
-  }
-
-  /**************
-  func: features
-  params: none
-  describe: return a list of features that are available to the system.
-  ***************/
-  features() {
-    if (!this._active) return this._messages.offline; // check the active status
-    const id = this.uid();
-    const key = 'features';
-    this.action(key, id.uid);
-    
-    this.state('data', `${key}:${id.uid}`);
-    const data = {
-      id, // set the object id
-      key, // set the key
-      value: this._features, // set the value to the features list
-      agent: this.agent(), // set the agent value.
-      client: this.client(), // set the client value.
-      created: Date.now(), // set the created date.
-    };
-
-    this.action('hash', `${data.key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5');
-    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
-    data.sha256 = this.hash(data, 'sha256');    
-    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
-    data.sha512 = this.hash(data, 'sha512');
-    
-    this.state('return', `${data.key}:${data.id.uid}`);
-    return data;
-  }
 
   /**************
   func: context
@@ -1800,7 +1649,7 @@ class Deva {
       this._context = value;
       const lookup = this.vars.context[value] || value;
       const text = extra ? `${lookup} ${extra}` : lookup;
-
+  
       const data = {
         id,
         agent: this.agent(),
@@ -1810,11 +1659,11 @@ class Deva {
         text,
         created: Date.now(),
       };
-
+  
       data.md5 = this.hash(data, 'md5');
       data.sha256 = this.hash(data, 'sha256');
       data.sha512 = this.hash(data, 'sha512');
-
+  
       this.talk(this._events.context, data);
       return data;
     } catch (e) {
@@ -1822,7 +1671,7 @@ class Deva {
       return this.err(e, value);
     }
   }
-
+  
   contexts() {
     if (!this._active) return this._messages.offline; // check the active status
     const id = this.uid();
@@ -1838,15 +1687,201 @@ class Deva {
       client: this.client(),
       created: Date.now(),      
     };
-
+  
     this.action('hash', `${data.key}:md5:${data.id.uid}`);
     data.md5 = this.hash(data, 'md5');
     this.action('hash', `${data.key}:sha256:${data.id.uid}`);
     data.sha256 = this.hash(data, 'sha256');    
     this.action('hash', `${data.key}:sha512:${data.id.uid}`);
     data.sha512 = this.hash(data, 'sha512');
-
+  
     this.state('return', `${data.key}:${id.uid}`);
+    return data;
+  }
+
+  /**************
+  func: feature
+  params:
+    - value: The feature flag to set for the Deva that matches to this._features
+    - extra: Any extra text to send with the feature value.
+  describe
+  ***************/
+  feature(value=false, extra=false) {
+    return this._workflow('feature', value, extra);
+  }
+  
+  /**************
+  func: features
+  params: none
+  describe: return a list of features that are available to the system.
+  ***************/
+  features() {
+    return this._workflowItems('features');
+  }
+
+  /**************
+  func: zone
+  params:
+    - st: The zone flag to set for the Deva that matches to this._zones
+  describe
+  ***************/
+  zone(value=false, extra=false) {
+    return this._workflow('zone', value, extra);
+  }
+
+  /**************
+  func: zones
+  params: none
+  describe: returns a listing of zones currently in the system.
+  ***************/
+  zones() {
+    return this._workflowItems('zones');
+  }
+
+  /**************
+  func: action
+  params:
+    - value: The state flag to set for the Deva that matches to this._states
+    - extra: Any extra text to send with the action value.
+  describe
+  ***************/
+  action(value=false, extra=false) {
+    return this._workflow('action', value, extra);
+  }
+
+  /**************
+  func: actions
+  params: none
+  describe: Returns a list of available actions in the system.
+  ***************/
+  actions() {
+    this._workflowItems('actions');
+  }
+
+  /**************
+  func: state
+  params:
+    - value: The state value to set for the Deva that matches to this._states
+    - extra: any extra text to add to the state change.
+  ***************/
+  state(value=false, extra=false) {
+    return this._workflow('state', value, extra);
+  }
+  
+  /**************
+  func: states
+  params: none
+  describe: returns the available states values.
+  ***************/
+  states() {
+    return this._workflowItems('states');
+  }
+
+  /**************
+  func: intent
+  params:
+    - value: The intent value to set for the Deva that matches to this._intents
+    - extra: any extra text to add to the intent change.
+  ***************/
+  intent(value=false, extra=false) {
+    return this._workflow('intent', value, extra);
+  }
+  
+  /**************
+  func: intents
+  params: none
+  describe: returns the available intents values.
+  ***************/
+  intents() {
+    return this._workflowItems('intents');
+  }
+
+  /**************
+  func: belief
+  params:
+    - value: The belief value to set for the Deva that matches to this._beliefs
+    - extra: any extra text to add to the belief change.
+  ***************/
+  belief(value=false, extra=false) {
+    return this._workflow('belief', value, extra);
+  }
+  
+  /**************
+  func: beliefs
+  params: none
+  describe: returns the available beliefs values.
+  ***************/
+  beliefs() {
+    return this._workflowItems('intents');
+  }
+
+  /**************
+  func: _workflow
+  params:
+    - value: The workflow value to set for the Deva that matches to this._states
+    - extra: any extra text to add to the state change.
+    stages: Feature, Zone, Action, State, Intent
+  ***************/
+  _workflow(key, value=false, extra=false) {
+    if (!this._active) return this._messages.offline;
+    const id = this.uid();
+    try {
+      const _key = `_${key}`;
+      const _keys = `_${key}s`;
+      if (!value || !this[_keys][value]) return; // return if no matching value
+      this[_key] = value;
+      const lookup = this[_keys][value]; // set the local states lookup
+      const text = extra ? `${lookup} ${extra}` : lookup; // set text from lookup with extra
+      const data = { // build the data object
+        id, // set the data id
+        key, // set the key to state
+        value, // set the value to the passed in value
+        text, // set the text value of the data
+        agent: this.agent(), // set the agent
+        client: this.client(), // set the client
+        created: Date.now(), // set the data created date.
+      };
+  
+      data.md5 = this.hash(data, 'md5');
+      data.sha256 = this.hash(data, 'sha256');
+      data.sha512 = this.hash(data, 'sha512');
+  
+      this.talk(this._events[key], data); // broadcast the state event
+      return data;
+    } catch (e) { // catch any errors
+      return this.err(e); // return if an error happens
+    }
+  }
+  
+  /**************
+  func: _workflowItems
+  params: none
+  describe: returns the available workflow items for a given key.
+  ***************/
+  _workflowItems(key) {
+    if (!this._active) return this._messages.offline;
+    const id = this.uid(); // set the current uid
+    this.action(key, id.uid); // set the action to the passed key
+    const value = this[_key]; // get the _keys value 
+    // set the data packet for the states
+    this.state('data', `${key}:${id.uid}`);
+    const data = {
+      id,
+      key,
+      value,
+      agent: this.agent(),
+      client: this.client(),
+      created: Date.now(),      
+    }
+  
+    this.action('hash', `${data.key}:md5:${data.id.uid}`);
+    data.md5 = this.hash(data, 'md5');
+    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
+    data.sha256 = this.hash(data, 'sha256');    
+    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
+    data.sha512 = this.hash(data, 'sha512');
+  
+    this.action('return', `${data.key}:${id.uid}`);
     return data;
   }
 
@@ -2135,6 +2170,7 @@ class Deva {
     this.zone('load', key);
     this.action('load', key);
     this.state('load', key);
+    this.intent('good', `load:${key}`);
     return this.devas[key].init(client);
   }
 
@@ -2158,9 +2194,11 @@ class Deva {
           this.talk(this._events.unload, key);
         });
         this.action('resolve', `unload:${key}`);
+        this.intent('good', `unload:${key}`);
         return resolve(`${this._messages.unload}:${key}`);
       } catch (e) {
         this.state('catch', `unload:${key}`);
+        this.intent('bad', `unload:${key}`);
         return this.err(e, this.devas[key], reject)
       }
     });
@@ -2231,6 +2269,7 @@ class Deva {
     data.sha512 = this.hash(data, 'sha512');
     
     this.action('return', `core:${id.uid}`);
+    this.intent('good', `core:${id.uid}`);
     return data;
   }
 
@@ -2274,7 +2313,8 @@ class Deva {
     data.sha256 = this.hash(data, 'sha256');
     data.sha512 = this.hash(data, 'sha512');
 
-    this.state('return', `info:${id.uid}`);
+    this.action('return', `info:${id.uid}`);
+    this.intent('good', `info:${id.uid}`);
     return data;
   }
 
@@ -2298,7 +2338,8 @@ class Deva {
     // format the date since active for output.
     const dateFormat = this.lib.formatDate(this._active, 'long', true);
     // create the text msg string
-    this.state('return', `status:${id.uid}`);
+    this.action('return', `status:${id.uid}`);
+    this.intent('good', `status:${id.uid}`);
     return `${this._agent.profile.name} active since ${dateFormat}`;                           // return final text string
   }
   
@@ -2324,6 +2365,7 @@ class Deva {
       this.action(key, id.uid);
       this.state(key, id.uid);
       this.context(key, id.uid);
+
       const params = msg.split(' '); // split the msg into an array by spaces.
 
       const splitText = params[0].split(':');
@@ -2355,10 +2397,12 @@ class Deva {
       } 
       catch(e) {
         this.state('catch', `${key}:${id.uid}`);
+        this.intent('bad', `${key}:${id.uid}`);
         return this.err(e, msg, reject);
       }
       finally {
-        this.action('resolve', `help:${id.uid}`);
+        this.action('resolve', `${key}:${id.uid}`);
+        this.intent('good', `${key}:${id.uid}`);
         return resolve(helpDoc);
       }
     });
@@ -2377,6 +2421,7 @@ class Deva {
   err(err,packet,reject=false) {
     const id = this.uid();
     const key = 'error';
+    this.intent('bad', `${key}:${id.uid}`);
     this.context(key, id.uid);
     this.feature(key, id.uid);
     this.zone(key, id.uid);
@@ -2421,11 +2466,13 @@ class Deva {
     if (hasOnError) {
       this.action('onfunc', `hasOnError:${data.value}:${data.id.uid}`);
       this.state('onfunc', `hasOnError:${data.value}:${data.id.uid}`);
+      this.intent('bad', `hasOnError:${data.id.uid}`);
       return this.onError(err, packet, reject);
     }
     // else block handled the reject if there is no onError function.
     else {
       this.action('reject', `${data.value}:${id.uid}`);
+      this.intent('bad', `error:${data.id.uid}`);
       return reject ? reject(err) : Promise.reject(err);
     }
   }
@@ -2481,6 +2528,7 @@ class Deva {
     data.md5 = this.hash(data, 'md5'); // md5 the uid and created. 
     data.sha256 = this.hash(data, 'sha256'); // sha256 the uid, created, md5
     data.sha512 = this.hash(data, 'sha512'); // sha512 the uid, created, md5, sha256.
+    // this.intent('good', `uid:${data.uid}`);
     return data; // return the complete uid data.
   }  
   
@@ -2540,14 +2588,22 @@ class Deva {
     data.md5 = this.hash(data, 'md5'); // hash data packet into md5 and inert into data.
     data.sha256 = this.hash(data, 'sha256'); // hash data into sha 256 then set in data.
     data.sha512 = this.hash(data, 'sha512'); // hash data into sha 512 then set in data.
+    this.intent('good', `sign:${data.id.uid}`);
     return data;
   }
   
   license_check(personalVLA, packageVLA) {    
+    const id = this.uid();
     this.state('license', `check:personalVLA:${packageVLA.uid}`);
-    if (!personalVLA) return false;
+    if (!personalVLA) {
+      this.intent('bad', `personalVLA:${id.uid}`);
+      return false
+    };
     this.state('license', `check:packageVLA:${packageVLA.uid}`);
-    if (!packageVLA) return false;
+    if (!packageVLA) {
+      this.intent('bad', `packageVLA:${id.uid}`);
+      return false;
+    }
     
     // this is to ensure no additional information is being transmitted.
     this.state('license', `compare:sha256:${packageVLA.uid}`);
@@ -2555,7 +2611,6 @@ class Deva {
     const packageVLA_hash = this.hash(packageVLA, 'sha256');
     
     if (personalVLA_hash !== packageVLA_hash) return false;
-  
 
     const approved = {
       id: this.uid(),
@@ -2568,6 +2623,7 @@ class Deva {
     approved.sha512 = this.hash(approved, 'sha512');
 
     this.state('return', `license:${packageVLA.uid}`);
+    this.intent('good', `license:${packageVLA.uid}`);
     return approved;
   }
 
