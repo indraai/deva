@@ -291,6 +291,74 @@ class Deva {
       return this.err(e);
     }    
   }
+
+  /**************
+  func: _invoke
+  params:
+  - data: the data to pass to the resolve
+  - resolve: the complete resolve to pass back
+  describe: The _invoke function is used for the recursion over 
+            init, start, enter, done ready, finish, complete
+  usage: this.complete(data, resolve)
+  ***************/
+  _invoke(opts) {
+    if (!this._active) return resolve(this._messages.offline);
+    const {key, data, resolve} = opts;
+    const {prev_key, next_key, onfunc, clear} = config.invoke[key];
+    this.action('invoke', `${key}:${data.id.uid}`);    
+    this.context(key, data.id.uid);
+    this.zone(key, data.id.uid);
+    this.action(key, data.id.uid);
+    this.state(key, data.id.uid);
+  
+    this.action('delete', `${key}:md5:${data.id.uid}`);
+    delete data.md5;
+    
+    this.action('delete', `${key}:sha256:${data.id.uid}`);
+    delete data.sha256;
+  
+    this.action('delete', `${key}:sha512:${data.id.uid}`);
+    delete data.sha512;
+  
+    this.state('data', `${key}:date:${data.id.uid}`);
+    data[key] = Date.now();// set the complete date on the whole data.
+  
+    this.action('hash', `${key}:md5:${data.id.uid}`);
+    data.md5 = this.hash(data, 'md5');
+  
+    this.action('hash', `${key}:sha256:${data.id.uid}`)
+    data.sha256 = this.hash(data, 'sha256');
+  
+    this.action('hash', `${key}:sha512:${data.id.uid}`)
+    data.sha512 = this.hash(data, 'sha512');
+        
+    // setup the complete talk event
+    this.action('talk', `${this._events[key]}:${data.id.uid}`); // action talk for the event.
+    this.talk(this._events[key], data); // talk the complete event
+
+    if (clear) {
+      this.state('loop', `${key}:clear:${data.id.uid}`);
+      for (let item of config.invoke.exit.clear) {
+        this[item] = false;
+      }      
+    }
+
+    // determine if there is an onComplete function for the entity.
+    const hasOnFunc = this[onfunc] && typeof this[onfunc] === 'function'; 
+    if (hasOnFunc) {
+      this.action('onfunc', `${key}:has:${onfunc}:${data.id.uid}`); // action onfunc
+      this.state('onfunc', `${key}:has:${onfunc}:${data.id.uid}`); // state onfunc
+      this.action('return', `${onfunc}:${data.id.uid}`); // action return
+      this.state('valid', `${onfunc}:${data.id.uid}`); // state valid
+      this.intent('good', `${onfunc}:${data.id.uid}`); // intent good
+      return this[onfunc](data, resolve);
+    }
+  
+    this.action('return', `${key}:${data.id.uid}`); // return action complete
+    this.state('valid', `${key}:${data.id.uid}`); // return state valid
+    this.intent('good', `${key}:${data.id.uid}`); // return intent good
+    return next_key ? this[next_key](data, resolve) : resolve(data);
+  }
   
   /**************
   func: Client
@@ -878,7 +946,7 @@ class Deva {
         this.state('set', `${key}:${method}:data:${id.uid}`);
         const data = typeof result === 'object' ? result.data : false;
         
-        this.state('data', `${key}:${method}:${sub_key}:${id.uid}`);
+        this.state('data', `${key}:${method}:${subkey}:${id.uid}`);
         const packet_answer = { // setup the packet.a container
           id,
           agent, // set the agent who answered the question
@@ -894,16 +962,16 @@ class Deva {
           created: Date.now(), // set the created date for the answer
         };
         // create a hash for the answer and insert into answer meta.
-        this.action('hash', `${key}:${method}:${sub_key}:md5:${id.uid}`);
+        this.action('hash', `${key}:${method}:${subkey}:md5:${id.uid}`);
         packet_answer.md5 = this.hash(packet_answer, 'md5');
 
-        this.action('hash', `${key}:${method}:${sub_key}:sha256:${id.uid}`);
+        this.action('hash', `${key}:${method}:${subkey}:sha256:${id.uid}`);
         packet_answer.sha256 = this.hash(packet_answer, 'sha256');
 
-        this.action('hash', `${key}:${method}:${sub_key}:sha512:${id.uid}`);
+        this.action('hash', `${key}:${method}:${subkey}:sha512:${id.uid}`);
         packet_answer.sha512 = this.hash(packet_answer, 'sha512');
 
-        this.state('set', `${key}:${method}:${sub_key}:${id.uid}`);
+        this.state('set', `${key}:${method}:${subkey}:${id.uid}`);
         packet.a = packet_answer; // set the packet.a to the packet_answer
 
         this.action('talk', `${this._events.answer}:${id.uid}`);
@@ -1187,29 +1255,22 @@ class Deva {
 
   /**************
   func: start
-  params:
-    - msg: the message for use when using custome flow logic to pass to onEnter
-  describe:
-    The start function begins the process by setting the state to start setting
-    the active to the current datetime and then checking for a custom onStart
-    function or running the enter function.
-  usage: this.start('msg')
+  usage: this.start(data, resolve);
+  params: data, resolve
+    - data: The data packet that is passed through the invoke chain.
+    - resolve: The Promise resolver following the data through recursion.
+  describe: 
+    The start() function initiates the Invoke Recursion Framework phase for the
+    current Deva context. It first checks for active runtime status, retrieves
+    invocation parameters (key-chain mapping, lifecycle handlers) from 
+    config.invoke.start, declares the invoke action, and then delegates control 
+    to _invoke(), ensuring consistent recursion through the start-enter-done 
+    sequence. This design preserves language-agnostic interoperability and 
+    deterministic state transitions across Deva systems.
   ***************/
   start(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
-    const {key, prev_key, next_key, onfunc} = config.invoke.enter;
-    this.context(key, data.id.uid);
-    this.zone(key, data.id.uid);
-    this.action(key, data.id.uid);
-    this.state(key, data.id.uid);
-    this.intent(key, data.id.uid);
-    return this._invoke({
-      key,
-      prev_key,
-      next_key,
-      onfunc,data,
-      resolve
-    });                
+    return this._invoke({key:'start',data,resolve});                
   }
 
   /**************
@@ -1225,19 +1286,7 @@ class Deva {
   ***************/
   enter(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
-    const {key, prev_key, next_key, onfunc} = config.invoke.enter;
-    this.context(key, data.id.uid);
-    this.zone(key, data.id.uid);
-    this.action(key, data.id.uid);
-    this.state(key, data.id.uid);
-    this.intent(key, data.id.uid);
-    return this._invoke({
-      key,
-      prev_key,
-      next_key,
-      onfunc,data,
-      resolve
-    });            
+    return this._invoke({key:'enter',data,resolve});                
   }
 
   /**************
@@ -1253,19 +1302,7 @@ class Deva {
   ***************/
   done(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
-    const {key, prev_key, next_key, onfunc} = config.invoke.done;
-    this.context(key, data.id.uid);
-    this.zone(key, data.id.uid);
-    this.action(key, data.id.uid);
-    this.state(key, data.id.uid);
-    this.intent(key, data.id.uid);
-    return this._invoke({
-      key,
-      prev_key,
-      next_key,
-      onfunc,data,
-      resolve
-    });    
+    return this._invoke({key:'done',data,resolve});
   }
 
   /**************
@@ -1278,16 +1315,15 @@ class Deva {
   ***************/
   ready(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
-    const {key, prev_key, next_key, onfunc} = config.invoke.ready;
-    this.context(key, data.id.uid);
-    this.zone(key, data.id.uid);
-    this.action(key, data.id.uid);
-    this.state(key, data.id.uid);
-    this.intent(key, data.id.uid);
+    const key = 'ready';
     
+    this.state('set', `${key}:agent:${data.id.uid}`);
     const agent = this.agent();    
+
     this.state('set', `${key}:config:hash:${data.id.uid}`); // state set to watch OnFinish
     this.config.hash[agent.key] = {};
+
+    this.state('loop', `${key}:config:ready:hash:${data.id.uid}`);
     for (let item of this._config.ready_hash) {
       if (this[item]) {
         const this_item = this[item];      
@@ -1295,14 +1331,7 @@ class Deva {
         this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
       }
     }
-    return this._invoke({
-      key,
-      prev_key,
-      next_key,
-      onfunc,
-      data,
-      resolve,
-    });
+    return this._invoke({key,data,resolve});                
   }
   
   /**************
@@ -1315,21 +1344,7 @@ class Deva {
   ***************/
   finish(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
-    const {key, prev_key, next_key, onfunc} = config.invoke.finish;
-    this.context(key, data.id.uid);
-    this.zone(key, data.id.uid); // enter finish zone
-    this.action(key, data.id.uid); // start finish action
-    this.state(key, data.id.uid); // set finish state
-    this.intent(key, data.id.uid); // set finish state
-    
-    return this._invoke({
-      key,
-      prev_key,
-      next_key,
-      onfunc,
-      data,
-      resolve,
-    });
+    return this._invoke({key:'finish',data,resolve});                
   }
 
   /**************
@@ -1343,101 +1358,23 @@ class Deva {
   ***************/
   complete(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
-    const {key, prev_key, next_key, onfunc} = config.invoke.complete;
-    this.context(key, data.id.uid);
-    this.zone(key, data.id.uid);
-    this.action(key, data.id.uid);
-    this.state(key, data.id.uid);
-    
-    return this._invoke({
-      key,
-      prev_key,
-      next_key,
-      onfunc,
-      data,
-      resolve,
-    }); 
+    return this._invoke({key:'complete',data,resolve});                
   }
-  /**************
-  func: _invoke
-  params:
-  - data: the data to pass to the resolve
-  - resolve: the complete resolve to pass back
-  describe: The _invoke function is used for the recursion over 
-            init, start, enter, done ready, finish, complete
-  usage: this.complete(data, resolve)
-  ***************/
-  _invoke(opts) {
-    if (!this._active) return resolve(this._messages.offline);
-    const {key, prev_key, next_key, onfunc, data, resolve} = opts;
-    this.context(key, data.id.uid);
-    this.zone(key, data.id.uid);
-    this.action(key, data.id.uid);
-    this.state(key, data.id.uid);
-
-    this.action('delete', `${key}:md5:${data.id.uid}`);
-    delete data.md5;
-    
-    this.action('delete', `${key}:sha256:${data.id.uid}`);
-    delete data.sha256;
-
-    this.action('delete', `${key}:sha512:${data.id.uid}`);
-    delete data.sha512;
-
-    this.state('data', `${key}:date:${data.id.uid}`);
-    data[key] = Date.now();// set the complete date on the whole data.
-
-    this.action('hash', `${key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5');
-
-    this.action('hash', `${key}:sha256:${data.id.uid}`)
-    data.sha256 = this.hash(data, 'sha256');
-
-    this.action('hash', `${key}:sha512:${data.id.uid}`)
-    data.sha512 = this.hash(data, 'sha512');
-        
-    // setup the complete talk event
-    this.action('talk', `${this._events[key]}:${data.id.uid}`); // action talk for the event.
-    this.talk(this._events[key], data); // talk the complete event
-
-    // determine if there is an onComplete function for the entity.
-    const hasOnFunc = this[onfunc] && typeof this[onfunc] === 'function'; 
-    if (hasOnFunc) {
-      this.action('onfunc', `${key}:has:${onfunc}:${data.id.uid}`); // action onfunc
-      this.state('onfunc', `${key}:has:${onfunc}:${data.id.uid}`); // state onfunc
-      this.action('return', `${onfunc}:${data.id.uid}`); // action return
-      this.state('valid', `${onfunc}:${data.id.uid}`); // state valid
-      this.intent('good', `${onfunc}:${data.id.uid}`); // intent good
-      return this[onfunc](data, resolve);
-    }
-
-    this.action('return', `${key}:${data.id.uid}`); // return action complete
-    this.state('valid', `${key}:${data.id.uid}`); // return state valid
-    this.intent('good', `${key}:${data.id.uid}`); // return intent good
-    return next_key ? this[next_key](data, resolve) : resolve(data);
-  }
-
+  
   /**************
   func: stop
   params:
     - msg: hte message from the caller incase need to use in calls
   describe:
-    The stop function will stop the Deva by setting the active status to false,
-    and the state to stop. From here it will check for a custom onStop function
-    for anything to run, or run the exit function.
-
-    If the deva is offline it will return the offline message.
+    The stop function will stop the Deva by setting necessary context,
+    zone, action, state to stop and creating the stop data packet.
   usage:
     this.stop()
   ***************/
   stop() {
     if (!this._active) return this._messages.offline;
-    const {key, prev_key, next_key, onfunc} = config.invoke.stop;
+    const key = 'stop';
     const id = this.uid();
-    this.context(key, id.uid);
-    this.zone(key, id.uid);
-    this.action(key, id.uid);    
-    this.state(key, id.uid); // set the state to stop
     
     this.state('set', `${key}:agent:${id.uid}`); // state stop agent
     const agent = this.agent().sha256; // get the current agent
@@ -1455,26 +1392,48 @@ class Deva {
       client, // set the client
       stop: Date.now(), // set the created date
     }
-
-    this.action('hash', `stop:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5');
-    this.action('hash', `stop:sha256:${data.id.uid}`)
-    data.sha256 = this.hash(data, 'sha256');    
-    this.action('hash', `stop:sha512:${data.id.uid}`)
-    data.sha512 = this.hash(data, 'sha512');
-
-    // has stop function then set hasOnStop variable
-    // if: has on stop then run on stop function or return exit function.
-    this.action('talk', `${this._events.stop}:${data.id.uid}`); // action talk for the event.
-    this.talk(this._events.stop, data);    
     
-    // determine if there is an onComplete function for the entity.
-    const hasOnStop = this.onStop && typeof this.onStop === 'function';
-    if (hasOnStop) {
-      this.action('onfunc', `hasOnStop:${data.id.uid}`); // action onfunc
-      this.state('onfunc', `hasOnStop:${data.id.uid}`); // state onfunc
-    }
-    return hasOnStop ? this.onStop(data) : this.exit(data)
+    return this._invoke({
+      key,
+      data,
+      resolve: Promise.resolve(),
+    })
+  }
+
+  /**************
+  func: close
+  usage: this.close(data, resolve);
+  params: data, resolve
+    - data: The data packet that is passed through the closing invoke chain.
+    - resolve: The Promise resolver following the data through recursion.
+  describe: 
+    The close() function initiates the closing Invoke Recursion Framework. 
+    It first checks for active runtime status, retrieves invocation parameters 
+    (chain mapping, lifecycle handlers) from config.invoke.close and then 
+    delegates control to _invoke(), ensuring consistent recursion through the 
+    start-enter-done sequence.
+  ***************/
+  close(data, resolve) {
+    if (!this._active) return resolve(this._messages.offline);
+    return this._invoke({key:'close',data,resolve});                
+  }
+
+  /**************
+  func: leave
+  usage: this.leave(data, resolve);
+  params: data, resolve
+    - data: The data packet that is passed through the closing invoke chain.
+    - resolve: The Promise resolver following the data through recursion.
+  describe: 
+    The leave() function initiates the leave aspect of the Invoke Recursion 
+    Framework. It first checks for active runtime status, retrieves invocation 
+    parameters (chain mapping, lifecycle handlers) from config.invoke.close and 
+    then delegates control to _invoke(), ensuring consistent recursion through 
+    the start-enter-done sequence.
+  ***************/
+  leave(data, resolve) {
+    if (!this._active) return resolve(this._messages.offline);
+    return this._invoke({key:'leave',data,resolve});                
   }
 
   /**************
@@ -1487,57 +1446,11 @@ class Deva {
     The return will check for a custom onExit function or run the done
     function.
   ***************/
-  exit(data) {
+  exit(data, resolve) {
     if (!this._active) return this._messages.offline;
-    const {key, prev_key, next_key, onfunc} = config.invoke.exit;
+    const key = 'exit';
     data.key = key;
-
-    this.context(key, data.id.uid);
-    this.zone(key, data.id.uid);
-    this.action(key, data.id.uid);
-    this.state(key, data.id.uid); // set the state to stop
-
-    this.action('delete', `${prev_key}:md5:${data.id.uid}`);
-    delete data.md5;
-    this.action('delete', `${prev_key}:sha256:${data.id.uid}`);
-    delete data.sha256;
-    this.action('delete', `${prev_key}:sha512:${data.id.uid}`);
-    delete data.sha512;
-
-    this.state('data', `${key}:time:${data.id.uid}`); // state stop agent    
-    data.exit = Date.now();
-    
-    this.action('hash', `${key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5');
-    this.action('hash', `${key}:sha256:${data.id.uid}`)
-    data.sha256 = this.hash(data, 'sha256');    
-    this.action('hash', `${key}:sha512:${data.id.uid}`)
-    data.sha512 = this.hash(data, 'sha512');
-    
-    // clear memory from config.invoke.exit.clear
-    
-    this.state('loop', `${key}:clear:${data.id.uid}`);
-    for (let item of config.invoke.exit.clear) {
-      this[item] = false;
-    }
-
-    this.action('talk', `${this._events.stop}:${data.id.uid}`); // action talk for the event.
-    this.talk(this._events.exit, data);    
-
-    const hasOnExit = this.onExit && typeof this.onExit === 'function';
-    if (hasOnExit) {
-      this.action('onfunc', `${onfunc}:${data.id.uid}`); // action onfunc
-      this.state('onfunc', `${onfunc}:${data.id.uid}`); // state onfunc
-      this.action('return', `${onfunc}:${data.id.uid}`); // state onfunc
-      this.state('valid', `${onfunc}:${data.id.uid}`); // state onfunc
-      this.intent('good', `${onfunc}:${data.id.uid}`); // state onfunc
-      return this[onfunc](data);
-    }
-
-    this.action('resolve', `${key}:${data.uid}`);
-    this.state('valid', `${key}:${data.uid}`);
-    this.intent('good', `${key}:${data.uid}`);
-    return Promise.resolve(data)
+    return this._invoke({key, data, resolve})
   }
 
 
