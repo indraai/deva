@@ -43,6 +43,8 @@
 		"put": "🤝 Put",
 		"push": "🫸 Push",
 		"pull": "👉 Pull",
+		"while": "🔁 While",
+		"loop": "🔃 Loop",
 		"search": "🔎 Search",
 		"memory": "💭 Memory",
 		"signature": "✍️️ Signature",

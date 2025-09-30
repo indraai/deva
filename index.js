@@ -1489,66 +1489,55 @@ class Deva {
   ***************/
   exit(data) {
     if (!this._active) return this._messages.offline;
-    data.key_prev = data.key;
-    data.key = 'exit';
-    this.context(data.key, data.id.uid);
-    this.zone(data.key, data.id.uid);
-    this.action(data.key, data.id.uid);
-    this.state(data.key, data.id.uid); // set the state to stop
+    const {key, prev_key, next_key, onfunc} = config.invoke.exit;
+    data.key = key;
 
-    this.action('delete', `${data.key_prev}:md5:${data.id.uid}`);
+    this.context(key, data.id.uid);
+    this.zone(key, data.id.uid);
+    this.action(key, data.id.uid);
+    this.state(key, data.id.uid); // set the state to stop
+
+    this.action('delete', `${prev_key}:md5:${data.id.uid}`);
     delete data.md5;
-    this.action('delete', `${data.key_prev}:sha256:${data.id.uid}`);
+    this.action('delete', `${prev_key}:sha256:${data.id.uid}`);
     delete data.sha256;
-    this.action('delete', `${data.key_prev}:sha512:${data.id.uid}`);
+    this.action('delete', `${prev_key}:sha512:${data.id.uid}`);
     delete data.sha512;
 
-    this.state('set', `${data.key}:time:${data.id.uid}`); // state stop agent    
+    this.state('data', `${key}:time:${data.id.uid}`); // state stop agent    
     data.exit = Date.now();
     
-    this.action('hash', `${data.key}:md5:${data.id.uid}`);
+    this.action('hash', `${key}:md5:${data.id.uid}`);
     data.md5 = this.hash(data, 'md5');
-    this.action('hash', `${data.key}:sha256:${data.id.uid}`)
+    this.action('hash', `${key}:sha256:${data.id.uid}`)
     data.sha256 = this.hash(data, 'sha256');    
-    this.action('hash', `${data.key}:sha512:${data.id.uid}`)
+    this.action('hash', `${key}:sha512:${data.id.uid}`)
     data.sha512 = this.hash(data, 'sha512');
     
-    // clear memory
-    this._active = false; // the active/birth date.
-    this._indra = false; // inherited Indra features.
-    this._veda = false; // inherited Veda features.
-    this._license = false; // inherited License features.
-    this._data = false; // inherited Data features.
-    this._error = false; // inherited Error features.
-    this._log = false; // inherited Log features.
-    this._report = false; // inherited Report features.
-    this._vector = false; // inherited Vector features.
-    this._king = false; // inherited King features.
-    this._treasury = false; // inherited Vector features.
-    this._security = false; // inherited Security features.
-    this._guard = false; // inherited Guard features.
-    this._defense = false; // inherited Security features.
-    this._wall = false; // inherited Wall features.
-    this._proxy = false; // inherited Proxy features.
-    this._legal = false; // inherited Legal features.
-    this._authority = false; // inherited Justice features.
-    this._justice = false; // inherited Justice features.
-    this._support = false; // inherited Support features.
-    this._services = false; // inherited Service features.
-    this._systems = false; // inherited Systems features.
-    this._networks = false; // inherited Systems features.
+    // clear memory from config.invoke.exit.clear
+    
+    this.state('loop', `${key}:clear:${data.id.uid}`);
+    for (let item of config.invoke.exit.clear) {
+      this[item] = false;
+    }
 
     this.action('talk', `${this._events.stop}:${data.id.uid}`); // action talk for the event.
     this.talk(this._events.exit, data);    
 
     const hasOnExit = this.onExit && typeof this.onExit === 'function';
     if (hasOnExit) {
-      this.action('onfunc', `hasOnExit:${data.id.uid}`); // action onfunc
-      this.state('onfunc', `hasOnExit:${data.id.uid}`); // state onfunc
+      this.action('onfunc', `${onfunc}:${data.id.uid}`); // action onfunc
+      this.state('onfunc', `${onfunc}:${data.id.uid}`); // state onfunc
+      this.action('return', `${onfunc}:${data.id.uid}`); // state onfunc
+      this.state('valid', `${onfunc}:${data.id.uid}`); // state onfunc
+      this.intent('good', `${onfunc}:${data.id.uid}`); // state onfunc
+      return this[onfunc](data);
     }
 
-    this.action('resolve', `exit:${data.uid}`);
-    return hasOnExit ? this.onExit(data) : Promise.resolve(data)
+    this.action('resolve', `${key}:${data.uid}`);
+    this.state('valid', `${key}:${data.uid}`);
+    this.intent('good', `${key}:${data.uid}`);
+    return Promise.resolve(data)
   }
 
 
