@@ -75,6 +75,18 @@ export default {
 			prev_key: 'finish',
 			next_key: false,
 			onfunc: 'onComplete',
+		},
+		stop: {
+			key: 'stop',
+			prev_key: false,
+			next_key: 'exit',
+			onfunc: 'onStop',
+		},
+		exit: {
+			key: 'exit',
+			prev_key: 'stop',
+			next_key: false,
+			onfunc: 'onExit',
 		}
 	},
 	context: false,

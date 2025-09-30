@@ -1398,7 +1398,7 @@ class Deva {
         
     // setup the complete talk event
     this.action('talk', `${this._events[key]}:${data.id.uid}`); // action talk for the event.
-    this.talk(this._events.complete, data); // talk the complete event
+    this.talk(this._events[key], data); // talk the complete event
 
     // determine if there is an onComplete function for the entity.
     const hasOnFunc = this[onfunc] && typeof this[onfunc] === 'function'; 
@@ -1432,26 +1432,27 @@ class Deva {
   ***************/
   stop() {
     if (!this._active) return this._messages.offline;
+    const {key, prev_key, next_key, onfunc} = config.invoke.stop;
     const id = this.uid();
-    const key = 'stop';
     this.context(key, id.uid);
     this.zone(key, id.uid);
     this.action(key, id.uid);    
     this.state(key, id.uid); // set the state to stop
     
     this.state('set', `${key}:agent:${id.uid}`); // state stop agent
-    const agent = this.agent(); // get the current agent
+    const agent = this.agent().sha256; // get the current agent
+    const value = agent.key;
+    
+    this.state('set', `${key}:client:${id.uid}`); // state stop agent
+    const client = this.client().sha256; // set the current client
 
-    this.state('set', `stop:client:${id.uid}`); // state stop agent
-    const client = this.client(); // set the current client
-
-    this.state('data', `stop:${id.uid}`);
+    this.state('data', `${key}:${id.uid}`);
     const data = { // build the stop data
       id, // set the id
       key, // set the key
-      value: agent.key, // set the value
-      agent: agent.sha256, // set the agent
-      client: client.sha256, // set the client
+      value, // set the value
+      agent, // set the agent
+      client, // set the client
       stop: Date.now(), // set the created date
     }
 
