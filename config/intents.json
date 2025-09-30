@@ -34,7 +34,17 @@
 		"pervert": "💋 Pervert",
 		"pleasure": "💅 Pleasure",
 		"desire": "😘 Desire",
+		"romance": "🌹 Romance",
 		"cannibal": "🥩 Cannibal",
-		"other": "🤔 Other"
+		"other": "🤔 Other",
+		"init": "🟠  Init",
+		"start": "🟢  Start",
+		"enter": "🚪 Enter",
+		"done": "☑️  Done",
+		"ready": "⭐️ Ready",
+		"finish": "🏁 Finish",
+		"complete": "✅ Complete",
+		"stop": "🔴 Stop",
+		"exit": "🚪 Exit"		
 	}
 }

@@ -15,9 +15,10 @@
 		"question": "💬 Question",
 		"cmd": "🪖  Command",
 		"answer": "💡 Answer",
-		"wait": "⏳ Waiting",
+		"wait": "⏳ Wait",
 		"pause": "⏸️ Pause",
 		"resume": "🚙 Resume",
+		"pending": "⏳ Pending",
 		"connect": "📳 Connect",
 		"disconnect": "📴 Disconnect",
 		"send": "📬 Send",
@@ -116,6 +117,7 @@
 		"mature": "🧓 Mature",
 		"immature": "🧒 Immature",
 		"consent": "✍️ Consent",
-		"onfunc": "🎚️ onFunction"
+		"onfunc": "🎚️ onFunction",
+		"romance": "🌹 Romance"				
 	}
 }

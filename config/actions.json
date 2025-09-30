@@ -39,6 +39,7 @@
 		"answer": "💡 Answer",
 		"ask": "📣 Ask",
 		"call": "📞 Call",
+		"wait": "⌛️ Wait",
 		"init": "🟠  Init",
 		"start": "🟢  Start",
 		"enter": "🚪 Enter",
@@ -102,6 +103,7 @@
 		"target": "🎯 Target",
 		"mature": "🧓 Mature",
 		"immature": "🧒 Immature",
-		"hash": "#️⃣ Hash"
+		"hash": "#️⃣ Hash",
+		"romance": "🌹 Romance"
 	}
 }

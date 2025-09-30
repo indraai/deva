@@ -39,6 +39,44 @@ export default {
 		"func",
 		"methods"
 	],
+	invoke: {
+		start: {
+			key: 'start',
+			prev_key: 'init',
+			next_key: 'enter',
+			onfunc: 'onStart',
+		},
+		enter: {
+			key: 'enter',
+			prev_key: 'start',
+			next_key: 'done',
+			onfunc: 'onEnter',
+		},
+		done: {
+			key: 'done',
+			prev_key: 'enter',
+			next_key: 'ready',
+			onfunc: 'onDone',
+		},
+		ready: {
+			key: 'ready',
+			prev_key: 'done',
+			next_key: false,
+			onfunc: 'onReady',
+		},
+		finish: {
+			key: 'finish',
+			prev_key: 'answer',
+			next_key: 'complete',
+			onfunc: 'onFinish',
+		},
+		complete: {
+			key: 'complete',
+			prev_key: 'finish',
+			next_key: false,
+			onfunc: 'onComplete',
+		}
+	},
 	context: false,
 	events: events.DATA,
 	feature: false,
@@ -47,11 +85,11 @@ export default {
 	zones: zones.DATA,
 	action: false,
 	actions: actions.DATA,
-	state: false,
+	state: 'offline',
 	states: states.DATA,
-	intent: false,
+	intent: 'neutral',
 	intents: intents.DATA,
-	belief: false,
+	belief: 'vedic',
 	beliefs: beliefs.DATA,
 	messages: msgs.DATA,
 }
