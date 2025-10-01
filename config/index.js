@@ -128,8 +128,8 @@ export default {
 			next_key: false,
 			onfunc: 'onShutdown',
 			clear: [
-				'modules'
-				'listeners'
+				'modules',
+				'listeners',
 				'events',
 				'_config',
 				'_active',
