@@ -1375,32 +1375,39 @@ class Deva {
     if (!this._active) return this._messages.offline; // check for active status
     const key = 'stop'; // set the stop key
     const id = this.uid(); // generate the stop uid
-    
-    this.state('set', `${key}:agent:${id.uid}`); // state stop agent
-    const agent = this.agent().sha256; // get the current agent
-    const value = agent.key;
-    
-    this.state('set', `${key}:client:${id.uid}`); // state stop agent
-    const client = this.client().sha256; // set the current client
-
-    this.state('data', `${key}:${id.uid}`);
-    const data = { // build the stop data
-      id, // set the id
-      key, // set the key
-      value, // set the value
-      agent, // set the agent
-      client, // set the client
-      stop: Date.now(), // set the created date
-    }
-    
-    this.action('return', `${key}:invoke:${data.id.uid}`);
-    this.state('valid', `${key}:invoke:${data.id.uid}`);
-    this.intent('good', `${key}:invoke:${data.id.uid}`);
-    return this._invoke({
-      key,
-      data,
-      resolve: Promise.resolve(),
-    })
+    let data;    
+    return new Promise((resolve, reject) => {
+      try {
+        this.state('set', `${key}:agent:${id.uid}`); // state stop agent
+        const agent = this.agent().sha256; // get the current agent
+        const value = agent.key;
+        
+        this.state('set', `${key}:client:${id.uid}`); // state stop agent
+        const client = this.client().sha256; // set the current client
+        
+        this.state('data', `${key}:${id.uid}`);
+        data = { // build the stop data
+          id, // set the id
+          key, // set the key
+          value, // set the value
+          agent, // set the agent
+          client, // set the client
+          stop: Date.now(), // set the created date
+        }
+        
+        this.action('return', `${key}:invoke:${data.id.uid}`);
+        this.state('valid', `${key}:invoke:${data.id.uid}`);
+        this.intent('good', `${key}:invoke:${data.id.uid}`);
+        return this._invoke({
+          key,
+          data,
+          resolve,
+        });
+      } 
+      catch (err) {
+        return this.err(err, data, reject);
+      }
+    });
   }
 
   /**************
@@ -1414,7 +1421,9 @@ class Deva {
   ***************/
   close(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
-    return this._invoke({key:'close',data,resolve});                
+    const key = 'close';
+    data.key = key;
+    return this._invoke({key,data,resolve});                
   }
 
   /**************
@@ -1429,7 +1438,9 @@ class Deva {
   ***************/
   leave(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
-    return this._invoke({key:'leave',data,resolve});                
+    const key = 'leave';
+    data.key = key;
+    return this._invoke({key,data,resolve});                
   }
 
   /**************
@@ -1443,10 +1454,10 @@ class Deva {
     Framework.
   ***************/
   exit(data, resolve) {
-    if (!this._active) return this._messages.offline;
+    if (!this._active) return resolve(this._messages.offline);
     const key = 'exit';
     data.key = key;
-    return this._invoke({key, data, resolve})
+    return this._invoke({key,data,resolve});                
   }
 
   /**************
@@ -1460,7 +1471,7 @@ class Deva {
     function.
   ***************/
   shutdown(data, resolve) {
-    if (!this._active) return this._messages.offline;
+    if (!this._active) return resolve(this._messages.offline);
     const key = 'shutdown';
     data.key = key;
     return this._invoke({key, data, resolve})
@@ -2035,7 +2046,7 @@ class Deva {
       } catch (e) {
         this.state('catch', `unload:${key}`);
         this.intent('bad', `unload:${key}`);
-        return this.err(e, this.devas[key], reject)
+        return this.err(e, key, reject)
       }
     });
   }

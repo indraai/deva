@@ -45,6 +45,9 @@
 		"finish": "🏁 Finish",
 		"complete": "✅ Complete",
 		"stop": "🔴 Stop",
-		"exit": "🚪 Exit"		
+		"close": "📦 Close",
+		"leave": "🫣 Leave",
+		"exit": "🚪 Exit",
+		"shutdown": "🔌 Shutdown"
 	}
 }
