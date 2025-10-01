@@ -96,10 +96,9 @@ export default {
 		},
 		exit: {
 			prev_key: 'stop',
-			next_key: false,
+			next_key: 'shutdown',
 			onfunc: 'onExit',
 			clear: [
-				'_active',
 				'_indra',
 				'_veda',
 				'_license',
@@ -123,6 +122,18 @@ export default {
 				'_systems',
 				'_networks',				
 			]
+		},
+		shutdown: {
+			prev_key: 'exit',
+			next_key: false,
+			onfunc: 'onShutdown',
+			clear: [
+				'modules'
+				'listeners'
+				'events',
+				'_config',
+				'_active',
+			],
 		}
 	},
 	context: false,

@@ -13,10 +13,14 @@
 		"finish": "devacore:finish",
 		"complete": "devacore:complete",
 		"stop": "devacore:stop",
+		"close": "devacore:leave",
+		"leave": "devacore:leave",
 		"exit": "devacore:exit",
+		"shutdown": "devacore:shutdown",
 		"question": "devacore:question",
 		"answer": "devacore:answer",
 		"ask": "devacore:ask",
+		"context": "devacore:context",
 		"feature": "devacore:feature",
 		"zone": "devacore:zone",
 		"action": "devacore:action",
@@ -24,7 +28,6 @@
 		"intent": "devacore:intent",
 		"belief": "devacore:belief",
 		"load": "devacore:load",
-		"unload": "devacore:unload",
-		"context": "devacore:context"
+		"unload": "devacore:unload"
 	}
 }

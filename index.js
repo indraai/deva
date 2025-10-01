@@ -1363,18 +1363,18 @@ class Deva {
   
   /**************
   func: stop
-  params:
-    - msg: hte message from the caller incase need to use in calls
-  describe:
-    The stop function will stop the Deva by setting necessary context,
-    zone, action, state to stop and creating the stop data packet.
-  usage:
-    this.stop()
+  usage: this.stop(data, resolve);
+  params: data, resolve
+    - data: The data packet that is passed through the closing invoke chain.
+    - resolve: The Promise resolver following the data through recursion.
+  describe: 
+    The stop() function initiates the egress stop aspect of the Invoke 
+    Recursion Framework.
   ***************/
   stop() {
-    if (!this._active) return this._messages.offline;
-    const key = 'stop';
-    const id = this.uid();
+    if (!this._active) return this._messages.offline; // check for active status
+    const key = 'stop'; // set the stop key
+    const id = this.uid(); // generate the stop uid
     
     this.state('set', `${key}:agent:${id.uid}`); // state stop agent
     const agent = this.agent().sha256; // get the current agent
@@ -1393,6 +1393,9 @@ class Deva {
       stop: Date.now(), // set the created date
     }
     
+    this.action('return', `${key}:invoke:${data.id.uid}`);
+    this.state('valid', `${key}:invoke:${data.id.uid}`);
+    this.intent('good', `${key}:invoke:${data.id.uid}`);
     return this._invoke({
       key,
       data,
@@ -1407,11 +1410,7 @@ class Deva {
     - data: The data packet that is passed through the closing invoke chain.
     - resolve: The Promise resolver following the data through recursion.
   describe: 
-    The close() function initiates the closing Invoke Recursion Framework. 
-    It first checks for active runtime status, retrieves invocation parameters 
-    (chain mapping, lifecycle handlers) from config.invoke.close and then 
-    delegates control to _invoke(), ensuring consistent recursion through the 
-    start-enter-done sequence.
+    The close() function initiates the close aspect of the Invoke Recursion Framework.
   ***************/
   close(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
@@ -1426,10 +1425,7 @@ class Deva {
     - resolve: The Promise resolver following the data through recursion.
   describe: 
     The leave() function initiates the leave aspect of the Invoke Recursion 
-    Framework. It first checks for active runtime status, retrieves invocation 
-    parameters (chain mapping, lifecycle handlers) from config.invoke.close and 
-    then delegates control to _invoke(), ensuring consistent recursion through 
-    the start-enter-done sequence.
+    Framework.
   ***************/
   leave(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
@@ -1438,6 +1434,23 @@ class Deva {
 
   /**************
   func: exit
+  usage: this.exit(data, resolve);
+  params: data, resolve
+    - data: The data packet that is passed through the egress invoke chain.
+    - resolve: The Promise resolver following the data through recursion.
+  describe: 
+    The exit() function initiates the exit aspect of the Invoke Recursion 
+    Framework.
+  ***************/
+  exit(data, resolve) {
+    if (!this._active) return this._messages.offline;
+    const key = 'exit';
+    data.key = key;
+    return this._invoke({key, data, resolve})
+  }
+
+  /**************
+  func: shutdown
   params:
     - msg: hte message from the caller incase need to use in calls
   describe:
@@ -1446,9 +1459,9 @@ class Deva {
     The return will check for a custom onExit function or run the done
     function.
   ***************/
-  exit(data, resolve) {
+  shutdown(data, resolve) {
     if (!this._active) return this._messages.offline;
-    const key = 'exit';
+    const key = 'shutdown';
     data.key = key;
     return this._invoke({key, data, resolve})
   }

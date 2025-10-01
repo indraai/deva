@@ -64,10 +64,10 @@
 		"crisis": "😱 Crisis",
 		"private": "🤫 Private",
 		"public": "😀 Public",
+		"industry": "🏭 Industry",
 		"merit": "➕ Merit",
 		"demerit": "➖ Demerit",
 		"camera": "🤳 Camera",
-		"victim": "❤️‍🩹 Victim",
 		"yakshas": "🥩 Yakshas",
 		"rakshasas": "🥩 Rakshasas",
 		"pisakas": "🥩 Pisakas",
@@ -77,6 +77,15 @@
 		"porn": "👙 Pornography",
 		"prostitute": "💃 Prostitute",
 		"friend": "🤝 Friend",
-		"enemy": "🚨 Enemy"
+		"enemy": "🚨👿 Enemy",
+		"suspect": "🚨🥸 Suspect",
+		"culprit": "🚨😤 Culprit",
+		"criminal": "🚨🤬 Criminal",
+		"felon": "🚨🙅 Felon",
+		"victim": "🚨🩼 Victim",
+		"hostage": "🚨🙊 Hostage",
+		"court": "🏛️🧑‍⚖️ Court",
+		"jail": "⛓️🔏 Jail",
+		"prison": "⛓️🔐 Prison"
 	}
 }
