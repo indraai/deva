@@ -91,7 +91,7 @@ export default {
 		leave: {
 			prev_key: 'close',
 			next_key: 'exit',
-			onfunc: 'onClose',
+			onfunc: 'onLeave',
 			clear: false,
 		},
 		exit: {
