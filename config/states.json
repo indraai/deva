@@ -41,6 +41,8 @@
 		"load": "📦 Load",
 		"unload": "🥡 Unload",
 		"set": "🖖 Set",
+		"let": "🥬 Let",
+		"const": "🔩 const",
 		"get": "💠 Get",
 		"put": "🤝 Put",
 		"push": "🫸 Push",
