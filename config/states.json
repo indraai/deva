@@ -16,6 +16,7 @@
 		"cmd": "🪖  Command",
 		"answer": "💡 Answer",
 		"wait": "⏳ Wait",
+		"await": "⌛️ Await",
 		"pause": "⏸️ Pause",
 		"resume": "🚙 Resume",
 		"pending": "⏳ Pending",
