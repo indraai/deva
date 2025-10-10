@@ -902,7 +902,7 @@ class Deva {
       catch(e) {
         this.state('catch', `${method}:${id.uid}`);
         this.intent('bad', `${method}:${id.uid}`); //set the answer state to the method
-        return this.err(e); // if a overall error happens this witll call this.err
+        return this.err(e, packet, reject); // if a overall error happens this witll call this.err
       }
     });
   }
