@@ -334,7 +334,7 @@ class Deva {
         
     // setup the complete talk event
     this.action('talk', `${this._events[key]}:${data.id.uid}`); // action talk for the event.
-    this.talk(this._events[key], data); // talk the complete event
+    this.talk(this._events[key], this.lib.copy(data)); // talk the complete event
 
     if (clear) {
       this.state('loop', `${key}:clear:${data.id.uid}`);
@@ -882,7 +882,7 @@ class Deva {
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
           this.action('ask', `${key}:${id.uid}`);
           this.intent('good', `ask:${key}:${id.uid}`);
-          this.talk(`${key}:ask`, packet);
+          this.talk(`${key}:ask`, this.lib.copy(packet));
           this.once(`${key}:ask:${packet.id.uid}`, answer => {
             this.action('talk', `${this._events.ask}:${id.uid}`);
             this.intent('good', `${this.events.ask}:${id.uid}`);
@@ -1523,7 +1523,7 @@ class Deva {
       data.sha256 = this.hash(data, 'sha256');
       data.sha512 = this.hash(data, 'sha512');
   
-      this.talk(this._events.context, data);
+      this.talk(this._events.context, this.lib.copy(data));
       return data;
     } catch (e) {
       this.state('catch', `context:${value}:${id.uid}`);
@@ -1705,7 +1705,7 @@ class Deva {
       data.sha256 = this.hash(data, 'sha256');
       data.sha512 = this.hash(data, 'sha512');
   
-      this.talk(this._events[key], data); // broadcast the state event
+      this.talk(this._events[key], this.lib.copy(data)); // broadcast the state event
       return data;
     } catch (e) { // catch any errors
       return this.err(e); // return if an error happens
