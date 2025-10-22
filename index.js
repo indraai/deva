@@ -2365,8 +2365,10 @@ class Deva {
     const machine_hash = this.machine().sha256; // get the machine hash
     
     const client_hash = this.client().sha256 || false; // get client hash
-    const agent_hash = this.agent().sha256 || false; // get agent hash
-
+    const agent = this.agent();
+    const agent_hash = agent.sha256 || false; // get agent hash
+    const warning = agent.messages.uid_warning || this._messages.uid_warning;
+    
     const data = {
       uid: false,
       time,
@@ -2375,7 +2377,7 @@ class Deva {
       agent: agent_hash,
       core: core_hash,
       machine: machine_hash,
-      warning: this._messages.uid_warning,
+      warning,
       copyright: this._core.copyright,
     }
     if (guid) {
