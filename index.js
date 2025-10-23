@@ -2367,7 +2367,7 @@ class Deva {
     const client_hash = this.client().sha256 || false; // get client hash
     const agent = this.agent();
     const agent_hash = agent.sha256 || false; // get agent hash
-    const warning = agent.uid_warning || this._messages.uid_warning;
+    const warning = agent.uid_warning || this._messages.uid_warning; // agent or default warning
     
     const data = {
       uid: false,
