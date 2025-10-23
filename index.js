@@ -2365,20 +2365,29 @@ class Deva {
     const machine_hash = this.machine().sha256; // get the machine hash
     
     const client_hash = this.client().sha256 || false; // get client hash
-    const agent = this.agent();
-    const agent_hash = agent.sha256 || false; // get agent hash
-    const warning = agent.uid_warning || this._messages.uid_warning; // agent or default warning
+    const agent_hash = this.agent().sha256 || false; // get agent hash
+    const warning = this._agent.profile.uid_warning || this._messages.uid_warning; // agent or default warning
+    const copyright = this._agent.profile.copyright || this._core.copyright; // agent or default warning
     
+    const fingerprint_data = {
+      client_hash,
+      agent_hash,
+      core_hash,
+      machine_hash,
+    };
+    const fingerprint = this.hash(fingerprint_data, 'sha256');
+
     const data = {
       uid: false,
       time,
       date,
-      client: client_hash,
-      agent: agent_hash,
-      core: core_hash,
-      machine: machine_hash,
+      fingerprint,
+      client_hash,
+      agent_hash,
+      core_hash,
+      machine_hash,
       warning,
-      copyright: this._core.copyright,
+      copyright,
     }
     if (guid) {
       const uid = randomUUID(); // set uid into local constant.
