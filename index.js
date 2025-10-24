@@ -2382,10 +2382,10 @@ class Deva {
       time,
       date,
       fingerprint,
-      client_hash,
-      agent_hash,
-      core_hash,
-      machine_hash,
+      client: client_hash,
+      agent: agent_hash,
+      core: core_hash,
+      machine: machine_hash,
       warning,
       copyright,
     }
@@ -2409,7 +2409,15 @@ class Deva {
     // this.intent('good', `uid:${data.uid}`);
     return data; // return the complete uid data.
   }  
-  
+
+  /**************
+  func: sign
+  params:
+    - packet: The packet to sign data to.
+  describe:
+    The sign function can create a digital signature to a packet.
+  copyright: Copyright ©2025 Quinn A Michaels. All rights reserved.
+  ***************/
   sign(packet) {
     const time = Date.now();
     const client = this.client();
@@ -2469,7 +2477,16 @@ class Deva {
     this.intent('good', `sign:${data.id.uid}`);
     return data;
   }
-  
+
+  /**************
+  func: license_check
+  params:
+    - personalVLA: The Personal VLA to validate.
+    - packageVLA: The Package VLA to validate against
+  describe:
+    The license_check function can checks VLA license validity.
+  copyright: Copyright ©2025 Quinn A Michaels. All rights reserved.
+  ***************/  
   license_check(personalVLA, packageVLA) {    
     const id = this.uid();
     this.state('license', `check:personalVLA:${packageVLA.uid}`);
