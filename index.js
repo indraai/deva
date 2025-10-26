@@ -2420,10 +2420,10 @@ class Deva {
   ***************/
   sign(packet) {
     const time = Date.now();
+    const id = this.uid();
     const client = this.client();
     const agent = this.agent();
-    const {q, id} = packet;
-    const transport = id.uid; // set the transport id from the packet id.
+    const {q} = packet;
     
     const {meta, text} = q;
     const {key, method, params} = meta;
@@ -2436,10 +2436,10 @@ class Deva {
     const client_hash = client.sha256 === packet.q.client.sha256 ? client.sha256 : invalid_client;
     const created = this.lib.formatDate(time, 'long', true); // Formatted created date.
     
-    const container = `OM:O:${key.toUpperCase()}:${transport}`; // set container string.
+    const container = `OM:O:${key.toUpperCase()}:${id.uid}`; // set container string.
 
     const packet_hash = this.hash(packet, 'sha256');
-    const token = this.hash(`${key} client:${client.profile.id} fullname:${client.profile.fullname} transport:${transport}`, 'sha256');
+    const token = this.hash(`${key} client:${client.profile.id} fullname:${client.profile.fullname} uid:${id.uid}`, 'sha256');
     
     // build the main data packet.
     const data = {
@@ -2456,7 +2456,7 @@ class Deva {
         fullname: client.profile.fullname,
         emojis: client.profile.emojis,
         company: client.profile.company,
-        expires: client.expires ? time + client.expires : 'none',
+        expires: client.profile.expires ? time + client.profile.expires : 'none',
         caseid: client.profile.caseid || 'none',
         token,
         sha256: client.sha256,
@@ -2468,13 +2468,21 @@ class Deva {
       },
       packet: packet_hash,
       created,
-      warning: client.warning || agent.warning || 'none',
+      warning: agent.profile.warning || 'none',
       copyright: agent.profile.copyright || this._core.copyright,
     };
+    
+    this.action('hash', `${data.key}:sign:md5:${data.id.uid}`);
     data.md5 = this.hash(data, 'md5'); // hash data packet into md5 and inert into data.
+    
+    this.action('hash', `${data.key}:sign:sha256:${data.id.uid}`);
     data.sha256 = this.hash(data, 'sha256'); // hash data into sha 256 then set in data.
+    
+    this.action('hash', `${data.key}:sign:sha512:${data.id.uid}`);
     data.sha512 = this.hash(data, 'sha512'); // hash data into sha 512 then set in data.
-    this.intent('good', `sign:${data.id.uid}`);
+
+    this.action('return', `${data.key}:sign:${data.id.uid}`);
+    this.intent('good', `${data.key}:sign:${data.id.uid}`);
     return data;
   }
 
