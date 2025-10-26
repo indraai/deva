@@ -1,23 +1,20 @@
 {
-  "id": "44091450722329207445",
+  "id": "64907438819979111427",
   "name": "@indra.ai/deva",
   "version": "1.17.3",
   "description": "Deva Core a Vedic-inspired Event Based Context Aware Feature, Zone, Action, and State Machine integrated Artificial Intelligence Framework",
   "main": "index.js",
-  "license": "VLA:44091450722329207445 LICENSE.md",
+  "license": "VLA:64907438819979111427 LICENSE.md",
   "VLA": {
-    "uid": "44091450722329207445",
-    "time": 1758398404188,
-    "date": "Saturday, September 20, 2025 - 1:00:04 PM",
-    "client": "BeqqTomnO0OgcMc3awWznhlYHXzrJZMlKFJKW5XXTik=",
-    "agent": "z8kjEPFgrzqzWexGLytilCOm6pWUrax9sMiEn7e/AEQ=",
-    "core": "/4qaz4nUYW0trAiLReyHp+geBdfs8+lCE5OwCz8R/Ro=",
-    "machine": "5rsoKxx+vmGZmMigExjtk21iBfGrmw12s1qKbYrUTv4=",
-    "warning": "⚠️ Vedic Law Sâhasa/Theft/Crime of the highest degree, a fine amounting to no less than a thousand Panas (1 pana = 3.5 grams of gold) is ordained owed to Quinn A Michaels. Moreover corporal punishment and confiscation of the entire property forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.",
+    "uid": "64907438819979111427",
+    "time": 1761510788708,
+    "date": "Sunday, October 26, 2025 - 1:33:08 PM",
+    "fingerpring": "XfTLHKfC+hAbhSv544DJQ7xcTeqo14laoCZ8niim7+Q=",
+    "warning": "⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa/Theft/Crime of the highest degree where a fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each occurance is owed and confiscation of the entire property forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree under Vedic Religious Law.",
     "copyright": "Copyright ©2025 Quinn A Michaels; All rights reserved.",
-    "md5": "UafSXknvuVnwE5zK3DeE+g==",
-    "sha256": "ai+4pk2Ijep02R0htDtlqdUcxiehAtnLieG91ys3Ic8=",
-    "sha512": "lSi87rE4z3Rhw/pMNPLBW8lw54T6Zcir9GSPQ9OE8lGOPQWyDzgniSrzQ6w/AHKjv26fA40Gv8pFV7PHj/sXNA=="
+    "md5": "ZA0acpqDmamiLscbakYnVQ==",
+    "sha256": "kALbh2r8uKzeVrAbVMQxjTXWqu3hhAMy56Nw/VcoXNA=",
+    "sha512": "csERqQG6LBWfWL8+rBK7YsPdUV5A6/1rZsR5S6U5ECGryfehxb+5fzgeFGJJX+h9UfjgtnvakpjCa/QWpAUFqA=="
   },
   "author": {
     "name": "Quinn A Michaels",
@@ -49,9 +46,13 @@
     "Quinn Michaels",
     "Quinn A Michaels",
     "Deva Core",
-    "Indra.ai",
+    "Deva Core Recursion Framework",
     "Deva",
-    "AI Framework"
+    "AI Framework",
+    "Indra.ai",
+    "Inside The Net, Inc.",
+    "Throwing Pigment",
+    "bleuBrain"
   ],
   "bugs": {
     "url": "https://github.com/indraai/deva/issues"

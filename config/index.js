@@ -1,7 +1,7 @@
 "use strict";
 // Copyright ©2025 Quinn A Michaels; All rights reserved. 
 // Legal Signature Required For Lawful Use.
-// Distributed under VLA:44091450722329207445 LICENSE.md
+// Distributed under VLA:64907438819979111427 LICENSE.md
 
 import events from './events.json' with {type:'json'};
 import features from './features.json' with {type:'json'};
