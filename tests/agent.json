@@ -41,7 +41,9 @@
       "emoji": "/public/devas/deva/emoji.png",
       "avatar": "/public/devas/deva/avatar.png",
       "background": "/public/devas/deva/background.png",
-      "gender": "M"
+      "gender": "M",
+      "warning": false,
+      "copyright": false
     },
     "vars": {
       "hello": "Hello World",

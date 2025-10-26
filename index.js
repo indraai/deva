@@ -2360,13 +2360,13 @@ class Deva {
   uid(guid=false) {
     const time = Date.now(); // set time to local constant
     const date = this.lib.formatDate(time, 'long', true); // set date to local constant
-
+    const { profile } = this.agent();
     const core_hash = this.hash(this._core, 'sha256');
     const machine_hash = this.machine().sha256; // get the machine hash
     
-    const client_hash = this.client().sha256 || false; // get client hash
-    const agent_hash = this.agent().sha256 || false; // get agent hash
-    const warning = this._agent.profile.uid_warning || this._messages.uid_warning; // agent or default warning
+    const client_hash = this.client().sha256; // get client hash
+    const agent_hash = this.agent().sha256; // get agent hash
+    const warning = this._agent.profile.warning || this._messages.warning; // agent or default warning
     const copyright = this._agent.profile.copyright || this._core.copyright; // agent or default warning
     
     const fingerprint_data = {
@@ -2469,7 +2469,7 @@ class Deva {
       packet: packet_hash,
       created,
       warning: client.warning || agent.warning || 'none',
-      copyright: client.profile.copyright || agent.profile.copyright,
+      copyright: agent.profile.copyright || this._core.copyright,
     };
     data.md5 = this.hash(data, 'md5'); // hash data packet into md5 and inert into data.
     data.sha256 = this.hash(data, 'sha256'); // hash data into sha 256 then set in data.
