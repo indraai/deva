@@ -2367,7 +2367,9 @@ class Deva {
     const client_hash = this.client().sha256; // get client hash
     const agent_hash = this.agent().sha256; // get agent hash
     const warning = this._agent.profile.warning || this._messages.warning; // agent or default warning
-    const copyright = this._agent.profile.copyright || this._core.copyright; // agent or default warning
+    const copyright = this._agent.profile.copyright || this._core.copyright; // agent or default copyright
+
+    const status = this._agent.profile.status || this._messages.status;
     
     const fingerprint_data = {
       client_hash,
@@ -2386,6 +2388,7 @@ class Deva {
       agent: agent_hash,
       core: core_hash,
       machine: machine_hash,
+      status,
       warning,
       copyright,
     }
@@ -2419,14 +2422,16 @@ class Deva {
   copyright: Copyright ©2025 Quinn A Michaels. All rights reserved.
   ***************/
   sign(packet) {
-    const time = Date.now();
     const id = this.uid();
+    const {time, date, fingerprint} = id;
+
     const client = this.client();
     const agent = this.agent();
     const {q} = packet;
     
     const {meta, text} = q;
     const {key, method, params} = meta;
+
     const opts = this.lib.copy(params); // copy the params and set as opts.
     const command = opts.shift();
     
@@ -2434,12 +2439,14 @@ class Deva {
 
     const agent_hash = agent.sha256 === packet.q.agent.sha256 ? agent.sha256 : invalid_agent;
     const client_hash = client.sha256 === packet.q.client.sha256 ? client.sha256 : invalid_client;
-    const created = this.lib.formatDate(time, 'long', true); // Formatted created date.
     
     const container = `OM:O:${key.toUpperCase()}:${id.uid}`; // set container string.
 
     const packet_hash = this.hash(packet, 'sha256');
     const token = this.hash(`${key} client:${client.profile.id} fullname:${client.profile.fullname} uid:${id.uid}`, 'sha256');
+    
+    const warning = agent.profile.warning || this._messages.warning;
+    const copyright = agent.profile.copyright || this._core.copyright;
     
     // build the main data packet.
     const data = {
@@ -2449,6 +2456,7 @@ class Deva {
       opts: opts.join('.'),
       text,
       time,
+      date,
       container,
       client: {
         key: client.key,
@@ -2459,17 +2467,16 @@ class Deva {
         expires: client.profile.expires ? time + client.profile.expires : 'none',
         caseid: client.profile.caseid || 'none',
         token,
-        sha256: client.sha256,
+        hash: client_hash,
       },
       agent: {
         key: agent.key,
         name: agent.profile.name,
-        sha256: agent.sha256,
+        hash: agent_hash,
       },
       packet: packet_hash,
-      created,
-      warning: agent.profile.warning || 'none',
-      copyright: agent.profile.copyright || this._core.copyright,
+      warning,
+      copyright,
     };
     
     this.action('hash', `${data.key}:sign:md5:${data.id.uid}`);
