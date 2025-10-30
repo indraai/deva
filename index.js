@@ -2442,13 +2442,17 @@ class Deva {
     
     const container = `OM:O:${key.toUpperCase()}:${id.uid}`; // set container string.
 
+    this.action('hash', `${key}:packet:sha256:${id.uid}`);
     const packet_hash = this.hash(packet, 'sha256');
+
+    this.action('hash', `${key}:token:sha256:${id.uid}`);
     const token = this.hash(`${key} client:${client.profile.id} fullname:${client.profile.fullname} uid:${id.uid}`, 'sha256');
     
     const warning = agent.profile.warning || this._messages.warning;
     const copyright = agent.profile.copyright || this._core.copyright;
     
     // build the main data packet.
+    this.state('data', `${key}:sign:${id.uid}`); // set state data
     const data = {
       id,
       key,
