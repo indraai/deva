@@ -20,28 +20,34 @@ class Deva {
     this._agent = opts.agent || false; // Agent profile object
     this._client = {}; // this will be set on init.
     this._active = false; // the active/birth date.
-    this._indra = false; // inherited Indra features.
-    this._veda = false; // inherited Veda features.
     this._license = false; // inherited License features.
-    this._data = false; // inherited Data features.
+    this._feecting = false; // inherited Feecting features.
     this._error = false; // inherited Error features.
     this._log = false; // inherited Log features.
+    this._data = false; // inherited Data features.
     this._report = false; // inherited Report features.
-    this._vector = false; // inherited Vector features.
+    this._veda = false; // inherited Veda features.
+    this._indu = false; // inherited INdu features.
+    this._indra = false; // inherited Indra features.
+    this._soma = false; // inherited Soma features.
     this._king = false; // inherited King features.
+    this._owner = false; // inherited Owner features.
+    this._vector = false; // inherited Vector features.
+    this._intelligence = false; // inherited Intelligence features.
     this._treasury = false; // inherited Vector features.
+    this._authority = false; // inherited Justice features.
+    this._justice = false; // inherited Justice features.
+    this._legal = false; // inherited Legal features.
     this._security = false; // inherited Security features.
     this._guard = false; // inherited Guard features.
     this._defense = false; // inherited Security features.
     this._wall = false; // inherited Wall features.
     this._proxy = false; // inherited Proxy features.
-    this._legal = false; // inherited Legal features.
-    this._authority = false; // inherited Justice features.
-    this._justice = false; // inherited Justice features.
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
     this._systems = false; // inherited Systems features.
     this._networks = false; // inherited Systems features.
+    
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = new lib({pkg}); // used for loading library functions    
     this.utils = opts.utils || {}; // parse functions inside the deva
@@ -454,6 +460,17 @@ class Deva {
   }
 
   /**************
+  func: Feecting
+  params: resolve, reject
+  describe:
+    The Feecting feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Feecting(resolve, reject) {
+    return this.Feature('feecting', resolve, reject);
+  }
+
+  /**************
   func: Error
   params: resolve, reject
   describe:
@@ -496,6 +513,72 @@ class Deva {
   Report(resolve, reject) {
     return this.Feature('report', resolve, reject);
   }
+
+  /**************
+  func: Veda
+  params: resolve, reject
+  describe:
+    The Veda feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Veda(resolve, reject) {
+    return this.Feature('veda', resolve, reject);
+  }
+
+  /**************
+  func: Indu
+  params: resolve, reject
+  describe:
+    The Indu feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Indu(resolve, reject) {
+    return this.Feature('indu', resolve, reject);
+  }
+
+  /**************
+  func: Indra
+  params: resolve, reject
+  describe:
+    The Indra feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Indra(resolve, reject) {
+    return this.Feature('indra', resolve, reject);
+  }
+
+  /**************
+  func: Soma
+  params: resolve, reject
+  describe:
+    The Soma feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Soma(resolve, reject) {
+    return this.Feature('soma', resolve, reject);
+  }
+
+  /**************
+  func: King
+  params: resolve, reject
+  describe:
+    The King feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  King(resolve, reject) {
+    return this.Feature('king', resolve, reject);
+  }
+    
+  /**************
+  func: Owner
+  params: resolve, reject
+  describe:
+    The Owner feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Owner(resolve, reject) {
+    return this.Feature('owner', resolve, reject);
+  }
   
   /**************
   func: Vector
@@ -517,50 +600,6 @@ class Deva {
   ***************/
   Intelligence(resolve, reject) {
     return this.Feature('intelligence', resolve, reject);
-  }
-
-  /**************
-  func: Indra
-  params: resolve, reject
-  describe:
-    The Indra feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Indra(resolve, reject) {
-    return this.Feature('indra', resolve, reject);
-  }
-
-  /**************
-  func: Veda
-  params: resolve, reject
-  describe:
-    The Veda feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Veda(resolve, reject) {
-    return this.Feature('veda', resolve, reject);
-  }
-
-  /**************
-  func: King
-  params: resolve, reject
-  describe:
-    The King feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  King(resolve, reject) {
-    return this.Feature('king', resolve, reject);
-  }
-
-  /**************
-  func: Owner
-  params: resolve, reject
-  describe:
-    The Owner feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Owner(resolve, reject) {
-    return this.Feature('owner', resolve, reject);
   }
 
   /**************
@@ -597,6 +636,17 @@ class Deva {
   }
 
   /**************
+  func: Legal
+  params: resolve, reject
+  describe:
+    The Legal feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Legal(resolve, reject) {
+    return this.Feature('legal', resolve, reject);
+  }
+  
+  /**************
   func: Security
   params: resolve, reject
   describe:
@@ -630,17 +680,6 @@ class Deva {
   }
 
   /**************
-  func: Wall
-  params: resolve, reject
-  describe:
-    The Defense feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Wall(resolve, reject) {
-    return this.Feature('wall', resolve, reject);
-  }
-
-  /**************
   func: Shield
   params: resolve, reject
   describe:
@@ -649,6 +688,17 @@ class Deva {
   ***************/
   Shield(resolve, reject) {
     return this.Feature('shield', resolve, reject);
+  }
+  
+  /**************
+  func: Wall
+  params: resolve, reject
+  describe:
+    The Defense feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Wall(resolve, reject) {
+    return this.Feature('wall', resolve, reject);
   }
 
   /**************
@@ -662,17 +712,6 @@ class Deva {
     return this.Feature('proxy', resolve, reject);
   }
 
-  /**************
-  func: Legal
-  params: resolve, reject
-  describe:
-    The Legal feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Legal(resolve, reject) {
-    return this.Feature('legal', resolve, reject);
-  }
-  
   /**************
   func: Support
   params: resolve, reject
@@ -1195,6 +1234,8 @@ class Deva {
       }).then(() => {
         return this.License(resolve, reject);
       }).then(() => {
+        return this.Feecting(resolve, reject);
+      }).then(() => {
         return this.Error(resolve, reject);
       }).then(() => {
         return this.Log(resolve, reject);
@@ -1203,17 +1244,21 @@ class Deva {
       }).then(() => {
         return this.Report(resolve, reject);
       }).then(() => {
-        return this.Vector(resolve, reject);
+        return this.Veda(resolve, reject);
       }).then(() => {
-        return this.Intelligence(resolve, reject);
+        return this.Indu(resolve, reject);
       }).then(() => {
         return this.Indra(resolve, reject);
       }).then(() => {
-        return this.Veda(resolve, reject);
+        return this.Soma(resolve, reject);
       }).then(() => {
         return this.King(resolve, reject);
       }).then(() => {
         return this.Owner(resolve, reject);
+      }).then(() => {
+        return this.Vector(resolve, reject);
+      }).then(() => {
+        return this.Intelligence(resolve, reject);
       }).then(() => {
         return this.Treasury(resolve, reject);
       }).then(() => {
@@ -1221,19 +1266,19 @@ class Deva {
       }).then(() => {
         return this.Authority(resolve, reject);
       }).then(() => {
+        return this.Legal(resolve, reject);
+      }).then(() => {
         return this.Security(resolve, reject);
       }).then(() => {
         return this.Guard(resolve, reject);
       }).then(() => {
         return this.Defense(resolve, reject);
       }).then(() => {
-        return this.Wall(resolve, reject);
-      }).then(() => {
         return this.Shield(resolve, reject);
       }).then(() => {
-        return this.Proxy(resolve, reject);
+        return this.Wall(resolve, reject);
       }).then(() => {
-        return this.Legal(resolve, reject);
+        return this.Proxy(resolve, reject);
       }).then(() => {
         return this.Support(resolve, reject);
       }).then(() => {
@@ -1775,7 +1820,6 @@ class Deva {
   }
 
   // FEATURE FUNCTIONS
-
   /**************
   func: license
   params: none
@@ -1784,6 +1828,16 @@ class Deva {
   ***************/
   license() {
     return this._getFeature('license', this._license);
+  }
+
+  /**************
+  func: feecting
+  params: none
+  describe: basic feecting features available in a Deva.
+  usage: this.feecting()
+  ***************/
+  feecting() {
+    return this._getFeature('feecting', this._feecting);
   }
 
   /**************
@@ -1827,25 +1881,25 @@ class Deva {
   }
 
   /**************
-  func: vector
+  func: veda
   params: none
-  describe: basic vector features available in a Deva.
-  usage: this.vector()
+  describe: basic veda features available in a Deva.
+  usage: this.veda()
   ***************/
-  vector() {
-    return this._getFeature('vector', this._vector);
+  veda() {
+    return this._getFeature('veda', this._veda);
   }
-  
+
   /**************
-  func: intelligence
+  func: indu
   params: none
-  describe: basic intelligence features available in a Deva.
-  usage: this.intelligence()
+  describe: basic indu features available in a Deva.
+  usage: this.indu()
   ***************/
-  intelligence() {
-    return this._getFeature('intelligence', this._vector);
+  indu() {
+    return this._getFeature('indu', this._indu);
   }
-  
+
   /**************
   func: indra
   params: none
@@ -1855,18 +1909,17 @@ class Deva {
   indra() {
     return this._getFeature('indra', this._indra);
   }
-  
 
   /**************
-  func: veda
+  func: soma
   params: none
-  describe: basic veda features available in a Deva.
-  usage: this.veda()
+  describe: basic soma features available in a Deva.
+  usage: this.soma()
   ***************/
-  veda() {
-    return this._getFeature('veda', this._veda);
+  soma() {
+    return this._getFeature('soma', this._soma);
   }
-  
+
   /**************
   func: king
   params: none
@@ -1887,6 +1940,26 @@ class Deva {
     return this._getFeature('owner', this._king);
   }
 
+  /**************
+  func: vector
+  params: none
+  describe: basic vector features available in a Deva.
+  usage: this.vector()
+  ***************/
+  vector() {
+    return this._getFeature('vector', this._vector);
+  }
+  
+  /**************
+  func: intelligence
+  params: none
+  describe: basic intelligence features available in a Deva.
+  usage: this.intelligence()
+  ***************/
+  intelligence() {
+    return this._getFeature('intelligence', this._intelligence);
+  }
+      
   /**************
   func: treasury
   params: none
@@ -1918,6 +1991,16 @@ class Deva {
   }
 
   /**************
+  func: legal
+  params: none
+  describe: basic legal features available in a Deva.
+  usage: this.systems()
+  ***************/
+  legal() {
+    return this._getFeature('legal', this._legal);
+  }
+    
+  /**************
   func: security
   params: none
   describe: basic security features available in a Deva.
@@ -1938,16 +2021,6 @@ class Deva {
   }
 
   /**************
-  func: wall
-  params: none
-  describe: basic wall features available in a Deva.
-  usage: this.wall()
-  ***************/
-  wall() {
-    return this._getFeature('wall', this._wall);
-  }
-
-  /**************
   func: defense
   params: none
   describe: basic defense features available in a Deva.
@@ -1955,6 +2028,16 @@ class Deva {
   ***************/
   defense() {
     return this._getFeature('defense', this._defense);
+  }
+
+  /**************
+  func: wall
+  params: none
+  describe: basic wall features available in a Deva.
+  usage: this.wall()
+  ***************/
+  wall() {
+    return this._getFeature('wall', this._wall);
   }
 
   /**************
@@ -1977,16 +2060,6 @@ class Deva {
     return this._getFeature('proxy', this._proxy);
   }
 
-  /**************
-  func: legal
-  params: none
-  describe: basic legal features available in a Deva.
-  usage: this.systems()
-  ***************/
-  legal() {
-    return this._getFeature('legal', this._legal);
-  }
-    
   /**************
   func: support
   params: none

@@ -53,22 +53,7 @@
         "global": [],
         "devas": {}
       },
-      "intelligence": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "indra": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "veda": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "data": {
+      "feecting": {
         "concerns": [],
         "global": [],
         "devas": {}
@@ -83,12 +68,32 @@
         "global": [],
         "devas": {}
       },
+      "data": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "report": {
         "concerns": [],
         "global": [],
         "devas": {}
       },
-      "vector": {
+      "veda": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "indu": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "indra": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "soma": {
         "concerns": [],
         "global": [],
         "devas": {}
@@ -103,7 +108,32 @@
         "global": [],
         "devas": {}
       },
+      "vector": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "intelligence": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "treasury": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "authority": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "justice": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "legal": {
         "concerns": [],
         "global": [],
         "devas": {}
@@ -140,21 +170,6 @@
         "devas": {}
       },
       "proxy": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "legal": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "authority": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "justice": {
         "concerns": [],
         "global": [],
         "devas": {}
