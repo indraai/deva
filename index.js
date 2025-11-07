@@ -2438,7 +2438,7 @@ class Deva {
     
     const client_hash = this.client().sha256; // get client hash
     const agent_hash = this.agent().sha256; // get agent hash
-    const warning = this._agent.profile.warning || this._messages.warning; // agent or default warning
+    const warning = this.vars.warning || this._agent.profile.warning || this._messages.warning; // agent or default warning
     const copyright = this._agent.profile.copyright || this._core.copyright; // agent or default copyright
 
     const status = this._agent.profile.status || this._messages.status;
