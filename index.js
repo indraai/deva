@@ -65,7 +65,8 @@ class Deva {
 
     this.cmdChr = config.cmdChr; // the trigger for local commands
     this.askChr = config.askChr; // the trigger for ask other DEva features
-
+    this.container = config.container // set the container object
+    this.box = config.xbox // set the box object
     this._inherit = config.inherit; // set inherit from config data.
     this._bind = config.bind; // set the bind from the config data.
 

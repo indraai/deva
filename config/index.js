@@ -15,6 +15,14 @@ import msgs from './msgs.json' with {type:'json'};
 export default {
 	cmdChr: '/',
 	askChr: '#',
+	container: {
+		begin: '::BEGIN:',
+		end: '::END:',
+	},
+	box: {
+		begin: '::begin:',
+		end: '::end:',
+	},
 	uid: {
 		end_min: 1000000,
 		end_max: 9999999
