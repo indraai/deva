@@ -20,8 +20,8 @@ export default {
 		end: '::END:',
 	},
 	box: {
-		begin: '::begin:',
-		end: '::end:',
+		begin: '::begin',
+		end: '::end',
 	},
 	uid: {
 		end_min: 1000000,
