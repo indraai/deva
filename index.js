@@ -889,11 +889,14 @@ class Deva {
           this.state('cmd', `${method}:${id.uid}`); // set the state to cmd.
         }
 
+        const agent = this.agent(); // set the agent for the packet.
+        const client = this.client(); // set the client for the packet.
+        
         this.state('data', `${method}:q:${id.uid}`);
         packet.q = { // build packet.q container
           id: this.uid(), // set the transport id for the question.
-          agent: this.agent(), // set the agent
-          client: this.client(), // set the client
+          agent, // set the agent
+          client, // set the client
           meta: { // build the meta container
             key, // set the key variable
             method, // set method to track function use
