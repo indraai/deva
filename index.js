@@ -1939,7 +1939,7 @@ class Deva {
   usage: this.owner()
   ***************/
   owner() {
-    return this._getFeature('owner', this._king);
+    return this._getFeature('owner', this._owner);
   }
 
   /**************
