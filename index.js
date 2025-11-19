@@ -2330,14 +2330,14 @@ class Deva {
         
         // get the help file and check to make sure the part we are looking for exists.
         const helpFile = this.lib.fs.readFileSync(helpPath, 'utf8');
-        const helpPart = helpFile.split(`::BEGIN:${part}`);
+        const helpPart = helpFile.split(`${this.container.begin}:${part}`);
         if (!helpPart[1]) {
           this.action('resolve', `${this._messages.help_not_found}:${id.uid}`);
           resolve(this._messages.help_not_found);
         }
         
         // last set the help doc and split out the selected part.
-        helpDoc = helpFile.split(`::BEGIN:${part}`)[1].split(`::END:${part}`)[0];
+        helpDoc = helpFile.split(`${this.container.begin}:${part}`)[1].split(`${this.container.end}:${part}`)[0];
       } 
       catch(e) {
         this.state('catch', `${key}:${id.uid}`);
@@ -2346,6 +2346,7 @@ class Deva {
       }
       finally {
         this.action('resolve', `${key}:${id.uid}`);
+        this.state('valid', `${key}:${id.uid}`);
         this.intent('good', `${key}:${id.uid}`);
         return resolve(helpDoc);
       }

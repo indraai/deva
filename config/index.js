@@ -16,8 +16,8 @@ export default {
 	cmdChr: '/',
 	askChr: '#',
 	container: {
-		begin: '::BEGIN:',
-		end: '::END:',
+		begin: '::BEGIN',
+		end: '::END',
 	},
 	box: {
 		begin: '::begin',
