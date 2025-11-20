@@ -1,13 +1,13 @@
 # Vedic License Agreement
 
 **Version:** 1.4.1  
-**VLA:** 64907438819979111427  
-**Date:** Sunday, October 26, 2025 - 1:33:08 PM  
+**VLA:** 38478178200141356938  
+**Date:** Wednesday, November 19, 2025 - 5:36:40 PM  
 **Owner:** Quinn A Michaels  
 **Company:** Inside The Net, Inc.  
 **Email:** quinn@indra.ai  
 **Link:** https://indra.ai   
-**Copyright:** Copyrright ©2025 Quinn A Michaels; All rights reserved.
+**Copyright:** Copyrright ©2002-2025 Quinn A Michaels; All rights reserved.
 
 This license agreement (“Agreement”) governs the use of the Deva Core (“Software”). By accessing or using the Software, you agree to the terms and conditions set forth below. If you do not agree, you are prohibited from using the Software.
 
@@ -161,34 +161,26 @@ By using the Software, you acknowledge that you have read, understood, and agree
 
 ---
 
-::begin:deva:vedic:uid:64907438819979111427
-uid: 64907438819979111427
-time: 1761510788708
-date: Sunday, October 26, 2025 - 1:33:08 PM
-fingerprint: XfTLHKfC+hAbhSv544DJQ7xcTeqo14laoCZ8niim7+Q=
-warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa/Theft/Crime of the highest degree where a fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each occurance is owed and confiscation of the entire property forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree under Vedic Religious Law.
+::begin:license:hash:55436373828492991875
+uid: 55436373828492991875
+algo: sha256
+text: First reference of the Quinn A Michaels answer/action recursive archtiecture in Inside The Net, Inc. itnContent establishing a 2002 Inside The Net, Inc. legal copyright claim back to the May 30, 2002 Web Archive.
+hash: qZFnh5NUkt42d4B9t4g6jWWF685NmVO/tW3NA33WylM=
+time: 1763602549804
+date: Wednesday, November 19, 2025 - 5:35:49 PM
+warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.
 copyright: Copyright ©2025 Quinn A Michaels; All rights reserved.
-md5: ZA0acpqDmamiLscbakYnVQ==
-sha256: kALbh2r8uKzeVrAbVMQxjTXWqu3hhAMy56Nw/VcoXNA=
-sha512: csERqQG6LBWfWL8+rBK7YsPdUV5A6/1rZsR5S6U5ECGryfehxb+5fzgeFGJJX+h9UfjgtnvakpjCa/QWpAUFqA==
-::end:deva:vedic:uid:64907438819979111427
+::end:license:hash:55436373828492991875
 
-::begin:sign:deva:21434514811868996161
-sign: Quinn Arjuna Arjika America Michaels 🤝🫡🕉🛕🪶🇺🇸
-uid: 21434514811868996161
-time: 1761515910313
-expires: none
-fingerprint: jjKiTj9GNkg0BZGoHa9swHP+Sl5y96t4+XKzW8h9u0s=
-name: Quinn A Michaels
-fullname: Quinn Arjuna Arjika America Michaels
-company: Inside The Net, Inc.
-caseid: FM-20250622-5114
-agent: undefined
-token: NCI5utqYPmFSWfwAWJpNeauQSxHKKiWJJfn2FjL5SZY=
-warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa/Theft/Crime of the highest degree where a fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each occurance is owed and confiscation of the entire property forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree under Vedic Religious Law.
-created: undefined
+::begin:license:uid:38478178200141356938
+uid: 38478178200141356938
+time: 1763602600904
+date: Wednesday, November 19, 2025 - 5:36:40 PM
+fingerprint: fapdf72J5hj5LKKa5P79kMYSvB05+VdCInUFxL4s/eY=
+warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.
 copyright: Copyright ©2025 Quinn A Michaels; All rights reserved.
-md5: icf3cGFR3J9JK5aRKUEa1w==
-sha256: 3siVnj/XOxQxFOxJy8l2dYQdmhkU26BsV4WDq3PE5Bo=
-sha512: CNUUePRLC4wlgPXIvvYjQBuYOuxXPUFkRuNsQqDmqnPmFtQOoJ2DASKlezaQ5wbANUDsHOzsyy5YIGenenSOOA==
-::end:sign:deva:21434514811868996161
+md5: 7tivW0a+NLmFz816TDpdMA==
+sha256: ri27jAuzBYwl1pGWVt/Fo2S8urB/+XnJGYio4kNQ+GM=
+sha512: 4c+rNxqn+hcUuyOln8z04G0JMr4oOv29VTtsGkSYTw4e2mSqURiDGx2R6psO+Z3SaKmKpjYV2FcaHwOZskWOdQ==
+::end:license:uid:38478178200141356938
+

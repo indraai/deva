@@ -1,20 +1,20 @@
 {
-  "id": "64907438819979111427",
+  "id": "38478178200141356938",
   "name": "@indra.ai/deva",
   "version": "1.23.3",
   "description": "Deva Core a Vedic-inspired Event Based Context Aware Feature, Zone, Action, and State Machine integrated Artificial Intelligence Framework",
   "main": "index.js",
-  "license": "VLA:64907438819979111427 LICENSE.md",
+  "license": "VLA:38478178200141356938 LICENSE.md",
   "VLA": {
-    "uid": "64907438819979111427",
-    "time": 1761510788708,
-    "date": "Sunday, October 26, 2025 - 1:33:08 PM",
-    "fingerpring": "XfTLHKfC+hAbhSv544DJQ7xcTeqo14laoCZ8niim7+Q=",
-    "warning": "⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa/Theft/Crime of the highest degree where a fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each occurance is owed and confiscation of the entire property forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree under Vedic Religious Law.",
+    "uid": "38478178200141356938",
+    "time": 1763602600904,
+    "date": "Wednesday, November 19, 2025 - 5:36:40 PM",
+    "fingerpring": "fapdf72J5hj5LKKa5P79kMYSvB05+VdCInUFxL4s/eY=",
+    "warning": "⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.",
     "copyright": "Copyright ©2025 Quinn A Michaels; All rights reserved.",
-    "md5": "ZA0acpqDmamiLscbakYnVQ==",
-    "sha256": "kALbh2r8uKzeVrAbVMQxjTXWqu3hhAMy56Nw/VcoXNA=",
-    "sha512": "csERqQG6LBWfWL8+rBK7YsPdUV5A6/1rZsR5S6U5ECGryfehxb+5fzgeFGJJX+h9UfjgtnvakpjCa/QWpAUFqA=="
+    "md5": "7tivW0a+NLmFz816TDpdMA==",
+    "sha256": "ri27jAuzBYwl1pGWVt/Fo2S8urB/+XnJGYio4kNQ+GM=",
+    "sha512": "4c+rNxqn+hcUuyOln8z04G0JMr4oOv29VTtsGkSYTw4e2mSqURiDGx2R6psO+Z3SaKmKpjYV2FcaHwOZskWOdQ=="
   },
   "author": {
     "name": "Quinn A Michaels",
@@ -32,7 +32,7 @@
       "url": "https://patreon.com/rahulaclub"
     }
   ],
-  "copyright": "Copyright ©2025 Quinn A Michaels; All rights reserved.",
+  "copyright": "Copyright ©2002-2025 Quinn A Michaels; All rights reserved.",
   "type": "module",
   "scripts": {
     "test": "node tests"
@@ -51,7 +51,7 @@
     "AI Framework",
     "Indra.ai",
     "Inside The Net, Inc.",
-    "Throwing Pigment",
+    "Throwing Pigment™",
     "bleuBrain"
   ],
   "bugs": {
