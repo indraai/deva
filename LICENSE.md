@@ -7,7 +7,7 @@
 **Company:** Inside The Net, Inc.  
 **Email:** quinn@indra.ai  
 **Link:** https://indra.ai   
-**Copyright:** Copyrright ©2002-2025 Quinn A Michaels; All rights reserved.
+**Copyright:** Copyrright ©2000-2025 Quinn A Michaels; All rights reserved.
 
 This license agreement (“Agreement”) governs the use of the Deva Core (“Software”). By accessing or using the Software, you agree to the terms and conditions set forth below. If you do not agree, you are prohibited from using the Software.
 
@@ -160,6 +160,17 @@ This Agreement constitutes the entire understanding between you and the Owner co
 By using the Software, you acknowledge that you have read, understood, and agree to be bound by this Agreement.
 
 ---
+
+::begin:license:hash:70960940285661042547
+uid: 70960940285661042547
+algo: sha256
+text: The hash to allow Copyright notices to 2000-current with the information on Inside The Net, Inc Filing Number 2234417 Filing Date May 15, 2000 State of California Bill Jones Secretary of State Agent of Service is Quinn A Michaels and Incorporator was Lawyer Michael M Baranov where the Corporation has 10,000 shares of Common Stock that can be held by not more than 35 persons and is a close corporation.
+hash: dznZC6RSjZIldxNiJKaPF4o4zhjS28dUGj9QNbQAxwc=
+time: 1763604796835
+date: Wednesday, November 19, 2025 - 6:13:16 PM
+warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.
+copyright: Copyright ©2025 Quinn A Michaels; All rights reserved.
+::end:license:hash:70960940285661042547
 
 ::begin:license:hash:55436373828492991875
 uid: 55436373828492991875
