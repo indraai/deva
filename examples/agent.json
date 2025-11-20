@@ -2,20 +2,20 @@
   "name": "AGENT",
   "describe": "AGENT FILE",
   "copyright": "Copyright ©2000-2025 Quinn Michaels. All rights reserved.",
-  "VLA": "38478178200141356938",
+  "VLA": "30785853158847668602",
   "DATA": {
     "id": 5380514963421,
     "key": "deva",
     "VLA": {
-      "uid": "38478178200141356938",
-      "time": 1763602600904,
-      "date": "Wednesday, November 19, 2025 - 5:36:40 PM",
-      "fingerpring": "fapdf72J5hj5LKKa5P79kMYSvB05+VdCInUFxL4s/eY=",
+      "uid": "30785853158847668602",
+      "time": 1763649536300,
+      "date": "Thursday, November 20, 2025 - 6:38:56 AM",
+      "fingerprint": "p8ksCS1Tjmfw/7YPmgbHO2NsSTjmcNR5IQFINx0Qw7A=",
       "warning": "⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.",
-      "copyright": "Copyright ©2025 Quinn A Michaels; All rights reserved.",
-      "md5": "7tivW0a+NLmFz816TDpdMA==",
-      "sha256": "ri27jAuzBYwl1pGWVt/Fo2S8urB/+XnJGYio4kNQ+GM=",
-      "sha512": "4c+rNxqn+hcUuyOln8z04G0JMr4oOv29VTtsGkSYTw4e2mSqURiDGx2R6psO+Z3SaKmKpjYV2FcaHwOZskWOdQ=="
+      "copyright": "Copyright ©2000-2025 Quinn A Michaels; All rights reserved.",
+      "md5": "0+y/qqTNzZ0JMDqJN8HM1Q==",
+      "sha256": "kUllmuBVsEODbPU97lbtt1URY4QigkiUxdH9mkCHpTI=",
+      "sha512": "ddYHSgNVfNZ8/9RejjLvmxvil7lH8B+V7e/h9jTVdVxTdXiTQ6/u9t17O1ysp+GqjFNNSsSvTEiskWPG21H7eg=="
     },
     "prompt": {
       "emoji": "🍏",

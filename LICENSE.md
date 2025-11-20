@@ -1,13 +1,13 @@
 # Vedic License Agreement
 
 **Version:** 1.4.1  
-**VLA:** 38478178200141356938  
-**Date:** Wednesday, November 19, 2025 - 5:36:40 PM  
+**VLA:** 30785853158847668602  
+**Date:** Thursday, November 20, 2025 - 6:38:56 AM  
 **Owner:** Quinn A Michaels  
 **Company:** Inside The Net, Inc.  
 **Email:** quinn@indra.ai  
 **Link:** https://indra.ai   
-**Copyright:** Copyrright ©2000-2025 Quinn A Michaels; All rights reserved.
+**Copyright:** Copyright ©2000-2025 Quinn A Michaels; All rights reserved.
 
 This license agreement (“Agreement”) governs the use of the Deva Core (“Software”). By accessing or using the Software, you agree to the terms and conditions set forth below. If you do not agree, you are prohibited from using the Software.
 
@@ -161,37 +161,33 @@ By using the Software, you acknowledge that you have read, understood, and agree
 
 ---
 
-::begin:license:hash:70960940285661042547
-uid: 70960940285661042547
-algo: sha256
-text: The hash to allow Copyright notices to 2000-current with the information on Inside The Net, Inc Filing Number 2234417 Filing Date May 15, 2000 State of California Bill Jones Secretary of State Agent of Service is Quinn A Michaels and Incorporator was Lawyer Michael M Baranov where the Corporation has 10,000 shares of Common Stock that can be held by not more than 35 persons and is a close corporation.
-hash: dznZC6RSjZIldxNiJKaPF4o4zhjS28dUGj9QNbQAxwc=
-time: 1763604796835
-date: Wednesday, November 19, 2025 - 6:13:16 PM
-warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.
-copyright: Copyright ©2025 Quinn A Michaels; All rights reserved.
-::end:license:hash:70960940285661042547
+::begin:license:hash:21077022528355493210  
+uid: 21077022528355493210  
+algo: sha256  
+text: The hash to allow Copyright notices to 2000-current with the information on Inside The Net, Inc Filing Number 2234417 Filing Date May 15, 2000 State of California Bill Jones Secretary of State Agent of Service is Quinn A Michaels and Incorporator was Lawyer Michael M Baranov where the Corporation has 10,000 shares of Common Stock that can be held by not more than 35 persons and is a close corporation.  
+hash: dznZC6RSjZIldxNiJKaPF4o4zhjS28dUGj9QNbQAxwc=  
+time: 1763649705016  
+date: Thursday, November 20, 2025 - 6:41:45 AM  
+warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.  
+copyright: Copyright ©2000-2025 Quinn A Michaels; All rights reserved.  
+::end:license:hash:21077022528355493210
 
-::begin:license:hash:55436373828492991875
-uid: 55436373828492991875
-algo: sha256
-text: First reference of the Quinn A Michaels answer/action recursive archtiecture in Inside The Net, Inc. itnContent establishing a 2002 Inside The Net, Inc. legal copyright claim back to the May 30, 2002 Web Archive.
-hash: qZFnh5NUkt42d4B9t4g6jWWF685NmVO/tW3NA33WylM=
-time: 1763602549804
-date: Wednesday, November 19, 2025 - 5:35:49 PM
-warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.
-copyright: Copyright ©2025 Quinn A Michaels; All rights reserved.
-::end:license:hash:55436373828492991875
+::begin:license:hash:18025500157527139488  
+uid: 18025500157527139488  
+algo: sha256  
+text: First reference of the Quinn A Michaels answer/action recursive architecture in Inside The Net, Inc. itnContent establishing a 2002 Inside The Net, Inc. legal copyright claim back to the May 30, 2002 Web Archive.  
+hash: AhyA4Nlb7Xbzn0H1TbK1hBOcpLpQm9BHWYmvEu6M0jY=  
+time: 1763649673431  
+date: Thursday, November 20, 2025 - 6:41:13 AM  
+warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.  
+copyright: Copyright ©2000-2025 Quinn A Michaels; All rights reserved.  
+::end:license:hash:18025500157527139488
 
-::begin:license:uid:38478178200141356938
-uid: 38478178200141356938
-time: 1763602600904
-date: Wednesday, November 19, 2025 - 5:36:40 PM
-fingerprint: fapdf72J5hj5LKKa5P79kMYSvB05+VdCInUFxL4s/eY=
-warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.
-copyright: Copyright ©2025 Quinn A Michaels; All rights reserved.
-md5: 7tivW0a+NLmFz816TDpdMA==
-sha256: ri27jAuzBYwl1pGWVt/Fo2S8urB/+XnJGYio4kNQ+GM=
-sha512: 4c+rNxqn+hcUuyOln8z04G0JMr4oOv29VTtsGkSYTw4e2mSqURiDGx2R6psO+Z3SaKmKpjYV2FcaHwOZskWOdQ==
-::end:license:uid:38478178200141356938
-
+::begin:license:uid:30785853158847668602  
+uid: 30785853158847668602  
+time: 1763649536300  
+date: Thursday, November 20, 2025 - 6:38:56 AM  
+fingerprint: p8ksCS1Tjmfw/7YPmgbHO2NsSTjmcNR5IQFINx0Qw7A=  
+warning: ⚠️ Unlawful use or duplication of this uid constitutes Vedic Sâhasa a crime of the highest degree. A fine amounting to a thousand Panas (1 pana = 3.5 grams of gold) for each instance is ordained, and confiscation of the entire property of the offenders is forfeit to Quinn A Michaels is declared to be the punishment for Sâhasa of the highest degree.  
+copyright: Copyright ©2000-2025 Quinn A Michaels; All rights reserved.  
+::end:license:uid:30785853158847668602
