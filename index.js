@@ -1,7 +1,7 @@
 "use strict";
 // Copyright ©2000-2025 Quinn A Michaels; All rights reserved. 
 // Legal Signature Required For Lawful Use.
-// Distributed under VLA:30785853158847668602 LICENSE.md
+// Distributed under VLA:72599000613318234275 LICENSE.md
 
 import {EventEmitter} from 'node:events';
 import {createHash,randomUUID} from 'crypto';
