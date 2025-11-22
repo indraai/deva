@@ -27,6 +27,7 @@ const info = {
   dir: __dirname,
   git: pkg.repository.url,
   bugs: pkg.bugs.url,
+	VLA: pkg.VLA,
   license: 'TESTING ONLY',
 };
 

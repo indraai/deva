@@ -2438,22 +2438,25 @@ class Deva {
   uid(guid=false) {
     const time = Date.now(); // set time to local constant
     const date = this.lib.formatDate(time, 'long', true); // set date to local constant
-    const { profile } = this.agent();
+    const license = this._info.VLA ? this._info.VLA.uid : false;
+    const client = this.client(); // get the client
+    const agent = this.agent(); // get the agent
+    const {profile} = agent;
+    const machine = this.machine(); // get the machine hash
+
     const core_hash = this.hash(this._core, 'sha256');
-    const machine_hash = this.machine().sha256; // get the machine hash
     
-    const client_hash = this.client().sha256; // get client hash
-    const agent_hash = this.agent().sha256; // get agent hash
     const warning = this.vars.warning || this._agent.profile.warning || this._messages.warning; // agent or default warning
     const copyright = this._agent.profile.copyright || this._core.copyright; // agent or default copyright
 
     const status = this._agent.profile.status || this._messages.status;
     
     const fingerprint_data = {
-      client_hash,
-      agent_hash,
+      license,
+      client: client.sha256,
+      agent: agent.sha256,
+      machine: machine.sha256,
       core_hash,
-      machine_hash,
     };
     const fingerprint = this.hash(fingerprint_data, 'sha256');
 
@@ -2461,11 +2464,12 @@ class Deva {
       uid: false,
       time,
       date,
+      license,
       fingerprint,
-      client: client_hash,
-      agent: agent_hash,
-      core: core_hash,
-      machine: machine_hash,
+      client: client.sha256,
+      agent: agent.sha256,
+      machine: machine.sha256,
+      core_hash,
       status,
       warning,
       copyright,
