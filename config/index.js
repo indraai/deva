@@ -108,6 +108,7 @@ export default {
 			onfunc: 'onExit',
 			clear: [
 				'_license',
+				'_identity',
 				'_feecting',
 				'_error',
 				'_log',
