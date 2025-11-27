@@ -1392,7 +1392,7 @@ class Deva {
   describe: This function is use to relay the to the ready state.
   usage: this.ready(data, resolve)
   ***************/
-  ready(data, resolve) {
+  async ready(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
     const key = 'ready';
     
@@ -1413,7 +1413,7 @@ class Deva {
 
     if (this.devas && Object.keys(this.devas).length) {
       for (let deva in this.devas) {
-        this.load(deva, data.client);
+        await this.load(deva, data.client);
         // after the deva loads talk the event to set asset directory.
         const id = this.uid();
         const {dir} = this.devas[deva].info();
@@ -2155,7 +2155,13 @@ class Deva {
     this.action('load', key);
     this.state('load', key);
     this.intent('good', `load:${key}`);
-    return this.devas[key].init(client);
+    return new Promise((resolve, reject) => {
+      this.devas[key].init(client).then(deva => {
+        return resolve(deva)        
+      }).catch(err => {
+        return this.err(err, client, reject);
+      })
+    });
   }
 
   /**************
