@@ -1421,7 +1421,6 @@ class Deva {
             this.talk(`deva:dir`, {id, key:deva_agent.key, dir});
             if (x === key_len) {
               setImmediate(async () => {
-                this.prompt(`${agent.key} resolved at ${deva}`)
                 return await this._invoke({key,data,resolve});                     
               });
             }
