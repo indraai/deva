@@ -363,12 +363,10 @@ class Deva {
       return this[onfunc](data, resolve);        
     }
     
-    setImmediate(() => {
-      this.action('return', `${key}:${data.id.uid}`); // return action complete
-      this.state('valid', `${key}:${data.id.uid}`); // return state valid
-      this.intent('good', `${key}:${data.id.uid}`); // return intent good
-      return next_key ? this[next_key](data, resolve) : resolve(data);     
-    });
+    this.action('return', `${key}:${data.id.uid}`); // return action complete
+    this.state('valid', `${key}:${data.id.uid}`); // return state valid
+    this.intent('good', `${key}:${data.id.uid}`); // return intent good
+    return next_key ? this[next_key](data, resolve) : resolve(data);     
   }
   
   /**************
