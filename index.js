@@ -1410,6 +1410,18 @@ class Deva {
         this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
       }
     }
+
+    if (this.devas && Object.keys(this.devas).length) {
+      for (let deva in this.devas) {
+        this.load(deva, data.client);
+        // after the deva loads talk the event to set asset directory.
+        const id = this.uid();
+        const {dir} = this.devas[deva].info();
+        const {key} = this.devas[deva].agent();
+        this.talk(`deva:dir`, {id, key,dir});
+      }
+    }
+
     return this._invoke({key,data,resolve});                                
   }
   
@@ -2138,12 +2150,12 @@ class Deva {
     -deva: The Deva model to load.
   describe: This function will enable fast loading of Deva into the system.
   ***************/
-  async load(key, client) {
+  load(key, client) {
     this.zone('load', key);
     this.action('load', key);
     this.state('load', key);
     this.intent('good', `load:${key}`);
-    return await this.devas[key].init(client);
+    return this.devas[key].init(client);
   }
 
   /**************
