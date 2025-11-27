@@ -1410,16 +1410,25 @@ class Deva {
         this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
       }
     }
-    if (this.devas && Object.keys(this.devas)) {
+    const key_len = Object.keys(this.devas).length
+    let x = 0;
+    if (this.devas && key_len) {
       for (let deva in this.devas) {
         const eitity = await this.load(deva, data.client);
         const id = this.uid();
         const {dir} = this.devas[deva].info();
         const {key} = this.devas[deva].agent();
-        this.talk(`deva:dir`, {id, key, dir});        
+        this.talk(`deva:dir`, {id, key, dir});
+        if (x === key_len - 1) {
+          console.log('running invoke after deva load');
+          return this._invoke({key,data,resolve});          
+        }
       }
     }
-    return this._invoke({key,data,resolve});    
+    else {
+      return this._invoke({key,data,resolve});    
+      
+    }
   }
   
   /**************
