@@ -310,7 +310,7 @@ class Deva {
             init, start, enter, done ready, finish, complete
   usage: this.complete(data, resolve)
   ***************/
-  _invoke(opts) {
+  async _invoke(opts) {
     if (!this._active) return resolve(this._messages.offline);
     const {key, data, resolve} = opts;
     const {prev_key, next_key, onfunc, clear} = config.invoke[key];
@@ -363,10 +363,12 @@ class Deva {
       return this[onfunc](data, resolve);
     }
   
-    this.action('return', `${key}:${data.id.uid}`); // return action complete
-    this.state('valid', `${key}:${data.id.uid}`); // return state valid
-    this.intent('good', `${key}:${data.id.uid}`); // return intent good
-    return next_key ? this[next_key](data, resolve) : resolve(data);
+    setImmediate(() => {
+      this.action('return', `${key}:${data.id.uid}`); // return action complete
+      this.state('valid', `${key}:${data.id.uid}`); // return state valid
+      this.intent('good', `${key}:${data.id.uid}`); // return intent good
+      return next_key ? this[next_key](data, resolve) : resolve(data);     
+    });
   }
   
   /**************
@@ -1429,7 +1431,9 @@ class Deva {
     }
     finally {
       // return the invoke in a set immediate so it runs after the loop
-      return this._invoke({key,data,resolve});                    
+      setImmediate(() => {
+        return this._invoke({key,data,resolve});                            
+      });
     }
   }
   
