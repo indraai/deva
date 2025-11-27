@@ -1421,9 +1421,7 @@ class Deva {
         });
       }
     }
-    else {
-      return this._invoke({key,data,resolve});    
-    }
+    return this._invoke({key,data,resolve});    
   }
   
   /**************
