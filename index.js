@@ -1412,12 +1412,11 @@ class Deva {
     }
     if (this.devas && Object.keys(this.devas)) {
       for (let deva in this.devas) {
-        await this.load(deva, data.client).then(entity => {
-          const id = this.uid();
-          const {dir} = this.devas[deva].info();
-          const {key} = this.devas[deva].agent();
-          this.talk(`deva:dir`, {id, key, dir});
-        });
+        const eitity = await this.load(deva, data.client);
+        const id = this.uid();
+        const {dir} = this.devas[deva].info();
+        const {key} = this.devas[deva].agent();
+        this.talk(`deva:dir`, {id, key, dir});        
       }
     }
     return this._invoke({key,data,resolve});    
