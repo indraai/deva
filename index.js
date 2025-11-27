@@ -1411,21 +1411,26 @@ class Deva {
     }
     // check if the entity has devas to load after everything is ready.
     // load the devas
-    if (this.devas && Object.keys(this.devas).length) {
-      for (let deva in this.devas) {
-        await this.load(deva, data.client);
-        // after the deva loads talk the event to set asset directory.
-        const id = this.devas[deva].uid();
-        const {dir} = this.devas[deva].info();
-        const {key} = this.devas[deva].agent();
-        this.talk(`deva:dir`, {id, key,dir});
-      }
-      setImmediate(() => {
-        // return the invoke in a set immediate so it runs after the loop
-        return this._invoke({key,data,resolve});                    
-      });
-    }  
-    return this._invoke({key,data,resolve});                 
+    let deva;
+    try {
+      if (this.devas && Object.keys(this.devas).length) {
+        for (deva in this.devas) {
+          await this.load(deva, data.client);
+          // after the deva loads talk the event to set asset directory.
+          const id = this.devas[deva].uid();
+          const {dir} = this.devas[deva].info();
+          const {key} = this.devas[deva].agent();
+          this.talk(`deva:dir`, {id, key,dir});
+        }
+      }      
+    } 
+    catch (err) {
+      return this.err(err, deva);
+    }
+    finally {
+      // return the invoke in a set immediate so it runs after the loop
+      return this._invoke({key,data,resolve});                    
+    }
   }
   
   /**************
@@ -2153,12 +2158,12 @@ class Deva {
     -deva: The Deva model to load.
   describe: This function will enable fast loading of Deva into the system.
   ***************/
-  load(key, client) {
+  async load(key, client) {
     this.zone('load', key);
     this.action('load', key);
     this.state('load', key);
     this.intent('good', `load:${key}`);
-    return this.devas[key].init(client);
+    return await this.devas[key].init(client);
   }
 
   /**************
