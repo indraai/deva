@@ -1429,7 +1429,7 @@ class Deva {
     }
     finally {
       // return the invoke in a set immediate so it runs after the loop
-      setImmediate(() => {
+      return setImmediate(() => {
         return this._invoke({key,data,resolve});                            
       });
     }
