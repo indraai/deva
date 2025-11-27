@@ -1420,6 +1420,7 @@ class Deva {
         const {key} = this.devas[deva].agent();
         this.talk(`deva:dir`, {id, key,dir});
       }
+      // return immedate on async
       return setImmediate(() => {
         return this._invoke({key,data,resolve});                                    
       });
