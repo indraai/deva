@@ -1410,8 +1410,7 @@ class Deva {
         this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
       }
     }
-    const keys = Object.keys(this.devas);
-    if (this.devas && keys.length) {
+    if (this.devas && Object.keys(this.devas)) {
       for (let deva in this.devas) {
         await this.load(deva, data.client).then(entity => {
           const id = this.uid();
