@@ -1421,8 +1421,9 @@ class Deva {
         this.talk(`deva:dir`, {id, key,dir});
       }
     }
-
-    return this._invoke({key,data,resolve});                                
+    return setImmediate(() => {
+      return this._invoke({key,data,resolve});                                    
+    });
   }
   
   /**************
