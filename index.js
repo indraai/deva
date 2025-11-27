@@ -1411,7 +1411,7 @@ class Deva {
       }
     }
     const key_len = Object.keys(this.devas).length
-    let x = 0;
+    let x = 1;
     if (this.devas && key_len) {
       for (let deva in this.devas) {
         const eitity = await this.load(deva, data.client);
@@ -1419,8 +1419,8 @@ class Deva {
         const {dir} = this.devas[deva].info();
         const agent = this.devas[deva].agent();
         this.talk(`deva:dir`, {id, key:agent.key, dir});
-        if (x === key_len - 1) {
-          console.log('running invoke after deva load');
+        if (x === key_len) {
+          console.log('running invoke after deva load', deva);
           return this._invoke({key,data,resolve});          
         }
         x = x + 1;
