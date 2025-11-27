@@ -1380,20 +1380,6 @@ class Deva {
   ***************/
   done(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
-
-    if (this.devas && Object.keys(this.devas).length) {
-      for (let deva in this.devas) {
-        setImmediate(() => {
-          this.load(deva, data.client);
-          // after the deva loads talk the event to set asset directory.
-          const id = this.uid();
-          const {dir} = this.devas[deva].info();
-          const {key} = this.devas[deva].agent();
-          this.talk(`deva:dir`, {id, key,dir});
-          
-        });
-      }
-    }
     return this._invoke({key:'done',data,resolve});    
   }
 
@@ -1405,7 +1391,7 @@ class Deva {
   describe: This function is use to relay the to the ready state.
   usage: this.ready(data, resolve)
   ***************/
-  ready(data, resolve) {
+  async ready(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
     const key = 'ready';
     
@@ -1424,7 +1410,20 @@ class Deva {
         this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
       }
     }
-    return this._invoke({key,data,resolve});                                    
+    const keys = Object.keys(this.devas);
+    if (this.devas && keys.length) {
+      for (let deva in this.devas) {
+        await this.load(deva, data.client).then(entity => {
+          const id = this.uid();
+          const {dir} = this.devas[deva].info();
+          const {key} = this.devas[deva].agent();
+          this.talk(`deva:dir`, {id, key, dir});
+        });
+      }
+    }
+    else {
+      return this._invoke({key,data,resolve});    
+    }
   }
   
   /**************
