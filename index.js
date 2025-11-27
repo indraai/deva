@@ -1417,12 +1417,13 @@ class Deva {
         const eitity = await this.load(deva, data.client);
         const id = this.uid();
         const {dir} = this.devas[deva].info();
-        const {key} = this.devas[deva].agent();
-        this.talk(`deva:dir`, {id, key, dir});
+        const agent = this.devas[deva].agent();
+        this.talk(`deva:dir`, {id, key:agent.key, dir});
         if (x === key_len - 1) {
           console.log('running invoke after deva load');
           return this._invoke({key,data,resolve});          
         }
+        x = x + 1;
       }
     }
     else {
