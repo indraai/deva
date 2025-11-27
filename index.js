@@ -310,7 +310,7 @@ class Deva {
             init, start, enter, done ready, finish, complete
   usage: this.complete(data, resolve)
   ***************/
-  async _invoke(opts) {
+  _invoke(opts) {
     if (!this._active) return resolve(this._messages.offline);
     const {key, data, resolve} = opts;
     const {prev_key, next_key, onfunc, clear, load} = config.invoke[key];
@@ -360,13 +360,13 @@ class Deva {
       this.action('return', `${onfunc}:${data.id.uid}`); // action return
       this.state('valid', `${onfunc}:${data.id.uid}`); // state valid
       this.intent('good', `${onfunc}:${data.id.uid}`); // intent good
-      return await this[onfunc](data, resolve);
+      return this[onfunc](data, resolve);
     }
   
     this.action('return', `${key}:${data.id.uid}`); // return action complete
     this.state('valid', `${key}:${data.id.uid}`); // return state valid
     this.intent('good', `${key}:${data.id.uid}`); // return intent good
-    return next_key ? await this[next_key](data, resolve) : resolve(data);
+    return next_key ? this[next_key](data, resolve) : resolve(data);
   }
   
   /**************
@@ -1346,7 +1346,7 @@ class Deva {
     sequence. This design preserves language-agnostic interoperability and 
     deterministic state transitions across Deva systems.
   ***************/
-  async start(data, resolve) {
+  start(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
     return this._invoke({key:'start',data,resolve});                
   }
@@ -1362,7 +1362,7 @@ class Deva {
     If the Deva is offline it will return the offline message.
   usage: this.enter('msg')
   ***************/
-  async enter(data, resolve) {
+  enter(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
     return this._invoke({key:'enter',data,resolve});                
   }
@@ -1378,26 +1378,23 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.done('msg')
   ***************/
-  async done(data, resolve) {
+  done(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
 
     if (this.devas && Object.keys(this.devas).length) {
       for (let deva in this.devas) {
-        await this.load(deva, data.client);
-        // after the deva loads talk the event to set asset directory.
-        const id = this.uid();
-        const {dir} = this.devas[deva].info();
-        const {key} = this.devas[deva].agent();
-        this.talk(`deva:dir`, {id, key,dir});
+        setImmediate(() => {
+          this.load(deva, data.client);
+          // after the deva loads talk the event to set asset directory.
+          const id = this.uid();
+          const {dir} = this.devas[deva].info();
+          const {key} = this.devas[deva].agent();
+          this.talk(`deva:dir`, {id, key,dir});
+          
+        });
       }
-      // return immedate on async
-      return setImmediate(() => {
-        return this._invoke({key:'done',data,resolve});
-      });
     }
-    else {
-      return this._invoke({key:'done',data,resolve});    
-    }    
+    return this._invoke({key:'done',data,resolve});    
   }
 
   /**************
@@ -1408,7 +1405,7 @@ class Deva {
   describe: This function is use to relay the to the ready state.
   usage: this.ready(data, resolve)
   ***************/
-  async ready(data, resolve) {
+  ready(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
     const key = 'ready';
     
