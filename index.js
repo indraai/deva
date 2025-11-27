@@ -1378,22 +1378,21 @@ class Deva {
     If the deva is offline it will return the offline message.
   usage: this.done('msg')
   ***************/
-  async done(data, resolve) {
+  done(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
 
     if (this.devas && Object.keys(this.devas).length) {
       for (let deva in this.devas) {
-        await this.load(deva, data.client);
-        // after the deva loads talk the event to set asset directory.
-        const id = this.uid();
-        const {dir} = this.devas[deva].info();
-        const {key} = this.devas[deva].agent();
-        this.talk(`deva:dir`, {id, key,dir});
+        setImmediate(async () => {
+          await this.load(deva, data.client);
+          // after the deva loads talk the event to set asset directory.
+          const id = this.uid();
+          const {dir} = this.devas[deva].info();
+          const {key} = this.devas[deva].agent();
+          this.talk(`deva:dir`, {id, key,dir});          
+        });
       }
-      // return immedate on async
-      return setImmediate(() => {
-        return this._invoke({key:'done',data,resolve});
-      });
+      return this._invoke({key:'done',data,resolve});
     }
     else {
       return this._invoke({key:'done',data,resolve});    
