@@ -1415,14 +1415,13 @@ class Deva {
     if (this.devas && key_len) {
       for (let deva in this.devas) {
           await this.load(deva, data.client).then(async entity => {
-            this.prompt(`${agent.key} load ${deva} `);
             const id = this.uid();
             const {dir} = this.devas[deva].info();
             const deva_agent = this.devas[deva].agent();
             this.talk(`deva:dir`, {id, key:deva_agent.key, dir});
             if (x === key_len) {
               setImmediate(async () => {
-                this.prompt(`${agent.key} loaded ${deva}`)
+                this.prompt(`${agent.key} resolved at ${deva}`)
                 return await this._invoke({key,data,resolve});                     
               });
             }
