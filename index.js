@@ -1414,16 +1414,16 @@ class Deva {
     let x = 1;
     if (this.devas && key_len) {
       for (let deva in this.devas) {
-        setImmediate(async () => {
-          console.log('deva deva', deva);
-          await this.load(deva, data.client).then(entity => {
+        setImmediate(() => {
+          this.prompt(`${agent.key} load ${deva} `);
+          this.load(deva, data.client).then(entity => {
             const id = this.uid();
             const {dir} = this.devas[deva].info();
-            const agent = this.devas[deva].agent();
-            this.talk(`deva:dir`, {id, key:agent.key, dir});
+            const deva_agent = this.devas[deva].agent();
+            this.talk(`deva:dir`, {id, key:deva_agent.key, dir});
             if (x === key_len) {
-              console.log('\n\ninvoke after load.', deva);
-                return this._invoke({key,data,resolve});                     
+              this.prompt(`${agent.key} invoke after load deva ${deva}`)
+              return this._invoke({key,data,resolve});                     
             }
             else {
               x = x + 1;
