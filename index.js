@@ -360,13 +360,13 @@ class Deva {
       this.action('return', `${onfunc}:${data.id.uid}`); // action return
       this.state('valid', `${onfunc}:${data.id.uid}`); // state valid
       this.intent('good', `${onfunc}:${data.id.uid}`); // intent good
-      return this[onfunc](data, resolve);        
+      return this[onfunc](data, resolve);
     }
-    
+  
     this.action('return', `${key}:${data.id.uid}`); // return action complete
     this.state('valid', `${key}:${data.id.uid}`); // return state valid
     this.intent('good', `${key}:${data.id.uid}`); // return intent good
-    return next_key ? this[next_key](data, resolve) : resolve(data);     
+    return next_key ? this[next_key](data, resolve) : resolve(data);
   }
   
   /**************
@@ -1346,7 +1346,7 @@ class Deva {
     sequence. This design preserves language-agnostic interoperability and 
     deterministic state transitions across Deva systems.
   ***************/
-  start(data, resolve) {
+  async start(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
     return this._invoke({key:'start',data,resolve});                
   }
@@ -1362,7 +1362,7 @@ class Deva {
     If the Deva is offline it will return the offline message.
   usage: this.enter('msg')
   ***************/
-  enter(data, resolve) {
+  async enter(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
     return this._invoke({key:'enter',data,resolve});                
   }
@@ -1381,6 +1381,7 @@ class Deva {
   done(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
     return this._invoke({key:'done',data,resolve});
+    
   }
 
   /**************
@@ -1391,7 +1392,7 @@ class Deva {
   describe: This function is use to relay the to the ready state.
   usage: this.ready(data, resolve)
   ***************/
-  async ready(data, resolve) {
+  ready(data, resolve) {
     if (!this._active) return resolve(this._messages.offline);
     const key = 'ready';
     
@@ -1409,30 +1410,7 @@ class Deva {
         this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
       }
     }
-    // check if the entity has devas to load after everything is ready.
-    // load the devas
-    let deva;
-    try {
-      if (this.devas && Object.keys(this.devas).length) {
-        for (deva in this.devas) {
-          await this.load(deva, data.client);
-          // after the deva loads talk the event to set asset directory.
-          const id = this.devas[deva].uid();
-          const {dir} = this.devas[deva].info();
-          const {key} = this.devas[deva].agent();
-          this.talk(`deva:dir`, {id, key,dir});
-        }
-      }      
-    } 
-    catch (err) {
-      return this.err(err, deva);
-    }
-    finally {
-      // return the invoke in a set immediate so it runs after the loop
-      return setImmediate(() => {
-        return this._invoke({key,data,resolve});                            
-      });
-    }
+    return this._invoke({key,data,resolve});                                
   }
   
   /**************
