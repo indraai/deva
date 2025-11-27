@@ -355,14 +355,12 @@ class Deva {
     // determine if there is an onComplete function for the entity.
     const hasOnFunc = this[onfunc] && typeof this[onfunc] === 'function'; 
     if (hasOnFunc) {
-      setImmediate(() => {
-        this.action('onfunc', `${key}:has:${onfunc}:${data.id.uid}`); // action onfunc
-        this.state('onfunc', `${key}:has:${onfunc}:${data.id.uid}`); // state onfunc
-        this.action('return', `${onfunc}:${data.id.uid}`); // action return
-        this.state('valid', `${onfunc}:${data.id.uid}`); // state valid
-        this.intent('good', `${onfunc}:${data.id.uid}`); // intent good
-        return this[onfunc](data, resolve);        
-      });
+      this.action('onfunc', `${key}:has:${onfunc}:${data.id.uid}`); // action onfunc
+      this.state('onfunc', `${key}:has:${onfunc}:${data.id.uid}`); // state onfunc
+      this.action('return', `${onfunc}:${data.id.uid}`); // action return
+      this.state('valid', `${onfunc}:${data.id.uid}`); // state valid
+      this.intent('good', `${onfunc}:${data.id.uid}`); // intent good
+      return this[onfunc](data, resolve);        
     }
     
     setImmediate(() => {
