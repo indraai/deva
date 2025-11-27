@@ -313,7 +313,7 @@ class Deva {
   async _invoke(opts) {
     if (!this._active) return resolve(this._messages.offline);
     const {key, data, resolve} = opts;
-    const {prev_key, next_key, onfunc, clear} = config.invoke[key];
+    const {prev_key, next_key, onfunc, clear, load} = config.invoke[key];
     this.action('invoke', `${key}:${data.id.uid}`);    
     this.context(key, data.id.uid);
     this.zone(key, data.id.uid);
@@ -360,13 +360,13 @@ class Deva {
       this.action('return', `${onfunc}:${data.id.uid}`); // action return
       this.state('valid', `${onfunc}:${data.id.uid}`); // state valid
       this.intent('good', `${onfunc}:${data.id.uid}`); // intent good
-      return this[onfunc](data, resolve);
+      return await this[onfunc](data, resolve);
     }
   
     this.action('return', `${key}:${data.id.uid}`); // return action complete
     this.state('valid', `${key}:${data.id.uid}`); // return state valid
     this.intent('good', `${key}:${data.id.uid}`); // return intent good
-    return next_key ? this[next_key](data, resolve) : resolve(data);
+    return next_key ? await this[next_key](data, resolve) : resolve(data);
   }
   
   /**************
