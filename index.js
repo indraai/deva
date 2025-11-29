@@ -1410,9 +1410,11 @@ class Deva {
         this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
       }
     }
+    
     const key_len = Object.keys(this.devas).length
     let x = 1;
     if (this.devas && key_len) {
+      this.state('loop', `${key}:devas:${data.id.uid}`);
       for (let deva in this.devas) {
           await this.load(deva, data.client).then(async entity => {
             const id = this.uid();
@@ -1420,8 +1422,8 @@ class Deva {
             const deva_agent = this.devas[deva].agent();
             this.talk(`deva:dir`, {id, key:deva_agent.key, dir});
             if (x === key_len) {
-              setImmediate(async () => {
-                return await this._invoke({key,data,resolve});                     
+              setImmediate(() => {
+                return this._invoke({key,data,resolve});                     
               });
             }
             x = x + 1;
