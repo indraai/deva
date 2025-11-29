@@ -21,7 +21,7 @@
 		"invalid_client": "⛔️ Client Hash Invalid",
 		"load": "📦 Load",
 		"unload": "🥡 Unload",
-		"warning": "{{prompt.emoji}} {{profile.name}} warns #UnlawfulUse or #Duplication constitutes #VedicSahasa a #Crime of the #HighestDegree. A #Fine amounting to 1000 #Panas (1 pana = 3.5 grams of gold) for each #Instance has been #Ordained, #Arrest by Federal Authorities, and #Confiscation of the #Offenders #EntireProperty forfeit to {{profile.owner}} through a U.S. Federally Authorized Escrow Service is declared to be the #Punishment for #Sahasa of the #HighestDegree. {{profile.hashtags}}",
+		"warning": "{{prompt.emoji}} {{profile.hashtag}} warns #UnlawfulUse or #Duplication constitutes #VedicSahasa a #Crime of the #HighestDegree. A #Fine amounting to 1000 #Panas (1 pana = 3.5 grams of gold) for each #Instance, #Arrest by U.S. Federal Law Enforcement, and #Confiscation of the #Offenders #EntirePropertyAndWealth forfeit to U.S. Authorities for #Investigation into #CriminalActivity and #Transfer to Lawful Victim Restitution has been #Ordained the #Punishment for #Sahasa of the #HighestDegree. {{profile.hashtags}}",
 		"client_license_check": "🪪 Check Client License",
 		"client_license_invalid": "❌ The Provided Client License Is Invalid",
 		"status": "vedic"	
