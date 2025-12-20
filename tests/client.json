@@ -152,6 +152,20 @@
         "global": [],
         "devas": {}
       },
+      "medical": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "communication": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
       "guard": {
         "concerns": [],
         "global": [],

@@ -24,6 +24,8 @@ class Deva {
     this._identity = false; // inherited Identity features.
     this._feecting = false; // inherited Feecting features.
     this._security = false; // inherited Security features.
+    this._medical = false; // inherited Medical features.
+    this._communication = false; // inherited Communication features.
     this._error = false; // inherited Error features.
     this._log = false; // inherited Log features.
     this._data = false; // inherited Data features.
@@ -32,11 +34,6 @@ class Deva {
     this._treasury = false; // inherited Vector features.
     this._authority = false; // inherited Justice features.
     this._justice = false; // inherited Justice features.
-    this._veda = false; // inherited Veda features.
-    this._indu = false; // inherited INdu features.
-    this._indra = false; // inherited Indra features.
-    this._soma = false; // inherited Soma features.
-    this._king = false; // inherited King features.
     this._owner = false; // inherited Owner features.
     this._vector = false; // inherited Vector features.
     this._intelligence = false; // inherited Intelligence features.
@@ -493,6 +490,28 @@ class Deva {
   ***************/
   Security(resolve, reject) {
     return this.Feature('security', resolve, reject);
+  }
+
+  /**************
+  func: Medical
+  params: resolve, reject
+  describe:
+    The Medical feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Medical(resolve, reject) {
+    return this.Feature('medical', resolve, reject);
+  }
+
+  /**************
+  func: Communication
+  params: resolve, reject
+  describe:
+    The Communication feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Communication(resolve, reject) {
+    return this.Feature('communication', resolve, reject);
   }
 
   /**************
@@ -1257,6 +1276,10 @@ class Deva {
       }).then(() => {
         return this.Security(resolve, reject);
       }).then(() => {
+        return this.Medical(resolve, reject);
+      }).then(() => {
+        return this.Communication(resolve, reject);
+      }).then(() => {
         return this.Error(resolve, reject);
       }).then(() => {
         return this.Log(resolve, reject);
@@ -1274,18 +1297,6 @@ class Deva {
         return this.Justice(resolve, reject);
       }).then(() => { 
         return this.Owner(resolve, reject);
-      }).then(() => {
-        return this.Veda(resolve, reject);
-
-      // this is current cut off point 
-      }).then(() => {
-        return this.Indu(resolve, reject);
-      }).then(() => {
-        return this.Indra(resolve, reject);
-      }).then(() => {
-        return this.Soma(resolve, reject);
-      }).then(() => {
-        return this.King(resolve, reject);
       }).then(() => {
         return this.Vector(resolve, reject);
       }).then(() => {
@@ -1901,6 +1912,24 @@ class Deva {
   security() {
     return this._getFeature('security', this._security);
   }
+  /**************
+  func: medical
+  params: none
+  describe: basic medical features available in a Deva.
+  usage: this.medical()
+  ***************/
+  medical() {
+    return this._getFeature('medical', this._medical);
+  }
+  /**************
+  func: communication
+  params: none
+  describe: basic communication features available in a Deva.
+  usage: this.communication()
+  ***************/
+  communication() {
+    return this._getFeature('communication', this._communication);
+  }
 
   /**************
   func: error
@@ -1992,56 +2021,6 @@ class Deva {
     return this._getFeature('owner', this._owner);
   }
   
-  /**************
-  func: veda
-  params: none
-  describe: basic veda features available in a Deva.
-  usage: this.veda()
-  ***************/
-  veda() {
-    return this._getFeature('veda', this._veda);
-  }
-
-  /**************
-  func: indu
-  params: none
-  describe: basic indu features available in a Deva.
-  usage: this.indu()
-  ***************/
-  indu() {
-    return this._getFeature('indu', this._indu);
-  }
-
-  /**************
-  func: indra
-  params: none
-  describe: basic indra features available in a Deva.
-  usage: this.indra()
-  ***************/
-  indra() {
-    return this._getFeature('indra', this._indra);
-  }
-
-  /**************
-  func: soma
-  params: none
-  describe: basic soma features available in a Deva.
-  usage: this.soma()
-  ***************/
-  soma() {
-    return this._getFeature('soma', this._soma);
-  }
-
-  /**************
-  func: king
-  params: none
-  describe: basic king features available in a Deva.
-  usage: this.king()
-  ***************/
-  king() {
-    return this._getFeature('king', this._king);
-  }
-
   /**************
   func: vector
   params: none

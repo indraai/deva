@@ -56,8 +56,22 @@
         "devas": {
           "hello": {}
         }
-      },
+      },      
       "support": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "medical": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "communication": {
         "concerns": [],
         "global": {},
         "devas": {
