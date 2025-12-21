@@ -23,12 +23,14 @@ class Deva {
     this._license = false; // inherited License features.
     this._identity = false; // inherited Identity features.
     this._feecting = false; // inherited Feecting features.
-    this._security = false; // inherited Security features.
-    this._medical = false; // inherited Medical features.
-    this._communication = false; // inherited Communication features.
     this._error = false; // inherited Error features.
     this._log = false; // inherited Log features.
     this._data = false; // inherited Data features.
+    this._security = false; // inherited Security features.
+    this._medical = false; // inherited Medical features.
+    this._communication = false; // inherited Communication features.
+    this._automation = false; // inherited Automation features.
+    this._simulation = false; // inherited Automation features.
     this._report = false; // inherited Report features.
     this._legal = false; // inherited Legal features.
     this._treasury = false; // inherited Vector features.
@@ -482,6 +484,39 @@ class Deva {
   }
 
   /**************
+  func: Error
+  params: resolve, reject
+  describe:
+    The Error feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Error(resolve, reject) {
+    return this.Feature('error', resolve, reject);
+  }
+  
+  /**************
+  func: Log
+  params: resolve, reject
+  describe:
+    The Log feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Log(resolve, reject) {
+    return this.Feature('log', resolve, reject);
+  }
+  
+  /**************
+  func: Data
+  params: resolve, reject
+  describe:
+    The Data feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Data(resolve, reject) {
+    return this.Feature('data', resolve, reject);
+  }
+
+  /**************
   func: Security
   params: resolve, reject
   describe:
@@ -515,36 +550,25 @@ class Deva {
   }
 
   /**************
-  func: Error
+  func: Automation
   params: resolve, reject
   describe:
-    The Error feature sets the correct variables and necessary rules for the
+    The Automation feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Error(resolve, reject) {
-    return this.Feature('error', resolve, reject);
+  Automation(resolve, reject) {
+    return this.Feature('automation', resolve, reject);
   }
-  
+
   /**************
-  func: Log
+  func: Simulation
   params: resolve, reject
   describe:
-    The Log feature sets the correct variables and necessary rules for the
+    The Simulation feature sets the correct variables and necessary rules for the
     client presented data.
   ***************/
-  Log(resolve, reject) {
-    return this.Feature('log', resolve, reject);
-  }
-  
-  /**************
-  func: Data
-  params: resolve, reject
-  describe:
-    The Data feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Data(resolve, reject) {
-    return this.Feature('data', resolve, reject);
+  Simulation(resolve, reject) {
+    return this.Feature('simulation', resolve, reject);
   }
 
   /**************
@@ -1274,17 +1298,21 @@ class Deva {
       }).then(() => {
         return this.Feecting(resolve, reject);
       }).then(() => {
+        return this.Error(resolve, reject);
+      }).then(() => {
+        return this.Log(resolve, reject);
+      }).then(() => {
+        return this.Data(resolve, reject);
+      }).then(() => {
         return this.Security(resolve, reject);
       }).then(() => {
         return this.Medical(resolve, reject);
       }).then(() => {
         return this.Communication(resolve, reject);
       }).then(() => {
-        return this.Error(resolve, reject);
+        return this.Automation(resolve, reject);
       }).then(() => {
-        return this.Log(resolve, reject);
-      }).then(() => {
-        return this.Data(resolve, reject);
+        return this.Simulation(resolve, reject);
       }).then(() => {
         return this.Report(resolve, reject);
       }).then(() => {
@@ -1904,6 +1932,36 @@ class Deva {
   }
 
   /**************
+  func: error
+  params: none
+  describe: basic error features available in a Deva.
+  usage: this.error()
+  ***************/
+  error() {
+    return this._getFeature('error', this._error);
+  }
+  
+  /**************
+  func: log
+  params: none
+  describe: basic log features available in a Deva.
+  usage: this.log()
+  ***************/
+  log() {
+    return this._getFeature('log', this._error);
+  }
+  
+  /**************
+  func: data
+  params: none
+  describe: basic data features available in a Deva.
+  usage: this.data()
+  ***************/
+  data() {
+    return this._getFeature('data', this._data);
+  }
+
+  /**************
   func: security
   params: none
   describe: basic security features available in a Deva.
@@ -1921,6 +1979,7 @@ class Deva {
   medical() {
     return this._getFeature('medical', this._medical);
   }
+  
   /**************
   func: communication
   params: none
@@ -1932,33 +1991,23 @@ class Deva {
   }
 
   /**************
-  func: error
+  func: automation
   params: none
-  describe: basic error features available in a Deva.
-  usage: this.error()
+  describe: basic automation features available in a Deva.
+  usage: this.automation()
   ***************/
-  error() {
-    return this._getFeature('error', this._error);
+  automation() {
+    return this._getFeature('automation', this._automation);
   }
 
   /**************
-  func: log
+  func: simulation
   params: none
-  describe: basic log features available in a Deva.
-  usage: this.log()
+  describe: basic simulation features available in a Deva.
+  usage: this.simulation()
   ***************/
-  log() {
-    return this._getFeature('log', this._error);
-  }
-
-  /**************
-  func: data
-  params: none
-  describe: basic data features available in a Deva.
-  usage: this.data()
-  ***************/
-  data() {
-    return this._getFeature('data', this._data);
+  simulation() {
+    return this._getFeature('simulation', this._simulation);
   }
 
   /**************

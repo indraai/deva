@@ -86,26 +86,6 @@
         "global": [],
         "devas": {}
       },
-      "indu": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "indra": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "soma": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "king": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
       "owner": {
         "concerns": [],
         "global": [],
@@ -160,6 +140,20 @@
         }
       },
       "communication": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "automation": {
+        "concerns": [],
+        "global": {},
+        "devas": {
+          "hello": {}
+        }
+      },
+      "simulation": {
         "concerns": [],
         "global": {},
         "devas": {
