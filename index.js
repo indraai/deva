@@ -517,6 +517,94 @@ class Deva {
   }
 
   /**************
+  func: Report
+  params: resolve, reject
+  describe:
+    The Report feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Report(resolve, reject) {
+    return this.Feature('report', resolve, reject);
+  }
+
+  /**************
+  func: Intelligence
+  params: resolve, reject
+  describe:
+    The Intelligence feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Intelligence(resolve, reject) {
+    return this.Feature('intelligence', resolve, reject);
+  }
+  
+  /**************
+  func: Automation
+  params: resolve, reject
+  describe:
+    The Automation feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Automation(resolve, reject) {
+    return this.Feature('automation', resolve, reject);
+  }
+  
+  /**************
+  func: Simulation
+  params: resolve, reject
+  describe:
+    The Simulation feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Simulation(resolve, reject) {
+    return this.Feature('simulation', resolve, reject);
+  }
+    
+  /**************
+  func: Communication
+  params: resolve, reject
+  describe:
+    The Communication feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Communication(resolve, reject) {
+    return this.Feature('communication', resolve, reject);
+  }
+  
+  /**************
+  func: Treasury
+  params: resolve, reject
+  describe:
+    The Treasury feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Treasury(resolve, reject) {
+    return this.Feature('treasury', resolve, reject);
+  }
+  
+  /**************
+  func: Justice
+  params: resolve, reject
+  describe:
+    The Justice feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Justice(resolve, reject) {
+    return this.Feature('justice', resolve, reject);
+  }
+  
+  /**************
+  func: Authority
+  params: resolve, reject
+  describe:
+    The Authority feature sets the correct variables and necessary rules for the
+    client presented data.
+  ***************/
+  Authority(resolve, reject) {
+    return this.Feature('authority', resolve, reject);
+  }
+
+  /**************
   func: Security
   params: resolve, reject
   describe:
@@ -539,50 +627,6 @@ class Deva {
   }
 
   /**************
-  func: Communication
-  params: resolve, reject
-  describe:
-    The Communication feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Communication(resolve, reject) {
-    return this.Feature('communication', resolve, reject);
-  }
-
-  /**************
-  func: Automation
-  params: resolve, reject
-  describe:
-    The Automation feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Automation(resolve, reject) {
-    return this.Feature('automation', resolve, reject);
-  }
-
-  /**************
-  func: Simulation
-  params: resolve, reject
-  describe:
-    The Simulation feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Simulation(resolve, reject) {
-    return this.Feature('simulation', resolve, reject);
-  }
-
-  /**************
-  func: Report
-  params: resolve, reject
-  describe:
-    The Report feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Report(resolve, reject) {
-    return this.Feature('report', resolve, reject);
-  }
-
-  /**************
   func: Legal
   params: resolve, reject
   describe:
@@ -592,95 +636,7 @@ class Deva {
   Legal(resolve, reject) {
     return this.Feature('legal', resolve, reject);
   }
-
-  /**************
-  func: Treasury
-  params: resolve, reject
-  describe:
-    The Treasury feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Treasury(resolve, reject) {
-    return this.Feature('treasury', resolve, reject);
-  }
-
-  /**************
-  func: Authority
-  params: resolve, reject
-  describe:
-    The Authority feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Authority(resolve, reject) {
-    return this.Feature('authority', resolve, reject);
-  }
   
-  /**************
-  func: Justice
-  params: resolve, reject
-  describe:
-    The Justice feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Justice(resolve, reject) {
-    return this.Feature('justice', resolve, reject);
-  }
-  
-  /**************
-  func: Veda
-  params: resolve, reject
-  describe:
-    The Veda feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Veda(resolve, reject) {
-    return this.Feature('veda', resolve, reject);
-  }
-
-  /**************
-  func: Indu
-  params: resolve, reject
-  describe:
-    The Indu feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Indu(resolve, reject) {
-    return this.Feature('indu', resolve, reject);
-  }
-
-  /**************
-  func: Indra
-  params: resolve, reject
-  describe:
-    The Indra feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Indra(resolve, reject) {
-    return this.Feature('indra', resolve, reject);
-  }
-
-  /**************
-  func: Soma
-  params: resolve, reject
-  describe:
-    The Soma feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Soma(resolve, reject) {
-    return this.Feature('soma', resolve, reject);
-  }
-
-  /**************
-  func: King
-  params: resolve, reject
-  describe:
-    The King feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  King(resolve, reject) {
-    return this.Feature('king', resolve, reject);
-  }
-    
   /**************
   func: Owner
   params: resolve, reject
@@ -692,82 +648,6 @@ class Deva {
     return this.Feature('owner', resolve, reject);
   }
   
-  /**************
-  func: Vector
-  params: resolve, reject
-  describe:
-    The Vector feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Vector(resolve, reject) {
-    return this.Feature('vector', resolve, reject);
-  }
-  
-  /**************
-  func: Intelligence
-  params: resolve, reject
-  describe:
-    The Intelligence feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Intelligence(resolve, reject) {
-    return this.Feature('intelligence', resolve, reject);
-  }
-  
-  /**************
-  func: Guard
-  params: resolve, reject
-  describe:
-    The Guard feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Guard(resolve, reject) {
-    return this.Feature('guard', resolve, reject);
-  }
-
-  /**************
-  func: Defense
-  params: resolve, reject
-  describe:
-    The Defense feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Defense(resolve, reject) {
-    return this.Feature('defense', resolve, reject);
-  }
-
-  /**************
-  func: Shield
-  params: resolve, reject
-  describe:
-    The Shield feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Shield(resolve, reject) {
-    return this.Feature('shield', resolve, reject);
-  }
-  
-  /**************
-  func: Wall
-  params: resolve, reject
-  describe:
-    The Defense feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Wall(resolve, reject) {
-    return this.Feature('wall', resolve, reject);
-  }
-
-  /**************
-  func: Proxy
-  params: resolve, reject
-  describe:
-    The Defense feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Proxy(resolve, reject) {
-    return this.Feature('proxy', resolve, reject);
-  }
 
   /**************
   func: Support
@@ -1304,41 +1184,29 @@ class Deva {
       }).then(() => {
         return this.Data(resolve, reject);
       }).then(() => {
-        return this.Security(resolve, reject);
+        return this.Report(resolve, reject);
       }).then(() => {
-        return this.Medical(resolve, reject);
-      }).then(() => {
-        return this.Communication(resolve, reject);
+        return this.Intelligence(resolve, reject);
       }).then(() => {
         return this.Automation(resolve, reject);
       }).then(() => {
         return this.Simulation(resolve, reject);
       }).then(() => {
-        return this.Report(resolve, reject);
-      }).then(() => {
-        return this.Legal(resolve, reject);
+        return this.Communication(resolve, reject);
       }).then(() => {
         return this.Treasury(resolve, reject);
+      }).then(() => { 
+        return this.Justice(resolve, reject);
       }).then(() => {
         return this.Authority(resolve, reject);
       }).then(() => {
-        return this.Justice(resolve, reject);
-      }).then(() => { 
+        return this.Security(resolve, reject);
+      }).then(() => {
+        return this.Medical(resolve, reject);
+      }).then(() => {
+        return this.Legal(resolve, reject);
+      }).then(() => {
         return this.Owner(resolve, reject);
-      }).then(() => {
-        return this.Vector(resolve, reject);
-      }).then(() => {
-        return this.Intelligence(resolve, reject);
-      }).then(() => {
-        return this.Guard(resolve, reject);
-      }).then(() => {
-        return this.Defense(resolve, reject);
-      }).then(() => {
-        return this.Shield(resolve, reject);
-      }).then(() => {
-        return this.Wall(resolve, reject);
-      }).then(() => {
-        return this.Proxy(resolve, reject);
       }).then(() => {
         return this.Support(resolve, reject);
       }).then(() => {
@@ -1962,6 +1830,86 @@ class Deva {
   }
 
   /**************
+  func: report
+  params: none
+  describe: basic report features available in a Deva.
+  usage: this.report()
+  ***************/
+  report() {
+    return this._getFeature('report', this._error);
+  }
+  
+  /**************
+  func: intelligence
+  params: none
+  describe: basic intelligence features available in a Deva.
+  usage: this.intelligence()
+  ***************/
+  intelligence() {
+    return this._getFeature('intelligence', this._intelligence);
+  }
+  
+  /**************
+  func: automation
+  params: none
+  describe: basic automation features available in a Deva.
+  usage: this.automation()
+  ***************/
+  automation() {
+    return this._getFeature('automation', this._automation);
+  }
+  
+  /**************
+  func: simulation
+  params: none
+  describe: basic simulation features available in a Deva.
+  usage: this.simulation()
+  ***************/
+  simulation() {
+    return this._getFeature('simulation', this._simulation);
+  }
+  
+  /**************
+  func: communication
+  params: none
+  describe: basic communication features available in a Deva.
+  usage: this.communication()
+  ***************/
+  communication() {
+    return this._getFeature('communication', this._communication);
+  }
+  
+  /**************
+  func: treasury
+  params: none
+  describe: basic treasury features available in a Deva.
+  usage: this.treasury()
+  ***************/
+  treasury() {
+    return this._getFeature('treasury', this._treasury);
+  }
+  
+  /**************
+  func: justice
+  params: none
+  describe: basic justice features available in a Deva.
+  usage: this.systems()
+  ***************/
+  justice() {
+    return this._getFeature('justice', this._justice);
+  }
+  
+  /**************
+  func: authority
+  params: none
+  describe: basic authority features available in a Deva.
+  usage: this.systems()
+  ***************/
+  authority() {
+    return this._getFeature('authority', this._authority);
+  }
+    
+  /**************
   func: security
   params: none
   describe: basic security features available in a Deva.
@@ -1981,46 +1929,6 @@ class Deva {
   }
   
   /**************
-  func: communication
-  params: none
-  describe: basic communication features available in a Deva.
-  usage: this.communication()
-  ***************/
-  communication() {
-    return this._getFeature('communication', this._communication);
-  }
-
-  /**************
-  func: automation
-  params: none
-  describe: basic automation features available in a Deva.
-  usage: this.automation()
-  ***************/
-  automation() {
-    return this._getFeature('automation', this._automation);
-  }
-
-  /**************
-  func: simulation
-  params: none
-  describe: basic simulation features available in a Deva.
-  usage: this.simulation()
-  ***************/
-  simulation() {
-    return this._getFeature('simulation', this._simulation);
-  }
-
-  /**************
-  func: report
-  params: none
-  describe: basic report features available in a Deva.
-  usage: this.report()
-  ***************/
-  report() {
-    return this._getFeature('report', this._error);
-  }
-  
-  /**************
   func: legal
   params: none
   describe: basic legal features available in a Deva.
@@ -2029,37 +1937,7 @@ class Deva {
   legal() {
     return this._getFeature('legal', this._legal);
   }
-  
-  /**************
-  func: treasury
-  params: none
-  describe: basic treasury features available in a Deva.
-  usage: this.treasury()
-  ***************/
-  treasury() {
-    return this._getFeature('treasury', this._treasury);
-  }
-  
-  /**************
-  func: authority
-  params: none
-  describe: basic authority features available in a Deva.
-  usage: this.systems()
-  ***************/
-  authority() {
-    return this._getFeature('authority', this._authority);
-  }
-  
-  /**************
-  func: justice
-  params: none
-  describe: basic justice features available in a Deva.
-  usage: this.systems()
-  ***************/
-  justice() {
-    return this._getFeature('justice', this._justice);
-  }
-
+    
   /**************
   func: owner
   params: none
@@ -2070,76 +1948,6 @@ class Deva {
     return this._getFeature('owner', this._owner);
   }
   
-  /**************
-  func: vector
-  params: none
-  describe: basic vector features available in a Deva.
-  usage: this.vector()
-  ***************/
-  vector() {
-    return this._getFeature('vector', this._vector);
-  }
-  
-  /**************
-  func: intelligence
-  params: none
-  describe: basic intelligence features available in a Deva.
-  usage: this.intelligence()
-  ***************/
-  intelligence() {
-    return this._getFeature('intelligence', this._intelligence);
-  }
-    
-  /**************
-  func: guard
-  params: none
-  describe: basic guard features available in a Deva.
-  usage: this.guard()
-  ***************/
-  guard() {
-    return this._getFeature('guard', this._guard);
-  }
-
-  /**************
-  func: defense
-  params: none
-  describe: basic defense features available in a Deva.
-  usage: this.defense()
-  ***************/
-  defense() {
-    return this._getFeature('defense', this._defense);
-  }
-
-  /**************
-  func: wall
-  params: none
-  describe: basic wall features available in a Deva.
-  usage: this.wall()
-  ***************/
-  wall() {
-    return this._getFeature('wall', this._wall);
-  }
-
-  /**************
-  func: shield
-  params: none
-  describe: basic shield features available in a Deva.
-  usage: this.shield()
-  ***************/
-  shield() {
-    return this._getFeature('shield', this._shield);
-  }
-
-  /**************
-  func: proxy
-  params: none
-  describe: basic proxy features availcoable in a Deva.
-  usage: this.proxy()
-  ***************/
-  proxy() {
-    return this._getFeature('proxy', this._proxy);
-  }
-
   /**************
   func: support
   params: none

@@ -81,32 +81,22 @@
         "global": [],
         "devas": {}
       },
-      "veda": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "owner": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "vector": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
       "intelligence": {
         "concerns": [],
         "global": [],
         "devas": {}
       },
-      "treasury": {
+      "automation": {
         "concerns": [],
-        "global": [],
+        "global": {},
         "devas": {}
       },
-      "authority": {
+      "communication": {
+        "concerns": [],
+        "global": {},
+        "devas": {}
+      },
+      "treasury": {
         "concerns": [],
         "global": [],
         "devas": {}
@@ -116,7 +106,7 @@
         "global": [],
         "devas": {}
       },
-      "legal": {
+      "authority": {
         "concerns": [],
         "global": [],
         "devas": {}
@@ -135,54 +125,21 @@
       "medical": {
         "concerns": [],
         "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "devas": {}
       },
-      "communication": {
+      "legal": {
         "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "global": [],
+        "devas": {}
       },
-      "automation": {
+      "owner": {
         "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "global": [],
+        "devas": {}
       },
       "simulation": {
         "concerns": [],
         "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "guard": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "defense": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "wall": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "shield": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "proxy": {
-        "concerns": [],
-        "global": [],
         "devas": {}
       },
       "support": {
@@ -198,9 +155,7 @@
           {"space": "https://deva.space"},
           {"cloud": "https://deva.cloud"}
         ],
-        "devas": {
-          "hello": {}
-        }
+        "devas": {}
       },
       "systems": {
         "concerns": [],
