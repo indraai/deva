@@ -2360,7 +2360,7 @@ class Deva {
   ***************/
   uid(guid=false) {
     const time = Date.now(); // set time to local constant
-    const date = this.lib.formatDate(time, 'long', true); // set date to local constant
+    const date = this.lib.formatDate(time, 'iso', true); // set date to local constant
     const license = this._info.VLA ? this._info.VLA.uid : false;
     const client = this.client(); // get the client
     const agent = this.agent(); // get the agent
