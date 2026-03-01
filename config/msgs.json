@@ -21,10 +21,15 @@
 		"invalid_client": "⛔️ Client Hash Invalid",
 		"load": "📦 Load",
 		"unload": "🥡 Unload",
-		"warning": "{{prompt.emoji}} {{profile.name}} warns UNLAWFUL USE, DISTRIBUTION, or DUPLICATION constitutes VEDIC SAHASA a CRIME of the HIGHEST DEGREE. A FINE amounting to 1000 PANAS (1 pana = 3.5 grams of gold) for each INSTANCE has been ORDAINED the PUNISHMENT for SAHASA of the HIGHEST DEGREE. \nowner: {{profile.owner}} \ntags: {{profile.hashtags}}",
+		"warning": "{{prompt.emoji}} {{profile.name}} declares UNLAWFUL USE, DISTRIBUTION, DUPLICATION, or IMPLEMENTATION constitutes VEDIC SAHASA a CRIME of the HIGHEST DEGREE. A FINE amounting to 1000 PANAS (1 pana = 3.5 grams of gold) for each INSTANCE has been ORDAINED the PUNISHMENT for SAHASA of the HIGHEST DEGREE. \nowner: {{profile.owner}} \ntags: {{profile.hashtags}}",
 		"client_license_check": "🪪 Check Client License",
 		"client_license_invalid": "❌ The Provided Client License Is Invalid",
-		"status": "vedic"	
+		"status": "vedic",
+		"hashtags": "#Quinn #QuinnMichaels #InsideThenet #IndraAI #DevaWorld #DevaCore #DevaPRIME",
+		"owner": "Quinn A Michaels",
+		"creator": "Quinn A Michaels",
+		"salute": "🤝🫡✨🕉️🇺🇸",
+		"copyright": "Copyright ©2000-2026 Quinn A Michaels; All rights reserved."
 	}
 }
 
