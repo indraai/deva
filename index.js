@@ -1,5 +1,5 @@
 "use strict";
-// Copyright ©2000-2026 Quinn A Michaels; All rights reserved. 
+// Copyright ©2000-2026 Quinn America Michaels; All rights reserved. 
 // Legal Signature Required For Lawful Use.
 // Distributed under VLA:67261312889761363542 LICENSE.md  
 // 2026-02-13T10:41:03.746Z
@@ -2437,7 +2437,7 @@ class Deva {
     - packet: The packet to sign data to.
   describe:
     The sign function can create a digital signature to a packet.
-  copyright: Copyright ©2025 Quinn A Michaels. All rights reserved.
+  copyright: Copyright ©2000-2026 Quinn America Michaels. All rights reserved.
   ***************/
   sign(packet) {
     const id = this.uid();
@@ -2522,7 +2522,7 @@ class Deva {
     - packageVLA: The Package VLA to validate against
   describe:
     The license_check function can checks VLA license validity.
-  copyright: Copyright ©2025 Quinn A Michaels. All rights reserved.
+  copyright: Copyright ©2000-2026 Quinn America Michaels. All rights reserved.
   ***************/  
   license_check(personalVLA, packageVLA) {    
     const id = this.uid();
