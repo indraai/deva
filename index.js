@@ -2372,11 +2372,12 @@ class Deva {
     const core_hash = this.hash(this._core, 'sha256');
     
     const warning = this._agent.profile.warning || this._messages.warning; // agent or default warning
+    const notice = this._agent.profile.notice || this._messages.notice; // agent or default notice
     const copyright = this._agent.profile.copyright || this._messages.copyright; // agent or default copyright
 
     const status = this._agent.profile.status || this._messages.status;
     
-    const tags = this._agent.profile.hashtags || this._messages.hashtags;
+    const vectors = this._agent.profile.vectors || this._messages.vectors;
     const owner = this._agent.profile.owner || this._messages.owner;
     const creator = this._agent.profile.creator || this._messages.creator;
     const salute = this._agent.profile.salute || this._messages.salute;
@@ -2404,7 +2405,8 @@ class Deva {
       core_hash,
       status,
       warning,
-      tags,
+      notice,
+      vectors,
       owner,
       creator,
       salute,
