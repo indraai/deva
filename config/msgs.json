@@ -22,7 +22,7 @@
 		"load": "📦 Load",
 		"unload": "🥡 Unload",
 		"warning": "{{prompt.emoji}} {{profile.name}} declares UNLAWFUL USE, DISTRIBUTION, DUPLICATION, or IMPLEMENTATION constitutes VEDIC SAHASA a CRIME of the HIGHEST DEGREE. A FINE amounting to 1000 PANAS (1 pana = 3.5 grams of gold) for each INSTANCE has been ORDAINED the PUNISHMENT for SAHASA of the HIGHEST DEGREE.",
-		"notice": "Those PUBLICLY ACCUSED, SUSPECTED, or CONVICTED of CRIMES with their ASSOCIATES and FAMILY MEMBERS along with those who DEPART from the ESTABLISHED RULE of LAW are FORBIDDEN from USING {{profile.name}}.",
+		"notice": "Use of {{[profile.name]}} constitutes ACKNOWLEDGMENT of and AGREEMENT to OPERATE ACCORDING to the LAWS of the UNITED STATES OF AMERICA along with all APPLICABLE FEDERAL, STATE, and LOCAL LAWS.",
 		"client_license_check": "🪪 Check Client License",
 		"client_license_invalid": "❌ The Provided Client License Is Invalid",
 		"status": "vedic",
