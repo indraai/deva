@@ -2356,7 +2356,7 @@ class Deva {
                       secure numerical number used for transporting records
                       across networks without collision or needing to store system uuid.
     3. the uid is then returned with a created, md5, sha256, and sha512 hash of the value
-  copyright: 2025 Quinn A Michaels. All rights reserved.
+  copyright: 2025 Quinn America Michaels. All rights reserved.
   ***************/
   uid(guid=false) {
     const time = Date.now(); // set time to local constant
