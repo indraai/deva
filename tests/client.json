@@ -1,7 +1,7 @@
 {
   "name": "CLIENT",
   "describe": "CLIENT FILE",
-  "copyright": "Copyright ©2000-2026 Quinn America Michaels; All rights reserved.",
+  "copyright": "Copyright ©2000-2026 Quinn Arjuna Michaels; All rights reserved.",
   "DATA": {
     "id": "44091450722329207445",
     "key": "test",
@@ -57,7 +57,7 @@
       "lang": "en",
       "locale": "en-US",
       "currency": "USD",
-      "copyright": "Copyright ©2000-2026 Quinn America Michaels; All rights reserved."
+      "copyright": "Copyright ©2000-2026 Quinn Arjuna Michaels; All rights reserved."
     },
     "features": {
       "license": {
