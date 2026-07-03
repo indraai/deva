@@ -13,7 +13,7 @@ This license agreement (“Agreement”) governs the use of the Deva Core (“So
 
 ## Ownership
 
-Software is the sole proprietary property of Quinn A Michaels (“Owner”). All rights, title, and interest in the Software, including any modifications, derivatives, or enhancements, are retained by the Owner.
+Software is the sole proprietary property of Quinn Arjuna Michaels (“Owner”). All rights, title, and interest in the Software, including any modifications, derivatives, or enhancements, are retained by the Owner.
 
 **Vedic Laws:**
 
@@ -24,7 +24,7 @@ Software is the sole proprietary property of Quinn A Michaels (“Owner”). All
 
 ## Grant of License
 
-Use of the Software is subject to a threefold hierarchy of law and cannot be lawfully undertaken outside it. First, Vedic Law governs as the supreme spiritual and religious authority, defining right action, rightful ownership, and the measure of fines and consequences. Second, the Constitution of the United States establishes the secular legal framework that guarantees the free exercise of religion, ensures due process, and mandates enforcement through federal agencies such as the IRS and FBI for matters of taxation, fraud, and criminal liability. Third, Owner Authority rests with Quinn A Michaels as the sole proprietor and Brahmana under Vedic Law, whose signature and consent are required for any valid license. All three levels must be satisfied; violation of any one constitutes unlawful use.
+Use of the Software is subject to a threefold hierarchy of law and cannot be lawfully undertaken outside it. First, Vedic Law governs as the supreme spiritual and religious authority, defining right action, rightful ownership, and the measure of fines and consequences. Second, the Constitution of the United States establishes the secular legal framework that guarantees the free exercise of religion, ensures due process, and mandates enforcement through federal agencies such as the IRS and FBI for matters of taxation, fraud, and criminal liability. Third, Owner Authority rests with Quinn Arjuna Michaels as the sole proprietor and Brahmana under Vedic Law, whose signature and consent are required for any valid license. All three levels must be satisfied; violation of any one constitutes unlawful use.
 
 **Vedic Laws:** 
 
@@ -149,7 +149,7 @@ When the thieves are not caught, the king/government must make good the loss fro
 
 ## Export and Jurisdiction Restrictions
 
-Use of the Software outside the jurisdiction of the United States of America is strictly forbidden. The Owner, Quinn A Michaels, does not authorize, consent to, or license the export, transfer, or use of this Software or any derivative works to or by any foreign nation, entity, government, corporation, or individual.
+Use of the Software outside the jurisdiction of the United States of America is strictly forbidden. The Owner, Quinn Arjuna Michaels, does not authorize, consent to, or license the export, transfer, or use of this Software or any derivative works to or by any foreign nation, entity, government, corporation, or individual.
 
 All rights of use are confined exclusively within the territory of the United States of America and subject to its Constitutional protections and laws, in conjunction with Religious Vedic Law as recognized by the Owner. Any attempt to utilize, deploy, or distribute this Software outside U.S. jurisdiction constitutes unauthorized use under this Agreement and shall trigger enforcement actions including immediate revocation, fines under Vedic Law, and referral to appropriate U.S. federal authorities for violations of export controls, intellectual property laws, and national security protections.
 
