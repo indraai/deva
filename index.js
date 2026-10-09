@@ -24,15 +24,10 @@ class Deva {
     this._active = false; // the active/birth date.
     this._license = false; // inherited License features.
     this._identity = false; // inherited Identity features.
-    this._feecting = false; // inherited Feecting features.
     this._error = false; // inherited Error features.
     this._log = false; // inherited Log features.
     this._data = false; // inherited Data features.
     this._report = false; // inherited Report features.
-    this._algorithm = false; // inherited Algorithm features.
-    this._intelligence = false; // inherited Intelligence features.
-    this._automation = false; // inherited Automation features.
-    this._simulation = false; // inherited Automation features.
     this._communication = false; // inherited Communication features.
     this._treasury = false; // inherited Treasury features.
     this._justice = false; // inherited Justice features.
@@ -472,17 +467,6 @@ class Deva {
   }
 
   /**************
-  func: Feecting
-  params: resolve, reject
-  describe:
-    The Feecting feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Feecting(resolve, reject) {
-    return this.Feature('feecting', resolve, reject);
-  }
-
-  /**************
   func: Error
   params: resolve, reject
   describe:
@@ -527,28 +511,6 @@ class Deva {
   }
 
   /**************
-  func: Algorithm
-  params: resolve, reject
-  describe:
-    The Algorithm feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Algorithm(resolve, reject) {
-    return this.Feature('algorithm', resolve, reject);
-  }
-
-  /**************
-  func: Intelligence
-  params: resolve, reject
-  describe:
-    The Intelligence feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Intelligence(resolve, reject) {
-    return this.Feature('intelligence', resolve, reject);
-  }
-  
-  /**************
   func: Automation
   params: resolve, reject
   describe:
@@ -559,17 +521,6 @@ class Deva {
     return this.Feature('automation', resolve, reject);
   }
   
-  /**************
-  func: Simulation
-  params: resolve, reject
-  describe:
-    The Simulation feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Simulation(resolve, reject) {
-    return this.Feature('simulation', resolve, reject);
-  }
-    
   /**************
   func: Communication
   params: resolve, reject
@@ -1196,8 +1147,6 @@ class Deva {
       }).then(() => {
         return this.Identity(resolve, reject);
       }).then(() => {
-        return this.Feecting(resolve, reject);
-      }).then(() => {
         return this.Error(resolve, reject);
       }).then(() => {
         return this.Log(resolve, reject);
@@ -1205,14 +1154,6 @@ class Deva {
         return this.Data(resolve, reject);
       }).then(() => {
         return this.Report(resolve, reject);
-      }).then(() => {
-        return this.Algorithm(resolve, reject);
-      }).then(() => {
-        return this.Intelligence(resolve, reject);
-      }).then(() => {
-        return this.Automation(resolve, reject);
-      }).then(() => {
-        return this.Simulation(resolve, reject);
       }).then(() => {
         return this.Communication(resolve, reject);
       }).then(() => {
@@ -1814,16 +1755,6 @@ class Deva {
   }
 
   /**************
-  func: feecting
-  params: none
-  describe: basic feecting features available in a Deva.
-  usage: this.feecting()
-  ***************/
-  feecting() {
-    return this._getFeature('feecting', this._feecting);
-  }
-
-  /**************
   func: error
   params: none
   describe: basic error features available in a Deva.
@@ -1861,36 +1792,6 @@ class Deva {
   ***************/
   report() {
     return this._getFeature('report', this._error);
-  }
-  
-  /**************
-  func: intelligence
-  params: none
-  describe: basic intelligence features available in a Deva.
-  usage: this.intelligence()
-  ***************/
-  intelligence() {
-    return this._getFeature('intelligence', this._intelligence);
-  }
-  
-  /**************
-  func: automation
-  params: none
-  describe: basic automation features available in a Deva.
-  usage: this.automation()
-  ***************/
-  automation() {
-    return this._getFeature('automation', this._automation);
-  }
-  
-  /**************
-  func: simulation
-  params: none
-  describe: basic simulation features available in a Deva.
-  usage: this.simulation()
-  ***************/
-  simulation() {
-    return this._getFeature('simulation', this._simulation);
   }
   
   /**************
