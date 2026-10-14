@@ -23,7 +23,6 @@ class Deva {
     this._client = {}; // this will be set on init.
     this._active = false; // the active/birth date.
     this._license = false; // inherited License features.
-    this._identity = false; // inherited Identity features.
     this._error = false; // inherited Error features.
     this._log = false; // inherited Log features.
     this._data = false; // inherited Data features.
@@ -455,17 +454,6 @@ class Deva {
     return this.Feature('license', resolve, reject);
   }
   
-  /**************
-  func: Identity
-  params: resolve, reject
-  describe:
-    The Identity feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Identity(resolve, reject) {
-    return this.Feature('identity', resolve, reject);
-  }
-
   /**************
   func: Error
   params: resolve, reject
@@ -1145,8 +1133,6 @@ class Deva {
       }).then(() => {
         return this.License(resolve, reject);
       }).then(() => {
-        return this.Identity(resolve, reject);
-      }).then(() => {
         return this.Error(resolve, reject);
       }).then(() => {
         return this.Log(resolve, reject);
@@ -1742,16 +1728,6 @@ class Deva {
   ***************/
   license() {
     return this._getFeature('license', this._license);
-  }
-
-  /**************
-  func: identity
-  params: none
-  describe: basic identity features available in a Deva.
-  usage: this.identity()
-  ***************/
-  identity() {
-    return this._getFeature('identity', this._identity);
   }
 
   /**************
