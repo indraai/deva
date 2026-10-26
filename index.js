@@ -1340,8 +1340,9 @@ class Deva {
     return new Promise((resolve, reject) => {
       try {
         this.state('set', `${key}:agent:${id.uid}`); // state stop agent
-        const agent = this.agent().sha256; // get the current agent
-        const value = agent.key;
+        const agentData = this.agent();
+        const agent = agentData.sha256; // get the current agent
+        const value = agentData.key;
         
         this.state('set', `${key}:client:${id.uid}`); // state stop agent
         const client = this.client().sha256; // set the current client
