@@ -151,12 +151,10 @@ class Deva {
             }
           }
         });
+        return resolve(); // when the configuration is complete then return an empty resolve.
       }
       catch (e) {
         return this.err(e, false, reject); // trigger the this.err for errors
-      }
-      finally {
-        return resolve(); // when the configuration is complete then return an empty resolve.
       }
     });
   }
@@ -186,12 +184,10 @@ class Deva {
             return this.listeners[listener](packet); // return the listener function
           })
         }
+        return resolve(); // resolve the function after everything is done.
       }
       catch (e) {
         return this.err(e, false, reject); // pass errors to this.err
-      }
-      finally {
-        return resolve(); // resolve the function after everything is done.
       }
     });
   }
