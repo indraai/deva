@@ -1043,9 +1043,9 @@ class Deva {
         this.action('hash', `${key}:${method}:packet:sha512:${packet.id.uid}`);
         packet.sha512 = this.hash(packet, 'sha512');
         
-        this.action('talk', `${this.events.answer}:${key}:${method}:${packet.id.uid}`);
-        this.state('valid', `${this.events.answer}:${key}:${method}:${packet.id.uid}`);
-        this.intent('good', `${this.events.answer}:${key}:${method}:${packet.id.uid}`);
+        this.action('talk', `${this._events.answer}:${key}:${method}:${packet.id.uid}`);
+        this.state('valid', `${this._events.answer}:${key}:${method}:${packet.id.uid}`);
+        this.intent('good', `${this._events.answer}:${key}:${method}:${packet.id.uid}`);
         this.talk(this._events.answer, this.lib.copy(packet)); // global talk event
 
         this.action('talk', `${agent.key}:${key}:${method}:${packet.id.uid}`);
