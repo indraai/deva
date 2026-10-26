@@ -309,7 +309,7 @@ class Deva {
     if (!config.invoke[key]) return resolve (this._messages.invalidkey);
     if (!data) return resolve (this._messages.nodata);
     
-    const {prev_key, next_key, onfunc, clear, load} = config.invoke[key];
+    const {next_key, onfunc, clear} = config.invoke[key];
     this.action('invoke', `${key}:${data.id.uid}`);    
     this.context(key, data.id.uid);
     this.zone(key, data.id.uid);
