@@ -824,7 +824,6 @@ class Deva {
           // if: isAsk wait for the once event which is key'd to the packet ID for specified responses
           this.action('ask', `${key}:${id.uid}`);
           this.intent('good', `ask:${key}:${id.uid}`);
-          this.talk(`${key}:ask`, this.lib.copy(packet));
           this.once(`${key}:ask:${packet.id.uid}`, answer => {
             this.action('talk', `${this._events.ask}:${id.uid}`);
             this.intent('good', `${this.events.ask}:${id.uid}`);
@@ -833,6 +832,7 @@ class Deva {
             this.intent('good', `finish:${method}:${id.uid}`);
             return this.finish(answer, resolve); // if:isAsk resolve the answer from the call
           });
+          this.talk(`${key}:ask`, this.lib.copy(packet));
         }
         else { // else: answer the question locally
           this.state('answer', `${method}:${id.uid}`); //set the answer state to the method
