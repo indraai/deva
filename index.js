@@ -306,6 +306,7 @@ class Deva {
     const {key, data, resolve} = opts;
     if (!this._active) return resolve(this._messages.offline);
     if (!key) return resolve (this._messages.nokey);
+    if (!config.invoke[key]) return resolve (this._messages.invalidkey);
     if (!data) return resolve (this._messages.nodata);
     
     const {prev_key, next_key, onfunc, clear, load} = config.invoke[key];
