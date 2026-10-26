@@ -15,6 +15,8 @@
 		"noid": "⛔️ NO ID PROVIDED",
 		"notext": "⛔️ NO TEXT PROVIDED",
 		"nopacket": "⛔️ NO PACKET PROVIDED",
+		"nodata": "⛔️ NO DATA PROVIDED",
+		"nokey": "⛔️ NO KEY PROVIDED",
 		"method_not_found": "⛔️ METHOD NOT FOUND",
 		"help_not_found": "⛔️ HELP NOT FOUND",
 		"invalid_agent": "⛔️ Agent Hash Invalid",

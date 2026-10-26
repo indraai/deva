@@ -50,7 +50,7 @@ class Deva {
     this.modules = opts.modules || {}; // 3rd Party Modules
     this.func = opts.func || {}; // local Functions
     this.methods = opts.methods || {}; // local Methods
-    this.maxListeners = opts.maxListenners || 0; // set the local maxListeners
+    this.maxListeners = opts.maxListeners || 0; // set the local maxListeners
     // prevent overwriting existing functions and variables with same name
     for (const opt in opts) {
       if (!this[opt] || !this[`_${opt}`]) this[opt] = opts[opt];
@@ -303,8 +303,11 @@ class Deva {
   usage: this.complete(data, resolve)
   ***************/
   _invoke(opts) {
-    if (!this._active) return resolve(this._messages.offline);
     const {key, data, resolve} = opts;
+    if (!this._active) return resolve(this._messages.offline);
+    if (!key) return resolve (this._messages.nokey);
+    if (!data) return resolve (this._messages.nodata);
+    
     const {prev_key, next_key, onfunc, clear, load} = config.invoke[key];
     this.action('invoke', `${key}:${data.id.uid}`);    
     this.context(key, data.id.uid);
@@ -2403,18 +2406,20 @@ class Deva {
     The license_check function can checks VLA license validity.
   copyright: Copyright ©2000-2026 Quinn Arjuna Michaels. All rights reserved.
   ***************/  
-  license_check(personalVLA, packageVLA) {    
+  license_check(personalVLA=false, packageVLA=false) {    
     const id = this.uid();
-    this.state('license', `check:personalVLA:${packageVLA.uid}`);
+
     if (!personalVLA) {
       this.intent('bad', `personalVLA:${id.uid}`);
       return false
     };
-    this.state('license', `check:packageVLA:${packageVLA.uid}`);
+    this.state('license', `check:personalVLA:${personalVLA.uid}`);
+
     if (!packageVLA) {
       this.intent('bad', `packageVLA:${id.uid}`);
       return false;
     }
+    this.state('license', `check:packageVLA:${packageVLA.uid}`);
     
     // this is to ensure no additional information is being transmitted.
     this.state('license', `compare:sha256:${packageVLA.uid}`);
