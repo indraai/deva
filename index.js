@@ -826,7 +826,7 @@ class Deva {
           this.intent('good', `ask:${key}:${id.uid}`);
           this.once(`${key}:ask:${packet.id.uid}`, answer => {
             this.action('talk', `${this._events.ask}:${id.uid}`);
-            this.intent('good', `${this.events.ask}:${id.uid}`);
+            this.intent('good', `${this._events.ask}:${id.uid}`);
             this.talk(this._events.ask, this.lib.copy(answer));
             this.action('return', `finish:${key}:ask:${id.uid}`);
             this.intent('good', `finish:${method}:${id.uid}`);
