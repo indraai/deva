@@ -19,7 +19,7 @@
 		"nokey": "⛔️ NO KEY PROVIDED",
 		"invalidkey": "⛔️ INVALID KEY PROVIDED",
 		"asktimeout": "⛔️ ASK TIMEOUT",
-		"noask": "⛔️ NO ASK PROVIDED",
+		"noask": "⛔️ ASK TARGET NOT FOUND",
 		"method_not_found": "⛔️ METHOD NOT FOUND",
 		"help_not_found": "⛔️ HELP NOT FOUND",
 		"invalid_agent": "⛔️ Agent Hash Invalid",
