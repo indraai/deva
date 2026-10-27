@@ -734,9 +734,8 @@ class Deva {
   describe:
   ***************/
   question(TEXT=false, DATA=false) {
-    // check the active status
-    if (!this._active) return Promise.resolve(this._messages.offline);
-    if (!TEXT) return Promise.resolve(this._messages.notext);
+    if (!this._active) return Promise.resolve(this._messages.offline); // resolve with offline message when not active.
+    if (!TEXT) return Promise.resolve(this._messages.notext); // resolve with the no text message if the client says nothing.
 
     const id = this.uid(); // generate a unique id for transport.
     this.zone('question', id.uid);
@@ -764,8 +763,8 @@ class Deva {
         key = this.agent().key; // set a temporary key from the agent key.
 
     return new Promise((resolve, reject) => {
-      // resolve with the no text message if the client says nothing.
-      this.state('try', `${method}:${id.uid}`);
+    
+      this.state('try', `${method}:${id.uid}`); // set state to try for process. 
       try { // try to answer the question
         if (isAsk) { // determine if hte question isAsk
           // if:isAsk split the agent key and remove first command character
