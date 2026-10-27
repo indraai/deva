@@ -2015,7 +2015,11 @@ class Deva {
     const data = this.lib.copy(this._core);
     data.id = id;
     data.created = Date.now();
-    
+
+    delete data.md5; // delete old md5 hash
+    delete data.sha256; // delete old sha256 hash
+    delete data.sha512; // delete old sha512 hash
+
     data.md5 = this.hash(data, 'md5');
     data.sha256 = this.hash(data, 'sha256');
     data.sha512 = this.hash(data, 'sha512');
