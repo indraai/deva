@@ -67,6 +67,7 @@ class Deva {
     this._uid = config.uid; // set the uid options
 
     this._events = config.events; // set the core system events
+    this._bound = new Map();
     this._feature = config.feature; // set the feature from config data.
     this._features = config.features; // set the features from config data.
 
@@ -179,10 +180,10 @@ class Deva {
         }
 
         // set the assigned listeners for the agent.
-        for (let listener in this.listeners) { // loop over the liteners
-          this.events.on(listener, packet => { // set the event listener
-            return this.listeners[listener](packet); // return the listener function
-          })
+        for (let listener in this.listeners) { // loop over the listeners
+          const handler = packet => this.listeners[listener](packet);
+          this._bound.set(listener, handler);
+          this.events.on(listener, handler);
         }
         return resolve(); // resolve the function after everything is done.
       }
@@ -192,8 +193,25 @@ class Deva {
     });
   }
 
+  /**************
+  func: _removeListeners
+  params: none
+  describe:
+    Remove listeners will take the this.lisners objects and remove the appropriate
+    listener values for the event bus.
+  ***************/
+  _removeListeners() {
+    if (!this.events || !this.listeners) return;
+    for (const evt in this.listeners) {
+      const handler = this._bound.get(evt);
+      if (handler) this.ignore(evt, handler); // ignore() already calls events.removeListener
+    }
+    this._bound.clear();
+    return this._clearPending(); // pending asks go in the same pass
+  }
+
   // Some elements will inherit the data of the parent. this object will loop over
-  // any children data that theis deva has and assign the inherited information.
+  // any children data that this deva has and assign the inherited information.
   /**************
   func: _assignInherit
   params: none
@@ -339,7 +357,8 @@ class Deva {
 
     if (clear) {
       this.state('loop', `${key}:clear:${data.id.uid}`);
-      for (let item of config.invoke.exit.clear) {
+      for (let item of clear) {
+        if (item === 'listeners') this._removeListeners();
         this[item] = false;
       }      
     }
@@ -693,9 +712,9 @@ class Deva {
     this.action('listen', evt);
     this.intent('good', `listen:${evt}`);
     this.listeners[evt] = callback;
-    return this.events.on(evt, packet => {
-      return this.listeners[evt](packet);
-    });
+    const handler = packet => this.listeners[evt](packet);
+    this._bound.set(evt, handler);
+    return this.events.on(evt, handler);    
   }
 
   /**************
