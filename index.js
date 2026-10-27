@@ -71,6 +71,7 @@ class Deva {
     this._events = config.events; // set the core system events
     this._bound = new Map(); // evt -> wrapper registered on the shared bus
     this._pending = new Set(); // pending asks: {evt, handler, timer}
+    this._stateBound = []; // [event, handler] pairs for the state listeners
     
     this._feature = config.feature; // set the feature from config data.
     this._features = config.features; // set the features from config data.
@@ -174,12 +175,14 @@ class Deva {
   _assignListeners() {
     return new Promise((resolve, reject) => {
       try {
+
         // set the default listeners for the states of the agent.
         for (let state in this._states) {
           if (typeof this[state] === 'function') {
-            this.events.on(`${this._agent.key}:${state}`, packet => {
-              return this[state](packet);
-            });
+            const evt = `${this._agent.key}:${state}`;
+            const handler = packet => this[state](packet);
+            this._stateBound.push([evt, handler]); // keep it so shutdown can remove it
+            this.events.on(evt, handler);
           }
         }
 
@@ -211,6 +214,8 @@ class Deva {
       if (handler) this.ignore(evt, handler); // ignore() already calls events.removeListener
     }
     this._bound.clear();
+    for (const [evt, handler] of this._stateBound) this.ignore(evt, handler); // state listeners from _assignListeners
+    this._stateBound = [];
     return this._clearPending(); // pending asks go in the same pass
   }
 
