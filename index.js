@@ -735,7 +735,7 @@ class Deva {
   ***************/
   question(TEXT=false, DATA=false) {
     if (!this._active) return Promise.resolve(this._messages.offline); // resolve with offline message when not active.
-    if (!TEXT) return Promise.resolve(this._messages.notext); // resolve with the no text message if the client says nothing.
+    if (!TEXT || typeof TEXT !== 'string') return Promise.resolve(this._messages.notext); // resolve with the no text message if the client says nothing.
 
     const id = this.uid(); // generate a unique id for transport.
     this.zone('question', id.uid);
