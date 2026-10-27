@@ -67,7 +67,9 @@ class Deva {
     this._uid = config.uid; // set the uid options
 
     this._events = config.events; // set the core system events
-    this._bound = new Map();
+    this._bound = new Map(); // evt -> wrapper registered on the shared bus
+    this._pending = new Set(); // pending asks: {evt, handler, timer}
+    
     this._feature = config.feature; // set the feature from config data.
     this._features = config.features; // set the features from config data.
 
@@ -210,6 +212,22 @@ class Deva {
     return this._clearPending(); // pending asks go in the same pass
   }
 
+  /**************
+  func: _clearPending
+  params: none
+  describe:
+    Clears the timer and removes the listener for every pending ask so a
+    shutdown leaves nothing behind on the shared event bus.
+  ***************/
+  _clearPending() {
+    if (!this._pending) return;
+    for (const pending of this._pending) {
+      clearTimeout(pending.timer);
+      if (this.events) this.ignore(pending.evt, pending.handler);
+    }
+    this._pending.clear();
+  }
+  
   // Some elements will inherit the data of the parent. this object will loop over
   // any children data that this deva has and assign the inherited information.
   /**************
