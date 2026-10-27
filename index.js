@@ -860,14 +860,51 @@ class Deva {
           this.action('ask', `${key}:${id.uid}`);
           this.intent('good', `ask:${key}:${id.uid}`);
           this.once(`${key}:ask:${packet.id.uid}`, answer => {
-            this.action('talk', `${this._events.ask}:${id.uid}`);
-            this.intent('good', `${this._events.ask}:${id.uid}`);
-            this.talk(this._events.ask, this.lib.copy(answer));
-            this.action('return', `finish:${key}:ask:${id.uid}`);
-            this.intent('good', `finish:${method}:${id.uid}`);
-            return this.finish(answer, resolve); // if:isAsk resolve the answer from the call
+            const evt = `${key}:ask:${packet.id.uid}`; // the once event keyed to this packet.
+            const pending = {evt, handler: false, timer: false}; // tracked so shutdown can clean up.
+            
+            // single place to release the listener, the timer, and the pending record.
+            const release = () => {
+              clearTimeout(pending.timer);
+              this._pending.delete(pending);
+              if (this.events) this.ignore(evt, pending.handler);
+            };
+            
+            pending.handler = answer => {
+              clearTimeout(pending.timer); // an answer arrived so cancel the timeout.
+              this._pending.delete(pending);
+              this.action('talk', `${this._events.ask}:${id.uid}`);
+              this.intent('good', `${this._events.ask}:${id.uid}`);
+              this.talk(this._events.ask, this.lib.copy(answer));
+              this.action('return', `finish:${key}:ask:${id.uid}`);
+              this.intent('good', `finish:${method}:${id.uid}`);
+              return this.finish(answer, resolve); // if:isAsk resolve the answer from the call
+            };
+
+            this._pending.add(pending);
+            this.once(evt, pending.handler);
+
+            // timeout so a silent Deva cannot hang the caller. 0 disables it.
+            const wait = this._config.timeout.ask;
+            if (wait > 0) {
+              pending.timer = setTimeout(() => {
+                if (!this._active) return; // shutdown already cleaned up.
+                release();
+                this.state('abort', `${key}:${method}:${id.uid}`);
+                this.intent('bad', `ask:${key}:${id.uid}`);
+                return resolve(this._messages.asktimeout);
+              }, wait);
+            }
+            
+            // talk returns false when nobody is listening so fail fast instead of waiting.
+            const heard = this.talk(`${key}:ask`, this.lib.copy(packet));
+            if (!heard) {
+              release();
+              this.state('invalid', `${key}:${method}:${id.uid}`);
+              this.intent('bad', `ask:${key}:${id.uid}`);
+              return resolve(this._messages.noask);
+            }
           });
-          this.talk(`${key}:ask`, this.lib.copy(packet));
         }
         else { // else: answer the question locally
           this.state('answer', `${method}:${id.uid}`); //set the answer state to the method
