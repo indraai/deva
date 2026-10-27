@@ -1106,7 +1106,12 @@ class Deva {
         text: this._messages.init,
         created: Date.now(),
       }
- 
+
+        // set the core hashes 
+      this._core.md5 = this.hash(this._core, 'md5'); // md5 the core and created. 
+      this._core.sha256 = this.hash(this._core, 'sha256'); // sha256 the core, created, md5
+      this._core.sha512 = this.hash(this._core, 'sha512'); // sha512 the core, created, md5, sha256.
+       
       this.action('hash', `start:md5:${data.id.uid}`);
       data.md5 = this.hash(data, 'md5');
  
@@ -1180,6 +1185,7 @@ class Deva {
         this.action('return', `init:${data.id.uid}`);
         this.state('valid', `init:${data.id.uid}`); // state set to watch onInit
         this.intent('good', `init:${data.id.uid}`); // state set to watch onInit
+        
         return this.start(data, resolve);
       }).catch(err => {
         this.state('catch', `init:${data.id.uid}`);
@@ -2162,7 +2168,15 @@ class Deva {
     - reject: An associated promise reject if the caller requires.
   describe:
     The err function provides the consistent error manage of the system.
+  
+    If the agent defines an onError function, err hands it (err, packet, reject)
+    and returns its result. In that case the agent owns the outcome: onError must
+    call reject to fail the caller's promise, or the promise will stay pending.
+    If there is no onError function, err calls reject(err) itself.
+  
   usage: this.err(err, data, reject);
+  
+  
   ***************/
   err(err,packet,reject=false) {
     const id = this.uid();
@@ -2247,7 +2261,7 @@ class Deva {
     const {profile} = agent;
     const machine = this.machine(); // get the machine hash
 
-    const core_hash = this.hash(this._core, 'sha256');
+    const core_hash = this._core.sha256; // get the core sha256 hash
     
     const warning = this._agent.profile.warning || this._messages.warning; // agent or default warning
     const notice = this._agent.profile.notice || this._messages.notice; // agent or default notice
