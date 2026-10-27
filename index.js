@@ -734,9 +734,11 @@ class Deva {
   describe:
   ***************/
   question(TEXT=false, DATA=false) {
-    const id = this.uid(); // generate a unique id for transport.
     // check the active status
     if (!this._active) return Promise.resolve(this._messages.offline);
+    if (!TEXT) return Promise.resolve(this._messages.notext);
+
+    const id = this.uid(); // generate a unique id for transport.
     this.zone('question', id.uid);
     this.action('question', id.uid);
     const t_split = TEXT.split(' '); // split the text on spaces to get words.
@@ -763,7 +765,6 @@ class Deva {
 
     return new Promise((resolve, reject) => {
       // resolve with the no text message if the client says nothing.
-      if (!TEXT) return resolve(this._messages.notext, resolve);
       this.state('try', `${method}:${id.uid}`);
       try { // try to answer the question
         if (isAsk) { // determine if hte question isAsk
