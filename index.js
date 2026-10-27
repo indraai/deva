@@ -1085,6 +1085,10 @@ class Deva {
   init(client) {
     // set client
     return new Promise((resolve, reject) => {
+      // set the core hashes 
+      this._core.md5 = this.hash(this._core, 'md5'); // md5 the core and created. 
+      this._core.sha256 = this.hash(this._core, 'sha256'); // sha256 the core, created, md5
+      this._core.sha512 = this.hash(this._core, 'sha512'); // sha512 the core, created, md5, sha256.
       
       const license_check = this.license_check(client.VLA, this._core.VLA);
       if (!license_check) {
@@ -1107,10 +1111,6 @@ class Deva {
         created: Date.now(),
       }
 
-        // set the core hashes 
-      this._core.md5 = this.hash(this._core, 'md5'); // md5 the core and created. 
-      this._core.sha256 = this.hash(this._core, 'sha256'); // sha256 the core, created, md5
-      this._core.sha512 = this.hash(this._core, 'sha512'); // sha512 the core, created, md5, sha256.
        
       this.action('hash', `start:md5:${data.id.uid}`);
       data.md5 = this.hash(data, 'md5');
