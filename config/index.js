@@ -134,7 +134,7 @@ export default {
 				'_security',
 				'_guard',
 				'_defense',
-				'_sheild',
+				'_shield',
 				'_wall',
 				'_proxy',
 				'_support',
