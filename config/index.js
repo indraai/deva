@@ -17,6 +17,9 @@ import msgs from './msgs.json' with {type:'json'};
 export default {
 	cmdChr: '/',
 	askChr: '#',
+	timeout: {
+		ask: 30000
+	},
 	container: {
 		begin: '::BEGIN',
 		end: '::END',
