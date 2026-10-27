@@ -19,7 +19,7 @@ class Deva {
     this._info = opts.info || false; // the deva information from the package file.
     this._config = opts.config || {}; // local Config Object
     this._config.ready_hash = config.ready_hash; // items to hash at ready
-    this._config.timeout = config.timeout; // add timeout values to _config.
+    if (!opts.config.timeout) this._config.timeout = config.timeout; // add timeout values to _config.
     
     this._agent = opts.agent || false; // Agent profile object
     this._client = {}; // this will be set on init.
