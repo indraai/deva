@@ -2161,16 +2161,9 @@ class Deva {
     const data = this.lib.copy(this._info);
     data.created = Date.now();
     
-    this.action('hash', `info:md5:${data.id}`);    
-    data.md5 = this.hash(data, 'md5');
-    this.action('hash', `info:sha256:${data.id}`);    
-    data.sha256 = this.hash(data, 'sha256');
-    this.action('hash', `info:sha512:${data.id}`);    
-    data.sha512 = this.hash(data, 'sha512');
-
     this.action('return', `info:${data.id}`);
     this.intent('good', `info:${data.id}`);
-    return data;
+    return this._stamp(data, 'info', data.id);
   }
 
   /**************
