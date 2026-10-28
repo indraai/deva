@@ -20,6 +20,7 @@ export default {
 	timeout: {
 		ask: 30000
 	},
+	hashes: ['md5', 'sha256', 'sha512'],
 	container: {
 		begin: '::BEGIN',
 		end: '::END',

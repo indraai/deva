@@ -18,6 +18,7 @@ class Deva {
     this._id = opts.id || randomUUID(); // the unique id assigned to the agent at load
     this._info = opts.info || false; // the deva information from the package file.
     this._config = opts.config || {}; // local Config Object
+    this._config.hashes = config.hashes; // set hashes array from config for stamping.
     this._config.ready_hash = config.ready_hash; // items to hash at ready
     this._config.timeout = {...config.timeout, ...this._config.timeout}; // add timeout values to _config.
     
@@ -405,6 +406,34 @@ class Deva {
     return next_key ? this[next_key](data, resolve) : resolve(data);
   }
   
+  /**************
+  func: _stamp
+  params:
+  - data: the data to stamp
+  - label: the label for the hash action.
+  describe: the stamp function will take a data object and apply the hashes from the this._hashes array.
+  usage: this._stamp(data, 'value')
+  ***************/
+  _stamp(data, label='', uid='') {
+    for (const algo of this._hashes) {
+      if (label) this.action('hash', `${label}:${algo}:${uid}`);
+      data[algo] = this.hash(data, algo);
+    }
+    return data;
+  }
+  
+  /**************
+  func: _unstamp
+  params:
+  - data: the data to unstamp
+  describe: the unstamp function will take a data object and remove the hashes over the this._hashes array.
+  usage: this._unstamp(data)
+  ***************/
+  _unstamp(data) {
+    for (const algo of this._hashes) delete data[algo];
+    return data;
+  }  
+
   /**************
   func: Client
   params: client - client provided data.
@@ -845,8 +874,9 @@ class Deva {
           created: Date.now(), // timestamp the question
         }
 
-        // hash the question
-
+        // stamp the question
+        
+        packet.q = this._stamp(packet.q, method, id.uid);
         this.action('hash', `${method}:md5:${id.uid}`);
         packet.q.md5 = this.hash(packet.q, 'md5');
         
