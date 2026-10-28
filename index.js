@@ -1571,12 +1571,10 @@ class Deva {
         created: Date.now(),
       };
   
-      data.md5 = this.hash(data, 'md5');
-      data.sha256 = this.hash(data, 'sha256');
-      data.sha512 = this.hash(data, 'sha512');
-  
-      this.talk(this._events.context, this.lib.copy(data));
-      return data;
+      const data_stamped = this._stamp(data, `context`, id.uid);
+      
+      this.talk(this._events.context, this.lib.copy(data_stamped));
+      return data_stamped;
     } catch (e) {
       this.state('catch', `context:${value}:${id.uid}`);
       return this.err(e, value);
@@ -1599,15 +1597,8 @@ class Deva {
       created: Date.now(),      
     };
   
-    this.action('hash', `${data.key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5');
-    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
-    data.sha256 = this.hash(data, 'sha256');    
-    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
-    data.sha512 = this.hash(data, 'sha512');
-  
-    this.state('return', `${data.key}:${id.uid}`);
-    return data;
+    this.state('return', `${key}:${id.uid}`);
+    return this._stamp(data, key, id.uid);
   }
 
   /**************
@@ -1752,11 +1743,12 @@ class Deva {
         client: this.client(), // set the client
         created: Date.now(), // set the data created date.
       };
-  
+
+      // manual hashing to avoid _stamp conflict at load.
       data.md5 = this.hash(data, 'md5');
       data.sha256 = this.hash(data, 'sha256');
       data.sha512 = this.hash(data, 'sha512');
-  
+
       this.talk(this._events[key], this.lib.copy(data)); // broadcast the state event
       return data;
     } catch (e) { // catch any errors
@@ -1785,15 +1777,8 @@ class Deva {
       created: Date.now(),      
     }
   
-    this.action('hash', `${data.key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5');
-    this.action('hash', `${data.key}:sha256:${data.id.uid}`);
-    data.sha256 = this.hash(data, 'sha256');    
-    this.action('hash', `${data.key}:sha512:${data.id.uid}`);
-    data.sha512 = this.hash(data, 'sha512');
-  
     this.action('return', `${data.key}:${id.uid}`);
-    return data;
+    return this._stamp(data, data.key, id.uid);
   }
 
   /**************
@@ -1805,6 +1790,7 @@ class Deva {
   client() {
     if (!this._active) return this._messages.offline; // check the active status
     const data = this.lib.copy(this._client); // create a copy of the client data        
+    // manual hashing here to prevent stack overflow with this._stamp.
     data.md5 = this.hash(data, 'md5');
     data.sha256 = this.hash(data, 'sha256');
     data.sha512 = this.hash(data, 'sha512');
@@ -1820,6 +1806,7 @@ class Deva {
   agent() {
     if (!this._active) return this._messages.offline; // check the active status
     const data = this.lib.copy(this._agent); // create a copy of the agent data.
+    // manual hashing here to prevent stack overflow with this._stamp.
     data.md5 = this.hash(data, 'md5');
     data.sha256 = this.hash(data, 'sha256');
     data.sha512 = this.hash(data, 'sha512');
@@ -2086,7 +2073,7 @@ class Deva {
     }
     
     // stamp the data
-    const data_stamped = this._stamp(data, 'prompt', data.id.uid);
+    const data_stamped = this._stamp(data, `${key}:${value}`, data.id.uid);
     
     // talk the prompt event to anyone listening
     this.action('talk', `${key}:${value}:${id.uid}`);
