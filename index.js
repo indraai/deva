@@ -2085,20 +2085,15 @@ class Deva {
       created: Date.now(),
     }
     
-    this.action('hash', `${key}:${value}:md5:${data.id.uid}`);    
-    data.md5 = this.hash(data, 'md5'); // md5 the data packet
-
-    this.action('hash', `${key}:${value}:sha256:${data.id.uid}`);
-    data.sha256 = this.hash(data, 'sha256'); // sha256 the data packet
-
-    this.action('hash', `${key}:${value}:sha512:${data.id.uid}`);
-    data.sha512 = this.hash(data, 'sha512'); // sha512 the data packet
+    // stamp the data
+    const data_stamped = this._stamp(data, 'prompt', data.id.uid);
     
+    // talk the prompt event to anyone listening
     this.action('talk', `${key}:${value}:${id.uid}`);
-    this.talk(this._events.prompt, data);
+    this.talk(this._events.prompt, data_stamped);
     
     this.action('return', `${key}:${value}:${id.uid}`);
-    return data;
+    return data_stamped;
   }
 
   /**************
