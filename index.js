@@ -411,11 +411,11 @@ class Deva {
   params:
   - data: the data to stamp
   - label: the label for the hash action.
-  describe: the stamp function will take a data object and apply the hashes from the this._hashes array.
+  describe: the stamp function will take a data object and apply the hashes from the this._config.hashes array.
   usage: this._stamp(data, 'value')
   ***************/
   _stamp(data, label='', uid='') {
-    for (const algo of this._hashes) {
+    for (const algo of this._config.hashes) {
       if (label) this.action('hash', `${label}:${algo}:${uid}`);
       data[algo] = this.hash(data, algo);
     }
@@ -430,7 +430,7 @@ class Deva {
   usage: this._unstamp(data)
   ***************/
   _unstamp(data) {
-    for (const algo of this._hashes) delete data[algo];
+    for (const algo of this._config.hashes) delete data[algo];
     return data;
   }  
 
