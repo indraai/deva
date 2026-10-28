@@ -875,16 +875,7 @@ class Deva {
         }
 
         // stamp the question
-        
         packet.q = this._stamp(packet.q, method, id.uid);
-        this.action('hash', `${method}:md5:${id.uid}`);
-        packet.q.md5 = this.hash(packet.q, 'md5');
-        
-        this.action('hash', `${method}:sha256:${id.uid}`)
-        packet.q.sha256 = this.hash(packet.q, 'sha256');
-        
-        this.action('hash', `${method}:sha512:${id.uid}`)
-        packet.q.sha512 = this.hash(packet.q, 'sha512');
 
         this.action('talk', `${this._events.question}:${id.uid}`);
         this.intent('good', `${this._events.question}:${id.uid}`);
