@@ -2499,18 +2499,9 @@ class Deva {
       copyright,
     };
     
-    this.action('hash', `${data.key}:sign:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5'); // hash data packet into md5 and inert into data.
-    
-    this.action('hash', `${data.key}:sign:sha256:${data.id.uid}`);
-    data.sha256 = this.hash(data, 'sha256'); // hash data into sha 256 then set in data.
-    
-    this.action('hash', `${data.key}:sign:sha512:${data.id.uid}`);
-    data.sha512 = this.hash(data, 'sha512'); // hash data into sha 512 then set in data.
-
     this.action('return', `${data.key}:sign:${data.id.uid}`);
     this.intent('good', `${data.key}:sign:${data.id.uid}`);
-    return data;
+    return this._stamp(data, 'sign', data.id.uid);
   }
 
   /**************
@@ -2550,13 +2541,10 @@ class Deva {
       personal: personalVLA_hash,
       package: packageVLA_hash,
     };
-    approved.md5 = this.hash(approved, 'md5');
-    approved.sha256 = this.hash(approved, 'sha256');
-    approved.sha512 = this.hash(approved, 'sha512');
 
     this.state('return', `license:${packageVLA.uid}`);
     this.intent('good', `license:${packageVLA.uid}`);
-    return approved;
+    return this._stamp(approved, 'license_check', packageVLA.uid);
   }
 
   /**************
