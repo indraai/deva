@@ -348,7 +348,7 @@ class Deva {
     this.state('data', `${key}:date:${data.id.uid}`);
     data[key] = Date.now();// set the complete date on the whole data.
   
-    const data_stamped = this._stamp(this._unstamp(data), `invoke:${key}`, data.id.uid);  
+    const data_stamped = this._stamp(this._unstamp(data), key, data.id.uid);  
   
     // setup the complete talk event
     this.action('talk', `${this._events[key]}:${data.id.uid}`); // action talk for the event.
@@ -403,7 +403,10 @@ class Deva {
   usage: this._unstamp(data)
   ***************/
   _unstamp(data) {
-    for (const algo of this._config.hashes) delete data[algo];
+    for (const algo of this._config.hashes) {
+      if this.action('delete', `delete:${algo}`);
+      delete data[algo]
+    };
     return data;
   }  
 
