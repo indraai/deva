@@ -1087,13 +1087,13 @@ class Deva {
           this.state('set', `${key}:${method}:${sub_key}:result:${packet.id.uid}`);
           packet_answer.text = result;
         }
-        const packet_answer_stamp = this._stamp(packet_answer, `${key}:${method}:${sub_key}`, packet.id.uid);
+        
+        // stamp the packet_answer and set it into packet.a.
+        this.state('set', `${key}:${method}:packet:a:${packet.id.uid}`);
+        packet.a = this._stamp(packet_answer, `${key}:${method}:packet:a`, packet.id.uid); // set the packet answer.
 
         this.state('set', `${key}:${method}:packet:q:agent:${packet.id.uid}`);
         packet.q.agent = agent; // set the question agent as the ask agent.
-
-        this.state('set', `${key}:${method}:packet:a:${packet.id.uid}`);
-        packet.a = this._stamp(packet_answer, `${key}:${method}:packet:a`, packet.id.uid); // set the packet answer.
                 
         // create new hashes for the packet before return.
         const packet_stamped = this._stamp(this._unstamp(packet), `${key}:${method}:packet`, packet.id.uid);
