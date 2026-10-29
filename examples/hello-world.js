@@ -5,9 +5,9 @@
 // Distributed under VLA:23221940810208468106 LICENSE.md  
 // Friday, October 9, 2026 - 7:47:02 AM PST
 
-import Client from './client.json' with {type:'json'};
+import Client from '../tests/client.json' with {type:'json'};
 const client = Client.DATA;
-import Agent from './agent.json' with {type:'json'};
+import Agent from '../tests/agent.json' with {type:'json'};
 const agent = Agent.DATA;
 
 import Deva from '../index.js';
