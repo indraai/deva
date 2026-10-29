@@ -1223,20 +1223,19 @@ class Deva {
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
         if (hasOnInit) {
-          this.action('onfunc', `hasOnInit:${data.id.uid}`); // state set to watch onInit
-          this.state('onfunc', `hasOnInit:${data.id.uid}`); // state set to watch onInit
-          this.intent('good', `onInit:${data.id.uid}`); // state set to watch onInit
-          this.action('return', `onInit:${data.id.uid}`);
+          this.action('onfunc', `onInit:${data.id.uid}`); // action set to onfunc
+          this.state('onfunc', `onInit:${data.id.uid}`); // state set to onfunc
+          this.intent('good', `onInit:${data.id.uid}`); // intent set to good
+          this.action('return', `onInit:${data.id.uid}`); // action set to return
           return this.onInit(data, resolve);
         }
-        this.action('return', `init:${data.id.uid}`);
-        this.state('valid', `init:${data.id.uid}`); // state set to watch onInit
-        this.intent('good', `init:${data.id.uid}`); // state set to watch onInit
-        
+        this.action('return', `init:${data.id.uid}`); // action set to return
+        this.state('valid', `init:${data.id.uid}`); // state set to valid
+        this.intent('good', `init:${data.id.uid}`); // intent set to good
         return this.start(data, resolve);
       }).catch(err => {
-        this.state('catch', `init:${data.id.uid}`);
-        this.intent('bad', `init:${data.id.uid}`); // state set to watch onInit
+        this.state('catch', `init:${data.id.uid}`); // state set to catch
+        this.intent('bad', `init:${data.id.uid}`); // intent set to bad
         return this.err(err, client, reject);
       });
     });
@@ -1281,10 +1280,10 @@ class Deva {
   /**************
   func: done
   params:
-  - data: hte message from the caller incase need to use in calls
+  - data: the message from the caller incase need to use in calls
   describe:
     When the done function is triggered the system will also set the state
-    of hte Deva to done.
+    of the Deva to done.
 
     If the deva is offline it will return the offline message.
   usage: this.done('msg')
@@ -1322,26 +1321,27 @@ class Deva {
       }
     }
     
-    const key_len = Object.keys(this.devas).length
-    let x = 1;
+    const key_len = Object.keys(this.devas).length // check the key length for looping
+    let x = 1; // let x equal one for iteration.
     if (this.devas && key_len) {
-      this.state('loop', `${key}:devas:${data.id.uid}`);
+      this.state('loop', `${key}:devas:${data.id.uid}`); // set the state to loop
       for (let deva in this.devas) {
+          // load the deva with client data
           await this.load(deva, data.client).then(async entity => {
-            const id = this.uid();
-            const {dir} = this.devas[deva].info();
-            const deva_agent = this.devas[deva].agent();
-            this.talk(`deva:dir`, {id, key:deva_agent.key, dir});
+            const id = this.uid(); // generate a new uid
+            const {dir} = this.devas[deva].info(); // get the base directory for the Deva from the info()
+            const deva_agent = this.devas[deva].agent(); // get the agent data from the deva.
+            this.talk(`deva:dir`, {id, key:deva_agent.key, dir}); // talk the deva dir event to setup tracking the Deva directories
             if (x === key_len) {
               setImmediate(() => {
-                return this._invoke({key,data,resolve});                     
+                return this._invoke({key,data,resolve}); // invoke the deva with the proper key, data, and resolve.
               });
             }
-            x = x + 1;
+            x = x + 1; // increment the iterator for key_len matching
         });
       }
     }
-    else return this._invoke({key,data,resolve});              
+    else return this._invoke({key,data,resolve}); // else run the key invoke.
   }
   
   /**************

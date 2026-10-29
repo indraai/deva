@@ -1,6 +1,6 @@
 # Deva Core
 
-**`@indra.ai/deva` · v1.60.2**
+**`@indra.ai/deva`**
 
 Deva Core is a Vedic-inspired, event-based, context-aware Feature, Zone, Action and State machine framework for building integrated artificial intelligence agents ("Devas") in Node.js. Every Deva is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it broadcasts each step as an event. Every packet it builds is stamped with cumulative md5, sha256 and sha512 hashes.
 
@@ -77,7 +77,7 @@ const hello = new Deva({
 hello.init(client);
 ```
 
-Run it with `node hello.mjs` and it prints `hello world`. This sample was run against v1.60.2.
+Run it with `node examples/hello-world.js` and it prints `hello world`.
 
 Three things to know from this example:
 
