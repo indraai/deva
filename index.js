@@ -402,9 +402,9 @@ class Deva {
   describe: the unstamp function will take a data object and remove the hashes over the this._hashes array.
   usage: this._unstamp(data)
   ***************/
-  _unstamp(data) {
+  _unstamp(data, id=false) {
     for (const algo of this._config.hashes) {
-      this.action('delete', algo);
+      this.action('delete', `${algo}:${data.id.uid}`);
       delete data[algo]
     };
     return data;
@@ -1711,7 +1711,7 @@ class Deva {
     if (!this._active) return this._messages.offline;
     const id = this.uid(); // set the current uid
     this.action(key, id.uid); // set the action to the passed key
-    const value = this[_key]; // get the _keys value 
+    const value = this[key]; // get the _keys value 
     // set the data packet for the states
     this.state('data', `${key}:${id.uid}`);
     const data = {
