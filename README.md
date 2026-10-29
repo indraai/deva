@@ -1,5 +1,7 @@
 # Deva Core
 
+[![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva)
+
 **`@indra.ai/deva`**
 
 Deva Core is a Vedic-inspired, event-based, context-aware Feature, Zone, Action and State machine framework for building integrated artificial intelligence agents ("Devas") in Node.js. Every Deva is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it broadcasts each step as an event. Every packet it builds is stamped with cumulative md5, sha256 and sha512 hashes.
@@ -214,7 +216,7 @@ A few spots (`init`, `_workflow`, `client()`, `agent()`, `machine()`, `uid()`) h
 
 Each call to `feature()`, `zone()`, `action()`, `state()`, `intent()` or `belief()` takes `(value, extra)`. If `value` exists in the matching list, it sets the current value, emits a hashed `devacore:<key>` event with `text` = the list's label plus `extra`, and returns that data. Unknown values are ignored silently. `context(value, extra)` does the same, using `vars.context` for the label, and accepts any value.
 
-The plural methods return a stamped object whose `value` is the full list. Counts at v1.60.2, with no agent additions:
+The plural methods return a stamped object whose `value` is the full list:
 
 | List | Method | Default | Count | Source |
 |---|---|---|---|---|
