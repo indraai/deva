@@ -344,28 +344,12 @@ class Deva {
     this.zone(key, data.id.uid);
     this.action(key, data.id.uid);
     this.state(key, data.id.uid);
-  
-    this.action('delete', `${key}:md5:${data.id.uid}`);
-    delete data.md5;
-    
-    this.action('delete', `${key}:sha256:${data.id.uid}`);
-    delete data.sha256;
-  
-    this.action('delete', `${key}:sha512:${data.id.uid}`);
-    delete data.sha512;
-  
+
     this.state('data', `${key}:date:${data.id.uid}`);
     data[key] = Date.now();// set the complete date on the whole data.
   
-    this.action('hash', `${key}:md5:${data.id.uid}`);
-    data.md5 = this.hash(data, 'md5');
+    const data_stamped = this._stamp(this._unstamp(data), `invoke:${key}`, data.id.uid);  
   
-    this.action('hash', `${key}:sha256:${data.id.uid}`)
-    data.sha256 = this.hash(data, 'sha256');
-  
-    this.action('hash', `${key}:sha512:${data.id.uid}`)
-    data.sha512 = this.hash(data, 'sha512');
-        
     // setup the complete talk event
     this.action('talk', `${this._events[key]}:${data.id.uid}`); // action talk for the event.
     this.talk(this._events[key], this.lib.copy(data)); // talk the complete event
