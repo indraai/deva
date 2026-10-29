@@ -403,8 +403,9 @@ class Deva {
   usage: this._unstamp(data)
   ***************/
   _unstamp(data) {
+    const id = data.id?.uid || this._messages.noid; // check for proper id in the data.
     for (const algo of this._config.hashes) {
-      this.action('delete', `${algo}:${data.id.uid}`);
+      this.action('delete', `${algo}:${id}`);
       delete data[algo]
     };
     return data;
