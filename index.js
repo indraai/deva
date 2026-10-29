@@ -404,7 +404,7 @@ class Deva {
   ***************/
   _unstamp(data) {
     for (const algo of this._config.hashes) {
-      this.action('delete', `delete:${algo}`);
+      this.action('delete', algo);
       delete data[algo]
     };
     return data;
