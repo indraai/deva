@@ -1603,7 +1603,7 @@ class Deva {
   describe: Returns a list of available actions in the system.
   ***************/
   actions() {
-    this._workflowItems('actions');
+    return this._workflowItems('actions');
   }
 
   /**************
