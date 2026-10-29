@@ -998,18 +998,8 @@ class Deva {
           data, // set the answer data
           created: Date.now(), // set the created date for the answer
         };
-        // create a hash for the answer and insert into answer meta.
-        this.action('hash', `${key}:${method}:${subkey}:md5:${id.uid}`);
-        packet_answer.md5 = this.hash(packet_answer, 'md5');
-
-        this.action('hash', `${key}:${method}:${subkey}:sha256:${id.uid}`);
-        packet_answer.sha256 = this.hash(packet_answer, 'sha256');
-
-        this.action('hash', `${key}:${method}:${subkey}:sha512:${id.uid}`);
-        packet_answer.sha512 = this.hash(packet_answer, 'sha512');
-
-        this.state('set', `${key}:${method}:${subkey}:${id.uid}`);
-        packet.a = packet_answer; // set the packet.a to the packet_answer
+        // stamp the packet_answer into packet.a
+        packet.a = this._stamp(packet_answer, `${key}:${method}:${subkey}`, id.uid); // set the packet.a to the packet_answer
 
         this.action('talk', `${this._events.answer}:${id.uid}`);
         this.talk(this._events.answer, this.lib.copy(packet)); // global talk event
@@ -1103,7 +1093,7 @@ class Deva {
         packet.q.agent = agent; // set the question agent as the ask agent.
 
         this.state('set', `${key}:${method}:packet:a:${packet.id.uid}`);
-        packet.a = packet_answer; // set the packet answer.
+        packet.a = this._stamp(packet_answer, `${key}:${method}:packet:a`, packet.id.uid); // set the packet answer.
                 
         // create new hashes for the packet before return.
         const packet_stamped = this._stamp(this._unstamp(packet), `${key}:${method}:packet`, packet.id.uid);
@@ -1111,7 +1101,7 @@ class Deva {
         this.action('talk', `${this._events.answer}:${key}:${method}:${packet.id.uid}`);
         this.state('valid', `${this._events.answer}:${key}:${method}:${packet.id.uid}`);
         this.intent('good', `${this._events.answer}:${key}:${method}:${packet.id.uid}`);
-        this.talk(this._events.answer, this.lib.copy(packet)); // global talk event
+        this.talk(this._events.answer, this.lib.copy(packet_stamped)); // global talk event
 
         this.action('talk', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.state('valid', `${agent.key}:${key}:${method}:${packet.id.uid}`);
