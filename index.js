@@ -1122,7 +1122,7 @@ class Deva {
         this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.talk(`${agent.key}:${key}:${method}:${packet.id.uid}`, {error:err});
-        return this.err(err, packet_stamped);
+        return this.err(err, packet);
       })
     }
     catch (e) {
