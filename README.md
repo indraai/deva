@@ -95,7 +95,7 @@ Three things to know from this example:
 |---|---|
 | `id` | Instance id. Defaults to `randomUUID()`. |
 | `info` | Package-style info object (`id`, `name`, `version`, `dir`, `VLA`, ...). Returned by `info()`. `info.VLA.uid` goes into every `uid()`. |
-| `agent` | The agent profile: `id`, `key` (the Deva's name on the bus), `prompt`, `profile` (`name`, and optional `warning`, `notice`, `copyright`, `status`, `vectors`, `owner`, `creator`, `salute`). It can also carry custom `zones`, `actions`, `intents`, `beliefs` and `messages`, which are merged in without overwriting the core ones. |
+| `agent` | The agent profile: `id`, `key` (the Deva's name on the bus), `prompt`, `profile` (`name`, and optional `warning`, `notice`, `copyright`, `status`, `vectors`, `owner`, `creator`, `salute`). It can also carry custom `zones`, `actions`, `states`, `intents`, `beliefs` and `messages`, which are merged in without overwriting the core ones (keys already in config win), and then removed from the agent object. |
 | `config` | Local config. Needs a `hash` object. Can set `timeout.ask` in ms (default `30000`, `0` disables it). |
 | `vars` | Free-form variables on `this.vars`. `vars.context` maps context keys to display text. |
 | `utils`, `func` | Your helper functions. Bound to the Deva at `init`. |
