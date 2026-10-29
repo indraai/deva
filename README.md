@@ -205,7 +205,9 @@ Deva Core hashes in three tiers, in the order `config.hashes = ['md5', 'sha256',
 The tiers are **cumulative by design**. Each hash is taken over the object *including the hashes before it*, so sha256 covers md5, and sha512 covers both. Hashes are base64 digests of `JSON.stringify(data)` (see `hash(data, algo)`).
 
 - `_stamp(data, label='', uid='')` adds the three hashes in order and returns the same object. When a label is given, it logs a `hash` action per tier (`<label>:<algo>:<uid>`).
-- `_unstamp(data)` removes them, logging a `delete` action per tier with `data.id.uid`, or `⛔️ NO ID PROVIDED` if there is none.
+
+- `_unstamp(data)` removes them, logging a `delete` action per tier as `<algo>:<uid>` using `data.id?.uid`. If the data has no `id` or the `id` has no `uid`, it uses `this._messages.noid` (`⛔️ NO ID PROVIDED`) instead of throwing.
+
 - To re-stamp after a change, `_stamp(_unstamp(data), label, uid)`. Since the tiers are cumulative, stamping twice without unstamping would change the values.
 
 The return path in Core methods is: the `return` action, then the `good` intent, then `_stamp`.
@@ -236,8 +238,6 @@ All core events are listed in `config/events.json` (25). The ones you'll usually
 
 `devacore:prompt`, `devacore:error`, `devacore:question`, `devacore:answer`, `devacore:ask`, `devacore:start`, `devacore:enter`, `devacore:done`, `devacore:ready`, `devacore:finish`, `devacore:complete`, `devacore:stop`, `devacore:exit`, `devacore:shutdown`, `devacore:context`, `devacore:feature`, `devacore:zone`, `devacore:action`, `devacore:state`, `devacore:intent`, `devacore:belief`, `devacore:load`, `devacore:unload`.
 
-Note: at v1.60.2 `close` is mapped to `devacore:leave`, so the close step emits `devacore:leave` too.
-
 ## Error handling
 
 `err(err, packet, reject)` is the single error path. It sets the `bad` intent and the `error` context, feature, zone, action and state. It emits a stamped `devacore:error` packet carrying `error: {name, message, stack}` and the related packet. Then:
@@ -267,11 +267,9 @@ npm test
 
 This runs `node tests` (`tests/index.js`), which builds a Deva from `tests/agent.json` and `tests/client.json`, runs it through the lifecycle and a self-test method, and prints the log. **It passes as long as nothing throws. There are no assertions yet.** Real assertion tests are planned.
 
-`examples/hello-world.js` is out of date at v1.60.2. It uses `require()`, so it fails under `"type": "module"`.
-
 ## Method reference
 
-These are the public methods whose behavior was checked against v1.60.2.
+These are the public methods.
 
 | Method | Returns | Notes |
 |---|---|---|
@@ -318,4 +316,4 @@ Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.
 - npm: https://www.npmjs.com/package/@indra.ai/deva
 - Homepage: https://indra.ai
 
-**Author:** Quinn Arjuna Michaels, Inside The Net, Inc. (quinn@indra.ai)
+**Author:** Quinn Arjuna America Michaels, Inside The Net, Inc. (quinn@indra.ai)
