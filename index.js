@@ -283,7 +283,7 @@ class Deva {
     const client = this.client() || false;
     const {meta, params} = packet.q;
     const text = `${this._messages.method_not_found} ${agent.key} ${meta.method}`
-    packet.a = {
+    const packet_answer = {
       id,
       agent,
       client,
@@ -294,8 +294,8 @@ class Deva {
       },
       created: Date.now(),
     };
-    
-    packet.a = this._stamp(packet.a); 
+    // set packet into packet.a after stamping it.
+    packet.a = this._stamp(packet_answer); 
     
     // stamp the packet before return
     const packet_stamped = this._stamp(this._unstamp(packet), `methodNotFound:${meta.method}`, packet.id.uid);    
