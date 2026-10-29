@@ -316,4 +316,4 @@ Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.
 - npm: https://www.npmjs.com/package/@indra.ai/deva
 - Homepage: https://indra.ai
 
-**Author:** Quinn Arjuna America Michaels, Inside The Net, Inc. (quinn@indra.ai)
+**Author:** Quinn Arjuna Michaels, Inside The Net, Inc. (quinn@indra.ai)
