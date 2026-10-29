@@ -295,21 +295,10 @@ class Deva {
       created: Date.now(),
     };
     
-    this.action('hash', `md5:${packet.a.id.uid}`);
-    packet.a.md5 = this.hash(packet.a, 'md5');
-    this.action('hash', `sha256:${packet.a.id.uid}`);
-    packet.a.sha256 = this.hash(packet.a, 'sha256');
-    this.action('hash', `sha512:${packet.a.id.uid}`);
-    packet.a.sha512 = this.hash(packet.a, 'sha512');
-
-    delete packet.md5;
-    delete packet.sha256;
-    delete packet.sha512;
+    packet.a = this._stamp(packet.a); 
     
-    packet.md5 = this.hash(packet, 'md5');
-    packet.sha256 = this.hash(packet, 'sha256');
-    packet.sha512 = this.hash(packet, 'sha512');
-    
+    // stamp the packet before return
+    const packet_stamped = this._stamp(this._unstamp(packet), `methodNotFound:${meta.method}`, packet.id.uid);    
     this.state('invalid', `${meta.method}:${packet.id.uid}`);
     return packet;
   }
@@ -1108,21 +1097,7 @@ class Deva {
           this.state('set', `${key}:${method}:${sub_key}:result:${packet.id.uid}`);
           packet_answer.text = result;
         }
-
-        // delete previous hashes before creating new ones.
-        this.action('delete', `${key}:${method}:packet:md5:${packet.id.uid}`);
-        delete packet.md5;
-        this.action('delete', `${key}:${method}:packet:sha256:${packet.id.uid}`);
-        delete packet.sha256;
-        this.action('delete', `${key}:${method}:packet:sha512:${packet.id.uid}`);
-        delete packet.sha512;
-        
-        this.action('hash', `${key}:${method}:${sub_key}:md5:${packet.id.uid}`);
-        packet_answer.md5 = this.hash(packet_answer, 'md5'); // md5 the answer.
-        this.action('hash', `${key}:${method}:${sub_key}:sha256:${packet.id.uid}`);
-        packet_answer.sha256 = this.hash(packet_answer, 'sha256'); // sha256 the answer.
-        this.action('hash', `${key}:${method}:${sub_key}:sha512:${packet.id.uid}`);
-        packet_answer.sha512 = this.hash(packet_answer, 'sha512'); // sha512 the answer
+        const packet_answer_stamp = this._stamp(packet_answer, `${key}:${method}:${sub_key}`, packet.id.uid);
 
         this.state('set', `${key}:${method}:packet:q:agent:${packet.id.uid}`);
         packet.q.agent = agent; // set the question agent as the ask agent.
@@ -1131,14 +1106,8 @@ class Deva {
         packet.a = packet_answer; // set the packet answer.
                 
         // create new hashes for the packet before return.
-        // delete previous hashes before creating new ones.
-        this.action('hash', `${key}:${method}:packet:md5:${packet.id.uid}`);
-        packet.md5 = this.hash(packet, 'md5');
-        this.action('hash', `${key}:${method}:packet:sha256:${packet.id.uid}`);
-        packet.sha256 = this.hash(packet, 'sha256');
-        this.action('hash', `${key}:${method}:packet:sha512:${packet.id.uid}`);
-        packet.sha512 = this.hash(packet, 'sha512');
-        
+        const packet_stamped = this._stamp(this._unstamp(packet), `${key}:${method}:packet`, packet.id.uid);
+                
         this.action('talk', `${this._events.answer}:${key}:${method}:${packet.id.uid}`);
         this.state('valid', `${this._events.answer}:${key}:${method}:${packet.id.uid}`);
         this.intent('good', `${this._events.answer}:${key}:${method}:${packet.id.uid}`);
@@ -1147,13 +1116,13 @@ class Deva {
         this.action('talk', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.state('valid', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.intent('good', `${agent.key}:${key}:${method}:${packet.id.uid}`);
-        this.talk(`${agent.key}:ask:${packet.id.uid}`, packet);
+        this.talk(`${agent.key}:ask:${packet.id.uid}`, packet_stamped);
       }).catch(err => {
         this.action('talk', `${agent.key}:${key}:${method}:err:${packet.id.uid}`);
         this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.talk(`${agent.key}:${key}:${method}:${packet.id.uid}`, {error:err});
-        return this.err(err, packet);
+        return this.err(err, packet_stamped);
       })
     }
     catch (e) {
@@ -2277,21 +2246,13 @@ class Deva {
       },
       packet,
       created: Date.now(),
-    }
-    
-    this.action('hash', `${data.key}:${data.value}:md5:${data.id.uid}`);    
-    data.md5 = this.hash(data, 'md5'); // md5 the data packet
-    
-    this.action('hash', `${data.key}:${data.value}:sha256:${data.id.uid}`);
-    data.sha256 = this.hash(data, 'sha256'); // sha256 the data packet
-    
-    
-    this.action('hash', `${data.key}:${data.value}:sha512:${data.id.uid}`);
-    data.sha512 = this.hash(data, 'sha512'); // sha512 the data packet
+    };
+    // stamp the data before return
+    const data_stamped = this._stamp(data, `${data.key}:${data.value}`, data.id.uid);
   
     // set the action to talk and emit the talk error.
     this.action('talk', `${this._events.error}:${data.id.uid}`);
-    this.talk(this._events.error, this.lib.copy(data));
+    this.talk(this._events.error, this.lib.copy(data_stamped));
   
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
     // if block handles returning the onError and setting the state to hasOnError
@@ -2390,6 +2351,7 @@ class Deva {
       const uid = `${begin_random}${end_random}`; // set uid to local constant
       data.uid = uid; // set base data object.
     }
+    // manual hashing to prevent overflow on stack calls.
     data.md5 = this.hash(data, 'md5'); // md5 the uid and created. 
     data.sha256 = this.hash(data, 'sha256'); // sha256 the uid, created, md5
     data.sha512 = this.hash(data, 'sha512'); // sha512 the uid, created, md5, sha256.
