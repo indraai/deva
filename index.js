@@ -1026,18 +1026,20 @@ class Deva {
   init(client) {
     // set client
     return new Promise((resolve, reject) => {
-      // set the core hashes 
+      // manually set the core hashes to avoid stack overflow from calls
+      // this is for the early core hashing needed for uid generation.
       this._core.md5 = this.hash(this._core, 'md5'); // md5 the core and created. 
       this._core.sha256 = this.hash(this._core, 'sha256'); // sha256 the core, created, md5
       this._core.sha512 = this.hash(this._core, 'sha512'); // sha512 the core, created, md5, sha256.
       
+      // do the core license check on init. 
       const license_check = this.license_check(client.VLA, this._core.VLA);
       if (!license_check) {
-        this.prompt(this._messages.client_license_invalid);
+        this.prompt(this._messages.client_license_invalid); // set license invalid prompt
         return resolve(this._messages.client_license_invalid); // return if} license check fails
       }
  
-      this._active = Date.now();
+      this._active = Date.now(); // after passes license check set _active date.
       const id = this.uid();
       const agent = this.agent();
       
@@ -1052,15 +1054,8 @@ class Deva {
         created: Date.now(),
       }
 
-       
-      this.action('hash', `start:md5:${data.id.uid}`);
-      data.md5 = this.hash(data, 'md5');
- 
-      this.action('hash', `start:sha256:${data.id.uid}`)
-      data.sha256 = this.hash(data, 'sha256');
- 
-      this.action('hash', `start:sha512:${data.id.uid}`)
-      data.sha512 = this.hash(data, 'sha512');
+      // stamp the init data
+      const data_stamped = this._stamp(data, 'init', data.id.uid); 
       
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -1110,7 +1105,7 @@ class Deva {
         this.action('return', `init:${data.id.uid}`); // action set to return
         this.state('valid', `init:${data.id.uid}`); // state set to valid
         this.intent('good', `init:${data.id.uid}`); // intent set to good
-        return this.start(data, resolve);
+        return this.start(data_stamped, resolve);
       }).catch(err => {
         this.state('catch', `init:${data.id.uid}`); // state set to catch
         this.intent('bad', `init:${data.id.uid}`); // intent set to bad
@@ -1195,6 +1190,7 @@ class Deva {
       if (this[item]) {
         const this_item = this[item];      
         this.action('hash', `${agent.key}:config:${item}:${data.id.uid}`);
+        // manually build hash for the config hash object for each agent key.
         this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
       }
     }
