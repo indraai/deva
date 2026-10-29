@@ -1660,7 +1660,7 @@ class Deva {
   describe: returns the available beliefs values.
   ***************/
   beliefs() {
-    return this._workflowItems('intents');
+    return this._workflowItems('beliefs');
   }
 
   /**************
