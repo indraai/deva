@@ -1,10 +1,9 @@
 {
   "name": "CLIENT",
   "describe": "CLIENT FILE",
-  "copyright": "Copyright ©2000-2026 Quinn Arjuna America Michaels. All rights reserved.",
-  "VLA": "64654724156459693416",
+  "copyright": "Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.",
   "DATA": {
-    "id": 3123155399059,
+    "id": "68537854653644795581",
     "key": "test",
     "VLA": {
       "uid": "23221940810208468106",
@@ -48,7 +47,9 @@
     },
     "profile": {
       "name": "Test User",
+      "fullname": "Test User Client Profile",
       "eamil": "test@example.com",
+      "company": "Inside The Net, Inc.",
       "describe": "The Test User",
       "emoji": "/public/devas/test/avatar.png",
       "avatar": "/public/devas/test/avatar.png",
@@ -56,9 +57,75 @@
       "gender": "splendid",
       "lang": "en",
       "locale": "en-US",
-      "currency": "USD"
+      "currency": "USD",
+      "copyright": "Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved."
     },
     "features": {
+      "license": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "identity": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "feecting": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "error": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "log": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "data": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "report": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "intelligence": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "automation": {
+        "concerns": [],
+        "global": {},
+        "devas": {}
+      },
+      "communication": {
+        "concerns": [],
+        "global": {},
+        "devas": {}
+      },
+      "treasury": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "justice": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "authority": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
       "security": {
         "hash": "md5",
         "cipher": {
@@ -67,99 +134,58 @@
           "password": "generic password for encryption test"
         },
         "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },      
-      "support": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "global": [],
+        "devas": {}
       },
       "medical": {
         "concerns": [],
         "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "communication": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "services": {
-        "concerns": [],
-        "global": {
-          "indra": "https://indra.ai",
-          "world": "https://deva.world",
-          "space": "https://deva.space",
-          "cloud": "https://deva.cloud"
-        },
-        "devas": {
-          "hello": {}
-        }
-      },
-      "systems": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "solutions": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "development": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "assistant": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
-      },
-      "business": {
-        "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "devas": {}
       },
       "legal": {
         "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "global": [],
+        "devas": {}
       },
-      "story": {
+      "owner": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "simulation": {
         "concerns": [],
         "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "devas": {}
       },
-      "mind": {
+      "support": {
         "concerns": [],
-        "global": {},
-        "devas": {
-          "hello": {}
-        }
+        "global": [],
+        "devas": {}
+      },
+      "services": {
+        "concerns": [],
+        "global": [
+          {"indra": "https://indra.ai"},
+          {"world": "https://deva.world"},
+          {"space": "https://deva.space"},
+          {"cloud": "https://deva.cloud"}
+        ],
+        "devas": {}
+      },
+      "systems": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "networks": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
+      },
+      "veda": {
+        "concerns": [],
+        "global": [],
+        "devas": {}
       }
     }
   }

@@ -1,489 +1,319 @@
-# deva
+# Deva Core
 
-## Summary
-Deva is a Node.js module designed to simplify the development of multi-agent systems by providing a consistent foundation for agent interactions. With Deva, developers can quickly create and manage a network of agents that can communicate and collaborate seamlessly. Deva offers features such as private and public socket communication, secure encryption, and consistent message passing. It also provides built-in support for interacting with various APIs, including YouTube, Twitter, Discord, IBM Watson, and ChatGPT. By using Deva, developers can save time and resources in building and integrating basic agent functionalities, and focus on developing more advanced features.
+**`@indra.ai/deva` · v1.60.2**
 
-## Description
+Deva Core is a Vedic-inspired, event-based, context-aware Feature, Zone, Action and State machine framework for building integrated artificial intelligence agents ("Devas") in Node.js. Every Deva is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it broadcasts each step as an event. Every packet it builds is stamped with cumulative md5, sha256 and sha512 hashes.
 
-The Deva module is a JavaScript library for building multi-agent systems that can communicate with each other and with external services. It provides a unified API for creating agents and defining their behaviors, and includes tools for handling communication between agents and for integrating with third-party APIs. The Deva module is designed to be flexible and customizable, allowing developers to easily create complex systems that can perform a wide range of tasks, from data collection and analysis to chatbot interactions and image generation. The module is written in JavaScript and can be used with Node.js, making it easy to integrate with other JavaScript libraries and tools.
+> Deva Core is distributed under the **Vedic License Agreement (VLA)**. Read [License](#license) before you use it.
 
-## Core Features
-The core features in the @indra.ai deva.core encompass a wide range of functionalities and capabilities. Here's a brief overview of each feature:
+## Contents
 
-1. Security Feature
-2. Guard Feature
-3. Defense Feature
-4. Support Feature
-5. Services Feature
-6. Systems Feature
-7. Networks Feature
-8. Legal Feature
-9. Justice Feature
-10. Authority Feature
+1. [Requirements](#requirements)
+2. [Install](#install)
+3. [Quick start](#quick-start)
+4. [Constructor options](#constructor-options)
+5. [Lifecycle](#lifecycle)
+6. [Messaging: question, answer, ask, talk, listen](#messaging)
+7. [The packet](#the-packet)
+8. [Stamping and the hash tiers](#stamping-and-the-hash-tiers)
+9. [The workflow: features, zones, actions, states, intents, beliefs, contexts](#the-workflow)
+10. [Events](#events)
+11. [Error handling](#error-handling)
+12. [Configuration files](#configuration-files)
+13. [Testing](#testing)
+14. [Method reference](#method-reference)
+15. [License](#license)
+16. [Links and author](#links-and-author)
 
-These core features work together to provide a comprehensive and robust platform for users, covering essential aspects such as security, support, services, Legal, Authority, and more.
+## Requirements
 
-## Functions
+- Node.js **22 or later** (`engines.node: ">=22"`), npm 9.5.1 or later.
+- ES modules only. The package is `"type": "module"` and uses JSON import attributes (`import x from './x.json' with {type: 'json'}`). `require()` won't work.
+- A **client object that carries a VLA** matching the one in Deva Core's `package.json`. `init()` refuses to start without it (see [Lifecycle](#lifecycle)).
 
-1. **Class Structure:** The code follows an object-oriented programming approach by defining a `Deva` class. This allows for encapsulation of properties and methods related to the agent.
-2. **State Management:** The `Deva` class has a state management system represented by the `_state` property and the `_states` object. It allows the agent to transition between different states and perform actions based on the current state.
-3. **Event System:** The code utilizes an event system by extending the `EventEmitter` class and creating an `events` object. This enables communication and collaboration between different components of the agent and other entities in the system.
-4. **Modularity and Inheritance:** The code demonstrates modularity by separating functionalities into different objects such as `config`, `lib`, `methods`, and `listeners`. It also showcases inheritance by assigning inherited properties to child Deva instances.
-5. **Error Handling:** The code includes an error handling mechanism through the `error` method. It allows for uniform error reporting and the execution of custom error handling logic.
-6. **Promises:** Promises are used in several asynchronous operations, such as initializing the agent, loading Deva models, and handling method calls. Promises ensure that the code can handle asynchronous operations in a structured and controlled manner.
-7. **Event-driven Architecture:** The code follows an event-driven architecture where different events trigger specific actions or callbacks. This enables loose coupling and flexibility in the agent's behavior and interactions with other components.
-8. **Extensibility:** The code provides hooks for custom logic through methods like `onInit`, `onStart`, `onStop`, `onEnter`, `onExit`, and `onDone`. These allow developers to extend the functionality of the agent by adding custom code at specific stages of its lifecycle.
-9. **Messaging and Communication:** The `talk` and `listen` methods facilitate messaging and communication between agents. Agents can ask questions (`ask` method) and receive responses, enabling interaction and collaboration.
-10. **Utility Functions:** The code includes utility functions like generating unique IDs (`uid` method), hashing data (`hash` method), and handling event listeners (`listen`, `once`, `ignore` methods).
+## Install
 
-## contents
-- [install](#install) - How to install the deva core.
-- [structure](#structure) - Basic structure of `deva`.
-- [agent](#agent) - The `agent` object stores the Agent Profile.
-- [vars](#vars) - Variables are stored in the `this.vars` object.
-- [listeners](#listeners) - Listeners are setup to allow a deva trigger events.
-- [devas](#listeners) - This is where sub-devas are loaded into the current deva.
-- [modules](#modules) - A `deva` can add modules to add to their functionality.
-- [func](#func) - A `deva` the internal functionality is written here.
-- [methods](#methods) - Methods expose the `deva` abilities to external commands/calls.
-- [states](#states) - There are various states that triger when a `deva` is doing things.
-- [utility](#utility) - Interal to a `deva` there are utility functions available to make actions easier like getting a unique id or status.
-
-
-## install
 ```bash
-$ npm i @indra.ai/deva --save
+npm install @indra.ai/deva
 ```
 
-## structure
+## Quick start
+
+This is a minimal working Deva with one method. `client.json` is a client file shaped like [`tests/client.json`](tests/client.json). Its `DATA.VLA` must match the `VLA` block in Deva Core's `package.json`.
+
 ```javascript
 import Deva from '@indra.ai/deva';
-import pkg from './package.json' with {type:'json'};
-const {agent,vars} = pkg.data;
+import Client from './client.json' with {type: 'json'};
 
-// set the __dirname
-import {dirname} from 'node:path';
-import {fileURLToPath} from 'node:url';    
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const client = Client.DATA; // must carry a VLA matching the Deva Core package VLA
 
-const info = {
-  id: pkg.id,
-  name: pkg.name,
-  describe: pkg.description,
-  version: pkg.version,
-  url: pkg.homepage,
-  dir: __dirname,
-  git: pkg.repository.url,
-  bugs: pkg.bugs.url,
-  author: pkg.author,
-  license: pkg.license,
-  copyright: pkg.copyright,
-};
-
-const DEVA = new Deva({
-  info, // info packet to store entity meta information.
-  agent, // the agent profile from the package data.
-  vars, // the variables the agent uses from the package data.
-  utils: {
-    translate(input) {return input.trim();},
-    parse(input) {return input.trim();},
-    process(input) {return input.trim();}
+const hello = new Deva({
+  info: {id: 'hello', name: 'Hello Deva', version: '0.0.1', VLA: client.VLA},
+  agent: {
+    id: 'hello',
+    key: 'hello',
+    prompt: {emoji: '👋', text: 'hello'},
+    profile: {name: 'Hello Deva'},
   },
-  listeners: {},
-  modules: {},
-  deva: {},
-  func: {
-    list(opts) {
-     return [
-       "test 1",
-       "test 2", 
-       "test 3",
-     ]  
-    }
+  config: {hash: {}},     // required: ready() writes this.config.hash[agent.key]
+  vars: {context: {}},    // required: context() looks up this.vars.context
+  listeners: {
+    'devacore:error'(packet) {
+      console.log('error:', packet.error.message);
+    },
   },
   methods: {
-    list(packet) {
-      this.context('list', packet.id);
-      this.action('method', `list:${packet.id}`);
-      return new Promise((resolve, reject) => {
-        try {
-          const data = this.func.data(packet.q);
-          return resolve({
-            text: `See Data`,
-            html: `See Data`,
-            data,
-          });
-        } catch (err) {
-          return this.error(err, packet, reject);          
-        }
-      });
-    }
+    greet(packet) {
+      return Promise.resolve({text: `hello ${packet.q.text}`});
+    },
   },
-  onReady(data, resolve) {
-    this.prompt(this.vars.messages.ready);
+  async onReady(data, resolve) {
+    const packet = await this.question('/greet world');
+    console.log(packet.a.text); // hello world
     return resolve(data);
   },
-  onError(err, data, reject) {
-    this.prompt(this.vars.messages.error);
-    console.log(err);
-    return reject(err);
-  }
 });
-export default DEVA
+
+hello.init(client);
 ```
 
-## agent
+Run it with `node hello.mjs` and it prints `hello world`. This sample was run against v1.60.2.
 
-```javascript
-this.agent();
+Three things to know from this example:
+
+- **Do your work from `onReady`, not after `await init()`.** The `init()` promise currently resolves with `undefined` as soon as the client step finishes, before `start`, `enter`, `done` and `ready` have run. `onReady` is the reliable point where the Deva is fully up.
+- **`info`, `config: {hash: {}}` and `vars.context` are effectively required.** Without them `ready()` or `context()` throws. The error handler then calls `context()` again, and the process ends in a stack overflow.
+- **Methods must return a Promise.** `answer()` calls `this.methods[method](packet).then(...)`.
+
+## Constructor options
+
+`new Deva(opts)` accepts:
+
+| Option | What it is |
+|---|---|
+| `id` | Instance id. Defaults to `randomUUID()`. |
+| `info` | Package-style info object (`id`, `name`, `version`, `dir`, `VLA`, ...). Returned by `info()`. `info.VLA.uid` goes into every `uid()`. |
+| `agent` | The agent profile: `id`, `key` (the Deva's name on the bus), `prompt`, `profile` (`name`, and optional `warning`, `notice`, `copyright`, `status`, `vectors`, `owner`, `creator`, `salute`). It can also carry custom `zones`, `actions`, `intents`, `beliefs` and `messages`, which are merged in without overwriting the core ones. |
+| `config` | Local config. Needs a `hash` object. Can set `timeout.ask` in ms (default `30000`, `0` disables it). |
+| `vars` | Free-form variables on `this.vars`. `vars.context` maps context keys to display text. |
+| `utils`, `func` | Your helper functions. Bound to the Deva at `init`. |
+| `methods` | Public commands, reachable by `question('/name ...')` or by another Deva's `#key name ...`. Bound at `init`. Each takes a packet and returns a Promise of a string or `{text, html, data}`. |
+| `listeners` | `{eventName: handler}`. Bound and registered on the event bus at `init`. |
+| `devas` | Child Deva instances. They inherit `events`, `lib` and `config` and are `init`'d during `ready`. |
+| `modules` | Third-party modules for your own use. |
+| `events` | An existing `EventEmitter` to share. Defaults to a new one. |
+| `maxListeners` | Passed to `events.setMaxListeners`. Default `0` (unlimited). |
+| Lifecycle hooks | `onInit`, `onStart`, `onEnter`, `onDone`, `onReady`, `onFinish`, `onComplete`, `onStop`, `onClose`, `onLeave`, `onExit`, `onShutdown`, `onError`. |
+
+Any other top-level option is copied onto the instance, as long as it doesn't clash with an existing property.
+
+## Lifecycle
+
+### Start-up: `init(client)`
+
+1. Hashes the core package data (md5, sha256, sha512).
+2. Runs `license_check(client.VLA, core.VLA)`, comparing sha256 hashes of the two VLA objects. On a mismatch it prompts and resolves with `❌ The Provided Client License Is Invalid`, and the Deva stays inactive.
+3. Marks the Deva active, then inherits into child devas, binds `listeners`/`methods`/`utils`/`func`/`lib`, and registers listeners.
+4. Runs the client feature chain: `Client`, then `License`, `Error`, `Log`, `Data`, `Report`, `Communication`, `Treasury`, `Justice`, `Authority`, `Legal`, `Owner`, `Security`, `Medical`, `Support`, `Services`, `Systems`, `Networks`, `Veda`, then `Done`. For each one that the client's `features` object defines, the Deva stores `this._<feature>` = `{client_id, client_name, concerns, global, personal}`, where `personal` is the entry under `devas[agent.key]`. Methods found in `client.features[x].methods` are bound into `this.methods`.
+5. Calls `onInit(data, resolve)` if you defined it, otherwise `start`.
+
+### The invoke chain
+
+`start`, `enter`, `done`, `ready`, `finish`, `complete`, `stop`, `close`, `leave`, `exit` and `shutdown` all run through `_invoke`. Each step sets the context, zone, action and state to its key, writes a timestamp under that key on the data (`data.start = Date.now()` and so on), re-stamps the data, and emits its `devacore:<key>` event. Then:
+
+- if an `on<Key>` hook exists, it calls `on<Key>(data, resolve)`, and **the hook decides what happens next**: call the next step (`this.enter(data, resolve)`) or `resolve(data)`;
+- otherwise it moves on to the next step itself.
+
+| Step | Next by default | Hook |
+|---|---|---|
+| start | enter | onStart |
+| enter | done | onEnter |
+| done | ready | onDone |
+| ready | (resolve) | onReady |
+| finish | complete | onFinish |
+| complete | (resolve) | onComplete |
+| stop | close | onStop |
+| close | leave | onClose |
+| leave | exit | onLeave |
+| exit | shutdown | onExit |
+| shutdown | (resolve) | onShutdown |
+
+`ready` also stores sha256 hashes of `vars`, `utils`, `listeners`, `modules`, `func` and `methods` in `config.hash[agent.key]`, and `init`s each child Deva in `devas`.
+
+`finish` and `complete` wrap every answer (see [Messaging](#messaging)).
+
+### Shutdown: `stop()`
+
+`stop()` returns a Promise and runs `stop`, `close`, `leave`, `exit` and `shutdown`. `exit` clears the inherited feature data (`_license`, `_security`, and so on). `shutdown` removes listeners and pending asks, and clears `modules`, `listeners`, `events`, `_config` and `_active`. After that, the Deva answers most calls with `⭕️ OFFLINE`. With no hooks defined, `await deva.stop()` resolves with the data object, whose `key` is `'shutdown'`.
+
+## Messaging
+
+### `question(text, data=false)`
+
+`question` is the entry point. It returns a Promise and reads the first word of `text`:
+
+| Form | Example | What happens |
+|---|---|---|
+| Command (`/`) | `/greet world` | Calls local `methods.greet` through `answer()`. `packet.q.text` is `world`. A `/method:a:b` form puts `['method','a','b']` in `meta.params`. |
+| Ask (`#`) | `#helper shout hi` | Sends the packet to the Deva whose agent key is `helper` and waits for its reply. |
+| Plain text | `hi there` | Calls `methods.question`, if you defined one. |
+
+Unknown methods resolve to a packet whose `a.text` is `⛔️ METHOD NOT FOUND <agent> <method>`.
+
+### Ask between Devas
+
+For `#key method text`, the asking Deva emits `key:ask` and waits once on `key:ask:<packet uid>`. The target's `ask(packet)` runs `methods[method]`, builds `packet.a`, and replies on that event. The asker then runs `finish`/`complete` and resolves. Each Deva listens on `<its key>:ask` automatically, as part of the state listeners registered at `init`.
+
+- If nobody is listening on `key:ask`, it resolves right away with `⛔️ ASK TARGET NOT FOUND`.
+- If no reply comes within `config.timeout.ask` (default 30 s), it resolves with `⛔️ ASK TIMEOUT`.
+
+Tested: a parent Deva with `devas: {helper}` asked `#helper shout hi there` and got `HI THERE` back, with `a.meta.key === 'helper'`.
+
+### Events directly
+
+- `talk(evt, packet)` emits on the bus and returns `true` if anyone was listening.
+- `listen(evt, callback)`, `once(evt, callback)` and `ignore(evt, callback)` add, add-once and remove listeners.
+- `prompt(text)` emits a stamped `devacore:prompt` packet.
+
+## The packet
+
+A packet resolved from `question()` looks like this (keys in order, verified):
+
+```text
+packet: id, q, a, created, finish, complete, md5, sha256, sha512
+  q:    id, agent, client, meta{key, method, params}, text, data, created, md5, sha256, sha512
+  a:    id, agent, client, meta{key, method, params}, text, html, data, created, md5, sha256, sha512
 ```
 
-### Data Attributes
+- `id` is a `uid()` object, not a string: `uid, time, iso, utc, date, license, fingerprint, client, agent, machine, core_hash, status, warning, notice, vectors, owner, creator, salute, copyright, md5, sha256, sha512`. Use `packet.id.uid` for the id value. `uid(true)` uses a random UUID for `uid`. The default is a time-based numeric id.
+- `agent` and `client` are copies with their own hashes.
+- `finish` and `complete` are timestamps added by those steps.
+- A method's result becomes `a.text`, `a.html` and `a.data`. A plain string result fills `text`.
 
-- **id:** The Agent id generated by `this.uid()`.  
-- **key:** The key to reference the agent by on the network.  
-- **prompt:** The prompt configuration for the entity.  
-  - **emoji:** The emoji the for the agent.
-  - **text:** Algorithm,
-  - **colors:** The colors for the agent on the prompt. As each agent can set custom prompt colors.
-    - **label:** The label colors for the agent prompt.
-      - **R:** The red value 0 to 255.
-      - **G:** The green value 0 to 255.
-      - **B:** The blue value 0 to 255.
-    - **text:** The text colors for the agent prompt.
-      - **R:** The red value 0 to 255.
-      - **G:** The green value 0 to 255.
-      - **B:** The blue value 0 to 255.
-- **profile:** The Agent profile configuration data.
-  - **name:** The name of the agent.
-  - **hashtag:** The hashtag to reference the agent by.
-  - **title:** Title of the Agent for media display.
-  - **subtitle:** Subtitle of the agent for extra context.
-  - **describe:** Short description of the agent to build from.
-  - **tweet:** The tweet/post that the agent will share about itself.
-  - **hashtags:** Comma list of hashtags to add when posting tweets/posts.
-  - **pronouns:** The pronounds the agent will be going by.
-  - **gender:** The gender of the agent as pronouns are how they identify and gender is their orientation.
-  - **style:** The personal style that reflects the agent/entity.
-  - **voice:** The voice profile the entity will use when speaking.
-  - **system:** The system the entity/agent is assigned to.
-  - **layout:** The display layout templte the entity uses for their personal presentation.
-  - **color:** The text color for the presentation layer.
-  - **bgcolor:** The background color for the entity presentatino layer.
-  - **emoji:** A graphic that represents the entity personal emoji.
-  - **avatar:** A graphic that represents the entity/agent personal avatar.
-  - **image:** A graphic that represents the entity overall image.
-  - **background:** The background graphic for the presentation layer.
-  - **owner:** The name of the owner of the agent/entity.
-  - **creator:** The name of the creator of the agent/entity.
-  - **created:** The date and time the entity/agent was created.
+## Stamping and the hash tiers
 
-## vars
+Deva Core hashes in three tiers, in the order `config.hashes = ['md5', 'sha256', 'sha512']`:
 
-```javascript
-this.vars
+| Tier | Intended use |
+|---|---|
+| md5 | Fast, everyday (civilian) verification |
+| sha256 | Government and authority verification |
+| sha512 | Military, agency and legal high-security use |
+
+The tiers are **cumulative by design**. Each hash is taken over the object *including the hashes before it*, so sha256 covers md5, and sha512 covers both. Hashes are base64 digests of `JSON.stringify(data)` (see `hash(data, algo)`).
+
+- `_stamp(data, label='', uid='')` adds the three hashes in order and returns the same object. When a label is given, it logs a `hash` action per tier (`<label>:<algo>:<uid>`).
+- `_unstamp(data)` removes them, logging a `delete` action per tier with `data.id.uid`, or `⛔️ NO ID PROVIDED` if there is none.
+- To re-stamp after a change, `_stamp(_unstamp(data), label, uid)`. Since the tiers are cumulative, stamping twice without unstamping would change the values.
+
+The return path in Core methods is: the `return` action, then the `good` intent, then `_stamp`.
+
+A few spots (`init`, `_workflow`, `client()`, `agent()`, `machine()`, `uid()`) hash manually on purpose and are commented as such. Calling `_stamp` there would log a state change from inside the state machinery and overflow the stack.
+
+## The workflow
+
+Each call to `feature()`, `zone()`, `action()`, `state()`, `intent()` or `belief()` takes `(value, extra)`. If `value` exists in the matching list, it sets the current value, emits a hashed `devacore:<key>` event with `text` = the list's label plus `extra`, and returns that data. Unknown values are ignored silently. `context(value, extra)` does the same, using `vars.context` for the label, and accepts any value.
+
+The plural methods return a stamped object whose `value` is the full list. Counts at v1.60.2, with no agent additions:
+
+| List | Method | Default | Count | Source |
+|---|---|---|---|---|
+| features | `features()` | — | 21 | `config/features.json` |
+| zones | `zones()` | — | 95 | `config/zones.json` |
+| actions | `actions()` | — | 116 | `config/actions.json` |
+| states | `states()` | `offline` | 134 | `config/states.json` |
+| intents | `intents()` | `neutral` | 78 | `config/intents.json` |
+| beliefs | `beliefs()` | `vedic` | 64 | `config/beliefs.json` |
+| contexts | `contexts()` | — | from your `vars.context` | your agent |
+
+The 21 features are `init, agent, client, license, error, log, data, report, communication, treasury, justice, authority, security, medical, legal, owner, support, services, systems, networks, veda`. Each client feature has a getter of the same name (`security()`, `veda()`, ...) that returns a copy of what the client supplied for it.
+
+## Events
+
+All core events are listed in `config/events.json` (25). The ones you'll usually listen to:
+
+`devacore:prompt`, `devacore:error`, `devacore:question`, `devacore:answer`, `devacore:ask`, `devacore:start`, `devacore:enter`, `devacore:done`, `devacore:ready`, `devacore:finish`, `devacore:complete`, `devacore:stop`, `devacore:exit`, `devacore:shutdown`, `devacore:context`, `devacore:feature`, `devacore:zone`, `devacore:action`, `devacore:state`, `devacore:intent`, `devacore:belief`, `devacore:load`, `devacore:unload`.
+
+Note: at v1.60.2 `close` is mapped to `devacore:leave`, so the close step emits `devacore:leave` too.
+
+## Error handling
+
+`err(err, packet, reject)` is the single error path. It sets the `bad` intent and the `error` context, feature, zone, action and state. It emits a stamped `devacore:error` packet carrying `error: {name, message, stack}` and the related packet. Then:
+
+- if you defined `onError(err, packet, reject)`, it returns that, and **you own the outcome**. Call `reject` to fail the caller's promise, or the promise stays pending;
+- otherwise it calls `reject(err)`, or returns `Promise.reject(err)`.
+
+A method that rejects or throws ends up here. Most calls made while the Deva is inactive return or resolve `⭕️ OFFLINE` instead of throwing.
+
+## Configuration files
+
+| File | Contents |
+|---|---|
+| `config/index.js` | Command char `/`, ask char `#`, `timeout.ask: 30000`, `hashes`, container markers (`::BEGIN`/`::END`), uid salt range, inherit/bind lists, the invoke chain table, defaults |
+| `config/events.json` | Event names |
+| `config/features.json` | Feature labels |
+| `config/zones.json`, `actions.json`, `states.json`, `intents.json`, `beliefs.json` | Workflow labels |
+| `config/msgs.json` | System messages such as `offline`, `noid`, `asktimeout`, `noask`, `method_not_found`, plus default `warning`, `notice` and `copyright` text |
+
+Each JSON file has `id`, `title`, `copyright`, `VLA` and `DATA`, and the values are in `DATA`.
+
+## Testing
+
+```bash
+npm test
 ```
 
-The vars can be use to set local variables for the deva that need to be used in your program.
-
-There are no default variables, so the scope is for you and your imagination to figure out.
-
-### example
-```javascript
-  vars: {
-    foo: 'bar',
-    steps: 10,
-    strings: 'Some variable string',
-    adding: 1 + 9 + 11,
-    objects: {
-      key: 'key value'
-    },
-    arrays: [
-      'value 1',
-      'value 2',
-    ]
-  }
-```
-
-## listeners
-Listeners are what you setup that allow your Deva to communicate with other Deva or parts of your application/system.
-
-```javascript
-this.listeners
-```
-
-### default
-
-Each Deva comes with a set of default listeners to provide basic functionality.
-
-### start
-This will trigger an event to start the Deva.
-
-```javascript
-this.talk(`*agent_key*:start`);
-```
-
-### stop
-This will trigger an event to stop the Deva.
-
-```javascript
-this.talk(`*agent_key*:stop`);
-```
-
-### status
-This will trigger an event to broadcast the Deva status.
-
-```javascript
-this.talk(`*agent_key*:status`);
-```
-
-## devas
-
-```javascript
-this.devas
-```
-
-The main object for Deva that are bwlow this Deva.
-
-## modules
-
-The external modules that your Deva might require to function.
-
-```javascript
-this.modules
-```
-
-## func
-The functions that your deva uses to operate. Functions are not exposed through
-the api to public access.
-
-```javascript
-this.func
-```
-
-### methods
-```javascript
-this.methods
-```
-
-The methods are exposed publicly through the question event that parses a string
-and sends a request to the question method that then interacts with functions, modules, and variables.
-
-## states
-Provided are a set of state functions that trigger when a Deva is at various states of starting/stopping.
-
-### onStart()
-
-The `onStart()` function runs after the `start` function has completed.
-
-```javascript
-this.onStart() {
-  // some code to run when the deva starts.
-}
-```
-
-### onStop()
-
-The `onStop()` function runs after the `stop` function has completed.
-
-```javascript
-this.onStop() {
-  // some code to run when the deva stops
-}
-```
-
-### onEnter()
-
-The `onEnter()` function runs after the `enter` event has fired.
-
-```javascript
-this.onEnter() {
-  // some code to run when the deva is loaded
-}
-```
-
-### onExit()
-
-The `onExit()`function runs after the `exit` event has fired.
-
-```javascript
-this.onExit() {
-  // some code to run when the deva logs out.
-}
-```
-
-### onDone()
-
-The `onDone()`function runs after the `done` event has fired.
-
-```javascript
-this.onDone() {
-  // some code to run when the deva logs out.
-}
-```
-
-### onInit()
-
-The `onInit()` function runs after the `init()` function has completed.
-
-```javascript
-this.onInit() {
-  // some code to run when the Deva initializes.
-}
-```
-
-## utility
-
-### question
-
-The question event is the functionality that exposes the methods to the outside world. When a deva asks a question the string is parsed into a question format so that commands to access various methods can be exposed.
-
-The `question(packet)` function is a default function that allows the system to ask questions of itself or other Deva.
-
-The function checks the beginning of a string for a `#` to determine wether to issue a command to run a specific method.
-
-See [Question Listener](#question) for usage.
-
-
-```javascript
-// async await
-const question = await this.question('#*agent_key* *method*:*params* *question string*');
-
-// promises
-this.question('#*agent_key* *method*:*params* *question string*').then(response => {
-  ...
-}).catch(err => {
-  ...
-})
-```
-
-### uid()
-Generates a unique ID that is used in packet transfer and other various ways.
-
-```javascript
-this.uid() // inside the object
-
-// example
-this.vars.id = this.uid()
-
-```
-
-### talk(evt, resource=false)
-
-The `talk()` function is used when your Deva needs to broadcast an event that other Deva
-or functions would be listening for.
-
-```javascript
-this.talk('event', resource);  // inside the object
-deva.talk('event', resource); // outside the object
-
-// example
-const evt_id = this.uid();
-const evt_data = {
-  task_id: 1,
-  task_name: 'this is blank data',
-  task_contact: 'joe@schmo.com',
-};
-
-this.talk('big-event', {
-  id: evt_id,
-  key: this.me.key,
-  q: {
-    bot: this.me,
-    text: 'text to send to the event',
-    data: evt_data,
-  },
-  created: Date.now(),
-});
-```
-
-### listen(evt callback)
-
-The `listen` function can assign listeners to the Deva and designate which `callback`
-function to run when an event is fired.
-
-Listeners can be set up individually this way or also added to the listeners object
-independently.
-
-```javascript
-this.listen('some-event', this.func.listener);
-
-this.func.listenter = packet => {
-  console.log('some-event-fired');
-};
-
-```
-
-### once(evt, callback)
-
-The `once()` function can assign a one-time listener to a function. This is useful when returning data with an id that one Deva has submitted to another Deva. Also very useful for submit responses that are unique to the request.
-
-```javascript
-this.once(`some-once-event`, this.func.listener)
-this.func.listener = packet => {
-  console.log('some-once-event-fired');
-}
-
-```
-
-### ignore(evt, callback)
-
-The `ignore()` function removes a listener from the designated event. This is useful for adding and removing events dynamically or as needed.
-
-```javascript
-this.ignore('ignore-event', this.func.listener);
-this.func.listener = packet => {
-  console.log('ignore-event-fired');
-}
-```
-
-
-### load(agent, opts)
-
-To add a Deva dynamically use the `load()` function. This can be utilized to add Deva to an existing Deva after the object has already been created.
-
-```javascript
-const opts = {
-  agent: {...},
-  vars: {...},
-  listeners: {...},
-  deva: {...},
-  func: {...},
-  onStart() {},
-  onStop() {},
-  onEnter() {},
-  onExit() {},
-}
-this.load('deva-name', opts);
-```
-
-### unload(agent)
-To delete a Deva for any reason use `unload()`. This will delete the Deva and all it's parts from the current Deva.
-
-```javascript
-
-this.unload('deva-key');
-
-```
-
-### status()
-The `status()` function will return the running status of the current Deva.
-
-### start()
-The `start()` function will start the Deva and run the `onStart()` state function.
-
-### stop()
-The `stop()` function will stop the Deva and run the `onStop()` state function.
-
-### init(deva=false)
-The `init()` function will initialize the Deva and run the `onInit()` state function.
-
----
-
-[Github Repo](https://github.com/indraai/deva)  
-[Back to indra.ai](https://indra.ai)  
-
-Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.  
-Owner Signature Required For Lawful Use.  
-Distributed under VLA:23221940810208468106 LICENSE.md  
-Friday, October 9, 2026 - 7:47:02 AM PST
+This runs `node tests` (`tests/index.js`), which builds a Deva from `tests/agent.json` and `tests/client.json`, runs it through the lifecycle and a self-test method, and prints the log. **It passes as long as nothing throws. There are no assertions yet.** Real assertion tests are planned.
+
+`examples/hello-world.js` is out of date at v1.60.2. It uses `require()`, so it fails under `"type": "module"`.
+
+## Method reference
+
+These are the public methods whose behavior was checked against v1.60.2.
+
+| Method | Returns | Notes |
+|---|---|---|
+| `init(client)` | Promise | Starts the Deva. See the `onReady` caveat above. |
+| `question(text, data?)` | Promise&lt;packet&gt; | `/cmd`, `#key method`, or plain text. |
+| `ask(packet)` | — | Answer side of `#` asks. Usually called for you. |
+| `stop()` | Promise | Runs the shutdown chain. |
+| `talk(evt, packet)` | boolean | Emit on the bus. |
+| `listen` / `once` / `ignore` | — | Manage listeners. |
+| `prompt(text)` | stamped data | Emits `devacore:prompt`. |
+| `feature`/`zone`/`action`/`state`/`intent`/`belief(value, extra?)` | data or `undefined` | Set and broadcast. |
+| `context(value, extra?)` | stamped data | Needs `vars.context`. |
+| `features`/`zones`/`actions`/`states`/`intents`/`beliefs`/`contexts()` | stamped `{id, key, value, agent, client, created}` | Full lists. |
+| `agent()` / `client()` | hashed copy | |
+| `info()` / `core()` | stamped copy | |
+| `status()` | string | `<profile.name> active since <date>` |
+| `uid(guid=false)` | uid object | See [The packet](#the-packet). |
+| `hash(data, algo='md5')` | base64 string | `md5`, `sha256`, `sha512` |
+| `_stamp(data, label?, uid?)` / `_unstamp(data)` | same object | See [Stamping](#stamping-and-the-hash-tiers). |
+| `license_check(personalVLA, packageVLA)` | stamped approval or `false` | |
+| `load(key, client)` / `unload(key)` | Promise | Init or stop a child Deva in `devas`. |
+| `err(err, packet, reject?)` | — | See [Error handling](#error-handling). |
+
+Not covered here because they weren't exercised for this README: `help(msg, help_dir)` (reads `<help_dir>/help/<file>.feecting` sections between `::BEGIN:<PART>` and `::END:<PART>`; feecting is Quinn Michaels' own language), `sign(packet)`, `machine()`, and the `lib` helpers (`this.lib.copy`, `formatDate`, and others).
+
+## License
+
+Deva Core is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `23221940810208468106`, owned by Quinn Arjuna America Michaels, through License Deva. The full text is in [LICENSE.md](LICENSE.md). It states, among other things, that:
+
+- by accessing or using the Software, you agree to its terms;
+- the Software is the sole proprietary property of the Owner;
+- use is subject to a threefold hierarchy: Vedic Law, the Constitution of the United States, and Owner Authority;
+- modification, distribution, sub-licensing, derivative works, reverse engineering, and official, government or commercial use without the Owner's verified authorization are prohibited;
+- unauthorized use is subject to Vedic fines and sanctions.
+
+Read LICENSE.md in full before you use the Software. This summary isn't a substitute for it.
+
+Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.
+
+## Links and author
+
+- Repository: https://github.com/indraai/deva
+- Issues: https://github.com/indraai/deva/issues
+- npm: https://www.npmjs.com/package/@indra.ai/deva
+- Homepage: https://indra.ai
+
+**Author:** Quinn Arjuna America Michaels, Inside The Net, Inc. (quinn@indra.ai)

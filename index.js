@@ -99,12 +99,12 @@ class Deva {
 
     this._state = config.state; // set the current state from config data.
     this._states = config.states; // set the states from options
-    // load any custom actions from the agent file
-    if (this._agent.actions) {
-      for (let item in this._agent.actions) {
-        if (!this._actions[item]) this._actions[item] = this._agent.actions[item];
+    // load any custom states from the agent file
+    if (this._agent.states) {
+      for (let item in this._agent.states) {
+        if (!this._states[item]) this._states[item] = this._agent.states[item];
       }
-      delete this._agent.actions;
+      delete this._agent.states;
     }
 
     this._intent = config.intent; // set the current intent from config data.

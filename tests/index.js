@@ -202,8 +202,8 @@ const DevaTest = new Deva({
 	onComplete(data, resolve) {
 		return resolve(data);
 	},
-	onError(e) {
-		console.log(e);
+	onError(err) {
+		console.log(err);
 	}
 });
 

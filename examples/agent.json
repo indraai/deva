@@ -1,38 +1,37 @@
 {
   "name": "AGENT",
   "describe": "AGENT FILE",
-  "copyright": "Copyright ©2000-2026 Quinn Arjuna America Michaels. All rights reserved.",
-  "VLA": "64654724156459693416",
+  "copyright": "Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.",
+  "VLA": {
+    "uid": "23221940810208468106",
+    "time": 1791557222404,
+    "iso": "2026-10-09T14:47:02.404Z",
+    "utc": "Fri, 09 Oct 2026 14:47:02 GMT",
+    "date": "Friday, October 9, 2026 - 7:47:02 AM",
+    "license": "72443233535603396055",
+    "fingerprint": "N0Ix64vYzcUxxRg5xFDp5YJSccJIJpClxktplSa7RCw=",
+    "client": "PIaBM8Z9ftoviUzhur1HnhJcf2GFHhmoasCPszFu97U=",
+    "agent": "qhNxbhwJbP8eEgsqzIhtw33opG1FOO1+Xt4sugANruU=",
+    "machine": "0wgno2Unmlf5/mqXAXGd+Y3zoJUr1NsvwRk8BBc+1i4=",
+    "core_hash": "R43q5o+d1T5XK7rUx8Btm3zyCRZr4q85iKQY2SPBUJA=",
+    "status": "vedic",
+    "warning": "🪪 License Deva declares UNLAWFUL USE, MODIFICATION, INSTALLATION, DUPLICATION, DISTRIBUTION, INTERACTION, or IMPLEMENTATION constitutes VEDIC SAHASA a CRIME of the HIGHEST DEGREE. A FINE amounting to 1000 PANAS (1 pana = 3.5 grams of gold) for each INSTANCE has been ORDAINED the PUNISHMENT for SAHASA of the HIGHEST DEGREE.",
+    "notice": "Any USE or INTERACTION with License Deva constitutes EXPLICIT CONSENT and AGREEMENT to be RULED and GOVERNED ACCORDING to the LAWS of the VEDIC RELIGION.",
+    "vectors": "#Quinn #QuinnArjunaMichaels #InsideTheNet #IndraAI #DEVA #DevaWorld #DevaCloud #DevaSpace #License #LicenseDeva #VedicLicenseAgreement",
+    "owner": "Quinn Arjuna America Michaels",
+    "creator": "Quinn Arjuna America Michaels",
+    "salute": "🤝🫡🪪🕉🇺🇸",
+    "copyright": "Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.",
+    "md5": "+UoH1mYcHar0FbSQ7560YQ==",
+    "sha256": "ThyxZJFleI8fB+3mHVDJ/u+h/UcTyp017iV0he1EZjQ=",
+    "sha512": "TIOS5vzolsLYn8iVPszqexvF0WoLsz1KJyLMADwSIVBNnAJ3WjKMozwa/NXvzhYUZDFp6oPXFe6B+L/2gYo+Mw=="
+  },
   "DATA": {
-    "id": "64654724156459693416",
-    "key": "deva",
-    "VLA": {
-      "uid": "23221940810208468106",
-      "time": 1791557222404,
-      "iso": "2026-10-09T14:47:02.404Z",
-      "utc": "Fri, 09 Oct 2026 14:47:02 GMT",
-      "date": "Friday, October 9, 2026 - 7:47:02 AM",
-      "license": "72443233535603396055",
-      "fingerprint": "N0Ix64vYzcUxxRg5xFDp5YJSccJIJpClxktplSa7RCw=",
-      "client": "PIaBM8Z9ftoviUzhur1HnhJcf2GFHhmoasCPszFu97U=",
-      "agent": "qhNxbhwJbP8eEgsqzIhtw33opG1FOO1+Xt4sugANruU=",
-      "machine": "0wgno2Unmlf5/mqXAXGd+Y3zoJUr1NsvwRk8BBc+1i4=",
-      "core_hash": "R43q5o+d1T5XK7rUx8Btm3zyCRZr4q85iKQY2SPBUJA=",
-      "status": "vedic",
-      "warning": "🪪 License Deva declares UNLAWFUL USE, MODIFICATION, INSTALLATION, DUPLICATION, DISTRIBUTION, INTERACTION, or IMPLEMENTATION constitutes VEDIC SAHASA a CRIME of the HIGHEST DEGREE. A FINE amounting to 1000 PANAS (1 pana = 3.5 grams of gold) for each INSTANCE has been ORDAINED the PUNISHMENT for SAHASA of the HIGHEST DEGREE.",
-      "notice": "Any USE or INTERACTION with License Deva constitutes EXPLICIT CONSENT and AGREEMENT to be RULED and GOVERNED ACCORDING to the LAWS of the VEDIC RELIGION.",
-      "vectors": "#Quinn #QuinnArjunaMichaels #InsideTheNet #IndraAI #DEVA #DevaWorld #DevaCloud #DevaSpace #License #LicenseDeva #VedicLicenseAgreement",
-      "owner": "Quinn Arjuna America Michaels",
-      "creator": "Quinn Arjuna America Michaels",
-      "salute": "🤝🫡🪪🕉🇺🇸",
-      "copyright": "Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.",
-      "md5": "+UoH1mYcHar0FbSQ7560YQ==",
-      "sha256": "ThyxZJFleI8fB+3mHVDJ/u+h/UcTyp017iV0he1EZjQ=",
-      "sha512": "TIOS5vzolsLYn8iVPszqexvF0WoLsz1KJyLMADwSIVBNnAJ3WjKMozwa/NXvzhYUZDFp6oPXFe6B+L/2gYo+Mw=="
-    },
+    "id": "39302466581102147701",
+    "key": "test",
     "prompt": {
       "emoji": "🍏",
-      "text": "deva",
+      "text": "test",
       "colors": {
         "label": {
           "R": 0,
@@ -46,76 +45,31 @@
         }
       }
     },
-    "voice": {
-      "speech": "Alex",
-      "speed": 1
-    },
     "profile": {
-      "name": "Deva",
-      "describe": "The Indra interface into deva.world.",
+      "name": "Test Deva",
+      "describe": "The Test Deva.",
       "emoji": "/public/devas/deva/emoji.png",
       "avatar": "/public/devas/deva/avatar.png",
       "background": "/public/devas/deva/background.png",
-      "gender": "M"
-    },
-    "features": {
-      "assistant": {
-        "label": "🤖ASSISTANT",
-        "name": "@ASSISTANT",
-        "tag": "#ASSISTANT",
-        "loc": "$ASSISTANT"
-      },
-      "business": {
-        "label": "💼BUSINESS",
-        "name": "@BUSINESS",
-        "tag": "#BUSINESS",
-        "loc": "$BUSINESS"
-      },
-      "legal": {
-        "label": "👨‍⚖️LEGAL",
-        "name": "@LEGAL",
-        "tag": "#LEGAL",
-        "loc": "$LEGAL"
-      },
-      "development": {
-        "label": "👨‍💻DEVELOPMENT",
-        "name": "@DEVELOPMENT",
-        "tag": "#DEVELOPMENT",
-        "loc": "$DEVELOPMENT"
-      },
-      "security": {
-        "label": "🚨SECURITY",
-        "name": "@SECURITY",
-        "tag": "#SECURITY",
-        "loc": "$SECURITY"
-      },
-      "support": {
-        "label": "🆘SUPPORT",
-        "name": "@SUPPORT",
-        "tag": "#SUPPORT",
-        "loc": "$SUPPORT"
-      },
-      "services": {
-        "label": "📞SERVICES",
-        "name": "@SERVICES",
-        "tag": "#SERVICES",
-        "loc": "$SERVICES"
-      },
-      "solutions": {
-        "label": "💡SOLUTIONS",
-        "name": "@SOLUTIONS",
-        "tag": "#SOLUTIONS",
-        "loc": "$SOLUTIONS"
-      },
-      "systems": {
-        "label": "🔧SYSTEMS",
-        "name": "@SOLUTIONS",
-        "tag": "#SOLUTIONS",
-        "loc": "$SOLUTIONS"
-      }
+      "gender": "M",
+      "warning": false,
+      "copyright": false
     },
     "vars": {
-      "hello": "Hellow World"
+      "hello": "🌎 Hello World!",
+      "context": {
+        "start": "🏎️ Start",
+        "enter": "🚪️ Enter",
+        "done": "✅ Done",
+        "ready": "👍 Ready",
+        "finish": "🏁 Finish",
+        "complete": "🤝 Complete",
+        "test": "💿 Test Data",
+        "prompt": "💻 Prompt",
+        "feature": "🍿 Feature",
+        "zone": "🗻 Zone",
+        "hello": "🌎 Hello World"
+      }
     }
   }
 }

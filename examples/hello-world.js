@@ -1,19 +1,40 @@
 "use strict";
-// Deva Core Example Hello World
+// Deva Core Hello World
 // Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved. 
 // Owner Signature Required For Lawful Use.
 // Distributed under VLA:23221940810208468106 LICENSE.md  
 // Friday, October 9, 2026 - 7:47:02 AM PST
 
-const client = require('./client.json').DATA;
-const agent = require('./agent.json').DATA;
+import Client from './client.json' with {type:'json'};
+const client = Client.DATA;
+import Agent from './agent.json' with {type:'json'};
+const agent = Agent.DATA;
 
-const Deva = require('../index');
-const HelloWorld = new Deva({
-  client: {
-    id: 100,
-    key: 'hello',
-  },
+import Deva from '../index.js';
+import pkg from '../package.json' with {type:'json'};
+
+import {dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';    
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const info = {
+  id: pkg.id,
+  name: pkg.name,
+  describe: pkg.description,
+  version: pkg.version,
+  author: pkg.author.name,
+  email: pkg.author.email,
+  url: pkg.authorurl,
+  copyright: pkg.copyright,
+  dir: __dirname,
+  git: pkg.repository.url,
+  bugs: pkg.bugs.url,
+  VLA: pkg.VLA,
+  license: 'TESTING ONLY',
+};
+
+const DevaTest = new Deva({
+  info,
   agent: {
     id: agent.id,
     key: agent.key,
@@ -26,71 +47,65 @@ const HelloWorld = new Deva({
     },
     parse(input) {
       return input.trim();
+    },
+    process(input) {
+      return input.trim();
     }
+  },
+  config: {
+    hash: {}
   },
   vars: agent.vars,
   listeners: {
     'devacore:prompt'(packet) {
-      console.log(`p: @${packet.agent.key}:${packet.text}`);
-    },
-    'devacore:state'(packet) {
-      console.log(`🍪 state > ${packet.text}`);
-    },
-    'devacore:zone'(packet) {
-      console.log(`🗺️  zone > ${packet.agent.profile.name} is in the ${packet.text} zone`);
-    },
-    'devacore:action'(packet) {
-      console.log(`💥 action > ${packet.agent.profile.name} get ${packet.text}`);
-    },
-    'devacore:feature'(packet) {
-      console.log(`🍿 feature > ${packet.agent.profile.name} ${packet.text}`);
-    },
-    'devacore:error'(packet) {
-      console.log(`❌ error > ${packet.agent.profile.name} ${packet.text}`);
+      this.context('prompt');
+      console.log(`👔  prompt: ${packet.text}`);
     },
   },
   devas: {},
   modules: {},
   func: {
     test(packet) {
-      const text = this._state
-      const id = this.uid();
-      const uuid = this.uid(true);
-
-      const cipher = this.cipher(JSON.stringify(packet));
-      const decipher = this.decipher(cipher);
-
-      const data = {
-        id,
-        uuid,
-        text,
-        hash: {
-          md5: this.hash(JSON.stringify(packet)),
-          sha256: this.hash(JSON.stringify(packet), 'sha256'),
-          sha512: this.hash(JSON.stringify(packet), 'sha512'),
-          created: this.formatDate(Date.now(), 'long'),
-        },
-        cipher,
-        decipher
-      }
-      console.log(data)
-      return Promise.resolve({
-        text: packet.a.text,
-        data,
-      });
+      return this.vars.hello;
     }
   },
   methods: {
     test(packet) {
-      return this.func.test(packet);
-    }
+      this.context('hello');
+      const test = this.func.test(packet)
+      return test;			
+    },
   },
-  onError(e) {
-    console.log(e);
+  onInit(data, resolve) {
+    return this.start(data, resolve);
+  },
+  onStart(data, resolve) {
+    return this.enter(data, resolve);
+  },
+  onEnter(data, resolve) {
+    return this.done(data, resolve);
+  },
+  onDone(data, resolve) {
+    return this.ready(data, resolve);
+  },
+  onReady(data, resolve) {
+    this.prompt(this._messages.ready);
+
+    const test = this.methods.test(data);		
+    this.prompt(test);
+
+    this.intent('good', `tests:ready`);		
+    return resolve(data);			
+  },
+  onComplete(data, resolve) {
+    return resolve(data);
+  },
+  onError(err) {
+    console.log(err);
   }
 });
 
-HelloWorld.init(client);
+DevaTest.init(client);
 
 
 // HelloWorld.question('/hello hello there').then(hello => {
