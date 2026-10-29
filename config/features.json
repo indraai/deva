@@ -12,18 +12,11 @@
 		"log": "🪵️ Log",
 		"data": "💾️ Data",
 		"report": "🗂️ Report",
-		"communication": "🏥 Communication",
-		"treasury": "🏦 Treasury",
-		"justice": "⚖️  Justice",
-		"authority": "🚔 Authority",
-		"security": "🚨 Security",
-		"medical": "🏥 Medical",
 		"legal": "🏛️ Legal",
-		"owner": "🩲️  Owner",
+		"security": "🚨 Security",
 		"support": "💼 Support",
 		"services": "🛠️ Services",
 		"systems": "🖥️️ Systems",
-		"networks": "📡 Networks",
-		"veda": "🕉️ Veda"
+		"networks": "📡 Networks"
 	}
 }

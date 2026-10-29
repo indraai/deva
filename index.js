@@ -30,18 +30,11 @@ class Deva {
     this._log = false; // inherited Log features.
     this._data = false; // inherited Data features.
     this._report = false; // inherited Report features.
-    this._communication = false; // inherited Communication features.
-    this._treasury = false; // inherited Treasury features.
-    this._justice = false; // inherited Justice features.
-    this._authority = false; // inherited Authority features.
     this._legal = false; // inherited Legal features.
-    this._owner = false; // inherited Owner features.
     this._security = false; // inherited Security features.
-    this._medical = false; // inherited Medical features.
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
     this._systems = false; // inherited Systems features.
-    this._networks = false; // inherited Systems features.
     this._veda = false; // inherited Veda features.
     
     this.events = opts.events || new EventEmitter({}); // Event Bus
@@ -547,62 +540,7 @@ class Deva {
   Report(resolve, reject) {
     return this.Feature('report', resolve, reject);
   }
-
-  /**************
-  func: Automation
-  params: resolve, reject
-  describe:
-    The Automation feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Automation(resolve, reject) {
-    return this.Feature('automation', resolve, reject);
-  }
   
-  /**************
-  func: Communication
-  params: resolve, reject
-  describe:
-    The Communication feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Communication(resolve, reject) {
-    return this.Feature('communication', resolve, reject);
-  }
-  
-  /**************
-  func: Treasury
-  params: resolve, reject
-  describe:
-    The Treasury feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Treasury(resolve, reject) {
-    return this.Feature('treasury', resolve, reject);
-  }
-  
-  /**************
-  func: Justice
-  params: resolve, reject
-  describe:
-    The Justice feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Justice(resolve, reject) {
-    return this.Feature('justice', resolve, reject);
-  }
-  
-  /**************
-  func: Authority
-  params: resolve, reject
-  describe:
-    The Authority feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Authority(resolve, reject) {
-    return this.Feature('authority', resolve, reject);
-  }
-
   /**************
   func: Legal
   params: resolve, reject
@@ -613,18 +551,7 @@ class Deva {
   Legal(resolve, reject) {
     return this.Feature('legal', resolve, reject);
   }
-  
-  /**************
-  func: Owner
-  params: resolve, reject
-  describe:
-    The Owner feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Owner(resolve, reject) {
-    return this.Feature('owner', resolve, reject);
-  }
-  
+    
   /**************
   func: Security
   params: resolve, reject
@@ -634,17 +561,6 @@ class Deva {
   ***************/
   Security(resolve, reject) {
     return this.Feature('security', resolve, reject);
-  }
-
-  /**************
-  func: Medical
-  params: resolve, reject
-  describe:
-    The Medical feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Medical(resolve, reject) {
-    return this.Feature('medical', resolve, reject);
   }
 
   /**************
@@ -678,28 +594,6 @@ class Deva {
   ***************/
   Systems(resolve, reject) {
     return this.Feature('systems', resolve, reject);
-  }
-
-  /**************
-  func: Networks
-  params: resolve, reject
-  describe:
-    The Networks feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Networks(resolve, reject) {
-    return this.Feature('networks', resolve, reject);
-  }
-
-  /**************
-  func: Veda
-  params: resolve, reject
-  describe:
-    The Veda feature sets the correct variables and necessary rules for the
-    client presented data.
-  ***************/
-  Veda(resolve, reject) {
-    return this.Feature('veda', resolve, reject);
   }
 
   /**************
@@ -1193,31 +1087,15 @@ class Deva {
       }).then(() => {
         return this.Report(resolve, reject);
       }).then(() => {
-        return this.Communication(resolve, reject);
-      }).then(() => {
-        return this.Treasury(resolve, reject);
-      }).then(() => { 
-        return this.Justice(resolve, reject);
-      }).then(() => {
-        return this.Authority(resolve, reject);
-      }).then(() => {
         return this.Legal(resolve, reject);
       }).then(() => {
-        return this.Owner(resolve, reject);
-      }).then(() => {
         return this.Security(resolve, reject);
-      }).then(() => {
-        return this.Medical(resolve, reject);
       }).then(() => {
         return this.Support(resolve, reject);
       }).then(() => {
         return this.Services(resolve, reject);
       }).then(() => {
         return this.Systems(resolve, reject);
-      }).then(() => {
-        return this.Networks(resolve, reject);
-      }).then(() => {
-        return this.Veda(resolve, reject);
       }).then(() => {
         return this.Done(resolve, reject);
       }).then(() => {
@@ -1810,47 +1688,7 @@ class Deva {
   report() {
     return this._getFeature('report', this._error);
   }
-  
-  /**************
-  func: communication
-  params: none
-  describe: basic communication features available in a Deva.
-  usage: this.communication()
-  ***************/
-  communication() {
-    return this._getFeature('communication', this._communication);
-  }
-  
-  /**************
-  func: treasury
-  params: none
-  describe: basic treasury features available in a Deva.
-  usage: this.treasury()
-  ***************/
-  treasury() {
-    return this._getFeature('treasury', this._treasury);
-  }
-  
-  /**************
-  func: justice
-  params: none
-  describe: basic justice features available in a Deva.
-  usage: this.systems()
-  ***************/
-  justice() {
-    return this._getFeature('justice', this._justice);
-  }
-  
-  /**************
-  func: authority
-  params: none
-  describe: basic authority features available in a Deva.
-  usage: this.systems()
-  ***************/
-  authority() {
-    return this._getFeature('authority', this._authority);
-  }
-    
+        
   /**************
   func: security
   params: none
@@ -1859,15 +1697,6 @@ class Deva {
   ***************/
   security() {
     return this._getFeature('security', this._security);
-  }
-  /**************
-  func: medical
-  params: none
-  describe: basic medical features available in a Deva.
-  usage: this.medical()
-  ***************/
-  medical() {
-    return this._getFeature('medical', this._medical);
   }
   
   /**************
@@ -1878,16 +1707,6 @@ class Deva {
   ***************/
   legal() {
     return this._getFeature('legal', this._legal);
-  }
-    
-  /**************
-  func: owner
-  params: none
-  describe: basic owner features available in a Deva.
-  usage: this.owner()
-  ***************/
-  owner() {
-    return this._getFeature('owner', this._owner);
   }
   
   /**************
@@ -1928,16 +1747,6 @@ class Deva {
   ***************/
   networks() {
     return this._getFeature('networks', this._networks);
-  }
-
-  /**************
-  func: veda
-  params: none
-  describe: basic veda features available in a Deva.
-  usage: this.veda()
-  ***************/
-  veda() {
-    return this._getFeature('veda', this._veda);
   }
 
   /**************
