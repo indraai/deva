@@ -13,7 +13,7 @@
 		"finish": "devacore:finish",
 		"complete": "devacore:complete",
 		"stop": "devacore:stop",
-		"close": "devacore:leave",
+		"close": "devacore:close",
 		"leave": "devacore:leave",
 		"exit": "devacore:exit",
 		"shutdown": "devacore:shutdown",
