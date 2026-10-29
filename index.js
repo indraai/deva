@@ -438,13 +438,13 @@ class Deva {
           }
         }
       }
-      const _client = this.lib.copy(client);                // copy the client parameter
-      this.state('data', `client:${client.id}`);
-      this._client = _client;                           // set local _client to this scope
+      const _client = this.lib.copy(client); // copy the client parameter
+      this.state('data', `client:${client.id}`); // set the state to data for client.
+      this._client = _client; // set local _client to this scope
 
-      this.action('return', `client:${client.id}`);
-      this.intent('good', `client:${client.id}`);
-      return resolve();
+      this.action('return', `client:${client.id}`); // set the action 
+      this.intent('good', `client:${client.id}`); // set the intent
+      return resolve(); // resolve the client .
     } catch (e) {
       this.state('catch', `client:${client.id}`);
       this.intent('bad', `client:${client.id}`);
