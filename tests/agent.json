@@ -67,7 +67,8 @@
         "test": "💿 Test Data",
         "prompt": "💻 Prompt",
         "feature": "🍿 Feature",
-        "zone": "🗻 Zone"
+        "zone": "🗻 Zone",
+        "hello": "🌎 Hello World"
       }
     }
   }
