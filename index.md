@@ -1,6 +1,8 @@
 ---
 layout: page
 title: Deva Core
+description: A Vedic-inspired, event-based Node.js framework for building integrated AI agents, with stamped, verifiable data on every step.
+image: /assets/deva.png
 ---
 
 <center>
