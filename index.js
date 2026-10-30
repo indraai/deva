@@ -304,7 +304,7 @@ class Deva {
   ***************/  
   _getFeature(key) {
     if (!this._active) return this._messages.offline; // check the active status
-    if (!this._features[key]) return this._messages.invalidfature; // return no key if doesn't match.
+    if (!this._features[key]) return this._messages.invalidfeature; // return no key if doesn't match.
     
     this.feature(key); // set the security state
     this.zone(key);
