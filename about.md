@@ -2,6 +2,8 @@
 layout: page
 title: About
 permalink: /about/
+description: What Deva Core is, what it does, where it fits, and what a company should know about its design, licensing and maturity before choosing it.
+image: /assets/banner.png
 ---
 
 Deva Core is a small, dependency-free Node.js framework for building software agents ("Devas") that work as a team on a shared event bus, describe everything they do in plain named steps, and stamp every packet of data they produce so it can be verified later.
