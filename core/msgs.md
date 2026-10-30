@@ -3,7 +3,7 @@ layout: page
 title: Core - Messagess
 description: not done yet
 image: /assets/banner.png
-permalink: /core/features/
+permalink: /core/msgs/
 ---
 
 {{page.description}}
