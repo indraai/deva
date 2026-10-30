@@ -462,7 +462,7 @@ class Deva {
     client presented data.
   ***************/
   Feature(feature, resolve, reject) {
-    if (!this._features[feature]) return resolve(this._messages.invalidfeature); // return no key if     
+    if (!this._features[feature]) return reject(this._messages.invalidfeature); // reject if there is no feature match.
     const _id = this.uid();
     this.feature(feature, _id.uid);
     this.zone(feature, _id.uid);
