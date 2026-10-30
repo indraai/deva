@@ -30,5 +30,5 @@ minima:
       icon: facebook
       url: "https://facebook.com/quinnshow"
   nav_pages:
-      - index.md
-      - docs.md
+    - index.md
+    - docs.md
