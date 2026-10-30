@@ -314,12 +314,12 @@ class Deva {
     try {
       const data = this.lib.copy(this[`_${key}`]);
       this.action('return', `_getFeature:${key}`); // set the return action
-      this.state('valid', key); // set the valid state
-      this.intent('good', key); // set the intent good
+      this.state('valid', `_getFeature:${key}`); // set the valid state
+      this.intent('good', `_getFeature:${key}`); // set the intent good
       return data; // return the data
     } catch (err) {
-      this.state('catch', key);
-      this.intent('bad', key);
+      this.state('catch', `_getFeature:${key}`);
+      this.intent('bad', `_getFeature:${key}`);
       return this.err(err);
     }    
   }
@@ -462,12 +462,13 @@ class Deva {
     client presented data.
   ***************/
   Feature(feature, resolve, reject) {
+    if (!this._features[feature]) return resolve(this._messages.invalidfeature); // return no key if     
     const _id = this.uid();
     this.feature(feature, _id.uid);
     this.zone(feature, _id.uid);
     const _cl = this.client(); // set local copy of client data
     try {
-      if (!_cl.features[feature]) return resolve(); // if no security feature goto Support
+      if (!_cl.features[feature]) return resolve(); // if no feature resolve
       else {
         this.action(feature, _id.uid); // set action to feature
         const _fe = `_${feature}`;
@@ -1078,7 +1079,7 @@ class Deva {
         this.action('init', data.id.uid);
         this.state('init', data.id.uid);
         this.intent('init', data.id.uid);
-      }).then(() => {
+
         return this.Client(client, resolve, reject);
       }).then(() => {
         return this.License(resolve, reject);
