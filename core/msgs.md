@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Core - Messagess
+title: Core - Messages
 description: not done yet
 image: /assets/banner.png
 permalink: /core/msgs/
