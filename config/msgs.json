@@ -19,6 +19,7 @@
 		"nokey": "⛔️ NO KEY PROVIDED",
 		"invalidkey": "⛔️ INVALID KEY PROVIDED",
 		"matchkey": "⛔️ INVALID KEY MATCH",
+		"invalidfeature": "⛔️ INVALID feature",
 		"asktimeout": "⛔️ ASK TIMEOUT",
 		"noask": "⛔️ ASK TARGET NOT FOUND",
 		"method_not_found": "⛔️ METHOD NOT FOUND",
