@@ -1,11 +1,3 @@
----
-permalink: README.html
-title: Deva Core - README
-subtitle: The Deva Core README File
-layout: page
-description: A Vedic-inspired, event-based, context-aware Feature, Zone, Action and State machine framework for building integrated artificial intelligence agents ("Devas").
----
-
 # Deva Core
 
 [![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva)
