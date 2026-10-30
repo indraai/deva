@@ -11,3 +11,21 @@ author:
 google_analytics: UA-126646842-1
 
 theme: minima
+minima:
+  skin: dark
+  social_links:
+    - title: Deva Core on Github
+      icon: github
+      url: "https://github.com/indraai/deva"
+    - title: Quinn Michaels on X (formerly Twitter)
+      icon: x-twitter
+      url: "https://x.com/quinnmichaels"
+    - title: Quinn Michaels on Youtube
+      icon: youtube
+      url: "https://youtube.com/quinnmichaels"
+    - title: Quinn Michaels on Instagram
+      icon: instagram
+      url: "https://instagram.com/quinnshow"
+    - title: Quinn Michaels on Facebook
+      icon: facebook
+      url: "https://facebook.com/quinnshow"
