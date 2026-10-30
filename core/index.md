@@ -18,6 +18,6 @@ permalink: /core/
 - [Zones](/core/zones)
 
 {% for action in site.data.actions.DATA %}
-	- key: {{action[0]}}  
-	  value: {{action[1]}} 
+	- **key**: {{action[0]}}  
+	  **value**: {{action[1]}} 
 {% endfor %}
