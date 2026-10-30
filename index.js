@@ -1455,8 +1455,8 @@ class Deva {
   /**************
   func: zone
   params:
-    - st: The zone flag to set for the Deva that matches to this._zones
-  describe
+    - value: the value to pass to _workflow 
+    - extra: Any extra text to send with the zone.
   ***************/
   zone(value=false, extra=false) {
     return this._workflow('zone', value, extra);
