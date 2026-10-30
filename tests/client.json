@@ -66,16 +66,6 @@
         "global": [],
         "devas": {}
       },
-      "identity": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "feecting": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
       "error": {
         "concerns": [],
         "global": [],
@@ -96,32 +86,7 @@
         "global": [],
         "devas": {}
       },
-      "intelligence": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "automation": {
-        "concerns": [],
-        "global": {},
-        "devas": {}
-      },
-      "communication": {
-        "concerns": [],
-        "global": {},
-        "devas": {}
-      },
-      "treasury": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "justice": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "authority": {
+      "legal": {
         "concerns": [],
         "global": [],
         "devas": {}
@@ -135,26 +100,6 @@
         },
         "concerns": [],
         "global": [],
-        "devas": {}
-      },
-      "medical": {
-        "concerns": [],
-        "global": {},
-        "devas": {}
-      },
-      "legal": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "owner": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "simulation": {
-        "concerns": [],
-        "global": {},
         "devas": {}
       },
       "support": {
@@ -173,16 +118,6 @@
         "devas": {}
       },
       "systems": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "networks": {
-        "concerns": [],
-        "global": [],
-        "devas": {}
-      },
-      "veda": {
         "concerns": [],
         "global": [],
         "devas": {}

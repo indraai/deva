@@ -1,11 +1,12 @@
 # Deva Core CI Config
-# Copyright ©2000-2026 Quinn Arjuna Michaels; All rights reserved. 
+# Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved. 
 # Owner Signature Required For Lawful Use.
 # Distributed under VLA:23221940810208468106 LICENSE.md  
 # Friday, October 9, 2026 - 7:47:02 AM PST
 
 author:
-  name: Quinn Arjuna Michaels
+  name: Quinn Arjuna America Michaels
   email: "quinn@indra.ai"
 
 google_analytics: UA-126646842-1
+theme: jekyll-theme-minimal

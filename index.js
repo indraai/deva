@@ -35,8 +35,7 @@ class Deva {
     this._support = false; // inherited Support features.
     this._services = false; // inherited Service features.
     this._systems = false; // inherited Systems features.
-    this._veda = false; // inherited Veda features.
-    
+
     this.events = opts.events || new EventEmitter({}); // Event Bus
     this.lib = new lib({pkg}); // used for loading library functions    
     this.utils = opts.utils || {}; // parse functions inside the deva
