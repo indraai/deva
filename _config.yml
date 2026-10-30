@@ -29,7 +29,7 @@ minima:
     - title: Quinn Michaels on Facebook
       icon: facebook
       url: "https://facebook.com/quinnshow"
-  nav_pages:
+  header_pages:
     - about.md
     - docs.md
     - core/index.md
