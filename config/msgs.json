@@ -18,6 +18,7 @@
 		"nodata": "⛔️ NO DATA PROVIDED",
 		"nokey": "⛔️ NO KEY PROVIDED",
 		"invalidkey": "⛔️ INVALID KEY PROVIDED",
+		"matchkey": "⛔️ INVALID KEY MATCH",
 		"asktimeout": "⛔️ ASK TIMEOUT",
 		"noask": "⛔️ ASK TARGET NOT FOUND",
 		"method_not_found": "⛔️ METHOD NOT FOUND",

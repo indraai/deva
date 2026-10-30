@@ -304,6 +304,8 @@ class Deva {
   ***************/  
   _getFeature(key) {
     if (!this._active) return this._messages.offline; // check the active status
+    if (!this[`_${key}`]) return this._messages.matchkey; // return no key if doesn't match.
+    
     this.feature(key); // set the security state
     this.zone(key);
     this.action(key);
@@ -311,13 +313,14 @@ class Deva {
     this.state('try', key);
     try {
       const data = this.lib.copy(this[`_${key}`]);
-      this.action('return', key); // set the security state
-      this.intent('good', key);
-      return data; // return the security feature
-    } catch (e) {
+      this.action('return', `_getFeature:${key}`); // set the return action
+      this.state('valid', key); // set the valid state
+      this.intent('good', key); // set the intent good
+      return data; // return the data
+    } catch (err) {
       this.state('catch', key);
       this.intent('bad', key);
-      return this.err(e);
+      return this.err(err);
     }    
   }
 
