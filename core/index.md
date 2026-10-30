@@ -8,7 +8,9 @@ permalink: /core/
 
 {{page.description}}
 
-Every Deva Core run is described by a small, fixed vocabulary. Each time something happens, the Core records which feature was involved, what was done, what state it is in, and what the intent was. The same names are used everywhere in the code, so a log entry means the same thing in every Deva. This reference is generated from the live data files shipped with the Core.
+Every **Deva Core** run is described by a small, fixed vocabulary. Each time something happens, the Core records which *feature* was involved, what was done, what *state* it is in, and what the *intent* was. The same names are used everywhere in the code, so a *log* entry means the same thing in every **Deva**. 
+
+This reference is generated from the live data files shipped with the Core.
 
 - [Features]({{ "/core/features/" | relative_url }}) ({{ site.data.features.DATA | size }}): the built-in capabilities, such as License, Error, Log, Security and Support.
 - [Zones]({{ "/core/zones/" | relative_url }}) ({{ site.data.zones.DATA | size }}): where an action is happening, so activity can be traced to its location.
