@@ -3,6 +3,10 @@ layout: page
 title: Deva Core
 ---
 
+<center>
+	<img src="/assets/deva.png" alt="Deva Core">
+</center>
+
 **A Vedic-inspired, event-based framework for building integrated AI agents in Node.js.**
 
 Deva Core is the base of every Deva. Each agent is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it announces every step as an event. Every data packet it builds is stamped with cumulative md5, sha256 and sha512 hashes, so you can verify what happened and in what order.
