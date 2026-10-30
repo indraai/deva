@@ -8,7 +8,7 @@
 import {EventEmitter} from 'node:events';
 import {createHash,randomUUID} from 'crypto';
 import lib from './lib/index.js';
-import config from './config/index.js';
+import config from './_data/index.js';
 import pkg from './package.json' with {type:'json'};
 
 class Deva {
