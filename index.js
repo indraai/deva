@@ -295,7 +295,14 @@ class Deva {
     return packet;
   }
 
-  _getFeature(key, value) {
+  /**************
+  func: _getFeature
+  params: 
+    - key: the feature key parameter.
+    - value: the value being passed into the data.
+  describe: 
+  ***************/  
+  _getFeature(key) {
     if (!this._active) return this._messages.offline; // check the active status
     this.feature(key); // set the security state
     this.zone(key);
@@ -303,7 +310,7 @@ class Deva {
     this.state(key);
     this.state('try', key);
     try {
-      const data = this.lib.copy(value);
+      const data = this.lib.copy(this[`_${key}`]);
       this.action('return', key); // set the security state
       this.intent('good', key);
       return data; // return the security feature
@@ -1641,7 +1648,7 @@ class Deva {
   usage: this.license()
   ***************/
   license() {
-    return this._getFeature('license', this._license);
+    return this._getFeature('license');
   }
 
   /**************
@@ -1651,7 +1658,7 @@ class Deva {
   usage: this.error()
   ***************/
   error() {
-    return this._getFeature('error', this._error);
+    return this._getFeature('error');
   }
   
   /**************
@@ -1661,7 +1668,7 @@ class Deva {
   usage: this.log()
   ***************/
   log() {
-    return this._getFeature('log', this._error);
+    return this._getFeature('log');
   }
   
   /**************
@@ -1671,7 +1678,7 @@ class Deva {
   usage: this.data()
   ***************/
   data() {
-    return this._getFeature('data', this._data);
+    return this._getFeature('data');
   }
 
   /**************
@@ -1681,7 +1688,7 @@ class Deva {
   usage: this.report()
   ***************/
   report() {
-    return this._getFeature('report', this._error);
+    return this._getFeature('report');
   }
         
   /**************
@@ -1691,7 +1698,7 @@ class Deva {
   usage: this.security()
   ***************/
   security() {
-    return this._getFeature('security', this._security);
+    return this._getFeature('security');
   }
   
   /**************
@@ -1701,7 +1708,7 @@ class Deva {
   usage: this.systems()
   ***************/
   legal() {
-    return this._getFeature('legal', this._legal);
+    return this._getFeature('legal');
   }
   
   /**************
@@ -1711,7 +1718,7 @@ class Deva {
   usage: this.support()
   ***************/
   support() {
-    return this._getFeature('support', this._support);
+    return this._getFeature('support');
   }
 
   /**************
@@ -1721,7 +1728,7 @@ class Deva {
   usage: this.services()
   ***************/
   services() {
-    return this._getFeature('services', this._services);
+    return this._getFeature('services');
   }
 
   /**************
@@ -1731,17 +1738,7 @@ class Deva {
   usage: this.systems()
   ***************/
   systems() {
-    return this._getFeature('systems', this._systems);
-  }
-
-  /**************
-  func: networks
-  params: none
-  describe: basic networks features available in a Deva.
-  usage: this.networks()
-  ***************/
-  networks() {
-    return this._getFeature('networks', this._networks);
+    return this._getFeature('systems');
   }
 
   /**************
