@@ -18,5 +18,6 @@ the core components
 - (Zones)[/core/zones]
 
 {% for action in site.data.actions.DATA %}
-	- {{action}}
+	- key: {{action[0]}}  
+	  value: {{action[1]}} 
 {% endfor %}
