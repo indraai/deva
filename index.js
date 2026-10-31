@@ -484,7 +484,9 @@ class Deva {
           personal: data.devas[this._agent.key], // Client personal features and rules.
           created: Date.now(),
         };
+        this.state('delete', `Feature:client:${feature}:${_id.uid}`); // set the state to delete
         delete this._client.features[feature]; // make a copy the clinet data.
+
         this.action('return', call_str); // set the action to return
         this.state('resolve', call_str); // set the state to resolve
         this.intent('good', call_str); // set the intent to good.
@@ -1079,7 +1081,6 @@ class Deva {
         this.zone('init', data.id.uid);
         this.action('init', data.id.uid);
         this.state('init', data.id.uid);
-        this.intent('init', data.id.uid);
 
         return this.Client(client, resolve, reject);
       }).then(() => {
@@ -1108,9 +1109,8 @@ class Deva {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
         if (hasOnInit) {
           this.action('onfunc', `onInit:${data.id.uid}`); // action set to onfunc
-          this.state('onfunc', `onInit:${data.id.uid}`); // state set to onfunc
+          this.state('valid', `onInit:${data.id.uid}`); // state set to onfunc
           this.intent('good', `onInit:${data.id.uid}`); // intent set to good
-          this.action('return', `onInit:${data.id.uid}`); // action set to return
           return this.onInit(data, resolve);
         }
         this.action('return', `init:${data.id.uid}`); // action set to return

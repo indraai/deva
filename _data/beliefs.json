@@ -4,30 +4,8 @@
 	"copyright": "Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.",
 	"VLA": "23221940810208468106",
 	"DATA": {
-		"positive": "🧸 Positive",
-		"negative": "☠️ Negative",
-		"productive": "🕺️ Productive",
-		"destructive": "💣 Destructive",
 		"vedic": "🕉️ Vedic",
-		"buddhist": "☸️️ Buddhist",
-		"hindu": "🛕 Hindu/Sikh",
-		"occult": "🪄 Occult",
-		"christian": "⛪️ Christian",
-		"jewish": "🕍 Jewish",
-		"muslim": "🕌️️ Muslim",
-		"pagan": "🧙️️ Pagan",
 		"american": "🇺🇸 American",
-		"delusional": "🪩 Delusional",
-		"other": "🤔 Other",
-		"license": "🪪  License",
-		"data": "💾️ Data",
-		"error": "❌️ Error",
-		"log": "🪵️ Log",
-		"report": "🗂️ Report",
-		"legal": "🏛️ Legal",
-		"security": "🚨 Security",
-		"support": "💼 Support",
-		"services": "🛠️ Services",
-		"systems": "🖥️️ Systems"
+		"other": "🤔 Other"
 	}
 }

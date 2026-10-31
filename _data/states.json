@@ -80,17 +80,6 @@
 		"catch": "⚾️ Catch",
 		"finally": "🏆 Finally",
 		"view": "👓 View",
-		"license": "🪪  License",
-		"feecting": "🏄 Feecting",
-		"data": "💾 Data",
-		"error": "❌ Error",
-		"log": "🪵 Log",
-		"report": "🗂️ Report",
-		"security": "🚨 Security",
-		"legal": "🏛️ Legal",
-		"support": "💼 Support",
-		"services": "🛠️ Services",
-		"systems": "🖥️ Systems",
 		"emergency": "🛟 Emergency",
 		"ingress": "🫴 Ingress",
 		"egress": "🫳 Egress",
@@ -116,8 +105,6 @@
 		"real": "😲 Real",
 		"mature": "🧓 Mature",
 		"immature": "🧒 Immature",
-		"consent": "✍️ Consent",
-		"onfunc": "🎚️ onFunction",
-		"romance": "🌹 Romance"
+		"consent": "✍️ Consent"
 	}
 }
