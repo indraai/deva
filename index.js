@@ -2064,7 +2064,7 @@ class Deva {
                       secure numerical number used for transporting records
                       across networks without collision or needing to store system uuid.
     3. the uid is then returned with a created, md5, sha256, and sha512 hash of the value
-  copyright: 2025 Quinn Arjuna Michaels. All rights reserved.
+  copyright: Copyright ©2000-2027 Quinn Arjuna America Michaels. All rights reserved.
   ***************/
   uid(guid=false) {
     const time = Date.now(); // set time to local constant
@@ -2148,7 +2148,7 @@ class Deva {
     - packet: The packet to sign data to.
   describe:
     The sign function can create a digital signature to a packet.
-  copyright: Copyright ©2000-2026 Quinn Arjuna Michaels. All rights reserved.
+  copyright: Copyright ©2000-2027 Quinn Arjuna America Michaels. All rights reserved.
   ***************/
   sign(packet) {
     const id = this.uid();
@@ -2224,7 +2224,7 @@ class Deva {
     - packageVLA: The Package VLA to validate against
   describe:
     The license_check function can checks VLA license validity.
-  copyright: Copyright ©2000-2026 Quinn Arjuna Michaels. All rights reserved.
+  copyright: Copyright ©2000-2027 Quinn Arjuna America Michaels. All rights reserved.
   ***************/  
   license_check(personalVLA=false, packageVLA=false) {    
     const id = this.uid();
