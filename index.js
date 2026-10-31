@@ -466,16 +466,16 @@ class Deva {
     const _id = this.uid();
     this.feature(feature, _id.uid);
     this.zone(feature, _id.uid);
-    const _cl = this.client(); // set local copy of client data
     try {
-      if (!_cl.features[feature]) return resolve(); // if no feature resolve
+      if (!this._features[feature]) return resolve(this._messages.invalidfeature); // if no feature resolve invalid feature
       else {
-        this.action(feature, _id.uid); // set action to feature
-        const _fe = `_${feature}`;
-        const {id, profile, features} = _cl; // make a copy the clinet data.
-        const data = features[feature]; // make a copy the clinet data.
-        this.state(feature, _id.uid);
-        this[_fe] = { // set this feature with data
+        const call_str = `Feature:${feature}:${_id.uid}` // call string for action state intent.
+        this.action('feature', call_str); // set action to feature
+        const {id, profile, features} = this.client(); // set the values from the client.
+        const data = features[feature]; // make a copy of the feature data
+
+        this.state('set', `Feature:this._${feature}:${_id.uid}`); // set the feature state value
+        this[`_${feature}`] = { // set this feature with data
           id: _id, // uid of the feature
           client_id: id, // client id for reference
           client_name: profile.name, // client name for personalization
@@ -485,13 +485,14 @@ class Deva {
           created: Date.now(),
         };
         delete this._client.features[feature]; // make a copy the clinet data.
-        this.state('resolve', `${feature}:${_id.uid}`);
-        this.intent('good', `${feature}:${_id.uid}`);
+        this.action('return', call_str); // set the action to return
+        this.state('resolve', call_str); // set the state to resolve
+        this.intent('good', call_str); // set the intent to good.
         return resolve(feature); // resolve when done
       }
     } catch (e) {
-      this.state('catch', `${feature}:${_id.uid}`);
-      this.intent('bad', `${feature}:${_id.uid}`);
+      this.state('catch', `${feature}:${_id.uid}`); // set the state to catch.
+      this.intent('bad', `${feature}:catch:${_id.uid}`); // set the intent to bad.
       return this.err(e, feature, reject); // run error handling if an error is caught
     }
   }
