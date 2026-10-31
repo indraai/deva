@@ -56,6 +56,7 @@
 		"await": "💛 Await",		
 		"continue": "❤️ Continue",
 		"break": "💔 Break",
+		"data": "💾️ Data",
 		"search": "🔎 Search",
 		"memory": "💭 Memory",
 		"signature": "✍️️ Signature",
@@ -66,12 +67,6 @@
 		"authorized": "🔑 Authorized",
 		"unauthorized": "🏴 Unauthorized",
 		"Done": "☑️   Done",
-		"glitch": "😡 Glitch",
-		"intruder": "🦹‍♂️ Intruder",
-		"snooper": "👀 Snooper",
-		"scam": "🙅‍♂️ Scam",
-		"fraud": "🤬 Fraud",
-		"crime": "🚔 Crime",
 		"official": "🫡 Official",
 		"unofficial": "🤥 Unofficial",
 		"approved": "🎖️ Approved",
@@ -99,12 +94,6 @@
 		"incorrect": "🟥 Incorrect",
 		"clean": "🧼 Clean",
 		"dirty": "🧹 Dirty",
-		"friend": "🦸 Friend",
-		"enemy": "🦹 Enemy",
-		"fake": "🥸 Fake",
-		"real": "😲 Real",
-		"mature": "🧓 Mature",
-		"immature": "🧒 Immature",
 		"consent": "✍️ Consent"
 	}
 }
