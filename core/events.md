@@ -6,7 +6,7 @@ image: /assets/banner.png
 permalink: /core/events/
 ---
 
-{{page.description}}
+**{{page.description}}**
 
 ## The event bus
 

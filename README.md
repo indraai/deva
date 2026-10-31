@@ -1,4 +1,4 @@
-# Deva Core
+# Deva
 
 [![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva)
 

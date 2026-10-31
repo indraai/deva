@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Deva Core
-description: A Vedic-inspired, event-based Node.js framework for building integrated AI agents, with stamped, verifiable data on every step.
+description: A Vedic-inspired, event-based Node.js framework for building integrated AI agents, with stamped, verifiable data on every step in Node.js.
 image: /assets/banner.png
 ---
 
@@ -9,7 +9,9 @@ image: /assets/banner.png
 	<img src="/assets/deva.png" alt="Deva Core">
 </center>
 
-**A Vedic-inspired, event-based framework for building integrated AI agents in Node.js.**
+**{{ page.description}}**
+
+[![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva)
 
 Deva Core is the base of every Deva. Each agent is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it announces every step as an event. Every data packet it builds is stamped with cumulative md5, sha256 and sha512 hashes, so you can verify what happened and in what order.
 

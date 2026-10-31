@@ -6,4 +6,6 @@ description: The Deva Core Documentation - install, quick start, lifecycle, mess
 image: /assets/banner.png
 ---
 
+{{ page.description}}
+
 {% include_relative README.md %}

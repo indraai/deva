@@ -8,7 +8,7 @@ permalink: /core/
 
 [![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva)
 
-{{page.description}}
+**{{page.description}}**
 
 Every **Deva Core** run is described by a small, fixed vocabulary. Each time something happens, the Core records which *feature* was involved, what was done, what *state* it is in, and what the *intent* was. The same names are used everywhere in the code, so a *log* entry means the same thing in every **Deva**. 
 
