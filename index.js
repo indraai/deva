@@ -2005,12 +2005,12 @@ class Deva {
   err(err,packet,reject=false) {
     const id = this.uid();
     const key = 'error';
-    this.intent('bad', `${key}:${id.uid}`);
     this.context(key, id.uid);
     this.feature(key, id.uid);
     this.zone(key, id.uid);
     this.action(key, id.uid);
     this.state(key, id.uid);
+    this.intent('bad', `${key}:${id.uid}`);
     
     const agent = this.agent();
     const client = this.client();
@@ -2138,7 +2138,6 @@ class Deva {
     data.md5 = this.hash(data, 'md5'); // md5 the uid and created. 
     data.sha256 = this.hash(data, 'sha256'); // sha256 the uid, created, md5
     data.sha512 = this.hash(data, 'sha512'); // sha512 the uid, created, md5, sha256.
-    // this.intent('good', `uid:${data.uid}`);
     return data; // return the complete uid data.
   }  
 
@@ -2212,8 +2211,8 @@ class Deva {
       copyright,
     };
     
-    this.action('return', `${data.key}:sign:${data.id.uid}`);
-    this.intent('good', `${data.key}:sign:${data.id.uid}`);
+    this.action('return', `${data.key}:sign:${data.id.uid}`); // set the action to return
+    this.intent('good', `${data.key}:sign:${data.id.uid}`); // set the intent to good
     return this._stamp(data, 'sign', data.id.uid);
   }
 
