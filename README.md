@@ -4,9 +4,9 @@
 
 **`@indra.ai/deva`**
 
-Deva Core is a Vedic-inspired, event-based, context-aware Feature, Zone, Action and State machine framework for building integrated artificial intelligence agents ("Devas") in Node.js. Every Deva is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it broadcasts each step as an event. Every packet it builds is stamped with cumulative md5, sha256 and sha512 hashes.
+Deva is a Vedic-inspired, event-based, context-aware Feature, Zone, Action and State machine framework for building integrated artificial intelligence agents ("Devas") in Node.js. Every Deva is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it broadcasts each step as an event. Every packet it builds is stamped with cumulative md5, sha256 and sha512 hashes.
 
-> Deva Core is distributed under the **Vedic License Agreement (VLA)**. Read [License](#license) before you use it.
+> Deva is distributed under the **Vedic License Agreement (VLA)**. Read [License](#license) before you use it.
 
 ## Contents
 
@@ -31,7 +31,7 @@ Deva Core is a Vedic-inspired, event-based, context-aware Feature, Zone, Action 
 
 - Node.js **22 or later** (`engines.node: ">=22"`), npm 9.5.1 or later.
 - ES modules only. The package is `"type": "module"` and uses JSON import attributes (`import x from './x.json' with {type: 'json'}`). `require()` won't work.
-- A **client object that carries a VLA** matching the one in Deva Core's `package.json`. `init()` refuses to start without it (see [Lifecycle](#lifecycle)).
+- A **client object that carries a VLA** matching the one in Deva's `package.json`. `init()` refuses to start without it (see [Lifecycle](#lifecycle)).
 
 ## Install
 
@@ -41,13 +41,13 @@ npm install @indra.ai/deva
 
 ## Quick start
 
-This is a minimal working Deva with one method. `client.json` is a client file shaped like [`tests/client.json`](tests/client.json). Its `DATA.VLA` must match the `VLA` block in Deva Core's `package.json`.
+This is a minimal working Deva with one method. `client.json` is a client file shaped like [`tests/client.json`](tests/client.json). Its `DATA.VLA` must match the `VLA` block in Deva's `package.json`.
 
 ```javascript
 import Deva from '@indra.ai/deva';
 import Client from './client.json' with {type: 'json'};
 
-const client = Client.DATA; // must carry a VLA matching the Deva Core package VLA
+const client = Client.DATA; // must carry a VLA matching the Deva package VLA
 
 const hello = new Deva({
   info: {id: 'hello', name: 'Hello Deva', version: '0.0.1', VLA: client.VLA},
@@ -194,7 +194,7 @@ packet: id, q, a, created, finish, complete, md5, sha256, sha512
 
 ## Stamping and the hash tiers
 
-Deva Core hashes in three tiers, in the order `config.hashes = ['md5', 'sha256', 'sha512']`:
+Deva hashes in three tiers, in the order `config.hashes = ['md5', 'sha256', 'sha512']`:
 
 | Tier | Intended use |
 |---|---|
@@ -297,7 +297,7 @@ Not covered here because they weren't exercised for this README: `help(msg, help
 
 ## License
 
-Deva Core is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `23221940810208468106`, owned by Quinn Arjuna America Michaels, through License Deva. The full text is in [LICENSE.md](LICENSE.md). It states, among other things, that:
+Deva is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `23221940810208468106`, owned by Quinn Arjuna America Michaels, through License Deva. The full text is in [LICENSE.md](LICENSE.md). It states, among other things, that:
 
 - by accessing or using the Software, you agree to its terms;
 - the Software is the sole proprietary property of the Owner;
