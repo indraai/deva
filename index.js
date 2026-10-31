@@ -471,6 +471,7 @@ class Deva {
       else {
         const call_str = `Feature:${feature}:${_id.uid}` // call string for action state intent.
         this.action('feature', call_str); // set action to feature
+        this.state('data', call_str); // set state to data
         const {id, profile, features} = this.client(); // set the values from the client.
         const data = features[feature]; // make a copy of the feature data
 

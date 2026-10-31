@@ -85,6 +85,7 @@
 		"create": "🎨 Create",
 		"destroy": "💣 Destroy",
 		"save": "📀 Save",
+		"delete": "🗑️ Delete",
 		"build": "👷️ Build",
 		"true": "🟢 True",
 		"false": "🔴 False",
