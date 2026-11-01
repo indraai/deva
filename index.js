@@ -307,10 +307,8 @@ class Deva {
     if (!this._features[key]) return this._messages.invalidfeature; // return no key if doesn't match.
     
     this.feature(key); // set the security state
-    this.zone(key);
-    this.action(key);
-    this.state(key);
-    this.state('try', key);
+    this.zone(key); // set the zone to the key.
+    this.state('try', key); // set the state to try.
     try {
       const data = this.lib.copy(this[`_${key}`]);
       this.action('return', `_getFeature:${key}`); // set the return action
