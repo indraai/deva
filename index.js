@@ -2234,7 +2234,7 @@ class Deva {
       this.action('return', personalVLA_str); // set the action to return
       this.state('invalid', personalVLA_str); // set the state to invalid
       this.intent('bad', personalVLA_str); // set the intent to bad
-      return false; // return the invalid personal VLA message
+      return this._messages.personalVLA; // return the invalid personal VLA message
     };
 
     // check the package VLA is passed.
@@ -2243,7 +2243,7 @@ class Deva {
       this.action('return', packageVLA_str); // set the action to return
       this.state('invalid', packageVLA_str); // set the state to invalid
       this.intent('bad', packageVLA_str); // set the intent to bad
-      return false; // return the invalid package VLA message
+      return this._messages.packageVLA; // return the invalid package VLA message
     }
         
     // this is to ensure no additional information is being transmitted.
