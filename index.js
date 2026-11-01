@@ -1107,7 +1107,7 @@ class Deva {
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
         if (hasOnInit) {
-          this.action('onfunc', `onInit:${data.id.uid}`); // action set to onfunc
+          this.action('func', `onInit:${data.id.uid}`); // action set to onfunc
           this.state('valid', `onInit:${data.id.uid}`); // state set to onfunc
           this.intent('good', `onInit:${data.id.uid}`); // intent set to good
           return this.onInit(data, resolve);
