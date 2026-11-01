@@ -1046,9 +1046,9 @@ class Deva {
       
       // do the core license check on init. 
       const license_check = this.license_check(client.VLA, this._core.VLA);
-      if (!license_check) {
-        this.prompt(this._messages.client_license_invalid); // set license invalid prompt
-        return resolve(this._messages.client_license_invalid); // return if} license check fails
+      if (!license_check?.id) {
+        this.prompt(license_check); // set license invalid prompt
+        return resolve(license_check); // return if} license check fails
       }
  
       this._active = Date.now(); // after passes license check set _active date.
@@ -2234,7 +2234,7 @@ class Deva {
       this.action('return', personalVLA_str); // set the action to return
       this.state('invalid', personalVLA_str); // set the state to invalid
       this.intent('bad', personalVLA_str); // set the intent to bad
-      return this._messages.personalVLA; // return the invalid personal VLA message
+      return false; // return the invalid personal VLA message
     };
 
     // check the package VLA is passed.
@@ -2243,7 +2243,7 @@ class Deva {
       this.action('return', packageVLA_str); // set the action to return
       this.state('invalid', packageVLA_str); // set the state to invalid
       this.intent('bad', packageVLA_str); // set the intent to bad
-      return this._messages.packageVLA; // return the invalid package VLA message
+      return false; // return the invalid package VLA message
     }
         
     // this is to ensure no additional information is being transmitted.
