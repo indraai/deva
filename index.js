@@ -352,7 +352,7 @@ class Deva {
   
     const data_stamped = this._stamp(this._unstamp(data), key, data.id.uid);  
   
-    // setup the complete talk event
+    // setup the complete talk veent
     this.action('talk', `${this._events[key]}:${data.id.uid}`); // action talk for the event.
     this.talk(this._events[key], this.lib.copy(data)); // talk the complete event
 
@@ -367,11 +367,9 @@ class Deva {
     // determine if there is an onComplete function for the entity.
     const hasOnFunc = this[onfunc] && typeof this[onfunc] === 'function'; 
     if (hasOnFunc) {
-      this.action('onfunc', `${key}:has:${onfunc}:${data.id.uid}`); // action onfunc
-      this.state('onfunc', `${key}:has:${onfunc}:${data.id.uid}`); // state onfunc
-      this.action('return', `${onfunc}:${data.id.uid}`); // action return
-      this.state('valid', `${onfunc}:${data.id.uid}`); // state valid
-      this.intent('good', `${onfunc}:${data.id.uid}`); // intent good
+      this.action('return', `onfunc:${onfunc}:${data.id.uid}`); // action return
+      this.state('valid', `onfunc:${onfunc}:${data.id.uid}`); // state valid
+      this.intent('good', `onfunc:${onfunc}:${data.id.uid}`); // intent good
       return this[onfunc](data, resolve);
     }
   
@@ -2231,7 +2229,7 @@ class Deva {
     const id = this.uid();
 
     // check the personal VLA is passed
-    if (!personalVLA) {
+    if (!personalVLA?.id) {
       const personalVLA_str = `license_check:personalVLA:${id.uid}`;
       this.action('return', personalVLA_str); // set the action to return
       this.state('invalid', personalVLA_str); // set the state to invalid
@@ -2240,7 +2238,7 @@ class Deva {
     };
 
     // check the package VLA is passed.
-    if (!packageVLA) {
+    if (!packageVLA?.id) {
       const packageVLA_str = `license_check:packageVLA:${id.uid}`;
       this.action('return', packageVLA_str); // set the action to return
       this.state('invalid', packageVLA_str); // set the state to invalid
