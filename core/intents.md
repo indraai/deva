@@ -10,7 +10,7 @@ permalink: /core/intents/
 
 ## What an intent is
 
-An intent records **the purpose or outcome behind what the Deva is doing**. Most calls in the Core use `good` when work succeeds and `bad` when it fails, but the list also covers lifecycle steps such as `good`, `neutral` and `bad`, and a wide range of purposes such as `help`, `work`, `assist` and `lawful`. Each time you set one, the Core records it and broadcasts a `devacore:intent` event. Actions say what is done, states say the condition, and intents say why and how it ended.
+An intent records **the purpose or outcome behind what the Deva is doing**. Most calls in the Core use `good` when work succeeds and `bad` when it fails. The list also covers a wide range of purposes such as `help`, `work`, `assist` and `lawful`. Each time you set one, the Core records it and broadcasts a `devacore:intent` event. Actions say what is done, states say the condition, and intents say why and how it ended.
 
 ## How to use it
 
