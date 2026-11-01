@@ -2040,8 +2040,8 @@ class Deva {
     const hasOnError = this.onError && typeof this.onError === 'function' ? true : false;
     // if block handles returning the onError and setting the state to hasOnError
     if (hasOnError) {
-      this.action('onfunc', `hasOnError:${data.value}:${data.id.uid}`);
-      this.state('onfunc', `hasOnError:${data.value}:${data.id.uid}`);
+      this.action('func', `onError:${data.value}:${data.id.uid}`);
+      this.state('invalid', `onError:${data.value}:${data.id.uid}`);
       this.intent('bad', `hasOnError:${data.id.uid}`);
       return this.onError(err, packet, reject);
     }
