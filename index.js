@@ -2229,7 +2229,7 @@ class Deva {
     const id = this.uid();
 
     // check the personal VLA is passed
-    if (!personalVLA?.id) {
+    if (!personalVLA) {
       const personalVLA_str = `license_check:personalVLA:${id.uid}`;
       this.action('return', personalVLA_str); // set the action to return
       this.state('invalid', personalVLA_str); // set the state to invalid
@@ -2238,7 +2238,7 @@ class Deva {
     };
 
     // check the package VLA is passed.
-    if (!packageVLA?.id) {
+    if (!packageVLA) {
       const packageVLA_str = `license_check:packageVLA:${id.uid}`;
       this.action('return', packageVLA_str); // set the action to return
       this.state('invalid', packageVLA_str); // set the state to invalid
