@@ -19,7 +19,7 @@ This reference is generated from the live data files shipped with the Core.
 - **[Actions]({{ "/core/actions/" | relative_url }})** ({{ site.data.actions.DATA | size }}): what was done, such as consent, encrypt, decrypt, return.
 - **[States]({{ "/core/states/" | relative_url }})** ({{ site.data.states.DATA | size }}): the condition something is in, such as online, active, idle, valid or catch.
 - **[Intents]({{ "/core/intents/" | relative_url }})** ({{ site.data.intents.DATA | size }}): the purpose behind an action, such as good, bad or lawful.
-- **[Beliefs]({{ "/core/beliefs/" | relative_url }})** ({{ site.data.beliefs.DATA | size }}): the stance recorded for the work, such as positive, productive or vedic.
+- **[Beliefs]({{ "/core/beliefs/" | relative_url }})** ({{ site.data.beliefs.DATA | size }}): the stance recorded for the work, such as vedic, american, or other.
 - **[Events]({{ "/core/events/" | relative_url }})** ({{ site.data.events.DATA | size }}): the named signals the Core emits through its lifecycle, such as `devacore:start`, `devacore:ready` and `devacore:error`, which your own code can listen for.
 - **[Messages]({{ "/core/msgs/" | relative_url }})** ({{ site.data.msgs.DATA | size }}): the standard text the Core uses for lifecycle steps and errors, so output is consistent and can be audited.
 

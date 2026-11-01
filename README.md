@@ -220,21 +220,21 @@ Each call to `feature()`, `zone()`, `action()`, `state()`, `intent()` or `belief
 
 The plural methods return a stamped object whose `value` is the full list:
 
-| List | Method | Default | Count | Source |
+| List | Method | Default | Source |
 |---|---|---|---|---|
-| features | `features()` | — | 21 | `config/features.json` |
-| zones | `zones()` | — | 95 | `config/zones.json` |
-| actions | `actions()` | — | 116 | `config/actions.json` |
-| states | `states()` | `offline` | 134 | `config/states.json` |
-| intents | `intents()` | `neutral` | 78 | `config/intents.json` |
-| beliefs | `beliefs()` | `vedic` | 64 | `config/beliefs.json` |
-| contexts | `contexts()` | — | from your `vars.context` | your agent |
+| features | `features()` | — | `_data/features.json` |
+| zones | `zones()` | — | `_data/zones.json` |
+| actions | `actions()` | — | `_data/actions.json` |
+| states | `states()` | `offline` | `_data/states.json` |
+| intents | `intents()` | `neutral` | `_data/intents.json` |
+| beliefs | `beliefs()` | `vedic` | `_data/beliefs.json` |
+| contexts | `contexts()` | —  | your agent |
 
 The 21 features are `init, agent, client, license, error, log, data, report, communication, treasury, justice, authority, security, medical, legal, owner, support, services, systems, networks, veda`. Each client feature has a getter of the same name (`security()`, `veda()`, ...) that returns a copy of what the client supplied for it.
 
 ## Events
 
-All core events are listed in `config/events.json` (25). The ones you'll usually listen to:
+All core events are listed in `_data_/events.json` (25). The ones you'll usually listen to:
 
 `devacore:prompt`, `devacore:error`, `devacore:question`, `devacore:answer`, `devacore:ask`, `devacore:start`, `devacore:enter`, `devacore:done`, `devacore:ready`, `devacore:finish`, `devacore:complete`, `devacore:stop`, `devacore:exit`, `devacore:shutdown`, `devacore:context`, `devacore:feature`, `devacore:zone`, `devacore:action`, `devacore:state`, `devacore:intent`, `devacore:belief`, `devacore:load`, `devacore:unload`.
 
@@ -251,11 +251,11 @@ A method that rejects or throws ends up here. Most calls made while the Deva is 
 
 | File | Contents |
 |---|---|
-| `config/index.js` | Command char `/`, ask char `#`, `timeout.ask: 30000`, `hashes`, container markers (`::BEGIN`/`::END`), uid salt range, inherit/bind lists, the invoke chain table, defaults |
-| `config/events.json` | Event names |
-| `config/features.json` | Feature labels |
-| `config/zones.json`, `actions.json`, `states.json`, `intents.json`, `beliefs.json` | Workflow labels |
-| `config/msgs.json` | System messages such as `offline`, `noid`, `asktimeout`, `noask`, `method_not_found`, plus default `warning`, `notice` and `copyright` text |
+| `_data/_index.js` | Command char `/`, ask char `#`, `timeout.ask: 30000`, `hashes`, container markers (`::BEGIN`/`::END`), uid salt range, inherit/bind lists, the invoke chain table, defaults |
+| `_data/_events.json` | Event names |
+| `_data/_features.json` | Feature labels |
+| `_data/_zones.json`, `actions.json`, `states.json`, `intents.json`, `beliefs.json` | Workflow labels |
+| `_data/_msgs.json` | System messages such as `offline`, `noid`, `asktimeout`, `noask`, `method_not_found`, plus default `warning`, `notice` and `copyright` text |
 
 Each JSON file has `id`, `title`, `copyright`, `VLA` and `DATA`, and the values are in `DATA`.
 

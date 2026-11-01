@@ -10,7 +10,7 @@ permalink: /core/beliefs/
 
 ## What a belief is
 
-A belief records **the outlook a Deva is working under** while it does a piece of work, such as positive, productive, or vedic. Each time you set one, the Core records it and broadcasts a `devacore:belief` event. Actions say what is being done, states say what condition it is in, intents say why, and beliefs say from which frame of reference. Together they give a full record of an operation.
+A belief records **the outlook a Deva is working under** while it does a piece of work, such as vedic, american, or other. Each time you set one, the Core records it and broadcasts a `devacore:belief` event. Actions say what is being done, states say what condition it is in, intents say why, and beliefs say from which frame of reference. Together they give a full record of an operation.
 
 ## How to use it
 
@@ -18,7 +18,7 @@ A belief records **the outlook a Deva is working under** while it does a piece o
 this.belief(<belief>, <emit_value>)
 ```
 
-- `<belief>` is a key from the list below, such as `'vedic'` or `'positive'`.
+- `<belief>` is a key from the list below, such as `'vedic'` or `'american'`.
 - `<emit_value>` is optional extra text added to the record. Use it to say what the belief applies to, such as an id.
 
 ```js

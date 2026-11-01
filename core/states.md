@@ -10,7 +10,7 @@ permalink: /core/states/
 
 ## What a state is
 
-A state records **the condition a Deva or a piece of work is in right now**: online, idle, waiting, pending, valid, or catch for an error. Each time you set one, the Core records it and broadcasts a `devacore:state` event. Actions say what is being done, and states say what condition it is in while it happens.
+A state records **the condition a Deva or a piece of work is in right now**: online, idle, wait, pending, valid, or catch for an error. Each time you set one, the Core records it and broadcasts a `devacore:state` event. Actions say what is being done, and states say what condition it is in while it happens.
 
 ## Setting a state: this.state()
 

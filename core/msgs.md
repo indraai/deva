@@ -46,10 +46,14 @@ if (result === this._messages.offline) {
 
 | Message | When |
 | --- | --- |
+| `personalVLA` | `license_check()` is called without a personal VLA, which is the client's license. |
+| `packageVLA` | `license_check()` is called without a package VLA, which is the Core's own license. |
+| `checkVLA` | Both VLAs are present, but their sha256 hashes don't match, so the license is invalid. |
 | `unload` | A feature is unloaded. It is returned with the feature key. |
-| `client_license_invalid` | The client's license check fails during startup. |
 | `invalid_agent`, `invalid_client` | A hash check on the agent or client fails. |
 | `init` | The text of the init data packet. |
+
+The three VLA messages are what `init()` resolves with when the client's license check fails. Startup stops there and the Deva is not activated. A valid license returns a stamped approval record, and `init()` continues.
 
 **Identity and legal text.** `warning`, `notice`, `copyright`, `status`, `vectors`, `owner`, `creator` and `salute` are the defaults the Core uses when it builds a Deva's license and fingerprint data. If your agent profile sets its own value, the profile wins, and the message is only the fallback.
 
