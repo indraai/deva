@@ -2230,34 +2230,41 @@ class Deva {
   license_check(personalVLA=false, packageVLA=false) {    
     const id = this.uid();
 
+    // check the personal VLA is passed
     if (!personalVLA) {
-      this.intent('bad', `personalVLA:${id.uid}`);
-      return false
+      const personalVLA_str = `license_check:personalVLA:${id.uid}`;
+      this.action('return', personalVLA_str); // set the action to return
+      this.state('invalid', personalVLA_str); // set the state to invalid
+      this.intent('bad', personalVLA_str); // set the intent to bad
+      return this._messages.personalVLA; // return the invalid personal VLA message
     };
-    this.state('license', `check:personalVLA:${personalVLA.uid}`);
 
+    // check the package VLA is passed.
     if (!packageVLA) {
-      this.intent('bad', `packageVLA:${id.uid}`);
-      return false;
+      const packageVLA_str = `license_check:packageVLA:${id.uid}`;
+      this.action('return', packageVLA_str); // set the action to return
+      this.state('invalid', packageVLA_str); // set the state to invalid
+      this.intent('bad', packageVLA_str); // set the intent to bad
+      return this._messages.packageVLA; // return the invalid package VLA message
     }
-    this.state('license', `check:packageVLA:${packageVLA.uid}`);
-    
+        
     // this is to ensure no additional information is being transmitted.
-    this.state('license', `compare:sha256:${packageVLA.uid}`);
-    const personalVLA_hash = this.hash(personalVLA, 'sha256');
-    const packageVLA_hash = this.hash(packageVLA, 'sha256');
-    
-    if (personalVLA_hash !== packageVLA_hash) return false;
+    this.state('check', `license_check:compare:${packageVLA.uid}`);
+    const personalVLA_hash = this.hash(personalVLA, 'sha256'); // hash the entire personal VLA locally
+    const packageVLA_hash = this.hash(packageVLA, 'sha256'); // hash the entire package VLA locally
+    if (personalVLA_hash !== packageVLA_hash) return this._messages.checkVLA; // if invalid return the invalid message
 
+    this.state('approved', `license_check:${packageVLA.uid}`);
     const approved = {
-      id: this.uid(),
+      id,
       time: Date.now(),
       personal: personalVLA_hash,
       package: packageVLA_hash,
     };
 
-    this.state('return', `license:${packageVLA.uid}`);
-    this.intent('good', `license:${packageVLA.uid}`);
+    this.action('return', `license_check:${packageVLA.uid}`); // set action to return
+    this.state('valid', `license_check:${packageVLA.uid}`); // set the state to valid
+    this.intent('good', `license_check:${packageVLA.uid}`); // set the intent to good
     return this._stamp(approved, 'license_check', packageVLA.uid);
   }
 

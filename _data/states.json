@@ -66,7 +66,7 @@
 		"help": "💙 Help",
 		"authorized": "🔑 Authorized",
 		"unauthorized": "🏴 Unauthorized",
-		"Done": "☑️   Done",
+		"Done": "☑️ Done",
 		"official": "🫡 Official",
 		"unofficial": "🤥 Unofficial",
 		"approved": "🎖️ Approved",
@@ -95,6 +95,7 @@
 		"incorrect": "🟥 Incorrect",
 		"clean": "🧼 Clean",
 		"dirty": "🧹 Dirty",
-		"consent": "✍️ Consent"
+		"consent": "✍️ Consent",
+		"check": "☑️ Check"
 	}
 }
