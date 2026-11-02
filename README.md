@@ -116,7 +116,7 @@ Any other top-level option is copied onto the instance, as long as it doesn't cl
 1. Hashes the core package data (md5, sha256, sha512).
 2. Runs `license_check(client.VLA, core.VLA)`, comparing sha256 hashes of the two VLA objects. On a mismatch it prompts and resolves with `❌ The Provided Client License Is Invalid`, and the Deva stays inactive.
 3. Marks the Deva active, then inherits into child devas, binds `listeners`/`methods`/`utils`/`func`/`lib`, and registers listeners.
-4. Runs the client feature chain: `Client`, then `License`, `Error`, `Log`, `Data`, `Report`, `Communication`, `Treasury`, `Justice`, `Authority`, `Legal`, `Security`, `Support`, `Services`, `Systems`, then `Done`. For each one that the client's `features` object defines, the Deva stores `this._<feature>` = `{client_id, client_name, concerns, global, personal}`, where `personal` is the entry under `devas[agent.key]`. Methods found in `client.features[x].methods` are bound into `this.methods`.
+4. Runs the client feature chain: `Client`, then `License`, `Error`, `Log`, `Data`, `Report`, `Legal`, `Security`, `Support`, `Services`, `Systems`, then `Done`. For each one that the client's `features` object defines, the Deva stores `this._<feature>` = `{client_id, client_name, concerns, global, personal}`, where `personal` is the entry under `devas[agent.key]`. Methods found in `client.features[x].methods` are bound into `this.methods`.
 5. Calls `onInit(data, resolve)` if you defined it, otherwise `start`.
 
 ### The invoke chain
