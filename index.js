@@ -1,9 +1,9 @@
 "use strict";
 // Deva Core
-// Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved. 
+// Copyright ©2000-2026 Quinn Michaels; All rights reserved. 
 // Owner Signature Required For Lawful Use.
-// Distributed under VLA:23221940810208468106 LICENSE.md  
-// Friday, October 9, 2026 - 7:47:02 AM PST
+// Distributed under VLA:31711622713594414221 LICENSE.md  
+// Sunday, November 1, 2026 - 10:04:59 PM PST
 
 import {EventEmitter} from 'node:events';
 import {createHash,randomUUID} from 'crypto';
@@ -2062,7 +2062,7 @@ class Deva {
                       secure numerical number used for transporting records
                       across networks without collision or needing to store system uuid.
     3. the uid is then returned with a created, md5, sha256, and sha512 hash of the value
-  copyright: Copyright ©2000-2026 Quinn Arjuna America Michaels. All rights reserved.
+  copyright: Copyright ©2000-2026 Quinn Michaels. All rights reserved.
   ***************/
   uid(guid=false) {
     const time = Date.now(); // set time to local constant
@@ -2145,7 +2145,7 @@ class Deva {
     - packet: The packet to sign data to.
   describe:
     The sign function can create a digital signature to a packet.
-  copyright: Copyright ©2000-2026 Quinn Arjuna America Michaels. All rights reserved.
+  copyright: Copyright ©2000-2026 Quinn Michaels. All rights reserved.
   ***************/
   sign(packet) {
     const id = this.uid();
@@ -2221,7 +2221,7 @@ class Deva {
     - packageVLA: The Package VLA to validate against
   describe:
     The license_check function can checks VLA license validity.
-  copyright: Copyright ©2000-2026 Quinn Arjuna America Michaels. All rights reserved.
+  copyright: Copyright ©2000-2026 Quinn Michaels. All rights reserved.
   ***************/  
   license_check(personalVLA=false, packageVLA=false) {    
     const id = this.uid();

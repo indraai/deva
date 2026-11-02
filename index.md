@@ -38,4 +38,4 @@ Node.js 22 or later. ES modules only.
 
 Deva Core is distributed under the **Vedic License Agreement (VLA)**. Read the [license](https://github.com/indraai/deva/blob/main/LICENSE.md) before you use it.
 
-Created by Quinn Arjuna America Michaels. [indra.ai](https://indra.ai)
+Created by Quinn Michaels. [indra.ai](https://indra.ai)
