@@ -230,7 +230,7 @@ The plural methods return a stamped object whose `value` is the full list:
 | beliefs | `beliefs()` | `vedic` | `_data/beliefs.json` |
 | contexts | `contexts()` | —  | your agent |
 
-The 21 features are `init, agent, client, license, error, log, data, report, communication, treasury, justice, authority, security, medical, legal, owner, support, services, systems, networks, veda`. Each client feature has a getter of the same name (`security()`, `veda()`, ...) that returns a copy of what the client supplied for it.
+The features are `init, agent, client, license, error, log, data, report, legal, security, support, services, systems`. Each client feature has a getter of the same name (`security()`, `veda()`, ...) that returns a copy of what the client supplied for it.
 
 ## Events
 
