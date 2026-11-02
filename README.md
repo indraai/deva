@@ -297,7 +297,7 @@ Not covered here because they weren't exercised for this README: `help(msg, help
 
 ## License
 
-Deva is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `23221940810208468106`, owned by Quinn Arjuna America Michaels, through License Deva. The full text is in [LICENSE.md](LICENSE.md). It states, among other things, that:
+Deva is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `31711622713594414221`, owned by Quinn Michaels, through License Deva. The full text is in [LICENSE.md](LICENSE.md). It states, among other things, that:
 
 - by accessing or using the Software, you agree to its terms;
 - the Software is the sole proprietary property of the Owner;
@@ -307,7 +307,7 @@ Deva is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `2
 
 Read LICENSE.md in full before you use the Software. This summary isn't a substitute for it.
 
-Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.
+Copyright ©2000-2026 Quinn Michaels; All rights reserved.
 
 ## Links and author
 
@@ -316,4 +316,4 @@ Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.
 - npm: https://www.npmjs.com/package/@indra.ai/deva
 - Homepage: https://indra.ai
 
-**Author:** Quinn Arjuna America Michaels, Inside The Net, Inc. (quinn@indra.ai)
+**Author:** Quinn Michaels, Inside The Net, Inc. (quinn@indra.ai)

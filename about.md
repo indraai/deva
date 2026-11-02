@@ -8,7 +8,7 @@ image: /assets/banner.png
 
 Deva Core is a small, dependency-free Node.js framework for building software agents ("Devas") that work as a team on a shared event bus, describe everything they do in plain named steps, and stamp every packet of data they produce so it can be verified later.
 
-It is written and maintained by Quinn Arjuna America Michaels, and it has been in development for more than ten years. It is the base that the other Deva modules build on.
+It is written and maintained by Quinn Michaels, and it has been in development for more than ten years. It is the base that the other Deva modules build on.
 
 ## 1. What Deva Core is
 
@@ -67,7 +67,7 @@ These are ideas for where the design fits, not a list of finished products.
 
 **Licensing**
 
-- Deva Core is distributed under the **Vedic License Agreement (VLA)**, owned by Quinn Arjuna America Michaels and distributed through License Deva.
+- Deva Core is distributed under the **Vedic License Agreement (VLA)**, owned by Quinn Michaels and distributed through License Deva.
 - Every client must present a VLA that matches the one in the Core. Without it, the Core will not start.
 - The license limits modification, redistribution, derivative works, and official, government or commercial use unless the Owner has verified and authorized it. **A company planning commercial use should contact the Owner first and have the authorization in writing.** Read the full [license](https://github.com/indraai/deva/blob/main/LICENSE.md) before you evaluate the Core.
 

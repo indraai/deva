@@ -35,8 +35,8 @@ A few principles follow from that:
 
 - **A fixed vocabulary.** The logbook uses a fixed list of words, kept in the Core's `_data` files. A `valid` state means the same thing in every Deva, so records can be searched and compared without guessing.
 - **Every record is sealed.** Packets and records carry three cumulative hashes. Each seal is pressed over the paper *and the seals beneath it*, so sha256 covers md5, and sha512 covers both. This tiering is deliberate. The README describes md5 as fast everyday verification, sha256 as government and authority verification, and sha512 as military, agency and legal high-security use.
-- **Licensed use.** The Core is distributed under the **Vedic License Agreement (VLA)**, owned by Quinn Arjuna America Michaels. A Deva will not start unless the client it serves carries a VLA that matches the one in the Core's `package.json`.
-- **A stated legal order.** `LICENSE.md` says use of the software "is subject to a threefold hierarchy of law": first Vedic Law, "as the supreme spiritual and religious authority"; second the Constitution of the United States, as "the secular legal framework"; and third Owner Authority, resting with Quinn Arjuna America Michaels, "whose signature and consent are required for any valid license." It adds: "All three levels must be satisfied; violation of any one constitutes unlawful use."
+- **Licensed use.** The Core is distributed under the **Vedic License Agreement (VLA)**, owned by Quinn Michaels. A Deva will not start unless the client it serves carries a VLA that matches the one in the Core's `package.json`.
+- **A stated legal order.** `LICENSE.md` says use of the software "is subject to a threefold hierarchy of law": first Vedic Law, "as the supreme spiritual and religious authority"; second the Constitution of the United States, as "the secular legal framework"; and third Owner Authority, resting with Quinn Michaels, "whose signature and consent are required for any valid license." It adds: "All three levels must be satisfied; violation of any one constitutes unlawful use."
 
 **Read [LICENSE.md](https://github.com/indraai/deva/blob/master/LICENSE.md) in full before you build anything with the Core.** Among other things, it restricts modification, distribution, derivative works, and commercial or government use without the Owner's verified authorization, and it limits use to the United States. This page is not a substitute for it, and your AI assistant can't decide for you whether your use is allowed.
 
@@ -374,4 +374,4 @@ Ask these yourself, or paste them to your AI assistant:
 
 ---
 
-Copyright ©2000-2026 Quinn Arjuna America Michaels; All rights reserved.
+Copyright ©2000-2026 Quinn Michaels; All rights reserved.
