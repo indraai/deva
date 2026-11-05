@@ -311,7 +311,6 @@ Why it's "safe":
 
 ### Current limits (true at version 1.62.92)
 
-- **`init()` resolves too early. A fix is planned for 1.63.** Right now the `init()` promise resolves with `undefined` as soon as the client step finishes, before `start`, `enter`, `done` and `ready` have run. In our recipe, `init resolved with: undefined` printed before `onReady` had done any work. Until the fix ships, wait for `onReady` or `devacore:ready`, and don't trust the `init` promise as a "ready" signal.
 - **Errors during the client feature chain don't stop start-up.** Because of the same early resolve, if the client object is missing feature settings, each feature step announces a `devacore:error` (in our test: `Cannot read properties of undefined (reading 'license')`, and the same for the others), but `init` has already resolved and the Deva still reaches `onReady`. Listen for `devacore:error` so you notice.
 - **Unknown names are silent.** A name that isn't in `_data` (or your agent's additions) makes `feature`, `zone`, `action`, `state`, `intent` and `belief` do nothing at all. That keeps the vocabulary strict, but a typo, or a name removed from `_data` in a later version, can quietly drop logbook lines. Check the lists after upgrading.
 - **`npm test` has no assertions yet.** It runs a Deva through its lifecycle and passes as long as nothing throws. Assertion tests are planned. Until then, "tests pass" means "it didn't crash," not "it did the right thing."
