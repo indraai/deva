@@ -83,7 +83,8 @@ Run it with `node examples/hello-world.js` and it prints `hello world`.
 
 Three things to know from this example:
 
-- **Do your work from `onReady`, not after `await init()`.** The `init()` promise currently resolves with client data as soon as the client step finishes, before `start`, `enter`, `done` and `ready` have run. `onReady` is the reliable point where the Deva is fully up.
+- Do your work from `onReady`, not after `await init()`. The `init()` promise currently resolves with client data as soon as the client step finishes, before `start`, `enter`, `done` and `ready` have run.
+
 - **`info`, `config: {hash: {}}` and `vars.context` are effectively required.** Without them `ready()` or `context()` throws. The error handler then calls `context()` again, and the process ends in a stack overflow.
 - **Methods must return a Promise.** `answer()` calls `this.methods[method](packet).then(...)`.
 
