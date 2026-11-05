@@ -442,7 +442,7 @@ class Deva {
 
       this.action('return', `client:${client.id}`); // set the action 
       this.intent('good', `client:${client.id}`); // set the intent
-      return resolve(); // resolve the client .
+      return resolve(_client); // resolve the client .
     } catch (e) {
       this.state('catch', `client:${client.id}`);
       this.intent('bad', `client:${client.id}`);
