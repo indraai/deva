@@ -129,8 +129,6 @@ After `init`, the Deva walks through named steps. Each step does the same things
 
 `ready` also seals your `vars`, `utils`, `listeners`, `modules`, `func` and `methods` into `config.hash[agent.key]` (a snapshot of how the office was set up) and starts each child Deva.
 
-**`onReady` is the moment the office is open.** Do your work from there, or after hearing `devacore:ready`. Don't do it right after `await init()`. The section on limits explains why.
-
 ## Talking on the intercom: messaging
 
 ### Asking a specialist a question
@@ -278,7 +276,6 @@ stopped: shutdown | after: ⭕️ OFFLINE
 
 Why it's "safe":
 
-- the work happens inside `onReady`, not after `await init()`;
 - every method returns a Promise;
 - `info`, `config: {hash: {}}` and `vars: {context: {}}` are all present;
 - there's a `devacore:error` listener, so errors are visible;
@@ -311,7 +308,6 @@ Why it's "safe":
 
 ### Current limits (true at version 1.62.92)
 
-- **Errors during the client feature chain don't stop start-up.** Because of the same early resolve, if the client object is missing feature settings, each feature step announces a `devacore:error` (in our test: `Cannot read properties of undefined (reading 'license')`, and the same for the others), but `init` has already resolved and the Deva still reaches `onReady`. Listen for `devacore:error` so you notice.
 - **Unknown names are silent.** A name that isn't in `_data` (or your agent's additions) makes `feature`, `zone`, `action`, `state`, `intent` and `belief` do nothing at all. That keeps the vocabulary strict, but a typo, or a name removed from `_data` in a later version, can quietly drop logbook lines. Check the lists after upgrading.
 - **`npm test` has no assertions yet.** It runs a Deva through its lifecycle and passes as long as nothing throws. Assertion tests are planned. Until then, "tests pass" means "it didn't crash," not "it did the right thing."
 - **The license-failure prompt isn't heard.** `init` calls `prompt()` with the license failure message, but the Deva isn't active yet, so no `devacore:prompt` is announced (we counted zero). Check the value `init` resolves with instead.
@@ -331,7 +327,6 @@ Ask these yourself, or paste them to your AI assistant:
 
 - [ ] Have I read `LICENSE.md`, and is my use allowed under it (location, commercial use, modification)?
 - [ ] Does my client object carry the VLA that matches the Core's `package.json`, and an entry for every client feature?
-- [ ] Is all my real work inside `onReady` (or after `devacore:ready`), not after `await init()`?
 - [ ] Does every method return a Promise, and does every hook call the next step or `resolve`?
 - [ ] Is every feature, zone, action, state, intent and belief name I use actually on its list?
 - [ ] Do I have a `devacore:error` listener, and does my `onError` (if any) call `reject`?
