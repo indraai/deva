@@ -1066,6 +1066,10 @@ class Deva {
 
       // stamp the init data
       const data_stamped = this._stamp(data, 'init', data.id.uid); 
+
+      const step = (name, ...args) => new Promise((res, rej) => {
+        this[name](...args, res, rej);
+      });
       
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -1079,29 +1083,29 @@ class Deva {
         this.action('init', data.id.uid);
         this.state('init', data.id.uid);
 
-        return this.Client(client, resolve, reject);
+        return step('Client', client);
       }).then(() => {
-        return this.License(resolve, reject);
+        return step('License');
       }).then(() => {
-        return this.Error(resolve, reject);
+        return step('Error');
       }).then(() => {
-        return this.Log(resolve, reject);
+        return step('Log');
       }).then(() => {
-        return this.Data(resolve, reject);
+        return step('Data');
       }).then(() => {
-        return this.Report(resolve, reject);
+        return step('Report');
       }).then(() => {
-        return this.Legal(resolve, reject);
+        return step('Legal');
       }).then(() => {
-        return this.Security(resolve, reject);
+        return step('Security');
       }).then(() => {
-        return this.Support(resolve, reject);
+        return step('Support');
       }).then(() => {
-        return this.Services(resolve, reject);
+        return step('Services');
       }).then(() => {
-        return this.Systems(resolve, reject);
+        return step('Systems');
       }).then(() => {
-        return this.Done(resolve, reject);
+        return step('Done');
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
         if (hasOnInit) {
