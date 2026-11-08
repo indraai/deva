@@ -83,7 +83,7 @@ Run it with `node examples/hello-world.js` and it prints `hello world`.
 
 Three things to know from this example:
 
-- Do your work from `onReady`, not after `await init()`. The `init()` promise currently resolves with client data as soon as the client step finishes, before `start`, `enter`, `done` and `ready` have run.
+- Do your work from `onReady`, not after `await init()`. The `init()` promise  resolves after `ready` have run.
 
 - **`info`, `config: {hash: {}}` and `vars.context` are effectively required.** Without them `ready()` or `context()` throws. The error handler then calls `context()` again, and the process ends in a stack overflow.
 - **Methods must return a Promise.** `answer()` calls `this.methods[method](packet).then(...)`.
