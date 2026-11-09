@@ -1011,18 +1011,17 @@ class Deva {
         this.action('talk', `${agent.key}:${key}:${method}:err:${packet.id.uid}`);
         this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
-        this.talk(`${agent.key}:${key}:${method}:${packet.id.uid}`, {error:err});
-        return this.err(err, packet);
+        this.talk(`${agent.key}:${key}:${packet.id.uid}`, {error:err});
+        return this.err(err, packet, () => {});
       })
     }
-    catch (err) {
+    catch (e) {
       this.action('talk', `${agent.key}:${key}:${method}:err:${packet.id.uid}`);
       this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
       this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
-      // reply on the asker's event so the asker hears the error right away.
-      this.talk(`${agent.key}:ask:${packet.id.uid}`, {error:err});
-      // log the error here; the asker owns the reject.
-      return this.err(err, packet, () => {});}
+      this.talk(`${agent.key}:${key}:${packet.id.uid}`, {error:e});
+      return this.err(e, packet, () => {})
+    }
     // now when we ask the meta params[0] should be the method
   }
 

@@ -17,9 +17,9 @@ const helper = () => build({
 	agent: {...agent, id: 'helper', key: 'helper', profile: {...agent.profile, name: 'Helper'}},
 	methods: {
 		shout: packet => Promise.resolve({text: packet.q.text.toUpperCase()}),
+		fail: () => Promise.reject(new Error('helper failed')),
+		throws: () => { throw new Error('helper threw'); },
 	},
-	fail: () => Promise.reject(new Error('helper failed')),
-	throws: () => { throw new Error('helper threw'); },
 });
 
 
