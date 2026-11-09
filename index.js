@@ -224,6 +224,7 @@ class Deva {
     for (const pending of this._pending) {
       clearTimeout(pending.timer);
       if (this.events) this.ignore(pending.evt, pending.handler);
+      pending.resolve(this._messages.offline); // the Deva is going offline so answer the waiting caller.
     }
     this._pending.clear();
   }
@@ -767,7 +768,7 @@ class Deva {
           this.action('ask', `${key}:${id.uid}`);
           this.intent('good', `ask:${key}:${id.uid}`);
           const evt = `${key}:ask:${packet.id.uid}`; // the once event keyed to this packet.
-          const pending = {evt, handler: false, timer: false}; // tracked so shutdown can clean up.
+          const pending = {evt, handler: false, timer: false, resolve}; // tracked so shutdown can clean up.
           
           // single place to release the listener, the timer, and the pending record.
           const release = () => {
@@ -1007,11 +1008,14 @@ class Deva {
         this.state('valid', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.intent('good', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.talk(`${agent.key}:ask:${packet.id.uid}`, packet_stamped);
+
       }).catch(err => {
         this.action('talk', `${agent.key}:${key}:${method}:err:${packet.id.uid}`);
         this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
+        // reply on the asker's event so the asker hears the error right away.
         this.talk(`${agent.key}:${key}:${packet.id.uid}`, {error:err});
+        // log the error here; the asker owns the reject.
         return this.err(err, packet, () => {});
       })
     }
@@ -1020,7 +1024,7 @@ class Deva {
       this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
       this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
       this.talk(`${agent.key}:${key}:${packet.id.uid}`, {error:e});
-      return this.err(e, packet, () => {})
+      return this.err(e, packet, () => {});
     }
     // now when we ask the meta params[0] should be the method
   }
