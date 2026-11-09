@@ -6,6 +6,8 @@ description: How the Deva Core is tested, what each test suite proves, and the e
 image: /assets/banner.png
 ---
 
+[![Tests](https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg)](https://github.com/indraai/deva/actions/workflows/test.yml)
+
 {{ page.description }}
 
 {% assign tests = site.data.tests.DATA %}
