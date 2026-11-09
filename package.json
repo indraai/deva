@@ -48,7 +48,8 @@
   "copyright": "Copyright ©2000-2026 Quinn Michaels; All rights reserved.",
   "type": "module",
   "scripts": {
-    "test": "node tests"
+    "test": "node --test \"tests/suite/*.test.js\"",
+    "demo": "node tests"
   },
   "repository": {
     "type": "git",
