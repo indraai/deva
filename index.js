@@ -1280,12 +1280,16 @@ class Deva {
     Recursion Framework.
   ***************/
   stop() {
-    if (!this._active) return this._messages.offline; // check for active status
+    if (!this._active) return Promise.resolve(this._messages.offline); // check for active status
     const key = 'stop'; // set the stop key
     const id = this.uid(); // generate the stop uid
     let data;    
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
+        // stop the child Devas first so none are left running when the parent closes. ready() loads them last.
+        this.state('loop', `${key}:devas:${id.uid}`);
+        for (const deva in this.devas) await this.devas[deva].stop();
+      
         this.state('set', `${key}:agent:${id.uid}`); // state stop agent
         const agentData = this.agent();
         const agent = agentData.sha256; // get the current agent

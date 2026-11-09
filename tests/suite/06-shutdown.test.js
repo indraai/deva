@@ -6,7 +6,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {build, client} from './_deva.js';
+import {build, client, agent} from './_deva.js';
 
 const TIERS = ['md5', 'sha256', 'sha512'];
 const CHAIN = ['stop', 'close', 'leave', 'exit', 'shutdown'];
@@ -14,7 +14,9 @@ const fresh = () => structuredClone(client);
 
 test('stop() answers offline before init()', async () => {
 	const deva = build();
-	assert.equal(await deva.stop(), deva._messages.offline);
+	const stopped = deva.stop();
+	assert.ok(stopped instanceof Promise, 'offline stop still returns a Promise');
+	assert.equal(await stopped, deva._messages.offline);
 });
 
 test('stop() runs the full chain and resolves the stamped stop data', async () => {
@@ -99,4 +101,23 @@ test('a pending ask at shutdown answers offline and leaves nothing behind', asyn
 	assert.equal(deva._pending.size, 0);
 	bus.removeListener('silent:ask', silent);
 	assert.deepEqual(bus.eventNames(), []);
+});
+
+test('stop() stops the child Devas first and leaves nothing on the bus', async () => {
+	const order = [];
+	const helper = build({
+		agent: {...agent, id: 'helper', key: 'helper', profile: {...agent.profile, name: 'Helper'}},
+		onShutdown(data, resolve) { order.push('helper:shutdown'); return resolve(data); },
+	});
+	const deva = build({devas: {helper}});
+	await deva.init(fresh());
+	assert.ok(helper._active, 'the child is running after init');
+	const bus = deva.events;
+	const heard = packet => order.push(`${packet.value}:stop`);
+	bus.on(deva._events.stop, heard);
+	await deva.stop();
+	bus.removeListener(deva._events.stop, heard);
+	assert.equal(helper._active, false, 'the child is offline');
+	assert.deepEqual(order, ['helper:stop', 'helper:shutdown', 'test:stop'], 'the child finishes before the parent starts');
+	assert.deepEqual(bus.eventNames(), [], 'nothing left on the bus');
 });
