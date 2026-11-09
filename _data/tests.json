@@ -1,0 +1,76 @@
+{
+	"id": "41985016213321096966",
+	"title": "Deva Core Tests",
+	"copyright": "Copyright ©2000-2026 Quinn Michaels; All rights reserved.",
+	"VLA": "31711622713594414221",
+	"DATA": {
+		"runner": "node:test",
+		"assert": "node:assert/strict",
+		"node": "24",
+		"command": "npm test",
+		"suites": [
+			{
+				"file": "00-build.test.js",
+				"title": "Build",
+				"describe": "build() makes a Deva that reaches ready.",
+				"count": 1
+			},
+			{
+				"file": "01-init.test.js",
+				"title": "Init",
+				"describe": "init() resolves with the ready data, waits for onReady, and a failing step or onError reject stops the chain.",
+				"count": 5
+			},
+			{
+				"file": "02-getters.test.js",
+				"title": "Feature Getters",
+				"describe": "Each feature getter returns exactly its own _key data as a copy, carries the client and its concerns, and answers offline after stop().",
+				"count": 31
+			},
+			{
+				"file": "03-hash.test.js",
+				"title": "Hash",
+				"describe": "The md5, sha256 and sha512 tiers match node:crypto, every hashing site carries all three, the uid fingerprint holds, and one changed field breaks every tier.",
+				"count": 6
+			},
+			{
+				"file": "04-license.test.js",
+				"title": "License",
+				"describe": "A matching VLA activates the Deva with stamped hashes; a changed, missing or absent VLA answers its message and stays inactive.",
+				"count": 6
+			},
+			{
+				"file": "05-messaging.test.js",
+				"title": "Messaging",
+				"describe": "question() runs local /commands and #ask calls to child Devas, child errors reach the asker right away, and missing or silent targets answer not found or timeout.",
+				"count": 12
+			},
+			{
+				"file": "06-shutdown.test.js",
+				"title": "Shutdown",
+				"describe": "stop() stops child Devas first, runs the full chain in order to onShutdown, clears features, answers pending asks offline and leaves nothing on the event bus.",
+				"count": 8
+			}
+		],
+		"edgecases": [
+			{
+				"title": "Child errors reach the asker",
+				"describe": "A failing or throwing child Deva method now rejects the asker right away instead of waiting for the ask timeout.",
+				"suite": "05-messaging.test.js",
+				"fixed": "1.64.7"
+			},
+			{
+				"title": "Pending asks at shutdown",
+				"describe": "A question still waiting on an answer when the Deva stops now resolves offline instead of hanging.",
+				"suite": "06-shutdown.test.js",
+				"fixed": "1.64.8"
+			},
+			{
+				"title": "Parent stop reaches its children",
+				"describe": "A parent's stop() now stops each child Deva through its full chain before the parent closes.",
+				"suite": "06-shutdown.test.js",
+				"fixed": "1.64.9"
+			}
+		]
+	}
+}
