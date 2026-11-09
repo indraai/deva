@@ -779,6 +779,14 @@ class Deva {
           pending.handler = answer => {
             clearTimeout(pending.timer); // an answer arrived so cancel the timeout.
             this._pending.delete(pending);
+
+            // the asked Deva failed so the asker handles the error like a local method error.
+            if (answer.error) {
+              this.state('catch', `${key}:${method}:${id.uid}`);
+              this.intent('bad', `ask:${key}:${id.uid}`);
+              return this.err(answer.error, packet, reject);
+            }
+            
             this.action('talk', `${this._events.ask}:${id.uid}`);
             this.intent('good', `${this._events.ask}:${id.uid}`);
             this.talk(this._events.ask, this.lib.copy(answer));
@@ -1007,13 +1015,14 @@ class Deva {
         return this.err(err, packet);
       })
     }
-    catch (e) {
+    catch (err) {
       this.action('talk', `${agent.key}:${key}:${method}:err:${packet.id.uid}`);
       this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
       this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
-      this.talk(`${agent.key}:ask:${packet.id.uid}`, {error:e});
-      return this.err(e, packet)
-    }
+      // reply on the asker's event so the asker hears the error right away.
+      this.talk(`${agent.key}:ask:${packet.id.uid}`, {error:err});
+      // log the error here; the asker owns the reject.
+      return this.err(err, packet, () => {});}
     // now when we ask the meta params[0] should be the method
   }
 
