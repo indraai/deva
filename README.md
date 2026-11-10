@@ -1,8 +1,6 @@
 # Deva
 
-[![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva)
-
-[![Tests](https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg)](https://github.com/indraai/deva/actions/workflows/test.yml)
+[![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva) [![Tests](https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg)](https://github.com/indraai/deva/actions/workflows/test.yml)
 
 **`@indra.ai/deva`**
 

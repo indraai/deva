@@ -6,6 +6,8 @@ description: What Deva Core is, what it does, where it fits, and what a company 
 image: /assets/banner.png
 ---
 
+[![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva) [![Tests](https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg)](https://github.com/indraai/deva/actions/workflows/test.yml)
+
 Deva Core is a small, dependency-free Node.js framework for building software agents ("Devas") that work as a team on a shared event bus, describe everything they do in plain named steps, and stamp every packet of data they produce so it can be verified later.
 
 It is written and maintained by Quinn Michaels, and it has been in development for more than ten years. It is the base that the other Deva modules build on.
