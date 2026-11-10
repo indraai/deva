@@ -224,6 +224,7 @@ class Deva {
     for (const pending of this._pending) {
       clearTimeout(pending.timer);
       if (this.events) this.ignore(pending.evt, pending.handler);
+      pending.resolve(this._messages.offline); // the Deva is going offline so answer the waiting caller.
     }
     this._pending.clear();
   }
@@ -442,7 +443,7 @@ class Deva {
 
       this.action('return', `client:${client.id}`); // set the action 
       this.intent('good', `client:${client.id}`); // set the intent
-      return resolve(); // resolve the client .
+      return resolve(_client); // resolve the client .
     } catch (e) {
       this.state('catch', `client:${client.id}`);
       this.intent('bad', `client:${client.id}`);
@@ -767,7 +768,7 @@ class Deva {
           this.action('ask', `${key}:${id.uid}`);
           this.intent('good', `ask:${key}:${id.uid}`);
           const evt = `${key}:ask:${packet.id.uid}`; // the once event keyed to this packet.
-          const pending = {evt, handler: false, timer: false}; // tracked so shutdown can clean up.
+          const pending = {evt, handler: false, timer: false, resolve}; // tracked so shutdown can clean up.
           
           // single place to release the listener, the timer, and the pending record.
           const release = () => {
@@ -779,6 +780,14 @@ class Deva {
           pending.handler = answer => {
             clearTimeout(pending.timer); // an answer arrived so cancel the timeout.
             this._pending.delete(pending);
+
+            // the asked Deva failed so the asker handles the error like a local method error.
+            if (answer.error) {
+              this.state('catch', `${key}:${method}:${id.uid}`);
+              this.intent('bad', `ask:${key}:${id.uid}`);
+              return this.err(answer.error, packet, reject);
+            }
+            
             this.action('talk', `${this._events.ask}:${id.uid}`);
             this.intent('good', `${this._events.ask}:${id.uid}`);
             this.talk(this._events.ask, this.lib.copy(answer));
@@ -999,20 +1008,23 @@ class Deva {
         this.state('valid', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.intent('good', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.talk(`${agent.key}:ask:${packet.id.uid}`, packet_stamped);
+
       }).catch(err => {
         this.action('talk', `${agent.key}:${key}:${method}:err:${packet.id.uid}`);
         this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
         this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
-        this.talk(`${agent.key}:${key}:${method}:${packet.id.uid}`, {error:err});
-        return this.err(err, packet);
+        // reply on the asker's event so the asker hears the error right away.
+        this.talk(`${agent.key}:${key}:${packet.id.uid}`, {error:err});
+        // log the error here; the asker owns the reject.
+        return this.err(err, packet, () => {});
       })
     }
     catch (e) {
       this.action('talk', `${agent.key}:${key}:${method}:err:${packet.id.uid}`);
       this.state('catch', `${agent.key}:${key}:${method}:${packet.id.uid}`);
       this.intent('bad', `${agent.key}:${key}:${method}:${packet.id.uid}`);
-      this.talk(`${agent.key}:ask:${packet.id.uid}`, {error:e});
-      return this.err(e, packet)
+      this.talk(`${agent.key}:${key}:${packet.id.uid}`, {error:e});
+      return this.err(e, packet, () => {});
     }
     // now when we ask the meta params[0] should be the method
   }
@@ -1066,6 +1078,10 @@ class Deva {
 
       // stamp the init data
       const data_stamped = this._stamp(data, 'init', data.id.uid); 
+
+      const step = (name, ...args) => new Promise((res, rej) => {
+        this[name](...args, res, rej);
+      });
       
       this.events.setMaxListeners(this.maxListeners);
       this._assignInherit().then(() => {
@@ -1079,29 +1095,29 @@ class Deva {
         this.action('init', data.id.uid);
         this.state('init', data.id.uid);
 
-        return this.Client(client, resolve, reject);
+        return step('Client', client);
       }).then(() => {
-        return this.License(resolve, reject);
+        return step('License');
       }).then(() => {
-        return this.Error(resolve, reject);
+        return step('Error');
       }).then(() => {
-        return this.Log(resolve, reject);
+        return step('Log');
       }).then(() => {
-        return this.Data(resolve, reject);
+        return step('Data');
       }).then(() => {
-        return this.Report(resolve, reject);
+        return step('Report');
       }).then(() => {
-        return this.Legal(resolve, reject);
+        return step('Legal');
       }).then(() => {
-        return this.Security(resolve, reject);
+        return step('Security');
       }).then(() => {
-        return this.Support(resolve, reject);
+        return step('Support');
       }).then(() => {
-        return this.Services(resolve, reject);
+        return step('Services');
       }).then(() => {
-        return this.Systems(resolve, reject);
+        return step('Systems');
       }).then(() => {
-        return this.Done(resolve, reject);
+        return step('Done');
       }).then(() => {
         const hasOnInit = this.onInit && typeof this.onInit === 'function';
         if (hasOnInit) {
@@ -1264,12 +1280,16 @@ class Deva {
     Recursion Framework.
   ***************/
   stop() {
-    if (!this._active) return this._messages.offline; // check for active status
+    if (!this._active) return Promise.resolve(this._messages.offline); // check for active status
     const key = 'stop'; // set the stop key
     const id = this.uid(); // generate the stop uid
     let data;    
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       try {
+        // stop the child Devas first so none are left running when the parent closes. ready() loads them last.
+        this.state('loop', `${key}:devas:${id.uid}`);
+        for (const deva in this.devas) await this.devas[deva].stop();
+      
         this.state('set', `${key}:agent:${id.uid}`); // state stop agent
         const agentData = this.agent();
         const agent = agentData.sha256; // get the current agent
@@ -1287,7 +1307,7 @@ class Deva {
           client, // set the client
           stop: Date.now(), // set the created date
         }
-        
+          
         this.action('return', `${key}:invoke:${data.id.uid}`);
         this.state('valid', `${key}:invoke:${data.id.uid}`);
         this.intent('good', `${key}:invoke:${data.id.uid}`);

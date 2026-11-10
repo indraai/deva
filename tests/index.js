@@ -120,7 +120,6 @@ const DevaTest = new Deva({
 		test(packet) {
 			const uid = this.uid();
 			const license_check = this.license_check(client.VLA, pkg.VLA);
-			const text = this._state
 			const core = this.core();
 			const info = this.info();
 			const sign_packet = {
@@ -164,7 +163,7 @@ const DevaTest = new Deva({
 				`::END:INFO:${info.id.uid}`,				
 				'::::',
 				`::BEGIN:SIGN:${license_check.id.uid}`,
-				JSON.stringify(license_check,null,2),
+				JSON.stringify(sign,null,2),
 				`::END:SIGN:${license_check.id.uid}`,
 				'::::',
 			];
@@ -177,8 +176,7 @@ const DevaTest = new Deva({
 	methods: {
 		test(packet) {
 			this.context('test');
-			const test = this.func.test(packet)
-			return test;			
+			return this.func.test(packet);			
 		},
 	},
 	onInit(data, resolve) {
@@ -194,7 +192,7 @@ const DevaTest = new Deva({
 		return this.ready(data, resolve);
 	},
 	onReady(data, resolve) {
-		const test = this.methods.test(data);		
+		this.methods.test(data);		
 		this.prompt(this._messages.ready);
 		this.intent('good', `tests:ready`);		
 		return resolve(data);			

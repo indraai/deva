@@ -2,6 +2,8 @@
 
 [![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva)
 
+[![Tests](https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg)](https://github.com/indraai/deva/actions/workflows/test.yml)
+
 **`@indra.ai/deva`**
 
 Deva is a Vedic-inspired, event-based, context-aware Feature, Zone, Action and State machine framework for building integrated artificial intelligence agents ("Devas") in Node.js. Every Deva is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it broadcasts each step as an event. Every packet it builds is stamped with cumulative md5, sha256 and sha512 hashes.
@@ -83,7 +85,8 @@ Run it with `node examples/hello-world.js` and it prints `hello world`.
 
 Three things to know from this example:
 
-- **Do your work from `onReady`, not after `await init()`.** The `init()` promise currently resolves with `undefined` as soon as the client step finishes, before `start`, `enter`, `done` and `ready` have run. `onReady` is the reliable point where the Deva is fully up.
+- Do your work from `onReady`, not after `await init()`. The `init()` promise resolves after `ready` has run.
+
 - **`info`, `config: {hash: {}}` and `vars.context` are effectively required.** Without them `ready()` or `context()` throws. The error handler then calls `context()` again, and the process ends in a stack overflow.
 - **Methods must return a Promise.** `answer()` calls `this.methods[method](packet).then(...)`.
 
