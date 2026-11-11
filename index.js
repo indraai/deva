@@ -1969,7 +1969,6 @@ class Deva {
 
       this.state('try', `${key}:${id.uid}`);
       try {
-
         // check if help file exists first and resolve if no file
         const helpExists = this.lib.fs.existsSync(helpPath); // check if help file exists
         if (!helpExists) {
@@ -1986,22 +1985,21 @@ class Deva {
           this.action('resolve', `${key}:not:found:${id.uid}`);
           this.state('invalid', `${key}:not:found:${id.uid}`);
           this.intent('bad', `${key}:not:found:${id.uid}`);          
-          resolve(this._messages.help_not_found);
+          return resolve(this._messages.help_not_found);
         }
         
         // last set the help doc and split out the selected part.
         helpDoc = helpFile.split(`${this.container.begin}:${part}`)[1].split(`${this.container.end}:${part}`)[0];
+
+        this.action('resolve', `${key}:${id.uid}`);
+        this.state('valid', `${key}:${id.uid}`);
+        this.intent('good', `${key}:${id.uid}`);
+        return resolve(helpDoc);
       } 
       catch(e) {
         this.state('catch', `${key}:${id.uid}`);
         this.intent('bad', `${key}:${id.uid}`);
         return this.err(e, msg, reject);
-      }
-      finally {
-        this.action('resolve', `${key}:${id.uid}`);
-        this.state('valid', `${key}:${id.uid}`);
-        this.intent('good', `${key}:${id.uid}`);
-        return resolve(helpDoc);
       }
     });
   }
