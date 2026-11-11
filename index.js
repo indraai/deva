@@ -1444,7 +1444,7 @@ class Deva {
     const data = {
       id,
       key,
-      value: this.vars.contexts || false,
+      value: this.vars.context || false, // this loads the local agent context list.
       agent: this.agent(),
       client: this.client(),
       created: Date.now(),      
