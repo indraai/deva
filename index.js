@@ -774,7 +774,11 @@ class Deva {
           const release = () => {
             clearTimeout(pending.timer);
             this._pending.delete(pending);
-            if (this.events) this.ignore(evt, pending.handler);
+            if (this.events) {
+              packet.a = false;
+              this.ignore(evt, pending.handler);
+              this.talk(evt, packet);
+            }
           };
           
           pending.handler = answer => {
