@@ -1411,7 +1411,7 @@ class Deva {
     try {
       if (!value) return;
       this._context = value;
-      const lookup = this.vars.context[value] || value;
+      const lookup = this.vars?.context?.[value] || value;
       const text = extra ? `${lookup} ${extra}` : lookup;
   
       const data = {
