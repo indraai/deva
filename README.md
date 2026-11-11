@@ -351,7 +351,7 @@ These are the public methods.
 | `err(err, packet, reject?)` | — | See [Error handling](#error-handling). |
 | `help(msg, help_dir)` | Promise of feecting text | See [Help](#help). |
 
-Not covered here because they weren't exercised for this README: `help(msg, help_dir)` (reads `<help_dir>/help/<file>.feecting` sections between `::BEGIN:<PART>` and `::END:<PART>`; feecting is Quinn Michaels' own language), `sign(packet)`, `machine()`, and the `lib` helpers (`this.lib.copy`, `formatDate`, and others).
+Not covered here because they weren't exercised for this README: `sign(packet)`, `machine()`, and the `lib` helpers (`this.lib.copy`, `formatDate`, and others).
 
 ## License
 
