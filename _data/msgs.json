@@ -23,7 +23,7 @@
 		"asktimeout": "⛔️ ASK TIMEOUT",
 		"noask": "⛔️ ASK TARGET NOT FOUND",
 		"method_not_found": "⛔️ METHOD NOT FOUND",
-		"help_not_found": "⛔️ HELP FILE NOT FOUND",
+		"help_not_found": "⛔️ HELP NOT FOUND",
 		"invalid_agent": "⛔️ Agent Hash Invalid",
 		"invalid_client": "⛔️ Client Hash Invalid",
 		"personalVLA": "❌ Bad Personal VLA",

@@ -21,11 +21,12 @@ Deva is a Vedic-inspired, event-based, context-aware Feature, Zone, Action and S
 9. [The workflow: features, zones, actions, states, intents, beliefs, contexts](#the-workflow)
 10. [Events](#events)
 11. [Error handling](#error-handling)
-12. [Configuration files](#configuration-files)
-13. [Testing](#testing)
-14. [Method reference](#method-reference)
-15. [License](#license)
-16. [Links and author](#links-and-author)
+12. [Help](#help)
+13. [Configuration files](#configuration-files)
+14. [Testing](#testing)
+15. [Method reference](#method-reference)
+16. [License](#license)
+17. [Links and author](#links-and-author)
 
 ## Requirements
 
@@ -248,6 +249,46 @@ All core events are listed in `_data/events.json` (25). The ones you'll usually 
 
 A method that rejects or throws ends up here. Most calls made while the Deva is inactive return or resolve `⭕️ OFFLINE` instead of throwing.
 
+## Help
+
+Every Deva can carry its own help, written in **feecting**, the language Devas use to talk to each other. The name stands for Functional Expressive Emergent Cognitive Technical Intelligent Neural Generator a Key Value Pair Line Label Function Method Event Listener Zone Feature Action State Procedural Asynchronous Vector Programming Language. A Deva's help system starts small and grows as the Deva grows.
+
+`help(msg, help_dir)` looks in the Deva's own folder and returns one section of a help file:
+
+- `help_dir` is the Deva's base directory, usually `__dirname` of the Deva's file. Help files live in `<help_dir>/help/`.
+- The first word of `msg` picks the file and the section, as `file:part`. The file defaults to `main`, and the part defaults to `MAIN` and is always matched in upper case.
+- A section is the text between `::BEGIN:<PART>` and `::END:<PART>` (the `container` markers in `_data/index.js`).
+
+```text
+my-deva/
+  index.js
+  help/
+    main.feecting
+    ask.feecting
+```
+
+```text
+::BEGIN:MAIN
+# My Deva
+p: What this Deva does and how to talk to it.
+::END:MAIN
+
+::BEGIN:ASK
+## Ask
+p: Use #key method text to ask another Deva.
+::END:ASK
+```
+
+| Call | Returns |
+|---|---|
+| `help('', __dirname)` or `help('main', __dirname)` | the `MAIN` section of `help/main.feecting` |
+| `help('main:ask', __dirname)` | the `ASK` section of `help/main.feecting` |
+| `help('ask', __dirname)` | the `MAIN` section of `help/ask.feecting` |
+| a file or section that doesn't exist | `⛔️ HELP NOT FOUND` (`_messages.help_not_found`) |
+| any call while the Deva is inactive | `⭕️ OFFLINE` |
+
+The section comes back as raw feecting text, with the surrounding newlines kept, so the Deva can pass it on to be parsed or shown. A found section sets the `valid` state and `good` intent. A missing file sets `invalid` and `bad` tagged `help:not:exists`, and a missing section sets them tagged `help:not:found`. Neither one raises an error. If `help_dir` isn't passed, the promise rejects with a `TypeError` from `path.join`.
+
 ## Configuration files
 
 | File | Contents |
@@ -266,7 +307,22 @@ Each JSON file has `id`, `title`, `copyright`, `VLA` and `DATA`, and the values 
 npm test
 ```
 
-This runs `node tests` (`tests/index.js`), which builds a Deva from `tests/agent.json` and `tests/client.json`, runs it through the lifecycle and a self-test method, and prints the log. **It passes as long as nothing throws. There are no assertions yet.** Real assertion tests are planned.
+This runs the assertion suite in `tests/suite/` with Node's built-in test runner (`node --test`), with no extra dependencies. GitHub Actions runs it on every push and pull request on Node 22 and 24, shown by the Tests badge at the top.
+
+| File | Covers | Tests |
+|---|---|---|
+| `00-build.test.js` | Building a Deva | 1 |
+| `01-init.test.js` | `init()` order and failures | 5 |
+| `02-getters.test.js` | Getters and stamped copies | 31 |
+| `03-hash.test.js` | The md5, sha256 and sha512 tiers | 6 |
+| `04-license.test.js` | `license_check` | 6 |
+| `05-messaging.test.js` | question, answer, ask and talk | 12 |
+| `06-shutdown.test.js` | `stop()` and the shutdown chain | 8 |
+| `07-help.test.js` | `help()` and feecting help files | 10 |
+
+`tests/suite/_deva.js` builds a fresh test Deva from `tests/agent.json` and `tests/client.json`, and `tests/suite/help/` holds the sample `.feecting` files for the help tests. The full list with edge cases is at [deva.world/tests](https://deva.world/tests/).
+
+`npm run demo` runs the older `tests/index.js` walkthrough, which builds a Deva, runs it through the lifecycle and prints the log.
 
 ## Method reference
 
@@ -293,6 +349,7 @@ These are the public methods.
 | `license_check(personalVLA, packageVLA)` | stamped approval or `false` | |
 | `load(key, client)` / `unload(key)` | Promise | Init or stop a child Deva in `devas`. |
 | `err(err, packet, reject?)` | — | See [Error handling](#error-handling). |
+| `help(msg, help_dir)` | Promise of feecting text | See [Help](#help). |
 
 Not covered here because they weren't exercised for this README: `help(msg, help_dir)` (reads `<help_dir>/help/<file>.feecting` sections between `::BEGIN:<PART>` and `::END:<PART>`; feecting is Quinn Michaels' own language), `sign(packet)`, `machine()`, and the `lib` helpers (`this.lib.copy`, `formatDate`, and others).
 

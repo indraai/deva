@@ -50,6 +50,12 @@
 				"title": "Shutdown",
 				"describe": "stop() stops child Devas first, runs the full chain in order to onShutdown, clears features, answers pending asks offline and leaves nothing on the event bus.",
 				"count": 8
+			},
+			{
+				"file": "07-help.test.js",
+				"title": "Help",
+				"describe": "help() returns the right feecting section by file and part, answers help not found for a missing file or section as invalid and bad without an error or a good intent, and answers offline before init and after stop.",
+				"count": 10
 			}
 		],
 		"edgecases": [
@@ -70,7 +76,13 @@
 				"describe": "A parent's stop() now stops each child Deva through its full chain before the parent closes.",
 				"suite": "06-shutdown.test.js",
 				"fixed": "1.64.9"
-			}
+			},
+			{
+				"title": "Missing help section",
+				"describe": "A missing section resolved help not found but kept going, threw, logged an error, and the finally block logged valid and good on both not-found paths.",
+				"suite": "07-help.test.js",
+				"fixed": "1.64.25"
+			}			
 		]
 	}
 }
