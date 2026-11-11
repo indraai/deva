@@ -109,7 +109,7 @@ export default {
 			clear: false,
 		},
 		exit: {
-			prev_key: 'stop',
+			prev_key: 'leave',
 			next_key: 'shutdown',
 			onfunc: 'onExit',
 			clear: [
