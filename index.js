@@ -1444,7 +1444,7 @@ class Deva {
     const data = {
       id,
       key,
-      value: this.vars.context || false,
+      value: this.vars.contexts || false,
       agent: this.agent(),
       client: this.client(),
       created: Date.now(),      
