@@ -1967,13 +1967,15 @@ class Deva {
             
       const helpPath = this.lib.path.join(help_dir, key, `${helpFile}.feecting`);
 
+      this.state('try', `${key}:${id.uid}`);
       try {
-        this.state('try', `${key}:${id.uid}`);
 
         // check if help file exists first and resolve if no file
         const helpExists = this.lib.fs.existsSync(helpPath); // check if help file exists
         if (!helpExists) {
-          this.action('resolve', `${key}:not:found:${id.uid}`);
+          this.action('resolve', `${key}:not:exists:${id.uid}`);
+          this.state('invalid', `${key}:not:exists:${id.uid}`);
+          this.intent('bad', `${key}:not:exists:${id.uid}`);          
           return resolve(this._messages.help_not_found);
         }
         
@@ -1981,7 +1983,9 @@ class Deva {
         const helpFile = this.lib.fs.readFileSync(helpPath, 'utf8');
         const helpPart = helpFile.split(`${this.container.begin}:${part}`);
         if (!helpPart[1]) {
-          this.action('resolve', `${this._messages.help_not_found}:${id.uid}`);
+          this.action('resolve', `${key}:not:found:${id.uid}`);
+          this.state('invalid', `${key}:not:found:${id.uid}`);
+          this.intent('bad', `${key}:not:found:${id.uid}`);          
           resolve(this._messages.help_not_found);
         }
         
