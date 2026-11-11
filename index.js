@@ -1952,7 +1952,7 @@ class Deva {
       let helpDoc = false;
       const id = this.uid();
       const key = 'help';
-      this.zone(key, id);
+      this.zone(key, id.uid);
 
       this.feature(key, id.uid);
       this.action(key, id.uid);
