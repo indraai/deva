@@ -2029,7 +2029,6 @@ class Deva {
   err(err,packet,reject=false) {
     const id = this.uid();
     const key = 'error';
-    this.context(key, id.uid);
     this.feature(key, id.uid);
     this.zone(key, id.uid);
     this.action(key, id.uid);
