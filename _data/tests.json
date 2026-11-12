@@ -56,6 +56,12 @@
 				"title": "Help",
 				"describe": "help() returns the right feecting section by file and part, answers help not found for a missing file or section as invalid and bad without an error or a good intent, and answers offline before init and after stop.",
 				"count": 10
+			},
+			{
+				"file": "08-error.test.js",
+				"title": "Error",
+				"describe": "err() rejects or hands off to onError without calling context(), talks one stamped error packet, and context() and contexts() read each Deva's own vars.context, falling back safely when it is missing.",
+				"count": 6
 			}
 		],
 		"edgecases": [
