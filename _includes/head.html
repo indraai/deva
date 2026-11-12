@@ -4,7 +4,13 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	{%- seo -%}
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:image:alt" content="{{ page.title | default: site.title }}: {{ site.tagline }}">
+	<meta name="twitter:image:alt" content="{{ page.title | default: site.title }}: {{ site.tagline }}">
+	<meta name="theme-color" content="#1a1025">
 	<link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+
 	{%- feed_meta -%}
 	<link rel="icon" type="image/png" sizes="128x128" href="{{ '/assets/favicon.png' | relative_url }}">
 	<link rel="apple-touch-icon" href="{{ '/assets/favicon.png' | relative_url }}">

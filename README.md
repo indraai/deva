@@ -42,7 +42,7 @@ npm install @indra.ai/deva
 
 ## Quick start
 
-This is a minimal working Deva with one method. `client.json` is a client file shaped like [`tests/client.json`](tests/client.json). Its `DATA.VLA` must match the `VLA` block in Deva's `package.json`.
+This is a minimal working Deva with one method. `client.json` is a client file shaped like [`tests/client.json`](https://github.com/indraai/deva/tests/client.json). Its `DATA.VLA` must match the `VLA` block in Deva's `package.json`.
 
 ```javascript
 import Deva from '@indra.ai/deva';
@@ -86,7 +86,6 @@ Three things to know from this example:
 
 - Do your work from `onReady`, not after `await init()`. The `init()` promise resolves after `ready` has run.
 
-- **`info`, `config: {hash: {}}` and `vars.context` are effectively required.** Without them `ready()` or `context()` throws. The error handler then calls `context()` again, and the process ends in a stack overflow.
 - **Methods must return a Promise.** `answer()` calls `this.methods[method](packet).then(...)`.
 
 ## Constructor options
@@ -355,7 +354,7 @@ Not covered here because they weren't exercised for this README: `sign(packet)`,
 
 ## License
 
-Deva is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `31711622713594414221`, owned by Quinn Michaels, through License Deva. The full text is in [LICENSE.md](LICENSE.md). It states, among other things, that:
+Deva is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `31711622713594414221`, owned by Quinn Michaels, through License Deva. The full text is in [LICENSE.md](https://github.com/indraai/deva/LICENSE.md). It states, among other things, that:
 
 - by accessing or using the Software, you agree to its terms;
 - the Software is the sole proprietary property of the Owner;
