@@ -3,6 +3,7 @@
 # Owner Signature Required For Lawful Use.
 # Distributed under VLA:31711622713594414221 LICENSE.md  
 # Sunday, November 1, 2026 - 10:04:59 PM PST
+url: "https://deva.world"
 title: Deva Core
 tagline: Event-based AI agents with stamped, verifiable data
 description: A Vedic-inspired, event-based Node.js framework for building integrated AI agents, with stamped, verifiable data on every step.
@@ -27,3 +28,6 @@ plugins:
   - jekyll-seo-tag
   - jekyll-feed
   - jekyll-sitemap
+google_analytics: G-JWHX0M91FE
+theme: minima
+
