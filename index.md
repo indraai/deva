@@ -1,23 +1,31 @@
 ---
-layout: page
+layout: home
 title: Deva Core
-description: A Vedic-inspired, event-based Node.js framework for building integrated AI agents, with stamped, verifiable data on every step in Node.js.
+headline: Agents that keep a verifiable record of every step.
+description: A Vedic-inspired, event-based Node.js framework for building integrated AI agents, with stamped, verifiable data on every step.
 image: /assets/banner.png
+features:
+  - title: A shared event bus
+    text: Devas talk with question, answer, ask, talk and listen. Asks time out instead of hanging.
+    url: /docs/#messaging
+    link: Messaging
+  - title: A named workflow
+    text: Features, zones, actions, states, intents, beliefs and contexts are first-class data you can read back stamped.
+    url: /core/
+    link: Core reference
+  - title: Stamped packets
+    text: Cumulative md5, sha256 and sha512 tiers on every packet, so you can verify what happened and in what order.
+    url: /docs/#stamping-and-the-hash-tiers
+    link: Hash tiers
+  - title: Tested in the open
+    text: Node's built-in test runner, no extra dependencies, run on Node 22 and 24 on every push.
+    url: /tests/
+    link: Test suites
 ---
 
-<center>
-	<img src="/assets/deva.png" alt="Deva Core">
-</center>
+## How it works
 
-**{{ page.description}}**
-
-[![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva) [![Tests](https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg)](https://github.com/indraai/deva/actions/workflows/test.yml)
-
-Deva Core is the base of every Deva. Each agent is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it announces every step as an event. Every data packet it builds is stamped with cumulative md5, sha256 and sha512 hashes, so you can verify what happened and in what order.
-
-```bash
-npm install @indra.ai/deva
-```
+Each agent is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it announces every step as an event. Every data packet it builds is stamped with cumulative md5, sha256 and sha512 hashes.
 
 Node.js 22 or later. ES modules only.
 
@@ -27,15 +35,8 @@ Node.js 22 or later. ES modules only.
 - [Deva Core on GitHub](https://github.com/indraai/deva), where the code, the issues and the examples live.
 - [`@indra.ai/deva` on npm](https://www.npmjs.com/package/@indra.ai/deva), for the published package.
 
-## What it gives you
+## Working with a team
 
-- **A shared event bus.** Devas talk to each other with `question`, `answer`, `ask`, `talk` and `listen`. Asks time out instead of hanging.
-- **A named workflow.** Features, zones, actions, states, intents, beliefs and contexts are first-class data, and you can read each one back stamped.
-- **Stamped packets.** The md5, sha256 and sha512 tiers build on each other, in order, on every packet.
-- **Your own methods.** Add agent methods, listeners and extra workflow names through the constructor, and the Core merges them with its own.
-
-## License
-
-Deva Core is distributed under the **Vedic License Agreement (VLA)**. Read the [license](https://github.com/indraai/deva/blob/main/LICENSE.md) before you use it.
+Building a multi-agent system and want help with the design, the audit trail or a commercial license? Email [quinn@indra.ai](mailto:quinn@indra.ai). Read the [VLA](/vla/) first.
 
 Created by Quinn Michaels. [indra.ai](https://indra.ai)
