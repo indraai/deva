@@ -58,6 +58,7 @@ class Deva {
     
     this._inherit = config.inherit; // set inherit from config data.
     this._bind = config.bind; // set the bind from the config data.
+    this._binding = new Map(); // set the binding map
 
     this._uid = config.uid; // set the uid options
 
@@ -146,6 +147,7 @@ class Deva {
         this._bind.forEach(bind => { // loop over the bind items func, method, listener...
           if (this[bind]) for (let x in this[bind]) { // if the root has a bind func, method, listener
             if (typeof this[bind][x] === 'function') { // check to make sure object is a fucntion
+              if (!this._binding.has(bind)) this._binding.set(bind, {});
               this[bind][x] = this[bind][x].bind(this); // bind the item from the bind object
             }
           }
@@ -1216,9 +1218,9 @@ class Deva {
     this.state('loop', `${key}:config:ready:hash:${data.id.uid}`);
     for (let item of this._config.ready_hash) {
       if (this[item]) {
-        const this_item = this[item];      
         this.action('hash', `${agent.key}:config:${item}:${data.id.uid}`);
         // manually build hash for the config hash object for each agent key.
+        const this_item = this._binding.get(item) || this[item];
         this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
       }
     }
