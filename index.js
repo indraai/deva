@@ -2102,7 +2102,6 @@ class Deva {
     const license = this._info.VLA ? this._info.VLA.uid : false;
     const client = this.client(); // get the client
     const agent = this.agent(); // get the agent
-    const {profile} = agent;
     const machine = this.machine(); // get the machine hash
 
     const core_hash = this._core.sha256; // get the core sha256 hash
@@ -2157,7 +2156,7 @@ class Deva {
       const max = Math.ceil(time + (time * Math.PI)); // generate max time form Math.PI multiplier.
       const begin_random = Math.floor(Math.random() * (max - min) + min); // generate random number between min and max.
       const {end_min, end_max} = this._uid; // set end min and max in to constant
-      const end_random = Math.ceil(Math.random() * (end_max - end_min) + end_min); // generate the 5 digit end salt on the number for added randomness.
+      const end_random = Math.ceil(Math.random() * (end_max - end_min) + end_min); // generate end salt on the number for added randomness.
       
       const uid = `${begin_random}${end_random}`; // set uid to local constant
       data.uid = uid; // set base data object.

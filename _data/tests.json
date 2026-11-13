@@ -60,7 +60,7 @@
 			{
 				"file": "08-error.test.js",
 				"title": "Error",
-				"describe": "err() rejects or hands off to onError without calling context(), talks one stamped error packet, and context() and contexts() read each Deva's own vars.context, falling back safely when it is missing.",
+				"describe": "err() rejects or hands off to onError without calling context(), talks one stamped error packet, and context() and contexts() read each Deva's own vars.context, falling back safely when it is missing. A local method that rejects or throws rejects question() with one error packet, a child ask error is logged by both Devas, and an unknown feature is rejected.",
 				"count": 10
 			}
 		],
