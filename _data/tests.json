@@ -62,6 +62,18 @@
 				"title": "Error",
 				"describe": "err() rejects or hands off to onError without calling context(), talks one stamped error packet, and context() and contexts() read each Deva's own vars.context, falling back safely when it is missing. A local method that rejects or throws rejects question() with one error packet, a child ask error is logged by both Devas, and an unknown feature is rejected.",
 				"count": 10
+			},
+			{
+				"file": "09-ready-hash.test.js",
+				"title": "Ready Hash",
+				"describe": "The ready hash is stable across Devas with identical functions, a func or method source change before ready changes the hash, and a listener added after ready with listen() does not change the stored ready hash.",
+				"count": 3
+			},
+			{
+				"file": "10-vocabulary.test.js",
+				"title": "Vocabulary",
+				"describe": "Two Devas in one process each keep their own agent zones, actions, states, intents, beliefs and messages, and neither mutates the shared base config.",
+				"count": 1
 			}
 		],
 		"edgecases": [
@@ -88,7 +100,19 @@
 				"describe": "A missing section resolved help not found but kept going, threw, logged an error, and the finally block logged valid and good on both not-found paths.",
 				"suite": "07-help.test.js",
 				"fixed": "1.64.25"
-			}			
-		]
+			},
+			{
+				"title": "Ready hash covers _binding source strings",
+				"describe": "The ready hash is taken from the _binding source strings for func, methods, utils and listeners. It stays the same for identical functions, changes when a func or method source changes before ready, and a listener added after ready with listen() is left out of the stored hash.",
+				"suite": "09-ready-hash.test.js",
+				"fixed": "1.64.46"
+			},
+			{
+				"title": "Vocabulary isolation",
+				"describe": "Each Deva shallow-copies config zones, actions, states, intents, beliefs and messages so custom agent entries stay on that Deva and the shared base config is not mutated.",
+				"suite": "10-vocabulary.test.js",
+				"fixed": "1.64.52"
+			}
+			]
 	}
 }
