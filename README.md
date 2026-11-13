@@ -58,7 +58,7 @@ const hello = new Deva({
     prompt: {emoji: '👋', text: 'hello'},
     profile: {name: 'Hello Deva'},
   },
-  config: {hash: {}},     // required: ready() writes this._config.hash[agent.key]
+  config: {hash: {}},     // optional: ready() writes this._config.hash[agent.key]
   vars: {context: {}},    // required: context() looks up this.vars.context
   listeners: {
     'devacore:error'(packet) {
