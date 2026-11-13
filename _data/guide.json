@@ -1,0 +1,113 @@
+{
+	"id": "66167949422918964262",
+	"title": "Deva Core Guide",
+	"copyright": "Copyright ©2000-2026 Quinn Michaels; All rights reserved.",
+	"VLA": "31711622713594414221",
+	"DATA": {
+		"project": "hello-deva",
+		"deva": "Hello Deva",
+		"package": "@indra.ai/deva",
+		"node": "22",
+		"npm": "9.5.1",
+		"install": "npm install @indra.ai/deva",
+		"run": "node index.js",
+		"tree": [
+			"hello-deva/",
+			"├── package.json",
+			"├── index.js",
+			"└── data/",
+			"    ├── client.json",
+			"    └── agent.json"
+		],
+		"steps": [
+			{
+				"step": 1,
+				"title": "Set up the project",
+				"permalink": "/guide/step-1/",
+				"describe": "Create the project folder, set it up as an ES module, install Deva Core, and lay out the files you will fill in.",
+				"learn": [
+					"Create a folder and run npm init.",
+					"Set \"type\": \"module\" in package.json.",
+					"Install @indra.ai/deva.",
+					"Create index.js and the data folder."
+				],
+				"files": ["package.json", "index.js"]
+			},
+			{
+				"step": 2,
+				"title": "The client file",
+				"permalink": "/guide/step-2/",
+				"describe": "Write client.json, which describes who is talking to the Deva.",
+				"learn": [
+					"The name, describe, copyright and DATA wrapper.",
+					"DATA.id, DATA.key and DATA.VLA.",
+					"DATA.prompt with its emoji, text and colors.",
+					"DATA.profile.",
+					"DATA.features, each with concerns, global and devas."
+				],
+				"files": ["data/client.json"]
+			},
+			{
+				"step": 3,
+				"title": "The agent file",
+				"permalink": "/guide/step-3/",
+				"describe": "Write agent.json, which describes who the Deva is, including its vars and its own context labels.",
+				"learn": [
+					"The wrapper, with VLA at the top level and DATA beneath it.",
+					"DATA.id, DATA.key and DATA.prompt.",
+					"DATA.profile.",
+					"DATA.vars with a plain value and the vars.context map."
+				],
+				"files": ["data/agent.json"]
+			},
+			{
+				"step": 4,
+				"title": "Wire it together",
+				"permalink": "/guide/step-4/",
+				"describe": "Import the client and agent files, build the info block from your package.json, and create the Deva.",
+				"learn": [
+					"Importing JSON with {type:'json'}.",
+					"Building info from package.json.",
+					"Passing agent and vars to new Deva()."
+				],
+				"files": ["index.js"]
+			},
+			{
+				"step": 5,
+				"title": "Give it skills",
+				"permalink": "/guide/step-5/",
+				"describe": "Add one func, one method and one listener, and see when to use each.",
+				"learn": [
+					"A func for internal work.",
+					"A method the Deva can be asked to run.",
+					"A listener that reacts to an event."
+				],
+				"files": ["index.js"]
+			},
+			{
+				"step": 6,
+				"title": "Bring it to life",
+				"permalink": "/guide/step-6/",
+				"describe": "Call init(client), watch the Deva reach ready, ask it a question, and read the stamped packet that comes back.",
+				"learn": [
+					"What happens between init(client) and ready.",
+					"What the ready hash marks.",
+					"Asking a question and reading the packet.",
+					"Checking the md5, sha256 and sha512 stamps."
+				],
+				"files": ["index.js"]
+			},
+			{
+				"step": 7,
+				"title": "Shut it down",
+				"permalink": "/guide/step-7/",
+				"describe": "Stop the Deva cleanly with stop() and see what it answers once it is offline.",
+				"learn": [
+					"Calling stop().",
+					"What a stopped Deva answers."
+				],
+				"files": ["index.js"]
+			}
+		]
+	}
+}
