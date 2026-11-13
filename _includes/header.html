@@ -12,7 +12,7 @@
 				</span>
 			</label>
 			<div class="trigger">
-				{%- assign nav = "Core:/core/,Docs:/docs/,Tests:/tests/,Vibe:/vibe/,VLA:/vla/,About:/about/" | split: "," -%}
+				{%- assign nav = "Core:/core/,Docs:/docs/,Guide:/guide/,Tests:/tests/,Vibe:/vibe/,VLA:/vla/,About:/about/" | split: "," -%}
 				{%- for item in nav -%}
 					{%- assign parts = item | split: ":" -%}
 					{%- assign href = parts[1] -%}
