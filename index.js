@@ -21,7 +21,7 @@ class Deva {
     this._config.hashes = config.hashes; // set hashes array from config for stamping.
     this._config.ready_hash = config.ready_hash; // items to hash at ready
     this._config.timeout = {...config.timeout, ...this._config.timeout}; // add timeout values to _config.
-    this._config.hash = {...config.hash} || {}; // set the default config hash
+    this._config.hash = this._config.hash || {}; // set the default config hash
     
     this._agent = opts.agent || false; // Agent profile object
     this._client = {}; // this will be set on init.
