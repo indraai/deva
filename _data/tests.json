@@ -43,7 +43,7 @@
 				"file": "05-messaging.test.js",
 				"title": "Messaging",
 				"describe": "question() runs local /commands and #ask calls to child Devas, child errors reach the asker right away, and missing or silent targets answer not found or timeout.",
-				"count": 12
+				"count": 13
 			},
 			{
 				"file": "06-shutdown.test.js",
