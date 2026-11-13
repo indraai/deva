@@ -127,7 +127,7 @@ After `init`, the Deva walks through named steps. Each step does the same things
 | exit | shutdown | `onExit` |
 | shutdown | (finished) | `onShutdown` |
 
-`ready` also seals your `vars`, `utils`, `listeners`, `modules`, `func` and `methods` into `config.hash[agent.key]` (a snapshot of how the office was set up) and starts each child Deva.
+`ready` also seals your `vars`, `utils`, `listeners`, `modules`, `func` and `methods` into `this._config.hash[agent.key]` (a snapshot of how the office was set up) and starts each child Deva.
 
 ## Talking on the intercom: messaging
 
@@ -221,7 +221,7 @@ const client = Client.DATA; // carries the VLA and an entry for every client fea
 const helper = new Deva({
 	info: {id: 'helper', name: 'Helper Deva', version: '0.0.1', dir: '.', VLA: pkg.VLA},
 	agent: {id: 'helper', key: 'helper', prompt: {emoji: '🛠', text: 'helper'}, profile: {name: 'Helper Deva'}},
-	config: {hash: {}},     // needed: ready() writes config.hash[agent.key]
+	config: {hash: {}},     // needed: ready() writes this._config.hash[agent.key]
 	vars: {context: {}},    // needed: context() looks things up here
 	methods: {
 		shout(packet) {

@@ -21,7 +21,7 @@ const same = () => ({
 	listeners: { 'suite:ready'(packet) { return packet; } },
 });
 
-const readyHash = deva => deva.config.hash[deva.agent().key];
+const readyHash = deva => deva._config.hash[deva.agent().key];
 
 test('the ready hash is stable across two Devas with identical functions', async () => {
 	const a = build(same());

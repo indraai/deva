@@ -21,6 +21,7 @@ class Deva {
     this._config.hashes = config.hashes; // set hashes array from config for stamping.
     this._config.ready_hash = config.ready_hash; // items to hash at ready
     this._config.timeout = {...config.timeout, ...this._config.timeout}; // add timeout values to _config.
+    this._config.hash = {...config.hash} || {}; // set the default config hash
     
     this._agent = opts.agent || false; // Agent profile object
     this._client = {}; // this will be set on init.
@@ -1219,7 +1220,7 @@ class Deva {
     const {VLA} = this.info();
 
     this.state('set', `${key}:config:hash:${data.id.uid}`); // state set to watch OnFinish
-    this.config.hash[agent.key] = {};
+    this._config.hash[agent.key] = {};
 
     this.state('loop', `${key}:config:ready:hash:${data.id.uid}`);
     for (let item of this._config.ready_hash) {
@@ -1227,7 +1228,7 @@ class Deva {
         this.action('hash', `${agent.key}:config:${item}:${data.id.uid}`);
         // manually build hash for the config hash object for each agent key.
         const this_item = this._binding.get(item) || this[item];
-        this.config.hash[agent.key][item] = this.hash(this_item, 'sha256');
+        this._config.hash[agent.key][item] = this.hash(this_item, 'sha256');
       }
     }
     
