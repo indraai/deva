@@ -74,7 +74,7 @@
   "bugs": {
     "url": "https://github.com/indraai/deva/issues"
   },
-  "homepage": "https://indra.ai",
+  "homepage": "https://deva.world",
   "eslintConfig": {
     "parserOptions": {
       "ecmaVersion": 6
