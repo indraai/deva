@@ -48,7 +48,7 @@
     "profile": {
       "name": "Test User",
       "fullname": "Test User Client Profile",
-      "eamil": "test@example.com",
+      "email": "test@example.com",
       "company": "Inside The Net, Inc.",
       "describe": "The Test User",
       "emoji": "/public/devas/test/avatar.png",
