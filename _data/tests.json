@@ -61,7 +61,7 @@
 				"file": "08-error.test.js",
 				"title": "Error",
 				"describe": "err() rejects or hands off to onError without calling context(), talks one stamped error packet, and context() and contexts() read each Deva's own vars.context, falling back safely when it is missing.",
-				"count": 6
+				"count": 10
 			}
 		],
 		"edgecases": [
