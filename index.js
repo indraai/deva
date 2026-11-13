@@ -146,9 +146,12 @@ class Deva {
       try {
         this._bind.forEach(bind => { // loop over the bind items func, method, listener...
           if (this[bind]) for (let x in this[bind]) { // if the root has a bind func, method, listener
-            if (typeof this[bind][x] === 'function') { // check to make sure object is a fucntion
+            // check to make sure the binding is a function.
+            if (typeof this[bind][x] === 'function') { 
+              // check to make sure object is a fucntion
               if (!this._binding.has(bind)) this._binding.set(bind, {});
-              this[bind][x] = this[bind][x].bind(this); // bind the item from the bind object
+              this._binding.get(bind)[x] = this[bind][x].toString();
+              this[bind][x] = this[bind][x].bind(this);
             }
           }
         });
