@@ -31,7 +31,7 @@
 				"file": "03-hash.test.js",
 				"title": "Hash",
 				"describe": "The md5, sha256 and sha512 tiers match node:crypto, every hashing site carries all three, the uid fingerprint holds, and one changed field breaks every tier.",
-				"count": 6
+				"count": 10
 			},
 			{
 				"file": "04-license.test.js",
