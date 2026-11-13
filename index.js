@@ -477,7 +477,7 @@ class Deva {
 
         const {id, profile = {}, features = {}} = this.client();
         const data = features[feature] || {};
-        if (this._client.features) delete this._client.features[feature];
+        
         this.state('set', `Feature:this._${feature}:${_id.uid}`); // set the feature state value
         this[`_${feature}`] = { // set this feature with data
           id: _id, // uid of the feature
