@@ -59,7 +59,7 @@ test('a failing feature step rejects init() and stops the chain', async () => {
 	for (const e of ['start', 'ready']) deva.events.on(`devacore:${e}`, () => seen.push(e));
 	deva.events.on('devacore:action', p => { if (p.value === 'feature') seen.push(p.text); });
 
-	await assert.rejects(deva.init(fresh({features: {}})));
+	await assert.rejects(deva.init(fresh({features: null})));
 	await wait(200);
 	assert.ok(!seen.includes('start') && !seen.includes('ready') && !seen.includes('onReady'), 'no lifecycle after the failure');
 	assert.ok(seen.some(t => t.includes('Feature:license')), 'license step ran');
@@ -68,10 +68,10 @@ test('a failing feature step rejects init() and stops the chain', async () => {
 
 test('onError that calls reject rejects init()', async () => {
 	const deva = build({ onError(err, packet, reject) { return reject && reject(err); } });
-	await assert.rejects(deva.init(fresh({features: {}})));
+	await assert.rejects(deva.init(fresh({features: null})));
 });
 
 test('onError that never calls reject leaves init() pending (the hook owns the outcome)', async () => {
 	const deva = build({ onError() {} });
-	assert.equal(await status(deva.init(fresh({features: {}})), 500), 'pending');
+	assert.equal(await status(deva.init(fresh({features: null})), 500), 'pending');
 });
