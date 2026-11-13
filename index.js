@@ -71,7 +71,7 @@ class Deva {
     this._features = config.features; // set the features from config data.
 
     this._zone = config.zone; // set the current zone from config data.
-    this._zones = config.zones; // set the zones from config data.
+    this._zones = {...config.zones}; // set the zones from config data.
     // load any custom zones from the agent file
     if (this._agent.zones) {
       for (let item in this._agent.zones) {
@@ -81,7 +81,7 @@ class Deva {
     }
     
     this._action = config.action; // set the action from config data.
-    this._actions = config.actions; // set the actions from config data.
+    this._actions = {...config.actions}; // set the actions from config data.
     // load any custom actions from the agent file
     if (this._agent.actions) {
       for (let item in this._agent.actions) {
@@ -91,7 +91,7 @@ class Deva {
     }
 
     this._state = config.state; // set the current state from config data.
-    this._states = config.states; // set the states from options
+    this._states = {...config.states}; // set the states from options
     // load any custom states from the agent file
     if (this._agent.states) {
       for (let item in this._agent.states) {
@@ -101,7 +101,7 @@ class Deva {
     }
 
     this._intent = config.intent; // set the current intent from config data.
-    this._intents = config.intents; // set the states from options
+    this._intents = {...config.intents}; // set the states from options
     // load any custom actions from the agent file
     if (this._agent.intents) {
       for (let item in this._agent.intents) {
@@ -111,7 +111,7 @@ class Deva {
     }
 
     this._belief = config.belief; // set the current belief from config data.
-    this._beliefs = config.beliefs; // set the states from options
+    this._beliefs = {...config.beliefs}; // set the states from options
     // load any custom actions from the agent file
     if (this._agent.beliefs) {
       for (let item in this._agent.beliefs) {
@@ -122,7 +122,7 @@ class Deva {
 
     this._context = config.context || false; // set the local context
 
-    this._messages = config.messages; // set the messages from config data.
+    this._messages = {...config.messages}; // set the messages from config data.
     // load any custom actions from the agent file
     if (this._agent.messages) {
       for (let item in this._agent.messages) {
