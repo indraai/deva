@@ -474,21 +474,28 @@ class Deva {
         const call_str = `Feature:${feature}:${_id.uid}` // call string for action state intent.
         this.action('feature', call_str); // set action to feature
         this.state('data', call_str); // set state to data
-        const {id, profile, features} = this.client(); // set the values from the client.
-        const data = features[feature]; // make a copy of the feature data
 
+        const {id, profile = {}, features = {}} = this.client();
+        const data = features[feature] || {};
+        ...
+        ...
+        if (this._client.features) delete this._client.features[feature];
+        
         this.state('set', `Feature:this._${feature}:${_id.uid}`); // set the feature state value
         this[`_${feature}`] = { // set this feature with data
           id: _id, // uid of the feature
           client_id: id, // client id for reference
-          client_name: profile.name, // client name for personalization
-          concerns: data.concerns, // any concerns for client
-          global: data.global, // the global policies for client
-          personal: data.devas[this._agent.key], // Client personal features and rules.
+          client_name: profile.name || this._messages.noname, // client name for personalization
+          concerns: data.concerns || this._messages.noconcerns, // any concerns for client
+          global: data.global || this._messages.noglobal, // the global for the feature
+          personal: data.devas ? data.devas[this._agent.key] : this._messages.nodevas, // Client personal features and rules.
           created: Date.now(),
         };
-        this.state('delete', `Feature:client:${feature}:${_id.uid}`); // set the state to delete
-        delete this._client.features[feature]; // make a copy the clinet data.
+  
+        if (this._client.features) {
+          this.state('delete', `Feature:client:${feature}:${_id.uid}`); // set the state to delete
+          delete this._client.features[feature];
+        }
 
         this.action('return', call_str); // set the action to return
         this.state('resolve', call_str); // set the state to resolve
