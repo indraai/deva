@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en_US"><!-- Custom header for favicons -->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.9.1 -->
+<title>Docs | Deva World</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Docs" />
+<meta name="author" content="Quinn Michaels" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The Deva Documentation - install, quick start, lifecycle, messaging between Devas, stamped packets, events and the full method reference." />
+<meta name="twitter:description" property="og:description" content="The Deva Documentation - install, quick start, lifecycle, messaging between Devas, stamped packets, events and the full method reference." />
+<link rel="canonical" href="http://localhost:4000/docs/" />
+<meta property="og:url" content="http://localhost:4000/docs/" />
+<meta property="og:site_name" content="Deva World" />
+<meta property="og:image" content="http://localhost:4000/assets/banner.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:4000/assets/banner.png" />
+<meta name="twitter:title" content="Docs" />
+<meta name="twitter:site" content="@quinnmichaels" />
+<meta name="twitter:creator" content="@quinnmichaels" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Quinn Michaels","url":"https://indra.ai"},"description":"The Deva Documentation - install, quick start, lifecycle, messaging between Devas, stamped packets, events and the full method reference.","headline":"Docs","image":"http://localhost:4000/assets/banner.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icon.png"},"name":"Quinn Michaels"},"url":"http://localhost:4000/docs/"}</script>
+<!-- End Jekyll SEO tag -->
+<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:image:alt" content="Docs: Event-based AI agents with stamped, verifiable data">
+	<meta name="twitter:image:alt" content="Docs: Event-based AI agents with stamped, verifiable data">
+	<meta name="theme-color" content="#0d0f17">
+	<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Deva World" /><link rel="icon" type="image/png" sizes="128x128" href="/assets/favicon.png">
+	<link rel="apple-touch-icon" href="/assets/favicon.png"></head><body><header class="site-header" role="banner">
+	<div class="wrapper">
+		<a class="site-title" rel="author" href="/">
+			<img class="site-logo" src="/assets/favicon.png" alt="" width="28" height="28">
+			<span>Deva Core</span>
+		</a>
+		<nav class="site-nav" aria-label="Main">
+			<input type="checkbox" id="nav-trigger" class="nav-trigger">
+			<label for="nav-trigger" aria-label="Menu">
+				<span class="menu-icon">
+					<svg viewBox="0 0 18 15" width="18px" height="15px"><path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path></svg>
+				</span>
+			</label>
+			<div class="trigger"><a class="page-link" href="/core/">Core</a><a class="page-link active" href="/docs/" aria-current="page">Docs</a><a class="page-link" href="/guide/">Guide</a><a class="page-link" href="/tests/">Tests</a><a class="page-link" href="/vibe/">Vibe</a><a class="page-link" href="/vla/">VLA</a><a class="page-link" href="/about/">About</a><a class="page-link nav-cta" href="https://github.com/indraai/deva">GitHub</a>
+			</div>
+		</nav>
+	</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Docs</h1>
+  </header>
+
+  <div class="post-content">
+    <p>The Deva Documentation - install, quick start, lifecycle, messaging between Devas, stamped packets, events and the full method reference.</p>
+
+<h1 id="deva">Deva</h1>
+
+<p><a href="https://www.npmjs.com/package/@indra.ai/deva"><img src="https://img.shields.io/npm/v/@indra.ai/deva" alt="npm" /></a> <a href="https://github.com/indraai/deva/actions/workflows/test.yml"><img src="https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg" alt="Tests" /></a></p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">@indra.ai/deva</code></strong></p>
+
+<p>Deva is a Vedic-inspired, event-based, context-aware Feature, Zone, Action and State machine framework for building integrated artificial intelligence agents (“Devas”) in Node.js. Every Deva is one <code class="language-plaintext highlighter-rouge">Deva</code> class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it broadcasts each step as an event. Every packet it builds is stamped with cumulative md5, sha256 and sha512 hashes.</p>
+
+<blockquote>
+  <p>Deva is distributed under the <strong>Vedic License Agreement (VLA)</strong>. Read <a href="#license">License</a> before you use it.</p>
+</blockquote>
+
+<h2 id="contents">Contents</h2>
+
+<ol>
+  <li><a href="#requirements">Requirements</a></li>
+  <li><a href="#install">Install</a></li>
+  <li><a href="#quick-start">Quick start</a></li>
+  <li><a href="#constructor-options">Constructor options</a></li>
+  <li><a href="#lifecycle">Lifecycle</a></li>
+  <li><a href="#messaging">Messaging: question, answer, ask, talk, listen</a></li>
+  <li><a href="#the-packet">The packet</a></li>
+  <li><a href="#stamping-and-the-hash-tiers">Stamping and the hash tiers</a></li>
+  <li><a href="#the-workflow">The workflow: features, zones, actions, states, intents, beliefs, contexts</a></li>
+  <li><a href="#events">Events</a></li>
+  <li><a href="#error-handling">Error handling</a></li>
+  <li><a href="#help">Help</a></li>
+  <li><a href="#configuration-files">Configuration files</a></li>
+  <li><a href="#testing">Testing</a></li>
+  <li><a href="#method-reference">Method reference</a></li>
+  <li><a href="#license">License</a></li>
+  <li><a href="#links-and-author">Links and author</a></li>
+</ol>
+
+<h2 id="requirements">Requirements</h2>
+
+<ul>
+  <li>Node.js <strong>22 or later</strong> (<code class="language-plaintext highlighter-rouge">engines.node: "&gt;=22"</code>), npm 9.5.1 or later.</li>
+  <li>ES modules only. The package is <code class="language-plaintext highlighter-rouge">"type": "module"</code> and uses JSON import attributes (<code class="language-plaintext highlighter-rouge">import x from './x.json' with {type: 'json'}</code>). <code class="language-plaintext highlighter-rouge">require()</code> won’t work.</li>
+  <li>A <strong>client object that carries a VLA</strong> matching the one in Deva’s <code class="language-plaintext highlighter-rouge">package.json</code>. <code class="language-plaintext highlighter-rouge">init()</code> refuses to start without it (see <a href="#lifecycle">Lifecycle</a>).</li>
+</ul>
+
+<h2 id="install">Install</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span> @indra.ai/deva
+</code></pre></div></div>
+
+<h2 id="quick-start">Quick start</h2>
+
+<p>This is a minimal working Deva with one method. <code class="language-plaintext highlighter-rouge">client.json</code> is a client file shaped like <a href="https://github.com/indraai/deva/tests/client.json"><code class="language-plaintext highlighter-rouge">tests/client.json</code></a>. Its <code class="language-plaintext highlighter-rouge">DATA.VLA</code> must match the <code class="language-plaintext highlighter-rouge">VLA</code> block in Deva’s <code class="language-plaintext highlighter-rouge">package.json</code>.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">Deva</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@indra.ai/deva</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">Client</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./client.json</span><span class="dl">'</span> <span class="kd">with</span> <span class="p">{</span><span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">json</span><span class="dl">'</span><span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="nx">Client</span><span class="p">.</span><span class="nx">DATA</span><span class="p">;</span> <span class="c1">// must carry a VLA matching the Deva package VLA</span>
+
+<span class="kd">const</span> <span class="nx">hello</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Deva</span><span class="p">({</span>
+  <span class="na">info</span><span class="p">:</span> <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="dl">'</span><span class="s1">hello</span><span class="dl">'</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Hello Deva</span><span class="dl">'</span><span class="p">,</span> <span class="na">version</span><span class="p">:</span> <span class="dl">'</span><span class="s1">0.0.1</span><span class="dl">'</span><span class="p">,</span> <span class="na">VLA</span><span class="p">:</span> <span class="nx">client</span><span class="p">.</span><span class="nx">VLA</span><span class="p">},</span>
+  <span class="na">agent</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">id</span><span class="p">:</span> <span class="dl">'</span><span class="s1">hello</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">key</span><span class="p">:</span> <span class="dl">'</span><span class="s1">hello</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">prompt</span><span class="p">:</span> <span class="p">{</span><span class="na">emoji</span><span class="p">:</span> <span class="dl">'</span><span class="s1">👋</span><span class="dl">'</span><span class="p">,</span> <span class="na">text</span><span class="p">:</span> <span class="dl">'</span><span class="s1">hello</span><span class="dl">'</span><span class="p">},</span>
+    <span class="na">profile</span><span class="p">:</span> <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Hello Deva</span><span class="dl">'</span><span class="p">},</span>
+  <span class="p">},</span>
+  <span class="na">config</span><span class="p">:</span> <span class="p">{</span><span class="na">hash</span><span class="p">:</span> <span class="p">{}},</span>     <span class="c1">// required: ready() writes this.config.hash[agent.key]</span>
+  <span class="na">vars</span><span class="p">:</span> <span class="p">{</span><span class="na">context</span><span class="p">:</span> <span class="p">{}},</span>    <span class="c1">// required: context() looks up this.vars.context</span>
+  <span class="na">listeners</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">devacore:error</span><span class="dl">'</span><span class="p">(</span><span class="nx">packet</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">packet</span><span class="p">.</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="p">},</span>
+  <span class="p">},</span>
+  <span class="na">methods</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nf">greet</span><span class="p">(</span><span class="nx">packet</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nb">Promise</span><span class="p">.</span><span class="nf">resolve</span><span class="p">({</span><span class="na">text</span><span class="p">:</span> <span class="s2">`hello </span><span class="p">${</span><span class="nx">packet</span><span class="p">.</span><span class="nx">q</span><span class="p">.</span><span class="nx">text</span><span class="p">}</span><span class="s2">`</span><span class="p">});</span>
+    <span class="p">},</span>
+  <span class="p">},</span>
+  <span class="k">async</span> <span class="nf">onReady</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">resolve</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">packet</span> <span class="o">=</span> <span class="k">await</span> <span class="k">this</span><span class="p">.</span><span class="nf">question</span><span class="p">(</span><span class="dl">'</span><span class="s1">/greet world</span><span class="dl">'</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">packet</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">text</span><span class="p">);</span> <span class="c1">// hello world</span>
+    <span class="k">return</span> <span class="nf">resolve</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+  <span class="p">},</span>
+<span class="p">});</span>
+
+<span class="nx">hello</span><span class="p">.</span><span class="nf">init</span><span class="p">(</span><span class="nx">client</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Run it with <code class="language-plaintext highlighter-rouge">node examples/hello-world.js</code> and it prints <code class="language-plaintext highlighter-rouge">hello world</code>.</p>
+
+<p>Three things to know from this example:</p>
+
+<ul>
+  <li>
+    <p>Do your work from <code class="language-plaintext highlighter-rouge">onReady</code>, not after <code class="language-plaintext highlighter-rouge">await init()</code>. The <code class="language-plaintext highlighter-rouge">init()</code> promise resolves after <code class="language-plaintext highlighter-rouge">ready</code> has run.</p>
+  </li>
+  <li>
+    <p><strong>Methods must return a Promise.</strong> <code class="language-plaintext highlighter-rouge">answer()</code> calls <code class="language-plaintext highlighter-rouge">this.methods[method](packet).then(...)</code>.</p>
+  </li>
+</ul>
+
+<h2 id="constructor-options">Constructor options</h2>
+
+<p><code class="language-plaintext highlighter-rouge">new Deva(opts)</code> accepts:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th>What it is</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">id</code></td>
+      <td>Instance id. Defaults to <code class="language-plaintext highlighter-rouge">randomUUID()</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">info</code></td>
+      <td>Package-style info object (<code class="language-plaintext highlighter-rouge">id</code>, <code class="language-plaintext highlighter-rouge">name</code>, <code class="language-plaintext highlighter-rouge">version</code>, <code class="language-plaintext highlighter-rouge">dir</code>, <code class="language-plaintext highlighter-rouge">VLA</code>, …). Returned by <code class="language-plaintext highlighter-rouge">info()</code>. <code class="language-plaintext highlighter-rouge">info.VLA.uid</code> goes into every <code class="language-plaintext highlighter-rouge">uid()</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">agent</code></td>
+      <td>The agent profile: <code class="language-plaintext highlighter-rouge">id</code>, <code class="language-plaintext highlighter-rouge">key</code> (the Deva’s name on the bus), <code class="language-plaintext highlighter-rouge">prompt</code>, <code class="language-plaintext highlighter-rouge">profile</code> (<code class="language-plaintext highlighter-rouge">name</code>, and optional <code class="language-plaintext highlighter-rouge">warning</code>, <code class="language-plaintext highlighter-rouge">notice</code>, <code class="language-plaintext highlighter-rouge">copyright</code>, <code class="language-plaintext highlighter-rouge">status</code>, <code class="language-plaintext highlighter-rouge">vectors</code>, <code class="language-plaintext highlighter-rouge">owner</code>, <code class="language-plaintext highlighter-rouge">creator</code>, <code class="language-plaintext highlighter-rouge">salute</code>). It can also carry custom <code class="language-plaintext highlighter-rouge">zones</code>, <code class="language-plaintext highlighter-rouge">actions</code>, <code class="language-plaintext highlighter-rouge">states</code>, <code class="language-plaintext highlighter-rouge">intents</code>, <code class="language-plaintext highlighter-rouge">beliefs</code> and <code class="language-plaintext highlighter-rouge">messages</code>, which are merged in without overwriting the core ones (keys already in config win), and then removed from the agent object.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">config</code></td>
+      <td>Local config. Needs a <code class="language-plaintext highlighter-rouge">hash</code> object. Can set <code class="language-plaintext highlighter-rouge">timeout.ask</code> in ms (default <code class="language-plaintext highlighter-rouge">30000</code>, <code class="language-plaintext highlighter-rouge">0</code> disables it).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">vars</code></td>
+      <td>Free-form variables on <code class="language-plaintext highlighter-rouge">this.vars</code>. <code class="language-plaintext highlighter-rouge">vars.context</code> maps context keys to display text.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">utils</code>, <code class="language-plaintext highlighter-rouge">func</code></td>
+      <td>Your helper functions. Bound to the Deva at <code class="language-plaintext highlighter-rouge">init</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">methods</code></td>
+      <td>Public commands, reachable by <code class="language-plaintext highlighter-rouge">question('/name ...')</code> or by another Deva’s <code class="language-plaintext highlighter-rouge">#key name ...</code>. Bound at <code class="language-plaintext highlighter-rouge">init</code>. Each takes a packet and returns a Promise of a string or <code class="language-plaintext highlighter-rouge">{text, html, data}</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">listeners</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{eventName: handler}</code>. Bound and registered on the event bus at <code class="language-plaintext highlighter-rouge">init</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">devas</code></td>
+      <td>Child Deva instances. They inherit <code class="language-plaintext highlighter-rouge">events</code>, <code class="language-plaintext highlighter-rouge">lib</code> and <code class="language-plaintext highlighter-rouge">config</code> and are <code class="language-plaintext highlighter-rouge">init</code>‘d during <code class="language-plaintext highlighter-rouge">ready</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">modules</code></td>
+      <td>Third-party modules for your own use.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">events</code></td>
+      <td>An existing <code class="language-plaintext highlighter-rouge">EventEmitter</code> to share. Defaults to a new one.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">maxListeners</code></td>
+      <td>Passed to <code class="language-plaintext highlighter-rouge">events.setMaxListeners</code>. Default <code class="language-plaintext highlighter-rouge">0</code> (unlimited).</td>
+    </tr>
+    <tr>
+      <td>Lifecycle hooks</td>
+      <td><code class="language-plaintext highlighter-rouge">onInit</code>, <code class="language-plaintext highlighter-rouge">onStart</code>, <code class="language-plaintext highlighter-rouge">onEnter</code>, <code class="language-plaintext highlighter-rouge">onDone</code>, <code class="language-plaintext highlighter-rouge">onReady</code>, <code class="language-plaintext highlighter-rouge">onFinish</code>, <code class="language-plaintext highlighter-rouge">onComplete</code>, <code class="language-plaintext highlighter-rouge">onStop</code>, <code class="language-plaintext highlighter-rouge">onClose</code>, <code class="language-plaintext highlighter-rouge">onLeave</code>, <code class="language-plaintext highlighter-rouge">onExit</code>, <code class="language-plaintext highlighter-rouge">onShutdown</code>, <code class="language-plaintext highlighter-rouge">onError</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Any other top-level option is copied onto the instance, as long as it doesn’t clash with an existing property.</p>
+
+<h2 id="lifecycle">Lifecycle</h2>
+
+<h3 id="start-up-initclient">Start-up: <code class="language-plaintext highlighter-rouge">init(client)</code></h3>
+
+<ol>
+  <li>Hashes the core package data (md5, sha256, sha512).</li>
+  <li>Runs <code class="language-plaintext highlighter-rouge">license_check(client.VLA, core.VLA)</code>, comparing sha256 hashes of the two VLA objects. On a mismatch it prompts and resolves with <code class="language-plaintext highlighter-rouge">❌ The Provided Client License Is Invalid</code>, and the Deva stays inactive.</li>
+  <li>Marks the Deva active, then inherits into child devas, binds <code class="language-plaintext highlighter-rouge">listeners</code>/<code class="language-plaintext highlighter-rouge">methods</code>/<code class="language-plaintext highlighter-rouge">utils</code>/<code class="language-plaintext highlighter-rouge">func</code>/<code class="language-plaintext highlighter-rouge">lib</code>, and registers listeners.</li>
+  <li>Runs the client feature chain: <code class="language-plaintext highlighter-rouge">Client</code>, then <code class="language-plaintext highlighter-rouge">License</code>, <code class="language-plaintext highlighter-rouge">Error</code>, <code class="language-plaintext highlighter-rouge">Log</code>, <code class="language-plaintext highlighter-rouge">Data</code>, <code class="language-plaintext highlighter-rouge">Report</code>, <code class="language-plaintext highlighter-rouge">Legal</code>, <code class="language-plaintext highlighter-rouge">Security</code>, <code class="language-plaintext highlighter-rouge">Support</code>, <code class="language-plaintext highlighter-rouge">Services</code>, <code class="language-plaintext highlighter-rouge">Systems</code>, then <code class="language-plaintext highlighter-rouge">Done</code>. For each one that the client’s <code class="language-plaintext highlighter-rouge">features</code> object defines, the Deva stores <code class="language-plaintext highlighter-rouge">this._&lt;feature&gt;</code> = <code class="language-plaintext highlighter-rouge">{client_id, client_name, concerns, global, personal}</code>, where <code class="language-plaintext highlighter-rouge">personal</code> is the entry under <code class="language-plaintext highlighter-rouge">devas[agent.key]</code>. Methods found in <code class="language-plaintext highlighter-rouge">client.features[x].methods</code> are bound into <code class="language-plaintext highlighter-rouge">this.methods</code>.</li>
+  <li>Calls <code class="language-plaintext highlighter-rouge">onInit(data, resolve)</code> if you defined it, otherwise <code class="language-plaintext highlighter-rouge">start</code>.</li>
+</ol>
+
+<h3 id="the-invoke-chain">The invoke chain</h3>
+
+<p><code class="language-plaintext highlighter-rouge">start</code>, <code class="language-plaintext highlighter-rouge">enter</code>, <code class="language-plaintext highlighter-rouge">done</code>, <code class="language-plaintext highlighter-rouge">ready</code>, <code class="language-plaintext highlighter-rouge">finish</code>, <code class="language-plaintext highlighter-rouge">complete</code>, <code class="language-plaintext highlighter-rouge">stop</code>, <code class="language-plaintext highlighter-rouge">close</code>, <code class="language-plaintext highlighter-rouge">leave</code>, <code class="language-plaintext highlighter-rouge">exit</code> and <code class="language-plaintext highlighter-rouge">shutdown</code> all run through <code class="language-plaintext highlighter-rouge">_invoke</code>. Each step sets the context, zone, action and state to its key, writes a timestamp under that key on the data (<code class="language-plaintext highlighter-rouge">data.start = Date.now()</code> and so on), re-stamps the data, and emits its <code class="language-plaintext highlighter-rouge">devacore:&lt;key&gt;</code> event. Then:</p>
+
+<ul>
+  <li>if an <code class="language-plaintext highlighter-rouge">on&lt;Key&gt;</code> hook exists, it calls <code class="language-plaintext highlighter-rouge">on&lt;Key&gt;(data, resolve)</code>, and <strong>the hook decides what happens next</strong>: call the next step (<code class="language-plaintext highlighter-rouge">this.enter(data, resolve)</code>) or <code class="language-plaintext highlighter-rouge">resolve(data)</code>;</li>
+  <li>otherwise it moves on to the next step itself.</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Step</th>
+      <th>Next by default</th>
+      <th>Hook</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>start</td>
+      <td>enter</td>
+      <td>onStart</td>
+    </tr>
+    <tr>
+      <td>enter</td>
+      <td>done</td>
+      <td>onEnter</td>
+    </tr>
+    <tr>
+      <td>done</td>
+      <td>ready</td>
+      <td>onDone</td>
+    </tr>
+    <tr>
+      <td>ready</td>
+      <td>(resolve)</td>
+      <td>onReady</td>
+    </tr>
+    <tr>
+      <td>finish</td>
+      <td>complete</td>
+      <td>onFinish</td>
+    </tr>
+    <tr>
+      <td>complete</td>
+      <td>(resolve)</td>
+      <td>onComplete</td>
+    </tr>
+    <tr>
+      <td>stop</td>
+      <td>close</td>
+      <td>onStop</td>
+    </tr>
+    <tr>
+      <td>close</td>
+      <td>leave</td>
+      <td>onClose</td>
+    </tr>
+    <tr>
+      <td>leave</td>
+      <td>exit</td>
+      <td>onLeave</td>
+    </tr>
+    <tr>
+      <td>exit</td>
+      <td>shutdown</td>
+      <td>onExit</td>
+    </tr>
+    <tr>
+      <td>shutdown</td>
+      <td>(resolve)</td>
+      <td>onShutdown</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">ready</code> also stores sha256 hashes of <code class="language-plaintext highlighter-rouge">vars</code>, <code class="language-plaintext highlighter-rouge">utils</code>, <code class="language-plaintext highlighter-rouge">listeners</code>, <code class="language-plaintext highlighter-rouge">modules</code>, <code class="language-plaintext highlighter-rouge">func</code> and <code class="language-plaintext highlighter-rouge">methods</code> in <code class="language-plaintext highlighter-rouge">config.hash[agent.key]</code>, and <code class="language-plaintext highlighter-rouge">init</code>s each child Deva in <code class="language-plaintext highlighter-rouge">devas</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">finish</code> and <code class="language-plaintext highlighter-rouge">complete</code> wrap every answer (see <a href="#messaging">Messaging</a>).</p>
+
+<h3 id="shutdown-stop">Shutdown: <code class="language-plaintext highlighter-rouge">stop()</code></h3>
+
+<p><code class="language-plaintext highlighter-rouge">stop()</code> returns a Promise and runs <code class="language-plaintext highlighter-rouge">stop</code>, <code class="language-plaintext highlighter-rouge">close</code>, <code class="language-plaintext highlighter-rouge">leave</code>, <code class="language-plaintext highlighter-rouge">exit</code> and <code class="language-plaintext highlighter-rouge">shutdown</code>. <code class="language-plaintext highlighter-rouge">exit</code> clears the inherited feature data (<code class="language-plaintext highlighter-rouge">_license</code>, <code class="language-plaintext highlighter-rouge">_security</code>, and so on). <code class="language-plaintext highlighter-rouge">shutdown</code> removes listeners and pending asks, and clears <code class="language-plaintext highlighter-rouge">modules</code>, <code class="language-plaintext highlighter-rouge">listeners</code>, <code class="language-plaintext highlighter-rouge">events</code>, <code class="language-plaintext highlighter-rouge">_config</code> and <code class="language-plaintext highlighter-rouge">_active</code>. After that, the Deva answers most calls with <code class="language-plaintext highlighter-rouge">⭕️ OFFLINE</code>. With no hooks defined, <code class="language-plaintext highlighter-rouge">await deva.stop()</code> resolves with the data object, whose <code class="language-plaintext highlighter-rouge">key</code> is <code class="language-plaintext highlighter-rouge">'shutdown'</code>.</p>
+
+<h2 id="messaging">Messaging</h2>
+
+<h3 id="questiontext-datafalse"><code class="language-plaintext highlighter-rouge">question(text, data=false)</code></h3>
+
+<p><code class="language-plaintext highlighter-rouge">question</code> is the entry point. It returns a Promise and reads the first word of <code class="language-plaintext highlighter-rouge">text</code>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Form</th>
+      <th>Example</th>
+      <th>What happens</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Command (<code class="language-plaintext highlighter-rouge">/</code>)</td>
+      <td><code class="language-plaintext highlighter-rouge">/greet world</code></td>
+      <td>Calls local <code class="language-plaintext highlighter-rouge">methods.greet</code> through <code class="language-plaintext highlighter-rouge">answer()</code>. <code class="language-plaintext highlighter-rouge">packet.q.text</code> is <code class="language-plaintext highlighter-rouge">world</code>. A <code class="language-plaintext highlighter-rouge">/method:a:b</code> form puts <code class="language-plaintext highlighter-rouge">['method','a','b']</code> in <code class="language-plaintext highlighter-rouge">meta.params</code>.</td>
+    </tr>
+    <tr>
+      <td>Ask (<code class="language-plaintext highlighter-rouge">#</code>)</td>
+      <td><code class="language-plaintext highlighter-rouge">#helper shout hi</code></td>
+      <td>Sends the packet to the Deva whose agent key is <code class="language-plaintext highlighter-rouge">helper</code> and waits for its reply.</td>
+    </tr>
+    <tr>
+      <td>Plain text</td>
+      <td><code class="language-plaintext highlighter-rouge">hi there</code></td>
+      <td>Calls <code class="language-plaintext highlighter-rouge">methods.question</code>, if you defined one.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Unknown methods resolve to a packet whose <code class="language-plaintext highlighter-rouge">a.text</code> is <code class="language-plaintext highlighter-rouge">⛔️ METHOD NOT FOUND &lt;agent&gt; &lt;method&gt;</code>.</p>
+
+<h3 id="ask-between-devas">Ask between Devas</h3>
+
+<p>For <code class="language-plaintext highlighter-rouge">#key method text</code>, the asking Deva emits <code class="language-plaintext highlighter-rouge">key:ask</code> and waits once on <code class="language-plaintext highlighter-rouge">key:ask:&lt;packet uid&gt;</code>. The target’s <code class="language-plaintext highlighter-rouge">ask(packet)</code> runs <code class="language-plaintext highlighter-rouge">methods[method]</code>, builds <code class="language-plaintext highlighter-rouge">packet.a</code>, and replies on that event. The asker then runs <code class="language-plaintext highlighter-rouge">finish</code>/<code class="language-plaintext highlighter-rouge">complete</code> and resolves. Each Deva listens on <code class="language-plaintext highlighter-rouge">&lt;its key&gt;:ask</code> automatically, as part of the state listeners registered at <code class="language-plaintext highlighter-rouge">init</code>.</p>
+
+<ul>
+  <li>If nobody is listening on <code class="language-plaintext highlighter-rouge">key:ask</code>, it resolves right away with <code class="language-plaintext highlighter-rouge">⛔️ ASK TARGET NOT FOUND</code>.</li>
+  <li>If no reply comes within <code class="language-plaintext highlighter-rouge">config.timeout.ask</code> (default 30 s), it resolves with <code class="language-plaintext highlighter-rouge">⛔️ ASK TIMEOUT</code>.</li>
+</ul>
+
+<p>Tested: a parent Deva with <code class="language-plaintext highlighter-rouge">devas: {helper}</code> asked <code class="language-plaintext highlighter-rouge">#helper shout hi there</code> and got <code class="language-plaintext highlighter-rouge">HI THERE</code> back, with <code class="language-plaintext highlighter-rouge">a.meta.key === 'helper'</code>.</p>
+
+<h3 id="events-directly">Events directly</h3>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">talk(evt, packet)</code> emits on the bus and returns <code class="language-plaintext highlighter-rouge">true</code> if anyone was listening.</li>
+  <li><code class="language-plaintext highlighter-rouge">listen(evt, callback)</code>, <code class="language-plaintext highlighter-rouge">once(evt, callback)</code> and <code class="language-plaintext highlighter-rouge">ignore(evt, callback)</code> add, add-once and remove listeners.</li>
+  <li><code class="language-plaintext highlighter-rouge">prompt(text)</code> emits a stamped <code class="language-plaintext highlighter-rouge">devacore:prompt</code> packet.</li>
+</ul>
+
+<h2 id="the-packet">The packet</h2>
+
+<p>A packet resolved from <code class="language-plaintext highlighter-rouge">question()</code> looks like this (keys in order, verified):</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>packet: id, q, a, created, finish, complete, md5, sha256, sha512
+  q:    id, agent, client, meta{key, method, params}, text, data, created, md5, sha256, sha512
+  a:    id, agent, client, meta{key, method, params}, text, html, data, created, md5, sha256, sha512
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">id</code> is a <code class="language-plaintext highlighter-rouge">uid()</code> object, not a string: <code class="language-plaintext highlighter-rouge">uid, time, iso, utc, date, license, fingerprint, client, agent, machine, core_hash, status, warning, notice, vectors, owner, creator, salute, copyright, md5, sha256, sha512</code>. Use <code class="language-plaintext highlighter-rouge">packet.id.uid</code> for the id value. <code class="language-plaintext highlighter-rouge">uid(true)</code> uses a random UUID for <code class="language-plaintext highlighter-rouge">uid</code>. The default is a time-based numeric id.</li>
+  <li><code class="language-plaintext highlighter-rouge">agent</code> and <code class="language-plaintext highlighter-rouge">client</code> are copies with their own hashes.</li>
+  <li><code class="language-plaintext highlighter-rouge">finish</code> and <code class="language-plaintext highlighter-rouge">complete</code> are timestamps added by those steps.</li>
+  <li>A method’s result becomes <code class="language-plaintext highlighter-rouge">a.text</code>, <code class="language-plaintext highlighter-rouge">a.html</code> and <code class="language-plaintext highlighter-rouge">a.data</code>. A plain string result fills <code class="language-plaintext highlighter-rouge">text</code>.</li>
+</ul>
+
+<h2 id="stamping-and-the-hash-tiers">Stamping and the hash tiers</h2>
+
+<p>Deva hashes in three tiers, in the order <code class="language-plaintext highlighter-rouge">config.hashes = ['md5', 'sha256', 'sha512']</code>:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tier</th>
+      <th>Intended use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>md5</td>
+      <td>Fast, everyday (civilian) verification</td>
+    </tr>
+    <tr>
+      <td>sha256</td>
+      <td>Government and authority verification</td>
+    </tr>
+    <tr>
+      <td>sha512</td>
+      <td>Military, agency and legal high-security use</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The tiers are <strong>cumulative by design</strong>. Each hash is taken over the object <em>including the hashes before it</em>, so sha256 covers md5, and sha512 covers both. Hashes are base64 digests of <code class="language-plaintext highlighter-rouge">JSON.stringify(data)</code> (see <code class="language-plaintext highlighter-rouge">hash(data, algo)</code>).</p>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">_stamp(data, label='', uid='')</code> adds the three hashes in order and returns the same object. When a label is given, it logs a <code class="language-plaintext highlighter-rouge">hash</code> action per tier (<code class="language-plaintext highlighter-rouge">&lt;label&gt;:&lt;algo&gt;:&lt;uid&gt;</code>).</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">_unstamp(data)</code> removes them, logging a <code class="language-plaintext highlighter-rouge">delete</code> action per tier as <code class="language-plaintext highlighter-rouge">&lt;algo&gt;:&lt;uid&gt;</code> using <code class="language-plaintext highlighter-rouge">data.id?.uid</code>. If the data has no <code class="language-plaintext highlighter-rouge">id</code> or the <code class="language-plaintext highlighter-rouge">id</code> has no <code class="language-plaintext highlighter-rouge">uid</code>, it uses <code class="language-plaintext highlighter-rouge">this._messages.noid</code> (<code class="language-plaintext highlighter-rouge">⛔️ NO ID PROVIDED</code>) instead of throwing.</p>
+  </li>
+  <li>
+    <p>To re-stamp after a change, <code class="language-plaintext highlighter-rouge">_stamp(_unstamp(data), label, uid)</code>. Since the tiers are cumulative, stamping twice without unstamping would change the values.</p>
+  </li>
+</ul>
+
+<p>The return path in Core methods is: the <code class="language-plaintext highlighter-rouge">return</code> action, then the <code class="language-plaintext highlighter-rouge">good</code> intent, then <code class="language-plaintext highlighter-rouge">_stamp</code>.</p>
+
+<p>A few spots (<code class="language-plaintext highlighter-rouge">init</code>, <code class="language-plaintext highlighter-rouge">_workflow</code>, <code class="language-plaintext highlighter-rouge">client()</code>, <code class="language-plaintext highlighter-rouge">agent()</code>, <code class="language-plaintext highlighter-rouge">machine()</code>, <code class="language-plaintext highlighter-rouge">uid()</code>) hash manually on purpose and are commented as such. Calling <code class="language-plaintext highlighter-rouge">_stamp</code> there would log a state change from inside the state machinery and overflow the stack.</p>
+
+<h2 id="the-workflow">The workflow</h2>
+
+<p>Each call to <code class="language-plaintext highlighter-rouge">feature()</code>, <code class="language-plaintext highlighter-rouge">zone()</code>, <code class="language-plaintext highlighter-rouge">action()</code>, <code class="language-plaintext highlighter-rouge">state()</code>, <code class="language-plaintext highlighter-rouge">intent()</code> or <code class="language-plaintext highlighter-rouge">belief()</code> takes <code class="language-plaintext highlighter-rouge">(value, extra)</code>. If <code class="language-plaintext highlighter-rouge">value</code> exists in the matching list, it sets the current value, emits a hashed <code class="language-plaintext highlighter-rouge">devacore:&lt;key&gt;</code> event with <code class="language-plaintext highlighter-rouge">text</code> = the list’s label plus <code class="language-plaintext highlighter-rouge">extra</code>, and returns that data. Unknown values are ignored silently. <code class="language-plaintext highlighter-rouge">context(value, extra)</code> does the same, using <code class="language-plaintext highlighter-rouge">vars.context</code> for the label, and accepts any value.</p>
+
+<p>The plural methods return a stamped object whose <code class="language-plaintext highlighter-rouge">value</code> is the full list:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>List</th>
+      <th>Method</th>
+      <th>Default</th>
+      <th>Source</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>features</td>
+      <td><code class="language-plaintext highlighter-rouge">features()</code></td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">_data/features.json</code></td>
+    </tr>
+    <tr>
+      <td>zones</td>
+      <td><code class="language-plaintext highlighter-rouge">zones()</code></td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">_data/zones.json</code></td>
+    </tr>
+    <tr>
+      <td>actions</td>
+      <td><code class="language-plaintext highlighter-rouge">actions()</code></td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">_data/actions.json</code></td>
+    </tr>
+    <tr>
+      <td>states</td>
+      <td><code class="language-plaintext highlighter-rouge">states()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">offline</code></td>
+      <td><code class="language-plaintext highlighter-rouge">_data/states.json</code></td>
+    </tr>
+    <tr>
+      <td>intents</td>
+      <td><code class="language-plaintext highlighter-rouge">intents()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">neutral</code></td>
+      <td><code class="language-plaintext highlighter-rouge">_data/intents.json</code></td>
+    </tr>
+    <tr>
+      <td>beliefs</td>
+      <td><code class="language-plaintext highlighter-rouge">beliefs()</code></td>
+      <td><code class="language-plaintext highlighter-rouge">vedic</code></td>
+      <td><code class="language-plaintext highlighter-rouge">_data/beliefs.json</code></td>
+    </tr>
+    <tr>
+      <td>contexts</td>
+      <td><code class="language-plaintext highlighter-rouge">contexts()</code></td>
+      <td>—</td>
+      <td>your agent</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The features are <code class="language-plaintext highlighter-rouge">init, agent, client, license, error, log, data, report, legal, security, support, services, systems</code>. Each client feature has a getter of the same name (<code class="language-plaintext highlighter-rouge">security()</code>, <code class="language-plaintext highlighter-rouge">support()</code>, …) that returns a copy of what the client supplied for it.</p>
+
+<h2 id="events">Events</h2>
+
+<p>All core events are listed in <code class="language-plaintext highlighter-rouge">_data/events.json</code> (25). The ones you’ll usually listen to:</p>
+
+<p><code class="language-plaintext highlighter-rouge">devacore:prompt</code>, <code class="language-plaintext highlighter-rouge">devacore:error</code>, <code class="language-plaintext highlighter-rouge">devacore:question</code>, <code class="language-plaintext highlighter-rouge">devacore:answer</code>, <code class="language-plaintext highlighter-rouge">devacore:ask</code>, <code class="language-plaintext highlighter-rouge">devacore:start</code>, <code class="language-plaintext highlighter-rouge">devacore:enter</code>, <code class="language-plaintext highlighter-rouge">devacore:done</code>, <code class="language-plaintext highlighter-rouge">devacore:ready</code>, <code class="language-plaintext highlighter-rouge">devacore:finish</code>, <code class="language-plaintext highlighter-rouge">devacore:complete</code>, <code class="language-plaintext highlighter-rouge">devacore:stop</code>, <code class="language-plaintext highlighter-rouge">devacore:exit</code>, <code class="language-plaintext highlighter-rouge">devacore:shutdown</code>, <code class="language-plaintext highlighter-rouge">devacore:context</code>, <code class="language-plaintext highlighter-rouge">devacore:feature</code>, <code class="language-plaintext highlighter-rouge">devacore:zone</code>, <code class="language-plaintext highlighter-rouge">devacore:action</code>, <code class="language-plaintext highlighter-rouge">devacore:state</code>, <code class="language-plaintext highlighter-rouge">devacore:intent</code>, <code class="language-plaintext highlighter-rouge">devacore:belief</code>, <code class="language-plaintext highlighter-rouge">devacore:load</code>, <code class="language-plaintext highlighter-rouge">devacore:unload</code>.</p>
+
+<h2 id="error-handling">Error handling</h2>
+
+<p><code class="language-plaintext highlighter-rouge">err(err, packet, reject)</code> is the single error path. It sets the <code class="language-plaintext highlighter-rouge">bad</code> intent and the <code class="language-plaintext highlighter-rouge">error</code> context, feature, zone, action and state. It emits a stamped <code class="language-plaintext highlighter-rouge">devacore:error</code> packet carrying <code class="language-plaintext highlighter-rouge">error: {name, message, stack}</code> and the related packet. Then:</p>
+
+<ul>
+  <li>if you defined <code class="language-plaintext highlighter-rouge">onError(err, packet, reject)</code>, it returns that, and <strong>you own the outcome</strong>. Call <code class="language-plaintext highlighter-rouge">reject</code> to fail the caller’s promise, or the promise stays pending;</li>
+  <li>otherwise it calls <code class="language-plaintext highlighter-rouge">reject(err)</code>, or returns <code class="language-plaintext highlighter-rouge">Promise.reject(err)</code>.</li>
+</ul>
+
+<p>A method that rejects or throws ends up here. Most calls made while the Deva is inactive return or resolve <code class="language-plaintext highlighter-rouge">⭕️ OFFLINE</code> instead of throwing.</p>
+
+<h2 id="help">Help</h2>
+
+<p>Every Deva can carry its own help, written in <strong>feecting</strong>, the language Devas use to talk to each other. The name stands for Functional Expressive Emergent Cognitive Technical Intelligent Neural Generator a Key Value Pair Line Label Function Method Event Listener Zone Feature Action State Procedural Asynchronous Vector Programming Language. A Deva’s help system starts small and grows as the Deva grows.</p>
+
+<p><code class="language-plaintext highlighter-rouge">help(msg, help_dir)</code> looks in the Deva’s own folder and returns one section of a help file:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">help_dir</code> is the Deva’s base directory, usually <code class="language-plaintext highlighter-rouge">__dirname</code> of the Deva’s file. Help files live in <code class="language-plaintext highlighter-rouge">&lt;help_dir&gt;/help/</code>.</li>
+  <li>The first word of <code class="language-plaintext highlighter-rouge">msg</code> picks the file and the section, as <code class="language-plaintext highlighter-rouge">file:part</code>. The file defaults to <code class="language-plaintext highlighter-rouge">main</code>, and the part defaults to <code class="language-plaintext highlighter-rouge">MAIN</code> and is always matched in upper case.</li>
+  <li>A section is the text between <code class="language-plaintext highlighter-rouge">::BEGIN:&lt;PART&gt;</code> and <code class="language-plaintext highlighter-rouge">::END:&lt;PART&gt;</code> (the <code class="language-plaintext highlighter-rouge">container</code> markers in <code class="language-plaintext highlighter-rouge">_data/index.js</code>).</li>
+</ul>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>my-deva/
+  index.js
+  help/
+    main.feecting
+    ask.feecting
+</code></pre></div></div>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>::BEGIN:MAIN
+# My Deva
+p: What this Deva does and how to talk to it.
+::END:MAIN
+
+::BEGIN:ASK
+## Ask
+p: Use #key method text to ask another Deva.
+::END:ASK
+</code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Call</th>
+      <th>Returns</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">help('', __dirname)</code> or <code class="language-plaintext highlighter-rouge">help('main', __dirname)</code></td>
+      <td>the <code class="language-plaintext highlighter-rouge">MAIN</code> section of <code class="language-plaintext highlighter-rouge">help/main.feecting</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">help('main:ask', __dirname)</code></td>
+      <td>the <code class="language-plaintext highlighter-rouge">ASK</code> section of <code class="language-plaintext highlighter-rouge">help/main.feecting</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">help('ask', __dirname)</code></td>
+      <td>the <code class="language-plaintext highlighter-rouge">MAIN</code> section of <code class="language-plaintext highlighter-rouge">help/ask.feecting</code></td>
+    </tr>
+    <tr>
+      <td>a file or section that doesn’t exist</td>
+      <td><code class="language-plaintext highlighter-rouge">⛔️ HELP NOT FOUND</code> (<code class="language-plaintext highlighter-rouge">_messages.help_not_found</code>)</td>
+    </tr>
+    <tr>
+      <td>any call while the Deva is inactive</td>
+      <td><code class="language-plaintext highlighter-rouge">⭕️ OFFLINE</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The section comes back as raw feecting text, with the surrounding newlines kept, so the Deva can pass it on to be parsed or shown. A found section sets the <code class="language-plaintext highlighter-rouge">valid</code> state and <code class="language-plaintext highlighter-rouge">good</code> intent. A missing file sets <code class="language-plaintext highlighter-rouge">invalid</code> and <code class="language-plaintext highlighter-rouge">bad</code> tagged <code class="language-plaintext highlighter-rouge">help:not:exists</code>, and a missing section sets them tagged <code class="language-plaintext highlighter-rouge">help:not:found</code>. Neither one raises an error. If <code class="language-plaintext highlighter-rouge">help_dir</code> isn’t passed, the promise rejects with a <code class="language-plaintext highlighter-rouge">TypeError</code> from <code class="language-plaintext highlighter-rouge">path.join</code>.</p>
+
+<h2 id="configuration-files">Configuration files</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Contents</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">_data/index.js</code></td>
+      <td>Command char <code class="language-plaintext highlighter-rouge">/</code>, ask char <code class="language-plaintext highlighter-rouge">#</code>, <code class="language-plaintext highlighter-rouge">timeout.ask: 30000</code>, <code class="language-plaintext highlighter-rouge">hashes</code>, container markers (<code class="language-plaintext highlighter-rouge">::BEGIN</code>/<code class="language-plaintext highlighter-rouge">::END</code>), uid salt range, inherit/bind lists, the invoke chain table, defaults</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">_data/events.json</code></td>
+      <td>Event names</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">_data/features.json</code></td>
+      <td>Feature labels</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">_data/zones.json</code>, <code class="language-plaintext highlighter-rouge">actions.json</code>, <code class="language-plaintext highlighter-rouge">states.json</code>, <code class="language-plaintext highlighter-rouge">intents.json</code>, <code class="language-plaintext highlighter-rouge">beliefs.json</code></td>
+      <td>Workflow labels</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">_data/msgs.json</code></td>
+      <td>System messages such as <code class="language-plaintext highlighter-rouge">offline</code>, <code class="language-plaintext highlighter-rouge">noid</code>, <code class="language-plaintext highlighter-rouge">asktimeout</code>, <code class="language-plaintext highlighter-rouge">noask</code>, <code class="language-plaintext highlighter-rouge">method_not_found</code>, plus default <code class="language-plaintext highlighter-rouge">warning</code>, <code class="language-plaintext highlighter-rouge">notice</code> and <code class="language-plaintext highlighter-rouge">copyright</code> text</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Each JSON file has <code class="language-plaintext highlighter-rouge">id</code>, <code class="language-plaintext highlighter-rouge">title</code>, <code class="language-plaintext highlighter-rouge">copyright</code>, <code class="language-plaintext highlighter-rouge">VLA</code> and <code class="language-plaintext highlighter-rouge">DATA</code>, and the values are in <code class="language-plaintext highlighter-rouge">DATA</code>.</p>
+
+<h2 id="testing">Testing</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">test</span>
+</code></pre></div></div>
+
+<p>This runs the assertion suite in <code class="language-plaintext highlighter-rouge">tests/suite/</code> with Node’s built-in test runner (<code class="language-plaintext highlighter-rouge">node --test</code>), with no extra dependencies. GitHub Actions runs it on every push and pull request on Node 22 and 24, shown by the Tests badge at the top.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Covers</th>
+      <th>Tests</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">00-build.test.js</code></td>
+      <td>Building a Deva</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">01-init.test.js</code></td>
+      <td><code class="language-plaintext highlighter-rouge">init()</code> order and failures</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">02-getters.test.js</code></td>
+      <td>Getters and stamped copies</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">03-hash.test.js</code></td>
+      <td>The md5, sha256 and sha512 tiers</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">04-license.test.js</code></td>
+      <td><code class="language-plaintext highlighter-rouge">license_check</code></td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">05-messaging.test.js</code></td>
+      <td>question, answer, ask and talk</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">06-shutdown.test.js</code></td>
+      <td><code class="language-plaintext highlighter-rouge">stop()</code> and the shutdown chain</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">07-help.test.js</code></td>
+      <td><code class="language-plaintext highlighter-rouge">help()</code> and feecting help files</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">tests/suite/_deva.js</code> builds a fresh test Deva from <code class="language-plaintext highlighter-rouge">tests/agent.json</code> and <code class="language-plaintext highlighter-rouge">tests/client.json</code>, and <code class="language-plaintext highlighter-rouge">tests/suite/help/</code> holds the sample <code class="language-plaintext highlighter-rouge">.feecting</code> files for the help tests. The full list with edge cases is at <a href="https://deva.world/tests/">deva.world/tests</a>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">npm run demo</code> runs the older <code class="language-plaintext highlighter-rouge">tests/index.js</code> walkthrough, which builds a Deva, runs it through the lifecycle and prints the log.</p>
+
+<h2 id="method-reference">Method reference</h2>
+
+<p>These are the public methods.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Returns</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">init(client)</code></td>
+      <td>Promise</td>
+      <td>Starts the Deva. See the <code class="language-plaintext highlighter-rouge">onReady</code> caveat above.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">question(text, data?)</code></td>
+      <td>Promise&lt;packet&gt;</td>
+      <td><code class="language-plaintext highlighter-rouge">/cmd</code>, <code class="language-plaintext highlighter-rouge">#key method</code>, or plain text.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ask(packet)</code></td>
+      <td>—</td>
+      <td>Answer side of <code class="language-plaintext highlighter-rouge">#</code> asks. Usually called for you.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">stop()</code></td>
+      <td>Promise</td>
+      <td>Runs the shutdown chain.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">talk(evt, packet)</code></td>
+      <td>boolean</td>
+      <td>Emit on the bus.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">listen</code> / <code class="language-plaintext highlighter-rouge">once</code> / <code class="language-plaintext highlighter-rouge">ignore</code></td>
+      <td>—</td>
+      <td>Manage listeners.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">prompt(text)</code></td>
+      <td>stamped data</td>
+      <td>Emits <code class="language-plaintext highlighter-rouge">devacore:prompt</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">feature</code>/<code class="language-plaintext highlighter-rouge">zone</code>/<code class="language-plaintext highlighter-rouge">action</code>/<code class="language-plaintext highlighter-rouge">state</code>/<code class="language-plaintext highlighter-rouge">intent</code>/<code class="language-plaintext highlighter-rouge">belief(value, extra?)</code></td>
+      <td>data or <code class="language-plaintext highlighter-rouge">undefined</code></td>
+      <td>Set and broadcast.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">context(value, extra?)</code></td>
+      <td>stamped data</td>
+      <td>Needs <code class="language-plaintext highlighter-rouge">vars.context</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">features</code>/<code class="language-plaintext highlighter-rouge">zones</code>/<code class="language-plaintext highlighter-rouge">actions</code>/<code class="language-plaintext highlighter-rouge">states</code>/<code class="language-plaintext highlighter-rouge">intents</code>/<code class="language-plaintext highlighter-rouge">beliefs</code>/<code class="language-plaintext highlighter-rouge">contexts()</code></td>
+      <td>stamped <code class="language-plaintext highlighter-rouge">{id, key, value, agent, client, created}</code></td>
+      <td>Full lists.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">agent()</code> / <code class="language-plaintext highlighter-rouge">client()</code></td>
+      <td>hashed copy</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">info()</code> / <code class="language-plaintext highlighter-rouge">core()</code></td>
+      <td>stamped copy</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">status()</code></td>
+      <td>string</td>
+      <td><code class="language-plaintext highlighter-rouge">&lt;profile.name&gt; active since &lt;date&gt;</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">uid(guid=false)</code></td>
+      <td>uid object</td>
+      <td>See <a href="#the-packet">The packet</a>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">hash(data, algo='md5')</code></td>
+      <td>base64 string</td>
+      <td><code class="language-plaintext highlighter-rouge">md5</code>, <code class="language-plaintext highlighter-rouge">sha256</code>, <code class="language-plaintext highlighter-rouge">sha512</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">_stamp(data, label?, uid?)</code> / <code class="language-plaintext highlighter-rouge">_unstamp(data)</code></td>
+      <td>same object</td>
+      <td>See <a href="#stamping-and-the-hash-tiers">Stamping</a>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">license_check(personalVLA, packageVLA)</code></td>
+      <td>stamped approval or <code class="language-plaintext highlighter-rouge">false</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">load(key, client)</code> / <code class="language-plaintext highlighter-rouge">unload(key)</code></td>
+      <td>Promise</td>
+      <td>Init or stop a child Deva in <code class="language-plaintext highlighter-rouge">devas</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">err(err, packet, reject?)</code></td>
+      <td>—</td>
+      <td>See <a href="#error-handling">Error handling</a>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">help(msg, help_dir)</code></td>
+      <td>Promise of feecting text</td>
+      <td>See <a href="#help">Help</a>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Not covered here because they weren’t exercised for this README: <code class="language-plaintext highlighter-rouge">sign(packet)</code>, <code class="language-plaintext highlighter-rouge">machine()</code>, and the <code class="language-plaintext highlighter-rouge">lib</code> helpers (<code class="language-plaintext highlighter-rouge">this.lib.copy</code>, <code class="language-plaintext highlighter-rouge">formatDate</code>, and others).</p>
+
+<h2 id="license">License</h2>
+
+<p>Deva is distributed under the <strong>Vedic License Agreement</strong>, version 1.4.2, VLA <code class="language-plaintext highlighter-rouge">31711622713594414221</code>, owned by Quinn Michaels, through License Deva. The full text is in <a href="https://github.com/indraai/deva/LICENSE.md">LICENSE.md</a>. It states, among other things, that:</p>
+
+<ul>
+  <li>by accessing or using the Software, you agree to its terms;</li>
+  <li>the Software is the sole proprietary property of the Owner;</li>
+  <li>use is subject to a threefold hierarchy: Vedic Law, the Constitution of the United States, and Owner Authority;</li>
+  <li>modification, distribution, sub-licensing, derivative works, reverse engineering, and official, government or commercial use without the Owner’s verified authorization are prohibited;</li>
+  <li>unauthorized use is subject to Vedic fines and sanctions.</li>
+</ul>
+
+<p>Read LICENSE.md in full before you use the Software. This summary isn’t a substitute for it.</p>
+
+<p>Copyright ©2000-2026 Quinn Michaels; All rights reserved.</p>
+
+<h2 id="links-and-author">Links and author</h2>
+
+<ul>
+  <li>Repository: https://github.com/indraai/deva</li>
+  <li>Issues: https://github.com/indraai/deva/issues</li>
+  <li>npm: https://www.npmjs.com/package/@indra.ai/deva</li>
+  <li>Homepage: https://indra.ai</li>
+</ul>
+
+<p><strong>Author:</strong> Quinn Michaels, Inside The Net, Inc. (quinn@indra.ai)</p>
+
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer" role="contentinfo">
+	<div class="wrapper">
+		<div class="footer-grid">
+			<div class="footer-brand">
+				<p class="footer-title">Deva Core</p>
+				<p>Event-based AI agents with stamped, verifiable data</p>
+				<p class="footer-small">Distributed under the <a href="/vla/">Vedic License Agreement</a>, VLA <code>31711622713594414221</code>.</p>
+			</div>
+			<div>
+				<p class="footer-title">Project</p>
+				<ul>
+					<li><a href="/docs/">Documentation</a></li>
+					<li><a href="/tests/">Tests</a></li>
+					<li><a href="https://github.com/indraai/deva">GitHub</a></li>
+					<li><a href="https://www.npmjs.com/package/@indra.ai/deva">npm</a></li>
+				</ul>
+			</div>
+			<div>
+				<p class="footer-title">Contact</p>
+				<ul>
+					<li><a href="mailto:quinn@indra.ai">quinn@indra.ai</a></li>
+					<li><a href="https://indra.ai">indra.ai</a></li>
+					<li><a href="https://github.com/indraai" rel="me">GitHub</a></li>
+					<li><a href="https://x.com/quinnmichaels" rel="me">X</a></li>
+					<li><a href="https://youtube.com/quinnmichaels" rel="me">YouTube</a></li>
+					<li><a href="https://instagram.com/quinnshow" rel="me">Instagram</a></li>
+					<li><a href="https://facebook.com/quinnshow" rel="me">Facebook</a></li>
+				</ul>
+			</div>
+		</div>
+		<p class="footer-small footer-copy">Copyright &copy;2000-2026 Quinn Michaels; All rights reserved.</p>
+	</div>
+</footer>
+</body>
+
+</html>

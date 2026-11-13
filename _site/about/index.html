@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en_US"><!-- Custom header for favicons -->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.9.1 -->
+<title>About | Deva World</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="About" />
+<meta name="author" content="Quinn Michaels" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="What Deva Core is, what it does, where it fits, and what a company should know about its design, licensing and maturity before choosing it." />
+<meta name="twitter:description" property="og:description" content="What Deva Core is, what it does, where it fits, and what a company should know about its design, licensing and maturity before choosing it." />
+<link rel="canonical" href="http://localhost:4000/about/" />
+<meta property="og:url" content="http://localhost:4000/about/" />
+<meta property="og:site_name" content="Deva World" />
+<meta property="og:image" content="http://localhost:4000/assets/banner.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:4000/assets/banner.png" />
+<meta name="twitter:title" content="About" />
+<meta name="twitter:site" content="@quinnmichaels" />
+<meta name="twitter:creator" content="@quinnmichaels" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","author":{"@type":"Person","name":"Quinn Michaels","url":"https://indra.ai"},"description":"What Deva Core is, what it does, where it fits, and what a company should know about its design, licensing and maturity before choosing it.","headline":"About","image":"http://localhost:4000/assets/banner.png","name":"Quinn Michaels","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icon.png"},"name":"Quinn Michaels"},"sameAs":["https://github.com/indraai","https://x.com/quinnmichaels","https://youtube.com/quinnmichaels","https://instagram.com/quinnshow","https://facebook.com/quinnshow"],"url":"http://localhost:4000/about/"}</script>
+<!-- End Jekyll SEO tag -->
+<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:image:alt" content="About: Event-based AI agents with stamped, verifiable data">
+	<meta name="twitter:image:alt" content="About: Event-based AI agents with stamped, verifiable data">
+	<meta name="theme-color" content="#0d0f17">
+	<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Deva World" /><link rel="icon" type="image/png" sizes="128x128" href="/assets/favicon.png">
+	<link rel="apple-touch-icon" href="/assets/favicon.png"></head><body><header class="site-header" role="banner">
+	<div class="wrapper">
+		<a class="site-title" rel="author" href="/">
+			<img class="site-logo" src="/assets/favicon.png" alt="" width="28" height="28">
+			<span>Deva Core</span>
+		</a>
+		<nav class="site-nav" aria-label="Main">
+			<input type="checkbox" id="nav-trigger" class="nav-trigger">
+			<label for="nav-trigger" aria-label="Menu">
+				<span class="menu-icon">
+					<svg viewBox="0 0 18 15" width="18px" height="15px"><path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path></svg>
+				</span>
+			</label>
+			<div class="trigger"><a class="page-link" href="/core/">Core</a><a class="page-link" href="/docs/">Docs</a><a class="page-link" href="/guide/">Guide</a><a class="page-link" href="/tests/">Tests</a><a class="page-link" href="/vibe/">Vibe</a><a class="page-link" href="/vla/">VLA</a><a class="page-link active" href="/about/" aria-current="page">About</a><a class="page-link nav-cta" href="https://github.com/indraai/deva">GitHub</a>
+			</div>
+		</nav>
+	</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">About</h1>
+  </header>
+
+  <div class="post-content">
+    <p><a href="https://www.npmjs.com/package/@indra.ai/deva"><img src="https://img.shields.io/npm/v/@indra.ai/deva" alt="npm" /></a> <a href="https://github.com/indraai/deva/actions/workflows/test.yml"><img src="https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg" alt="Tests" /></a></p>
+
+<p>Deva Core is a small, dependency-free Node.js framework for building software agents (“Devas”) that work as a team on a shared event bus, describe everything they do in plain named steps, and stamp every packet of data they produce so it can be verified later.</p>
+
+<p>It is written and maintained by Quinn Michaels, and it has been in development for more than ten years. It is the base that the other Deva modules build on.</p>
+
+<h2 id="1-what-deva-core-is">1. What Deva Core is</h2>
+
+<ul>
+  <li><strong>A framework for agents.</strong> Each agent is one <code class="language-plaintext highlighter-rouge">Deva</code> instance. You give it an identity, some methods, and the listeners it should react to.</li>
+  <li><strong>An event bus.</strong> Every Deva announces what it is doing as an event. Other Devas, loggers, dashboards and tests can listen to those events without the Deva knowing about them.</li>
+  <li><strong>A named workflow.</strong> While it works, a Deva moves through named features, zones, actions, states, intents, beliefs and contexts. Each step is recorded as data you can read back, so you can see what happened and why.</li>
+  <li><strong>A record you can verify.</strong> Every packet it builds is stamped with three cumulative hashes (md5, sha256 and sha512), so you can check later that the data has not changed since it was stamped.</li>
+</ul>
+
+<h2 id="2-what-it-does">2. What it does</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Capability</th>
+      <th>What it means for you</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Agent lifecycle</strong></td>
+      <td>Every Deva starts, enters, runs, finishes and shuts down through the same steps, and you can hook any step with your own code.</td>
+    </tr>
+    <tr>
+      <td><strong>Messaging between Devas</strong></td>
+      <td>Devas ask each other questions and get answers back. Asks have a timeout, so a Deva that never answers does not hang the caller.</td>
+    </tr>
+    <tr>
+      <td><strong>Workflow records</strong></td>
+      <td>Features, zones, actions, states, intents, beliefs and contexts are first-class data you can list, read and stamp.</td>
+    </tr>
+    <tr>
+      <td><strong>Stamped packets</strong></td>
+      <td>Three hash tiers, md5, sha256 and sha512, built on each other in order, on every packet.</td>
+    </tr>
+    <tr>
+      <td><strong>Client policy</strong></td>
+      <td>A client object carries the policies and concerns for the work (license, security, data, reporting, and others). Each Deva stores the part that applies to it.</td>
+    </tr>
+    <tr>
+      <td><strong>Child Devas</strong></td>
+      <td>A Deva can host other Devas, start them, and pass its context down to them.</td>
+    </tr>
+    <tr>
+      <td><strong>Your own code</strong></td>
+      <td>Methods, listeners, utilities and extra workflow names are added through the constructor and merged with the Core’s own.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="3-how-it-fits-together">3. How it fits together</h2>
+
+<ol>
+  <li><strong>Create</strong> a <code class="language-plaintext highlighter-rouge">Deva</code> with an identity, a client and your own methods.</li>
+  <li><strong>Initialize</strong> it. The Core checks the client’s license, loads the client’s policies, and brings the Deva online.</li>
+  <li><strong>Work.</strong> Your Deva answers questions, asks other Devas, and emits events as it goes. Each answer is wrapped in a stamped packet.</li>
+  <li><strong>Observe.</strong> Anything that listens to the bus sees every step, in order.</li>
+  <li><strong>Stop</strong> cleanly. Listeners and pending asks are removed and the Deva goes offline.</li>
+</ol>
+
+<h2 id="4-where-it-can-be-used">4. Where it can be used</h2>
+
+<p>These are ideas for where the design fits, not a list of finished products.</p>
+
+<ul>
+  <li><strong>Auditable AI assistants.</strong> A team of agents where every step and every answer is recorded and can be verified afterwards.</li>
+  <li><strong>Workflow and automation services.</strong> Specialist agents, one for each job (intake, review, reporting), passing work to each other over the bus.</li>
+  <li><strong>Compliance-minded back offices.</strong> Services that need to show what was decided, when, and with what data, such as document handling, approvals and reporting.</li>
+  <li><strong>Multi-agent research and analysis.</strong> A coordinator Deva that asks other Devas for parts of an answer and gathers the results.</li>
+  <li><strong>Monitoring and observability.</strong> Listener-only Devas that watch events from other Devas and raise reports or alerts.</li>
+  <li><strong>Education and simulation.</strong> Agents with named states, intents and beliefs make behavior easy to inspect and explain.</li>
+  <li><strong>A base for your own Deva modules.</strong> Build a specialist module on the Core and reuse it across products.</li>
+</ul>
+
+<h2 id="5-what-a-decision-maker-should-know">5. What a decision maker should know</h2>
+
+<p><strong>Technical fit</strong></p>
+
+<ul>
+  <li><strong>Runtime:</strong> Node.js 22 or later, npm 9.5.1 or later. ES modules only.</li>
+  <li><strong>Dependencies:</strong> none beyond Node.js itself. The Core’s own code makes no network calls, and anything that reaches outside your system is code you add.</li>
+  <li><strong>Size:</strong> one main class in a single file, plus JSON configuration. It is small enough for a team to read in full.</li>
+  <li><strong>Built-in helpers:</strong> the Core’s <code class="language-plaintext highlighter-rouge">lib</code> gives your Devas file, operating system and process helpers (including <code class="language-plaintext highlighter-rouge">exec</code> and <code class="language-plaintext highlighter-rouge">spawn</code>) and encrypt and decrypt functions. Treat a Deva as trusted code that runs with your process’s permissions, and review how you use these helpers.</li>
+  <li><strong>Integration:</strong> it is a library inside your own process, not a hosted service. You decide how to deploy it, where it logs, and what it connects to.</li>
+  <li><strong>Package:</strong> <a href="https://www.npmjs.com/package/@indra.ai/deva"><code class="language-plaintext highlighter-rouge">@indra.ai/deva</code></a> on npm, source on <a href="https://github.com/indraai/deva">GitHub</a>.</li>
+</ul>
+
+<p><strong>Integrity and records</strong></p>
+
+<ul>
+  <li>The hash tiers give you a way to check that a packet has not changed since it was stamped. They are integrity checks. The hashes are not encryption and they are not digital signatures, so decide separately how to store and protect the data.</li>
+  <li>Because every step is a named event, you can send the full event stream to your own log, audit or monitoring system.</li>
+</ul>
+
+<p><strong>Licensing</strong></p>
+
+<ul>
+  <li>Deva Core is distributed under the <strong>Vedic License Agreement (VLA)</strong>, owned by Quinn Michaels and distributed through License Deva.</li>
+  <li>Every client must present a VLA that matches the one in the Core. Without it, the Core will not start.</li>
+  <li>The license limits modification, redistribution, derivative works, and official, government or commercial use unless the Owner has verified and authorized it. <strong>A company planning commercial use should contact the Owner first and have the authorization in writing.</strong> Read the full <a href="https://github.com/indraai/deva/blob/main/LICENSE.md">license</a> before you evaluate the Core.</li>
+</ul>
+
+<p><strong>Maturity and support</strong></p>
+
+<ul>
+  <li>The Core is on the 1.x line, published on npm, with documentation in the <a href="/docs/">README</a> and a working example.</li>
+  <li>It is maintained by one author. Plan for that in your own support and continuity needs.</li>
+</ul>
+
+<h2 id="6-get-started">6. Get started</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span> @indra.ai/deva
+</code></pre></div></div>
+
+<ul>
+  <li><a href="/docs/">Read the documentation</a>, with install, a quick start, the lifecycle and the method reference.</li>
+  <li><a href="https://github.com/indraai/deva">Browse the source and examples</a>.</li>
+  <li><a href="https://github.com/indraai/deva/issues">Questions and issues</a>.</li>
+  <li>Licensing and commercial use: quinn@indra.ai.</li>
+</ul>
+
+<h2 id="7-frequently-asked-questions">7. Frequently asked questions</h2>
+
+<p><strong>Is this an AI model?</strong> No. Deva Core is the framework that agents run on. You can connect any model or service your own code calls.</p>
+
+<p><strong>Does it send my data anywhere?</strong> The Core runs inside your Node.js process and its own code has no network calls. What your Devas connect to is up to the code you write.</p>
+
+<p><strong>Can I use it in a commercial product?</strong> Only with the Owner’s verified authorization under the VLA. Contact quinn@indra.ai before you build on it.</p>
+
+<p><strong>Why three hash tiers?</strong> They let public work be verified quickly (md5), by authorities (sha256) and at high security (sha512), and the tiers build on each other so a packet can move between those levels.</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer" role="contentinfo">
+	<div class="wrapper">
+		<div class="footer-grid">
+			<div class="footer-brand">
+				<p class="footer-title">Deva Core</p>
+				<p>Event-based AI agents with stamped, verifiable data</p>
+				<p class="footer-small">Distributed under the <a href="/vla/">Vedic License Agreement</a>, VLA <code>31711622713594414221</code>.</p>
+			</div>
+			<div>
+				<p class="footer-title">Project</p>
+				<ul>
+					<li><a href="/docs/">Documentation</a></li>
+					<li><a href="/tests/">Tests</a></li>
+					<li><a href="https://github.com/indraai/deva">GitHub</a></li>
+					<li><a href="https://www.npmjs.com/package/@indra.ai/deva">npm</a></li>
+				</ul>
+			</div>
+			<div>
+				<p class="footer-title">Contact</p>
+				<ul>
+					<li><a href="mailto:quinn@indra.ai">quinn@indra.ai</a></li>
+					<li><a href="https://indra.ai">indra.ai</a></li>
+					<li><a href="https://github.com/indraai" rel="me">GitHub</a></li>
+					<li><a href="https://x.com/quinnmichaels" rel="me">X</a></li>
+					<li><a href="https://youtube.com/quinnmichaels" rel="me">YouTube</a></li>
+					<li><a href="https://instagram.com/quinnshow" rel="me">Instagram</a></li>
+					<li><a href="https://facebook.com/quinnshow" rel="me">Facebook</a></li>
+				</ul>
+			</div>
+		</div>
+		<p class="footer-small footer-copy">Copyright &copy;2000-2026 Quinn Michaels; All rights reserved.</p>
+	</div>
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en_US"><!-- Custom header for favicons -->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.9.1 -->
+<title>Core - Intents | Deva World</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Core - Intents" />
+<meta name="author" content="Quinn Michaels" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="What intents are in the Deva Core, how to set one, and the full list of available intents." />
+<meta name="twitter:description" property="og:description" content="What intents are in the Deva Core, how to set one, and the full list of available intents." />
+<link rel="canonical" href="http://localhost:4000/core/intents/" />
+<meta property="og:url" content="http://localhost:4000/core/intents/" />
+<meta property="og:site_name" content="Deva World" />
+<meta property="og:image" content="http://localhost:4000/assets/banner.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:4000/assets/banner.png" />
+<meta name="twitter:title" content="Core - Intents" />
+<meta name="twitter:site" content="@quinnmichaels" />
+<meta name="twitter:creator" content="@quinnmichaels" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Quinn Michaels","url":"https://indra.ai"},"description":"What intents are in the Deva Core, how to set one, and the full list of available intents.","headline":"Core - Intents","image":"http://localhost:4000/assets/banner.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icon.png"},"name":"Quinn Michaels"},"url":"http://localhost:4000/core/intents/"}</script>
+<!-- End Jekyll SEO tag -->
+<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:image:alt" content="Core - Intents: Event-based AI agents with stamped, verifiable data">
+	<meta name="twitter:image:alt" content="Core - Intents: Event-based AI agents with stamped, verifiable data">
+	<meta name="theme-color" content="#0d0f17">
+	<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Deva World" /><link rel="icon" type="image/png" sizes="128x128" href="/assets/favicon.png">
+	<link rel="apple-touch-icon" href="/assets/favicon.png"></head><body><header class="site-header" role="banner">
+	<div class="wrapper">
+		<a class="site-title" rel="author" href="/">
+			<img class="site-logo" src="/assets/favicon.png" alt="" width="28" height="28">
+			<span>Deva Core</span>
+		</a>
+		<nav class="site-nav" aria-label="Main">
+			<input type="checkbox" id="nav-trigger" class="nav-trigger">
+			<label for="nav-trigger" aria-label="Menu">
+				<span class="menu-icon">
+					<svg viewBox="0 0 18 15" width="18px" height="15px"><path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path></svg>
+				</span>
+			</label>
+			<div class="trigger"><a class="page-link active" href="/core/">Core</a><a class="page-link" href="/docs/">Docs</a><a class="page-link" href="/guide/">Guide</a><a class="page-link" href="/tests/">Tests</a><a class="page-link" href="/vibe/">Vibe</a><a class="page-link" href="/vla/">VLA</a><a class="page-link" href="/about/">About</a><a class="page-link nav-cta" href="https://github.com/indraai/deva">GitHub</a>
+			</div>
+		</nav>
+	</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Core - Intents</h1>
+  </header>
+
+  <div class="post-content">
+    <p>What intents are in the Deva Core, how to set one, and the full list of available intents.</p>
+
+<h2 id="what-an-intent-is">What an intent is</h2>
+
+<p>An intent records <strong>the purpose or outcome behind what the Deva is doing</strong>. Most calls in the Core use <code class="language-plaintext highlighter-rouge">good</code> when work succeeds and <code class="language-plaintext highlighter-rouge">bad</code> when it fails. The list also covers a wide range of purposes such as <code class="language-plaintext highlighter-rouge">help</code>, <code class="language-plaintext highlighter-rouge">work</code>, <code class="language-plaintext highlighter-rouge">assist</code> and <code class="language-plaintext highlighter-rouge">lawful</code>. Each time you set one, the Core records it and broadcasts a <code class="language-plaintext highlighter-rouge">devacore:intent</code> event. Actions say what is done, states say the condition, and intents say why and how it ended.</p>
+
+<h2 id="how-to-use-it">How to use it</h2>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="nf">intent</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">intent</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="nx">emit_value</span><span class="o">&gt;</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&lt;intent&gt;</code> is a key from the list below, such as <code class="language-plaintext highlighter-rouge">'good'</code> or <code class="language-plaintext highlighter-rouge">'bad'</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">&lt;emit_value&gt;</code> is optional extra text added to the record. Use it to say what the intent applies to, such as a function name and an id.</li>
+</ul>
+
+<p>The usual pattern in the Core is to return, mark <code class="language-plaintext highlighter-rouge">good</code>, and only then hash and stamp the data. Bad data is never hashed.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span> <span class="p">{</span>
+	<span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">lib</span><span class="p">.</span><span class="nf">copy</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="s2">`_</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2">`</span><span class="p">]);</span>
+	<span class="k">this</span><span class="p">.</span><span class="nf">action</span><span class="p">(</span><span class="dl">'</span><span class="s1">return</span><span class="dl">'</span><span class="p">,</span> <span class="s2">`_getFeature:</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>       <span class="c1">// 1. the return action</span>
+	<span class="k">this</span><span class="p">.</span><span class="nf">state</span><span class="p">(</span><span class="dl">'</span><span class="s1">valid</span><span class="dl">'</span><span class="p">,</span> <span class="s2">`_getFeature:</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+	<span class="k">this</span><span class="p">.</span><span class="nf">intent</span><span class="p">(</span><span class="dl">'</span><span class="s1">good</span><span class="dl">'</span><span class="p">,</span> <span class="s2">`_getFeature:</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>         <span class="c1">// 2. the good intent</span>
+	<span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">this</span><span class="p">.</span><span class="nf">state</span><span class="p">(</span><span class="dl">'</span><span class="s1">catch</span><span class="dl">'</span><span class="p">,</span> <span class="s2">`_getFeature:</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+	<span class="k">this</span><span class="p">.</span><span class="nf">intent</span><span class="p">(</span><span class="dl">'</span><span class="s1">bad</span><span class="dl">'</span><span class="p">,</span> <span class="s2">`_getFeature:</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>          <span class="c1">// the failure path marks bad</span>
+	<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nf">err</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="what-happens-when-you-call-it">What happens when you call it</h2>
+
+<ol>
+  <li>The Core checks that the Deva is active. If it is not, it returns the offline message.</li>
+  <li>If the intent name is not in the list below, the call is ignored without an error. Check the spelling against the list.</li>
+  <li>Otherwise the Core sets the current intent and builds a record with a unique id, the intent key, the label plus your extra text, the agent, the client, and a timestamp.</li>
+  <li>The record is hashed with md5, sha256 and sha512, emitted as <code class="language-plaintext highlighter-rouge">devacore:intent</code>, and returned to you.</li>
+</ol>
+
+<h2 id="available-intents">Available intents</h2>
+
+<p>There are 17 intents.</p>
+
+<ul>
+  <li>
+    <p><strong>help</strong>: 🙏 Help</p>
+  </li>
+  <li>
+    <p><strong>good</strong>: 🙂 Good</p>
+  </li>
+  <li>
+    <p><strong>neutral</strong>: 😐 Neutral</p>
+  </li>
+  <li>
+    <p><strong>bad</strong>: 🙁 Bad</p>
+  </li>
+  <li>
+    <p><strong>evil</strong>: 👿 Evil</p>
+  </li>
+  <li>
+    <p><strong>abuse</strong>: 🩼 Abuse</p>
+  </li>
+  <li>
+    <p><strong>harm</strong>: 🤕 Harm</p>
+  </li>
+  <li>
+    <p><strong>malicious</strong>: 👺 Malicious</p>
+  </li>
+  <li>
+    <p><strong>lawful</strong>: ⛓️🤝 Lawful</p>
+  </li>
+  <li>
+    <p><strong>unlawful</strong>: ⛓️💥 Unlawful</p>
+  </li>
+  <li>
+    <p><strong>honest</strong>: 😇 Honest</p>
+  </li>
+  <li>
+    <p><strong>dishonest</strong>: 🤥 Dishonest</p>
+  </li>
+  <li>
+    <p><strong>fun</strong>: 😎 Fun</p>
+  </li>
+  <li>
+    <p><strong>play</strong>: 🛝 Play</p>
+  </li>
+  <li>
+    <p><strong>work</strong>: 💼 Work</p>
+  </li>
+  <li>
+    <p><strong>assist</strong>: 🗺️ Assist</p>
+  </li>
+  <li>
+    <p><strong>other</strong>: 🤔 Other</p>
+  </li>
+</ul>
+
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer" role="contentinfo">
+	<div class="wrapper">
+		<div class="footer-grid">
+			<div class="footer-brand">
+				<p class="footer-title">Deva Core</p>
+				<p>Event-based AI agents with stamped, verifiable data</p>
+				<p class="footer-small">Distributed under the <a href="/vla/">Vedic License Agreement</a>, VLA <code>31711622713594414221</code>.</p>
+			</div>
+			<div>
+				<p class="footer-title">Project</p>
+				<ul>
+					<li><a href="/docs/">Documentation</a></li>
+					<li><a href="/tests/">Tests</a></li>
+					<li><a href="https://github.com/indraai/deva">GitHub</a></li>
+					<li><a href="https://www.npmjs.com/package/@indra.ai/deva">npm</a></li>
+				</ul>
+			</div>
+			<div>
+				<p class="footer-title">Contact</p>
+				<ul>
+					<li><a href="mailto:quinn@indra.ai">quinn@indra.ai</a></li>
+					<li><a href="https://indra.ai">indra.ai</a></li>
+					<li><a href="https://github.com/indraai" rel="me">GitHub</a></li>
+					<li><a href="https://x.com/quinnmichaels" rel="me">X</a></li>
+					<li><a href="https://youtube.com/quinnmichaels" rel="me">YouTube</a></li>
+					<li><a href="https://instagram.com/quinnshow" rel="me">Instagram</a></li>
+					<li><a href="https://facebook.com/quinnshow" rel="me">Facebook</a></li>
+				</ul>
+			</div>
+		</div>
+		<p class="footer-small footer-copy">Copyright &copy;2000-2026 Quinn Michaels; All rights reserved.</p>
+	</div>
+</footer>
+</body>
+
+</html>

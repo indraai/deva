@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en_US"><!-- Custom header for favicons -->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.9.1 -->
+<title>Core - States | Deva World</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Core - States" />
+<meta name="author" content="Quinn Michaels" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="What states are in the Deva Core, how to set one with this.state(), how to list them with this.states(), and the full list." />
+<meta name="twitter:description" property="og:description" content="What states are in the Deva Core, how to set one with this.state(), how to list them with this.states(), and the full list." />
+<link rel="canonical" href="http://localhost:4000/core/states/" />
+<meta property="og:url" content="http://localhost:4000/core/states/" />
+<meta property="og:site_name" content="Deva World" />
+<meta property="og:image" content="http://localhost:4000/assets/banner.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:4000/assets/banner.png" />
+<meta name="twitter:title" content="Core - States" />
+<meta name="twitter:site" content="@quinnmichaels" />
+<meta name="twitter:creator" content="@quinnmichaels" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Quinn Michaels","url":"https://indra.ai"},"description":"What states are in the Deva Core, how to set one with this.state(), how to list them with this.states(), and the full list.","headline":"Core - States","image":"http://localhost:4000/assets/banner.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icon.png"},"name":"Quinn Michaels"},"url":"http://localhost:4000/core/states/"}</script>
+<!-- End Jekyll SEO tag -->
+<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:image:alt" content="Core - States: Event-based AI agents with stamped, verifiable data">
+	<meta name="twitter:image:alt" content="Core - States: Event-based AI agents with stamped, verifiable data">
+	<meta name="theme-color" content="#0d0f17">
+	<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Deva World" /><link rel="icon" type="image/png" sizes="128x128" href="/assets/favicon.png">
+	<link rel="apple-touch-icon" href="/assets/favicon.png"></head><body><header class="site-header" role="banner">
+	<div class="wrapper">
+		<a class="site-title" rel="author" href="/">
+			<img class="site-logo" src="/assets/favicon.png" alt="" width="28" height="28">
+			<span>Deva Core</span>
+		</a>
+		<nav class="site-nav" aria-label="Main">
+			<input type="checkbox" id="nav-trigger" class="nav-trigger">
+			<label for="nav-trigger" aria-label="Menu">
+				<span class="menu-icon">
+					<svg viewBox="0 0 18 15" width="18px" height="15px"><path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path></svg>
+				</span>
+			</label>
+			<div class="trigger"><a class="page-link active" href="/core/">Core</a><a class="page-link" href="/docs/">Docs</a><a class="page-link" href="/guide/">Guide</a><a class="page-link" href="/tests/">Tests</a><a class="page-link" href="/vibe/">Vibe</a><a class="page-link" href="/vla/">VLA</a><a class="page-link" href="/about/">About</a><a class="page-link nav-cta" href="https://github.com/indraai/deva">GitHub</a>
+			</div>
+		</nav>
+	</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Core - States</h1>
+  </header>
+
+  <div class="post-content">
+    <p>What states are in the Deva Core, how to set one with this.state(), how to list them with this.states(), and the full list.</p>
+
+<h2 id="what-a-state-is">What a state is</h2>
+
+<p>A state records <strong>the condition a Deva or a piece of work is in right now</strong>: online, idle, wait, pending, valid, or catch for an error. Each time you set one, the Core records it and broadcasts a <code class="language-plaintext highlighter-rouge">devacore:state</code> event. Actions say what is being done, and states say what condition it is in while it happens.</p>
+
+<h2 id="setting-a-state-thisstate">Setting a state: this.state()</h2>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="nf">state</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">state</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="nx">emit_value</span><span class="o">&gt;</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&lt;state&gt;</code> is a key from the list below, such as <code class="language-plaintext highlighter-rouge">'try'</code>, <code class="language-plaintext highlighter-rouge">'valid'</code> or <code class="language-plaintext highlighter-rouge">'catch'</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">&lt;emit_value&gt;</code> is optional extra text added to the record. Use it to say what the state applies to, such as a function name and an id.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="nf">state</span><span class="p">(</span><span class="dl">'</span><span class="s1">try</span><span class="dl">'</span><span class="p">,</span> <span class="nx">key</span><span class="p">);</span>                              <span class="c1">// work is starting inside a try block</span>
+<span class="k">this</span><span class="p">.</span><span class="nf">state</span><span class="p">(</span><span class="dl">'</span><span class="s1">valid</span><span class="dl">'</span><span class="p">,</span> <span class="s2">`_getFeature:</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>           <span class="c1">// the data passed its check</span>
+<span class="k">this</span><span class="p">.</span><span class="nf">state</span><span class="p">(</span><span class="dl">'</span><span class="s1">catch</span><span class="dl">'</span><span class="p">,</span> <span class="s2">`_getFeature:</span><span class="p">${</span><span class="nx">key</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>           <span class="c1">// an error was caught</span>
+</code></pre></div></div>
+
+<p>When you call it:</p>
+
+<ol>
+  <li>The Core checks that the Deva is active. If it is not, it returns the offline message.</li>
+  <li>If the state name is not in the list below, the call is ignored without an error. Check the spelling against the list.</li>
+  <li>Otherwise the Core sets the current state and builds a record with a unique id, the state key, the label plus your extra text, the agent, the client, and a timestamp.</li>
+  <li>The record is hashed with md5, sha256 and sha512, emitted as <code class="language-plaintext highlighter-rouge">devacore:state</code>, and returned to you.</li>
+</ol>
+
+<h2 id="listing-the-states-thisstates">Listing the states: this.states()</h2>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">states</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nf">states</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>This returns every state the Deva knows about as one data packet, with its own id, the agent, the client, a timestamp, and the md5, sha256 and sha512 hashes. The list itself is under <code class="language-plaintext highlighter-rouge">states.value</code>, as key and label pairs. If the Deva is not active it returns the offline message. Calling it also records a <code class="language-plaintext highlighter-rouge">states</code> action and a <code class="language-plaintext highlighter-rouge">data</code> state of its own, so reading the list leaves a trace like everything else.</p>
+
+<p>The matching functions <code class="language-plaintext highlighter-rouge">this.actions()</code>, <code class="language-plaintext highlighter-rouge">this.zones()</code>, <code class="language-plaintext highlighter-rouge">this.intents()</code> and the others work the same way for their lists.</p>
+
+<h2 id="available-states">Available states</h2>
+
+<p>There are 93 states.</p>
+
+<ul>
+  <li>
+    <p><strong>online</strong>: 🤩 Online</p>
+  </li>
+  <li>
+    <p><strong>offline</strong>: 😴 Offline</p>
+  </li>
+  <li>
+    <p><strong>active</strong>: 😀 Active</p>
+  </li>
+  <li>
+    <p><strong>inactive</strong>: 🥱 Inactive</p>
+  </li>
+  <li>
+    <p><strong>idle</strong>: 🚘 Idle</p>
+  </li>
+  <li>
+    <p><strong>talk</strong>: 📢 Talk</p>
+  </li>
+  <li>
+    <p><strong>listen</strong>: 👂 Listen</p>
+  </li>
+  <li>
+    <p><strong>ask</strong>: 🗣️ Ask</p>
+  </li>
+  <li>
+    <p><strong>question</strong>: 💬 Question</p>
+  </li>
+  <li>
+    <p><strong>cmd</strong>: 🪖  Command</p>
+  </li>
+  <li>
+    <p><strong>answer</strong>: 💡 Answer</p>
+  </li>
+  <li>
+    <p><strong>wait</strong>: ⏳ Wait</p>
+  </li>
+  <li>
+    <p><strong>pause</strong>: ⏸️ Pause</p>
+  </li>
+  <li>
+    <p><strong>resume</strong>: 🚙 Resume</p>
+  </li>
+  <li>
+    <p><strong>pending</strong>: ⏳ Pending</p>
+  </li>
+  <li>
+    <p><strong>connect</strong>: 📳 Connect</p>
+  </li>
+  <li>
+    <p><strong>disconnect</strong>: 📴 Disconnect</p>
+  </li>
+  <li>
+    <p><strong>send</strong>: 📬 Send</p>
+  </li>
+  <li>
+    <p><strong>receive</strong>: 📪 Receive</p>
+  </li>
+  <li>
+    <p><strong>return</strong>: 🤿 Return</p>
+  </li>
+  <li>
+    <p><strong>resolve</strong>: 🤝 Resolve</p>
+  </li>
+  <li>
+    <p><strong>reject</strong>: 🧱 Reject</p>
+  </li>
+  <li>
+    <p><strong>init</strong>: 🟠  Init</p>
+  </li>
+  <li>
+    <p><strong>start</strong>: 🟢  Start</p>
+  </li>
+  <li>
+    <p><strong>enter</strong>: 🚪 Enter</p>
+  </li>
+  <li>
+    <p><strong>done</strong>: ☑️  Done</p>
+  </li>
+  <li>
+    <p><strong>ready</strong>: ⭐️ Ready</p>
+  </li>
+  <li>
+    <p><strong>finish</strong>: 🏁 Finish</p>
+  </li>
+  <li>
+    <p><strong>complete</strong>: ✅ Complete</p>
+  </li>
+  <li>
+    <p><strong>stop</strong>: 🔴 Stop</p>
+  </li>
+  <li>
+    <p><strong>close</strong>: 📦 Close</p>
+  </li>
+  <li>
+    <p><strong>leave</strong>: 🫣 Leave</p>
+  </li>
+  <li>
+    <p><strong>exit</strong>: 🚪 Exit</p>
+  </li>
+  <li>
+    <p><strong>shutdown</strong>: 🔌 Shutdown</p>
+  </li>
+  <li>
+    <p><strong>open</strong>: 🥫 Open</p>
+  </li>
+  <li>
+    <p><strong>begin</strong>: 🗺️ Begin</p>
+  </li>
+  <li>
+    <p><strong>end</strong>: 🎬 End</p>
+  </li>
+  <li>
+    <p><strong>load</strong>: 📦 Load</p>
+  </li>
+  <li>
+    <p><strong>unload</strong>: 🥡 Unload</p>
+  </li>
+  <li>
+    <p><strong>set</strong>: 🖖 Set</p>
+  </li>
+  <li>
+    <p><strong>let</strong>: 🥬 Let</p>
+  </li>
+  <li>
+    <p><strong>const</strong>: 🔩 Const</p>
+  </li>
+  <li>
+    <p><strong>get</strong>: 💠 Get</p>
+  </li>
+  <li>
+    <p><strong>put</strong>: 🤝 Put</p>
+  </li>
+  <li>
+    <p><strong>push</strong>: 🫸 Push</p>
+  </li>
+  <li>
+    <p><strong>pull</strong>: 👉 Pull</p>
+  </li>
+  <li>
+    <p><strong>while</strong>: 🔁 While</p>
+  </li>
+  <li>
+    <p><strong>loop</strong>: 🔃 Loop</p>
+  </li>
+  <li>
+    <p><strong>async</strong>: 🦿 Async</p>
+  </li>
+  <li>
+    <p><strong>await</strong>: 💛 Await</p>
+  </li>
+  <li>
+    <p><strong>continue</strong>: ❤️ Continue</p>
+  </li>
+  <li>
+    <p><strong>break</strong>: 💔 Break</p>
+  </li>
+  <li>
+    <p><strong>data</strong>: 💾️ Data</p>
+  </li>
+  <li>
+    <p><strong>search</strong>: 🔎 Search</p>
+  </li>
+  <li>
+    <p><strong>memory</strong>: 💭 Memory</p>
+  </li>
+  <li>
+    <p><strong>signature</strong>: ✍️️ Signature</p>
+  </li>
+  <li>
+    <p><strong>invalid</strong>: 🖍️ Invalid</p>
+  </li>
+  <li>
+    <p><strong>valid</strong>: ✏️ Valid</p>
+  </li>
+  <li>
+    <p><strong>abort</strong>: 💥 Abort</p>
+  </li>
+  <li>
+    <p><strong>help</strong>: 💙 Help</p>
+  </li>
+  <li>
+    <p><strong>authorized</strong>: 🔑 Authorized</p>
+  </li>
+  <li>
+    <p><strong>unauthorized</strong>: 🏴 Unauthorized</p>
+  </li>
+  <li>
+    <p><strong>Done</strong>: ☑️ Done</p>
+  </li>
+  <li>
+    <p><strong>official</strong>: 🫡 Official</p>
+  </li>
+  <li>
+    <p><strong>unofficial</strong>: 🤥 Unofficial</p>
+  </li>
+  <li>
+    <p><strong>approved</strong>: 🎖️ Approved</p>
+  </li>
+  <li>
+    <p><strong>denied</strong>: 🖕 Denied</p>
+  </li>
+  <li>
+    <p><strong>try</strong>: 🏸 Try</p>
+  </li>
+  <li>
+    <p><strong>catch</strong>: ⚾️ Catch</p>
+  </li>
+  <li>
+    <p><strong>finally</strong>: 🏆 Finally</p>
+  </li>
+  <li>
+    <p><strong>view</strong>: 👓 View</p>
+  </li>
+  <li>
+    <p><strong>emergency</strong>: 🛟 Emergency</p>
+  </li>
+  <li>
+    <p><strong>ingress</strong>: 🫴 Ingress</p>
+  </li>
+  <li>
+    <p><strong>egress</strong>: 🫳 Egress</p>
+  </li>
+  <li>
+    <p><strong>go</strong>: 🚘 Go</p>
+  </li>
+  <li>
+    <p><strong>do</strong>: 🛹 Do</p>
+  </li>
+  <li>
+    <p><strong>make</strong>: 🖌️ Make</p>
+  </li>
+  <li>
+    <p><strong>write</strong>: 📝 Write</p>
+  </li>
+  <li>
+    <p><strong>create</strong>: 🎨 Create</p>
+  </li>
+  <li>
+    <p><strong>destroy</strong>: 💣 Destroy</p>
+  </li>
+  <li>
+    <p><strong>save</strong>: 📀 Save</p>
+  </li>
+  <li>
+    <p><strong>delete</strong>: 🗑️ Delete</p>
+  </li>
+  <li>
+    <p><strong>build</strong>: 👷️ Build</p>
+  </li>
+  <li>
+    <p><strong>true</strong>: 🟢 True</p>
+  </li>
+  <li>
+    <p><strong>false</strong>: 🔴 False</p>
+  </li>
+  <li>
+    <p><strong>safe</strong>: ⚪️ Safe</p>
+  </li>
+  <li>
+    <p><strong>unsafe</strong>: ⚫️ Unsafe</p>
+  </li>
+  <li>
+    <p><strong>correct</strong>: 🟦 Correct</p>
+  </li>
+  <li>
+    <p><strong>incorrect</strong>: 🟥 Incorrect</p>
+  </li>
+  <li>
+    <p><strong>clean</strong>: 🧼 Clean</p>
+  </li>
+  <li>
+    <p><strong>dirty</strong>: 🧹 Dirty</p>
+  </li>
+  <li>
+    <p><strong>consent</strong>: ✍️ Consent</p>
+  </li>
+  <li>
+    <p><strong>check</strong>: ☑️ Check</p>
+  </li>
+</ul>
+
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer" role="contentinfo">
+	<div class="wrapper">
+		<div class="footer-grid">
+			<div class="footer-brand">
+				<p class="footer-title">Deva Core</p>
+				<p>Event-based AI agents with stamped, verifiable data</p>
+				<p class="footer-small">Distributed under the <a href="/vla/">Vedic License Agreement</a>, VLA <code>31711622713594414221</code>.</p>
+			</div>
+			<div>
+				<p class="footer-title">Project</p>
+				<ul>
+					<li><a href="/docs/">Documentation</a></li>
+					<li><a href="/tests/">Tests</a></li>
+					<li><a href="https://github.com/indraai/deva">GitHub</a></li>
+					<li><a href="https://www.npmjs.com/package/@indra.ai/deva">npm</a></li>
+				</ul>
+			</div>
+			<div>
+				<p class="footer-title">Contact</p>
+				<ul>
+					<li><a href="mailto:quinn@indra.ai">quinn@indra.ai</a></li>
+					<li><a href="https://indra.ai">indra.ai</a></li>
+					<li><a href="https://github.com/indraai" rel="me">GitHub</a></li>
+					<li><a href="https://x.com/quinnmichaels" rel="me">X</a></li>
+					<li><a href="https://youtube.com/quinnmichaels" rel="me">YouTube</a></li>
+					<li><a href="https://instagram.com/quinnshow" rel="me">Instagram</a></li>
+					<li><a href="https://facebook.com/quinnshow" rel="me">Facebook</a></li>
+				</ul>
+			</div>
+		</div>
+		<p class="footer-small footer-copy">Copyright &copy;2000-2026 Quinn Michaels; All rights reserved.</p>
+	</div>
+</footer>
+</body>
+
+</html>

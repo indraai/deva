@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en_US"><!-- Custom header for favicons -->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.9.1 -->
+<title>Core - Features | Deva World</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Core - Features" />
+<meta name="author" content="Quinn Michaels" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="What features are in the Deva Core, how this.feature() marks which one is active, and the full list." />
+<meta name="twitter:description" property="og:description" content="What features are in the Deva Core, how this.feature() marks which one is active, and the full list." />
+<link rel="canonical" href="http://localhost:4000/core/features/" />
+<meta property="og:url" content="http://localhost:4000/core/features/" />
+<meta property="og:site_name" content="Deva World" />
+<meta property="og:image" content="http://localhost:4000/assets/banner.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://localhost:4000/assets/banner.png" />
+<meta name="twitter:title" content="Core - Features" />
+<meta name="twitter:site" content="@quinnmichaels" />
+<meta name="twitter:creator" content="@quinnmichaels" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Quinn Michaels","url":"https://indra.ai"},"description":"What features are in the Deva Core, how this.feature() marks which one is active, and the full list.","headline":"Core - Features","image":"http://localhost:4000/assets/banner.png","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icon.png"},"name":"Quinn Michaels"},"url":"http://localhost:4000/core/features/"}</script>
+<!-- End Jekyll SEO tag -->
+<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:image:alt" content="Core - Features: Event-based AI agents with stamped, verifiable data">
+	<meta name="twitter:image:alt" content="Core - Features: Event-based AI agents with stamped, verifiable data">
+	<meta name="theme-color" content="#0d0f17">
+	<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Deva World" /><link rel="icon" type="image/png" sizes="128x128" href="/assets/favicon.png">
+	<link rel="apple-touch-icon" href="/assets/favicon.png"></head><body><header class="site-header" role="banner">
+	<div class="wrapper">
+		<a class="site-title" rel="author" href="/">
+			<img class="site-logo" src="/assets/favicon.png" alt="" width="28" height="28">
+			<span>Deva Core</span>
+		</a>
+		<nav class="site-nav" aria-label="Main">
+			<input type="checkbox" id="nav-trigger" class="nav-trigger">
+			<label for="nav-trigger" aria-label="Menu">
+				<span class="menu-icon">
+					<svg viewBox="0 0 18 15" width="18px" height="15px"><path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path></svg>
+				</span>
+			</label>
+			<div class="trigger"><a class="page-link active" href="/core/">Core</a><a class="page-link" href="/docs/">Docs</a><a class="page-link" href="/guide/">Guide</a><a class="page-link" href="/tests/">Tests</a><a class="page-link" href="/vibe/">Vibe</a><a class="page-link" href="/vla/">VLA</a><a class="page-link" href="/about/">About</a><a class="page-link nav-cta" href="https://github.com/indraai/deva">GitHub</a>
+			</div>
+		</nav>
+	</div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Core - Features</h1>
+  </header>
+
+  <div class="post-content">
+    <p>What features are in the Deva Core, how this.feature() marks which one is active, and the full list.</p>
+
+<h2 id="what-a-feature-is">What a feature is</h2>
+
+<p>A feature is <strong>a built-in capability of the Deva Core</strong>, such as License, Error, Log, Security or Support. The ten capabilities from License through Systems are loaded when a Deva starts, and each can be read from your code through a getter of the same name, such as <code class="language-plaintext highlighter-rouge">this.license()</code> or <code class="language-plaintext highlighter-rouge">this.security()</code>. <code class="language-plaintext highlighter-rouge">init</code>, <code class="language-plaintext highlighter-rouge">agent</code> and <code class="language-plaintext highlighter-rouge">client</code> are also on the list so the Core can mark the startup, agent and client steps.</p>
+
+<h2 id="how-to-use-it">How to use it</h2>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="nf">feature</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">feature</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="nx">emit_value</span><span class="o">&gt;</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&lt;feature&gt;</code> is a key from the list below, such as <code class="language-plaintext highlighter-rouge">'security'</code> or <code class="language-plaintext highlighter-rouge">'client'</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">&lt;emit_value&gt;</code> is optional extra text added to the record. Use it to say what the feature is working on, such as an id.</li>
+</ul>
+
+<p>This call <strong>marks</strong> which feature the Deva is working in. It does not load a feature or run one. The Core uses it like this:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="nf">feature</span><span class="p">(</span><span class="dl">'</span><span class="s1">client</span><span class="dl">'</span><span class="p">,</span> <span class="s2">`client:</span><span class="p">${</span><span class="nx">client</span><span class="p">.</span><span class="nx">id</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span> <span class="c1">// marks the client step</span>
+<span class="k">this</span><span class="p">.</span><span class="nf">feature</span><span class="p">(</span><span class="dl">'</span><span class="s1">init</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">uid</span><span class="p">);</span>             <span class="c1">// marks the init step</span>
+<span class="k">this</span><span class="p">.</span><span class="nf">feature</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">id</span><span class="p">.</span><span class="nx">uid</span><span class="p">);</span>                     <span class="c1">// marks a feature as it loads</span>
+</code></pre></div></div>
+
+<p>To read a loaded feature’s data, call its getter instead:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">license</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nf">license</span><span class="p">();</span> <span class="c1">// returns a copy of the license feature data</span>
+</code></pre></div></div>
+
+<h2 id="what-happens-when-you-call-it">What happens when you call it</h2>
+
+<ol>
+  <li>The Core checks that the Deva is active. If it is not, it returns the offline message.</li>
+  <li>If the feature name is not in the list below, the call is ignored without an error. Check the spelling against the list.</li>
+  <li>Otherwise the Core sets the current feature and builds a record with a unique id, the feature key, the label plus your extra text, the agent, the client, and a timestamp.</li>
+  <li>The record is hashed with md5, sha256 and sha512, emitted as <code class="language-plaintext highlighter-rouge">devacore:feature</code>, and returned to you.</li>
+</ol>
+
+<h2 id="available-features">Available features</h2>
+
+<p>There are 13 features.</p>
+
+<ul>
+  <li>
+    <p><strong>init</strong>: 🟠  Init</p>
+  </li>
+  <li>
+    <p><strong>agent</strong>: 🦾 Agent</p>
+  </li>
+  <li>
+    <p><strong>client</strong>: 💪 Client</p>
+  </li>
+  <li>
+    <p><strong>license</strong>: 🪪  License</p>
+  </li>
+  <li>
+    <p><strong>error</strong>: ❌️ Error</p>
+  </li>
+  <li>
+    <p><strong>log</strong>: 🪵️ Log</p>
+  </li>
+  <li>
+    <p><strong>data</strong>: 💾️ Data</p>
+  </li>
+  <li>
+    <p><strong>report</strong>: 🗂️ Report</p>
+  </li>
+  <li>
+    <p><strong>legal</strong>: 🏛️ Legal</p>
+  </li>
+  <li>
+    <p><strong>security</strong>: 🚨 Security</p>
+  </li>
+  <li>
+    <p><strong>support</strong>: 💼 Support</p>
+  </li>
+  <li>
+    <p><strong>services</strong>: 🛠️ Services</p>
+  </li>
+  <li>
+    <p><strong>systems</strong>: 🖥️️ Systems</p>
+  </li>
+</ul>
+
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer" role="contentinfo">
+	<div class="wrapper">
+		<div class="footer-grid">
+			<div class="footer-brand">
+				<p class="footer-title">Deva Core</p>
+				<p>Event-based AI agents with stamped, verifiable data</p>
+				<p class="footer-small">Distributed under the <a href="/vla/">Vedic License Agreement</a>, VLA <code>31711622713594414221</code>.</p>
+			</div>
+			<div>
+				<p class="footer-title">Project</p>
+				<ul>
+					<li><a href="/docs/">Documentation</a></li>
+					<li><a href="/tests/">Tests</a></li>
+					<li><a href="https://github.com/indraai/deva">GitHub</a></li>
+					<li><a href="https://www.npmjs.com/package/@indra.ai/deva">npm</a></li>
+				</ul>
+			</div>
+			<div>
+				<p class="footer-title">Contact</p>
+				<ul>
+					<li><a href="mailto:quinn@indra.ai">quinn@indra.ai</a></li>
+					<li><a href="https://indra.ai">indra.ai</a></li>
+					<li><a href="https://github.com/indraai" rel="me">GitHub</a></li>
+					<li><a href="https://x.com/quinnmichaels" rel="me">X</a></li>
+					<li><a href="https://youtube.com/quinnmichaels" rel="me">YouTube</a></li>
+					<li><a href="https://instagram.com/quinnshow" rel="me">Instagram</a></li>
+					<li><a href="https://facebook.com/quinnshow" rel="me">Facebook</a></li>
+				</ul>
+			</div>
+		</div>
+		<p class="footer-small footer-copy">Copyright &copy;2000-2026 Quinn Michaels; All rights reserved.</p>
+	</div>
+</footer>
+</body>
+
+</html>

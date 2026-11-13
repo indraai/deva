@@ -1,0 +1,9 @@
+::BEGIN:MAIN
+# Test Deva Help
+p: The main help for the test Deva.
+::END:MAIN
+
+::BEGIN:ASK
+## Ask
+p: Use #key method text to ask another Deva.
+::END:ASK
