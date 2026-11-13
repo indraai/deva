@@ -488,8 +488,10 @@ class Deva {
           personal: data.devas ? data.devas[this._agent.key] : this._messages.nodevas,
           created: Date.now(),
         };
-        this.state('delete', `Feature:client:${feature}:${_id.uid}`); // set the state to delete
-        delete this._client.features[feature]; // make a copy the clinet data.
+        if (this._client.features) {
+          this.state('delete', `Feature:client:${feature}:${_id.uid}`); // set the state to delete
+          delete this._client.features[feature]; // delete the feature
+        }
 
         this.action('return', call_str); // set the action to return
         this.state('resolve', call_str); // set the state to resolve
