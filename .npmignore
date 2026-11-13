@@ -1,3 +1,17 @@
 packs/
 private/
+
 _site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+.bundle/
+vendor/
+
+*.log
+*.tgz
+.env
+
+Gemfile
+Gemfile.lock
+.ruby-version
