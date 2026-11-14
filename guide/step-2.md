@@ -177,7 +177,7 @@ Put together, `data/client.json` looks like this, with your VLA record in place 
       "copyright": "Copyright ©2000-2026 Quinn Michaels; All rights reserved.",
       "md5": "Nyx04ZFTi9GasJKyyeu/1w==",
       "sha256": "nK9Po2wQi4J5wxEl8z0oUaZnYxtRoSnRrArcjE8EE54=",
-      "sha512": "w/VOPKO2Ynnpw4EIWsJYht4Tyu90a8CgRTNkqWE5JTu6C+zz16gHPDcpy4rcg48G+yYKB+RbaDeu4E5mwqxNMQ=="  
+      "sha512": "w/VOPKO2Ynnpw4EIWsJYht4Tyu90a8CgRTNkqWE5JTu6C+zz16gHPDcpy4rcg48G+yYKB+RbaDeu4E5mwqxNMQ=="
     },
     "prompt": {
       "emoji": "🙂",
