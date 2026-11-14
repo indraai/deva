@@ -160,7 +160,8 @@ The first two lines are the vars from your agent file. `⭕️ OFFLINE` is the r
 |---|---|
 | `needs an import attribute of "type: json"` | An import is missing `with {type:'json'}`. |
 | `Cannot find module` for `agent.json` or `client.json` | The path is wrong. The files live in `data/`, so the imports should be `./data/agent.json` and `./data/client.json`. |
-| `undefined` instead of `Hello World` | `vars: agent.vars` is missing, or `agent` is the wrapper instead of `Agent.DATA`. |
+| undefined instead of Hello World | vars: agent.vars is missing from new Deva. |
+| Cannot read properties of undefined (reading 'greeting') | agent is the wrapper (Agent) instead of Agent.DATA. |
 | `SyntaxError` in `agent.json` or `client.json` | The JSON isn't valid. Run the JSON check from Step 2 or Step 3 again. |
 
 ## What you did

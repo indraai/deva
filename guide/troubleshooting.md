@@ -29,7 +29,7 @@ file:///home/you/hello-deva/node_modules/@indra.ai/deva/index.js:2119
 																				^
 
 TypeError: Cannot read properties of undefined (reading 'warning')
-		at Deva.uid (file:///home/you/hello-deva/node_modules/@indra.ai/deva/index.js:2119:39)
+    at Deva.uid (file:///home/you/hello-deva/node_modules/@indra.ai/deva/index.js:2119:39)
 ```
 
 - **The first line** is the file and line number where the error happened. It's often inside Deva Core, in `node_modules`, even when the mistake is in your own file. Line numbers can change from one version to the next, so don't search for them.
