@@ -1395,11 +1395,11 @@ class Deva {
 	/**************
 	func: shutdown
 	params:
-		- msg: hte message from the caller incase need to use in calls
+		- data: the data packet passed into shutdown.
+		- resolve: the resolve function for the shutdown.
 	describe:
-		The exit state function is triggered when the Deva is exiting.
-
-		The return will check for a custom onExit function or run the done
+		The shutdown state function is triggered when the Deva is shutting down.
+		The return will check for a custom onShutdown function or run the done
 		function.
 	***************/
 	shutdown(data, resolve) {
