@@ -40,6 +40,10 @@ By the end, your project will look like this:
 {% for line in guide.tree %}{{ line }}
 {% endfor %}```
 
+## Troubleshooting
+
+If a step doesn't work, see [Troubleshooting](/guide/troubleshooting/). It lists the errors you might hit at each step, what causes them and how to fix them.
+
 ## Ready?
 
 {% assign first = guide.steps | first %}

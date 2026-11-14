@@ -32,6 +32,7 @@ Node.js 22 or later. ES modules only.
 ## Start here
 
 - [Read the documentation](/docs/), with install, a working quick start, the lifecycle, messaging between Devas, the packet, hashing, events and the method reference.
+- [Build your first Deva](/guide/), a step-by-step guide from an empty folder to a working Deva with a skill, a method and a listener, then a clean shutdown.
 - [Deva Core on GitHub](https://github.com/indraai/deva), where the code, the issues and the examples live.
 - [`@indra.ai/deva` on npm](https://www.npmjs.com/package/@indra.ai/deva), for the published package.
 
