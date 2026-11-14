@@ -92,9 +92,11 @@
 				"permalink": "/guide/step-6/",
 				"describe": "Call init(client), watch the Deva reach ready, ask it a question, and read the stamped packet that comes back.",
 				"learn": [
+					"Adding profile.id to the client, matching DATA.id.",
+					"Keeping the client VLA, checked at init(client), separate from the agent VLA.",
 					"What happens between init(client) and ready.",
 					"What the ready hash marks.",
-					"Asking a question and reading the packet.",
+					"Asking a question from onReady and reading the packet.",
 					"Checking the md5, sha256 and sha512 stamps."
 				],
 				"files": ["index.js"]
