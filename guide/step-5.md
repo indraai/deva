@@ -33,12 +33,12 @@ All three are written as normal functions, like `greet(name) {}`. Don't write th
 Add a `func` block inside `new Deva()`, right after `vars: agent.vars,`:
 
 ```javascript
-  func: {
-    greet(name) {
-      if (!name) return `${this.vars.greeting}.`;
-      return `${this.vars.greeting}, and hello to ${name}.`;
-    },
-  },
+	func: {
+		greet(name) {
+			if (!name) return `${this.vars.greeting}.`;
+			return `${this.vars.greeting}, and hello to ${name}.`;
+		},
+	},
 ```
 
 `greet` builds the Deva's greeting from `this.vars.greeting`, the `Hello World` you wrote in your agent file in Step 3. If it's given a name, it adds a hello to that name.
@@ -48,22 +48,22 @@ Add a `func` block inside `new Deva()`, right after `vars: agent.vars,`:
 Add a `methods` block right after the `func` block:
 
 ```javascript
-  methods: {
-    hello(packet) {
-      this.context('hello', packet.q.text);
-      return new Promise(resolve => {
-        const text = this.func.greet(packet.q.text);
-        return resolve({
-          text,
-          html: `<p>${text}</p>`,
-          data: {
-            greeting: this.vars.greeting,
-            name: packet.q.text,
-          },
-        });
-      });
-    },
-  },
+	methods: {
+		hello(packet) {
+			this.context('hello', packet.q.text);
+			return new Promise(resolve => {
+				const text = this.func.greet(packet.q.text);
+				return resolve({
+					text,
+					html: `<p>${text}</p>`,
+					data: {
+						greeting: this.vars.greeting,
+						name: packet.q.text,
+					},
+				});
+			});
+		},
+	},
 ```
 
 The method's name is its command. Once the Deva is running, asking it `/hello Quinn` runs `methods.hello`. Here's what each part does:
@@ -79,11 +79,11 @@ The method's name is its command. Once the Deva is running, asking it `/hello Qu
 Add a `listeners` block right after the `methods` block:
 
 ```javascript
-  listeners: {
-    'devacore:question'(packet) {
-      console.log(`👂 heard: ${packet.q.text}`);
-    },
-  },
+	listeners: {
+		'devacore:question'(packet) {
+			console.log(`👂 heard: ${packet.q.text}`);
+		},
+	},
 ```
 
 The name of a listener is the event it listens for. `devacore:question` is the event Deva Core sends every time the Deva is asked a question, before it answers. The listener receives a copy of the question packet, so the question's text is in `packet.q.text`.
@@ -124,51 +124,51 @@ const agent = Agent.DATA;
 const client = Client.DATA;
 
 const info = {
-  id: pkg.id,
-  name: pkg.name,
-  describe: pkg.description,
-  version: pkg.version,
-  copyright: pkg.copyright,
-  dir: import.meta.dirname,
-  VLA: Agent.VLA,
+	id: pkg.id,
+	name: pkg.name,
+	describe: pkg.description,
+	version: pkg.version,
+	copyright: pkg.copyright,
+	dir: import.meta.dirname,
+	VLA: Agent.VLA,
 };
 
 const hello = new Deva({
-  info,
-  agent: {
-    id: agent.id,
-    key: agent.key,
-    prompt: agent.prompt,
-    profile: agent.profile,
-  },
-  vars: agent.vars,
-  func: {
-    greet(name) {
-      if (!name) return `${this.vars.greeting}.`;
-      return `${this.vars.greeting}, and hello to ${name}.`;
-    },
-  },
-  methods: {
-    hello(packet) {
-      this.context('hello', packet.q.text);
-      return new Promise(resolve => {
-        const text = this.func.greet(packet.q.text);
-        return resolve({
-          text,
-          html: `<p>${text}</p>`,
-          data: {
-            greeting: this.vars.greeting,
-            name: packet.q.text,
-          },
-        });
-      });
-    },
-  },
-  listeners: {
-    'devacore:question'(packet) {
-      console.log(`👂 heard: ${packet.q.text}`);
-    },
-  },
+	info,
+	agent: {
+		id: agent.id,
+		key: agent.key,
+		prompt: agent.prompt,
+		profile: agent.profile,
+	},
+	vars: agent.vars,
+	func: {
+		greet(name) {
+			if (!name) return `${this.vars.greeting}.`;
+			return `${this.vars.greeting}, and hello to ${name}.`;
+		},
+	},
+	methods: {
+		hello(packet) {
+			this.context('hello', packet.q.text);
+			return new Promise(resolve => {
+				const text = this.func.greet(packet.q.text);
+				return resolve({
+					text,
+					html: `<p>${text}</p>`,
+					data: {
+						greeting: this.vars.greeting,
+						name: packet.q.text,
+					},
+				});
+			});
+		},
+	},
+	listeners: {
+		'devacore:question'(packet) {
+			console.log(`👂 heard: ${packet.q.text}`);
+		},
+	},
 });
 
 console.log(hello.status());

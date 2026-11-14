@@ -20,12 +20,12 @@ The agent file uses the same outer shape as the client file. Open `data/agent.js
 
 ```json
 {
-  "name": "AGENT",
-  "describe": "Hello Deva agent file",
-  "copyright": "Copyright ©2026 Your Name; All rights reserved.",
-  "VLA": {},
-  "DATA": {
-  }
+	"name": "AGENT",
+	"describe": "Hello Deva agent file",
+	"copyright": "Copyright ©2026 Your Name; All rights reserved.",
+	"VLA": {},
+	"DATA": {
+	}
 }
 ```
 
@@ -56,12 +56,12 @@ Inside `DATA`, give the Deva an `id`, a `key` and a `prompt`:
 "id": "00000000000000000002",
 "key": "hello",
 "prompt": {
-  "emoji": "👋",
-  "text": "hello",
-  "colors": {
-    "label": {"R": 0, "G": 150, "B": 255},
-    "text": {"R": 101, "G": 192, "B": 255}
-  }
+	"emoji": "👋",
+	"text": "hello",
+	"colors": {
+		"label": {"R": 0, "G": 150, "B": 255},
+		"text": {"R": 101, "G": 192, "B": 255}
+	}
 },
 ```
 
@@ -75,8 +75,8 @@ Inside `DATA`, give the Deva an `id`, a `key` and a `prompt`:
 
 ```json
 "profile": {
-  "name": "Hello Deva",
-  "describe": "My first Deva. It says hello."
+	"name": "Hello Deva",
+	"describe": "My first Deva. It says hello."
 },
 ```
 
@@ -88,10 +88,10 @@ Inside `DATA`, give the Deva an `id`, a `key` and a `prompt`:
 
 ```json
 "vars": {
-  "greeting": "Hello World",
-  "context": {
-    "hello": "👋 Saying hello"
-  }
+	"greeting": "Hello World",
+	"context": {
+		"hello": "👋 Saying hello"
+	}
 }
 ```
 
@@ -106,34 +106,34 @@ Put together, `data/agent.json` looks like this. Your VLA record goes in place o
 
 ```json
 {
-  "name": "AGENT",
-  "describe": "Hello Deva agent file",
-  "copyright": "Copyright ©2026 Your Name; All rights reserved.",
-  "VLA": {
-    "uid": "your full VLA record"
-  },
-  "DATA": {
-    "id": "00000000000000000002",
-    "key": "hello",
-    "prompt": {
-      "emoji": "👋",
-      "text": "hello",
-      "colors": {
-        "label": {"R": 0, "G": 150, "B": 255},
-        "text": {"R": 101, "G": 192, "B": 255}
-      }
-    },
-    "profile": {
-      "name": "Hello Deva",
-      "describe": "My first Deva. It says hello."
-    },
-    "vars": {
-      "greeting": "Hello World",
-      "context": {
-        "hello": "👋 Saying hello"
-      }
-    }
-  }
+	"name": "AGENT",
+	"describe": "Hello Deva agent file",
+	"copyright": "Copyright ©2026 Your Name; All rights reserved.",
+	"VLA": {
+		"uid": "your full VLA record"
+	},
+	"DATA": {
+		"id": "00000000000000000002",
+		"key": "hello",
+		"prompt": {
+			"emoji": "👋",
+			"text": "hello",
+			"colors": {
+				"label": {"R": 0, "G": 150, "B": 255},
+				"text": {"R": 101, "G": 192, "B": 255}
+			}
+		},
+		"profile": {
+			"name": "Hello Deva",
+			"describe": "My first Deva. It says hello."
+		},
+		"vars": {
+			"greeting": "Hello World",
+			"context": {
+				"hello": "👋 Saying hello"
+			}
+		}
+	}
 }
 ```
 

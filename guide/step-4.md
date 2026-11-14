@@ -64,13 +64,13 @@ You won't use `client` until the Deva starts in Step {{ life.step }}, but loadin
 
 ```javascript
 const info = {
-  id: pkg.id,
-  name: pkg.name,
-  describe: pkg.description,
-  version: pkg.version,
-  copyright: pkg.copyright,
-  dir: import.meta.dirname,
-  VLA: Agent.VLA,
+	id: pkg.id,
+	name: pkg.name,
+	describe: pkg.description,
+	version: pkg.version,
+	copyright: pkg.copyright,
+	dir: import.meta.dirname,
+	VLA: Agent.VLA,
 };
 ```
 
@@ -84,14 +84,14 @@ Pass `info`, the agent's identity fields, and the agent's vars:
 
 ```javascript
 const hello = new Deva({
-  info,
-  agent: {
-    id: agent.id,
-    key: agent.key,
-    prompt: agent.prompt,
-    profile: agent.profile,
-  },
-  vars: agent.vars,
+	info,
+	agent: {
+		id: agent.id,
+		key: agent.key,
+		prompt: agent.prompt,
+		profile: agent.profile,
+	},
+	vars: agent.vars,
 });
 
 console.log(hello.vars.greeting);
@@ -113,24 +113,24 @@ const agent = Agent.DATA;
 const client = Client.DATA;
 
 const info = {
-  id: pkg.id,
-  name: pkg.name,
-  describe: pkg.description,
-  version: pkg.version,
-  copyright: pkg.copyright,
-  dir: import.meta.dirname,
-  VLA: Agent.VLA,
+	id: pkg.id,
+	name: pkg.name,
+	describe: pkg.description,
+	version: pkg.version,
+	copyright: pkg.copyright,
+	dir: import.meta.dirname,
+	VLA: Agent.VLA,
 };
 
 const hello = new Deva({
-  info,
-  agent: {
-    id: agent.id,
-    key: agent.key,
-    prompt: agent.prompt,
-    profile: agent.profile,
-  },
-  vars: agent.vars,
+	info,
+	agent: {
+		id: agent.id,
+		key: agent.key,
+		prompt: agent.prompt,
+		profile: agent.profile,
+	},
+	vars: agent.vars,
 });
 
 console.log(hello.vars.greeting);
