@@ -66,6 +66,7 @@
 				"permalink": "/guide/step-4/",
 				"describe": "Import the client and agent files, build the info block from your package.json, and create the Deva.",
 				"learn": [
+					"Filling in id, description and copyright in package.json with npm pkg set.",
 					"Importing JSON with {type:'json'}.",
 					"Building info from package.json.",
 					"Passing agent and vars to new Deva()."
@@ -111,3 +112,4 @@
 		]
 	}
 }
+

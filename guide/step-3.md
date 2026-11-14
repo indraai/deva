@@ -23,14 +23,32 @@ The agent file uses the same outer shape as the client file. Open `data/agent.js
   "name": "AGENT",
   "describe": "Hello Deva agent file",
   "copyright": "Copyright ©2026 Your Name; All rights reserved.",
+  "VLA": {},
   "DATA": {
   }
 }
 ```
 
-Everything the Deva reads goes inside `DATA`.
+Everything the Deva reads goes inside `DATA`. The `VLA` sits above it, at the top level.
 
-## 2. Identity and prompt
+## 2. The agent's license (VLA)
+
+The client file and the agent file each carry a VLA, and the two do different jobs:
+
+- The **client VLA**, inside the client's `DATA` from Step 2, is checked when the Deva starts. It's what gives the client access to Deva Core.
+- The **agent VLA**, at the top of this file, belongs to the Deva itself. It isn't checked at start-up. It gets compared later, when something accesses this Deva. Custom Devas do that comparison in their own `onInit` event.
+
+For Hello Deva, the agent VLA is the same record that ships with Deva Core. Print it the same way you did in Step 2:
+
+```bash
+node -e "console.log(JSON.stringify(require('./node_modules/{{ guide.package }}/package.json').VLA, null, 2))"
+```
+
+Copy the whole object it prints into the top-level `"VLA"`, unchanged.
+
+While you're building, the agent's settings live in `agent.json`. When a Deva is ready for production, the same settings move into its `package.json`, so the entity, its data and its package travel together as one file. The VLA stays at the top level either way.
+
+## 3. Identity and prompt
 
 Inside `DATA`, give the Deva an `id`, a `key` and a `prompt`:
 
@@ -51,7 +69,7 @@ Inside `DATA`, give the Deva an `id`, a `key` and a `prompt`:
 - `key` is the Deva's short name. Other Devas and the client's `devas` settings refer to it by this key, so keep it short, lowercase and unique.
 - `prompt` works the same as in the client file: the emoji, label and colors the Deva uses when it talks.
 
-## 3. Profile
+## 4. Profile
 
 `profile` describes the Deva:
 
@@ -64,7 +82,7 @@ Inside `DATA`, give the Deva an `id`, a `key` and a `prompt`:
 
 `name` is the one that matters most. The Deva uses it to sign what it says. The profile can also carry its own `warning`, `notice`, `copyright`, `owner` and `creator`. If you leave those out, the Deva uses Deva Core's defaults.
 
-## 4. Vars
+## 5. Vars
 
 `vars` holds the Deva's own values. Anything you put here, the Deva can read later as `this.vars`. Start with one plain value and a `context` map:
 
@@ -84,11 +102,16 @@ The key is `context`, singular. Add more labels as your Deva learns more.
 
 ## The whole file
 
+Put together, `data/agent.json` looks like this. Your VLA record goes in place of `"uid": "your full VLA record"`, and it must be the whole record, copied unchanged:
+
 ```json
 {
   "name": "AGENT",
   "describe": "Hello Deva agent file",
   "copyright": "Copyright ©2026 Your Name; All rights reserved.",
+  "VLA": {
+    "uid": "your full VLA record"
+  },
   "DATA": {
     "id": "00000000000000000002",
     "key": "hello",
