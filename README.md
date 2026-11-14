@@ -354,7 +354,7 @@ Not covered here because they weren't exercised for this README: `sign(packet)`,
 
 ## License
 
-Deva is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `31711622713594414221`, owned by Quinn Michaels, through License Deva. The full text is in [LICENSE.md](https://github.com/indraai/deva/LICENSE.md). It states, among other things, that:
+Deva is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `31711622713594414221`, owned by Quinn Michaels, through License Deva. The full text is in [LICENSE.md](https://github.com/indraai/deva/blob/main/LICENSE.md). It states, among other things, that:
 
 - by accessing or using the Software, you agree to its terms;
 - the Software is the sole proprietary property of the Owner;
