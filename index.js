@@ -1399,7 +1399,7 @@ class Deva {
 		- resolve: the resolve function for the shutdown.
 	describe:
 		The shutdown state function is triggered when the Deva is shutting down.
-		The return will check for a custom onShutdown function or run the done
+		The return will check for a custom onShutdown function.
 		function.
 	***************/
 	shutdown(data, resolve) {
