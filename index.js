@@ -1293,9 +1293,7 @@ class Deva {
   /**************
   func: stop
   usage: this.stop(data, resolve);
-  params: data, resolve
-    - data: The data packet that is passed through the closing invoke chain.
-    - resolve: The Promise resolver following the data through recursion.
+  params: none
   describe: 
     The stop() function initiates the egress stop aspect of the Invoke 
     Recursion Framework.
