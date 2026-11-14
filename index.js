@@ -656,10 +656,14 @@ class Deva {
   listen(evt, callback) {
     this.action('listen', evt);
     this.intent('good', `listen:${evt}`);
-    this.listeners[evt] = callback;
-    const handler = packet => this.listeners[evt](packet);
-    this._bound.set(evt, handler);
-    return this.events.on(evt, handler);    
+
+    const existing = this._bound.get(evt); // already on the bus from init or an earlier listen
+    if (existing) this.events.removeListener(evt, existing); // take the old wrapper off first
+        
+    this.listeners[evt] = callback; // set the event into this.listeners.
+    const handler = packet => this.listeners[evt](packet); // build the handler
+    this._bound.set(evt, handler); // set the vent into _bound events.
+    return this.events.on(evt, handler); // return the event
   }
 
   /**************
