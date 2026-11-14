@@ -26,15 +26,15 @@ Open `data/client.json` and add an `id` as the first entry in `profile`. Use the
 
 ```json
 "profile": {
-	"id": "00000000000000000001",
-	"name": "You",
-	"fullname": "Your Full Name",
-	"email": "you@example.com",
-	"company": "Your Company",
-	"describe": "The person talking to Hello Deva.",
-	"lang": "en",
-	"locale": "en-US",
-	"currency": "USD"
+  "id": "00000000000000000001",
+  "name": "You",
+  "fullname": "Your Full Name",
+  "email": "you@example.com",
+  "company": "Your Company",
+  "describe": "The person talking to Hello Deva.",
+  "lang": "en",
+  "locale": "en-US",
+  "currency": "USD"
 },
 ```
 
@@ -70,23 +70,23 @@ Add `onReady` to `new Deva()`, right after the `listeners` block:
 
 ```javascript
 onReady(data, resolve) {
-	const {key} = this.agent();
-	console.log(this.status());
-	console.log('ready hash:', this._config.hash[key]);
-	this.question('/hello Quinn').then(packet => {
-		console.log('answer:', packet.a.text);
-		console.log('md5:', packet.md5);
-		console.log('sha256:', packet.sha256);
-		console.log('sha512:', packet.sha512);
+  const {key} = this.agent();
+  console.log(this.status());
+  console.log('ready hash:', this._config.hash[key]);
+  this.question('/hello Quinn').then(packet => {
+    console.log('answer:', packet.a.text);
+    console.log('md5:', packet.md5);
+    console.log('sha256:', packet.sha256);
+    console.log('sha512:', packet.sha512);
 
-		const check = this.lib.copy(packet);
-		for (const algo of ['md5', 'sha256', 'sha512']) delete check[algo];
-		for (const algo of ['md5', 'sha256', 'sha512']) {
-			check[algo] = this.hash(check, algo);
-			console.log(`${algo} matches:`, check[algo] === packet[algo]);
-		}
-		return resolve(data);
-	});
+    const check = this.lib.copy(packet);
+    for (const algo of ['md5', 'sha256', 'sha512']) delete check[algo];
+    for (const algo of ['md5', 'sha256', 'sha512']) {
+      check[algo] = this.hash(check, algo);
+      console.log(`${algo} matches:`, check[algo] === packet[algo]);
+    }
+    return resolve(data);
+  });
 },
 ```
 
@@ -151,70 +151,70 @@ const agent = Agent.DATA;
 const client = Client.DATA;
 
 const info = {
-	id: pkg.id,
-	name: pkg.name,
-	describe: pkg.description,
-	version: pkg.version,
-	copyright: pkg.copyright,
-	dir: import.meta.dirname,
-	VLA: Agent.VLA,
+  id: pkg.id,
+  name: pkg.name,
+  describe: pkg.description,
+  version: pkg.version,
+  copyright: pkg.copyright,
+  dir: import.meta.dirname,
+  VLA: Agent.VLA,
 };
 
 const hello = new Deva({
-	info,
-	agent: {
-		id: agent.id,
-		key: agent.key,
-		prompt: agent.prompt,
-		profile: agent.profile,
-	},
-	vars: agent.vars,
-	func: {
-		greet(name) {
-			if (!name) return `${this.vars.greeting}.`;
-			return `${this.vars.greeting}, and hello to ${name}.`;
-		},
-	},
-	methods: {
-		hello(packet) {
-			this.context('hello', packet.q.text);
-			return new Promise(resolve => {
-				const text = this.func.greet(packet.q.text);
-				return resolve({
-					text,
-					html: `<p>${text}</p>`,
-					data: {
-						greeting: this.vars.greeting,
-						name: packet.q.text,
-					},
-				});
-			});
-		},
-	},
-	listeners: {
-		'devacore:question'(packet) {
-			console.log(`👂 heard: ${packet.q.text}`);
-		},
-	},
-	onReady(data, resolve) {
-		const {key} = this.agent();
-		console.log(this.status());
-		console.log('ready hash:', this._config.hash[key]);
-		this.question('/hello Quinn').then(packet => {
-			console.log('answer:', packet.a.text);
-			console.log('md5:', packet.md5);
-			console.log('sha256:', packet.sha256);
-			console.log('sha512:', packet.sha512);
+  info,
+  agent: {
+    id: agent.id,
+    key: agent.key,
+    prompt: agent.prompt,
+    profile: agent.profile,
+  },
+  vars: agent.vars,
+  func: {
+    greet(name) {
+      if (!name) return `${this.vars.greeting}.`;
+      return `${this.vars.greeting}, and hello to ${name}.`;
+    },
+  },
+  methods: {
+    hello(packet) {
+      this.context('hello', packet.q.text);
+      return new Promise(resolve => {
+        const text = this.func.greet(packet.q.text);
+        return resolve({
+          text,
+          html: `<p>${text}</p>`,
+          data: {
+            greeting: this.vars.greeting,
+            name: packet.q.text,
+          },
+        });
+      });
+    },
+  },
+  listeners: {
+    'devacore:question'(packet) {
+      console.log(`👂 heard: ${packet.q.text}`);
+    },
+  },
+  onReady(data, resolve) {
+    const {key} = this.agent();
+    console.log(this.status());
+    console.log('ready hash:', this._config.hash[key]);
+    this.question('/hello Quinn').then(packet => {
+      console.log('answer:', packet.a.text);
+      console.log('md5:', packet.md5);
+      console.log('sha256:', packet.sha256);
+      console.log('sha512:', packet.sha512);
 
-			const check = this.lib.copy(packet);
-			for (const algo of ['md5', 'sha256', 'sha512']) delete check[algo];
-			for (const algo of ['md5', 'sha256', 'sha512']) {
-				check[algo] = this.hash(check, algo);
-				console.log(`${algo} matches:`, check[algo] === packet[algo]);
-			}
-			return resolve(data);
-		});
-	},
+      const check = this.lib.copy(packet);
+      for (const algo of ['md5', 'sha256', 'sha512']) delete check[algo];
+      for (const algo of ['md5', 'sha256', 'sha512']) {
+        check[algo] = this.hash(check, algo);
+        console.log(`${algo} matches:`, check[algo] === packet[algo]);
+      }
+      return resolve(data);
+    });
+  },
 });
 
 console.log(hello.status());
@@ -234,12 +234,12 @@ You should see something like this:
 ⭕️ OFFLINE
 Hello Deva active since Friday, November 13, 2026 - 9:42:47 PM
 ready hash: {
-	vars: 'rDSWWf9z7T32eW+iR+hmpovAlKg00WLgPZHL5lX8Jiw=',
-	utils: 'RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=',
-	listeners: 'ai+uM2sU+GbXlo68vVrH8JGVJ8rkSiBm5DI//ggURGg=',
-	modules: 'RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=',
-	func: 'OjSeCqlVjcdUbiGmeGrNh5Hv90nk+nQ6KCxTUjR3+FI=',
-	methods: '2YKySno+VMvwOxFVjNfhq7IOROUVA6sDqadLWSanDps='
+  vars: 'rDSWWf9z7T32eW+iR+hmpovAlKg00WLgPZHL5lX8Jiw=',
+  utils: 'RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=',
+  listeners: 'ai+uM2sU+GbXlo68vVrH8JGVJ8rkSiBm5DI//ggURGg=',
+  modules: 'RBNvo1WzZ4oRRq0W9+hknpT7T8If536DEMBg9hyq/4o=',
+  func: 'OjSeCqlVjcdUbiGmeGrNh5Hv90nk+nQ6KCxTUjR3+FI=',
+  methods: '2YKySno+VMvwOxFVjNfhq7IOROUVA6sDqadLWSanDps='
 }
 👂 heard: Quinn
 answer: Hello World, and hello to Quinn.
