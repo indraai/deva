@@ -107,7 +107,9 @@
 				"permalink": "/guide/step-7/",
 				"describe": "Stop the Deva cleanly with stop() and see what it answers once it is offline.",
 				"learn": [
-					"Calling stop().",
+					"Calling stop() and what its five shutdown steps do.",
+					"Adding an onStop hook that hands the shutdown on with this.close(data, resolve).",
+					"Checking that every listener is off the event bus.",
 					"What a stopped Deva answers."
 				],
 				"files": ["index.js"]
