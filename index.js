@@ -1141,7 +1141,7 @@ class Deva {
           this.action('func', `onInit:${data.id.uid}`); // action set to onfunc
           this.state('valid', `onInit:${data.id.uid}`); // state set to onfunc
           this.intent('good', `onInit:${data.id.uid}`); // intent set to good
-          return this.onInit(data, resolve);
+          return this.onInit(data_stamped, resolve); // return stamped data
         }
         this.action('return', `init:${data.id.uid}`); // action set to return
         this.state('valid', `init:${data.id.uid}`); // state set to valid
