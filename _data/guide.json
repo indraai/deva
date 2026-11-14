@@ -79,9 +79,10 @@
 				"permalink": "/guide/step-5/",
 				"describe": "Add one func, one method and one listener, and see when to use each.",
 				"learn": [
-					"A func for internal work.",
-					"A method the Deva can be asked to run.",
-					"A listener that reacts to an event."
+					"A func for internal work, called inside the Deva as this.func.greet().",
+					"A method the Deva can be asked to run, called as /hello.",
+					"A listener that reacts to the devacore:question event.",
+					"Why all three are bound to the Deva when it starts."
 				],
 				"files": ["index.js"]
 			},
@@ -112,4 +113,3 @@
 		]
 	}
 }
-
