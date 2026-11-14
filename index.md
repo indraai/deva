@@ -2,7 +2,7 @@
 layout: home
 title: Deva Core
 headline: Agents that keep a verifiable record of every step.
-description: A Vedic-inspired, event-based Node.js framework for building integrated AI agents, with stamped, verifiable data on every step.
+description: A Vedic-based, event-driven Node.js framework for building integrated AI agents, with stamped, verifiable data on every step.
 image: /assets/banner.png
 features:
   - title: A shared event bus
