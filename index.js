@@ -643,6 +643,7 @@ class Deva {
     to create seamless collaboration between Devas.
   ***************/
   talk(evt, packet=false) {
+    if (!this.events) return this._messages.offline; // return offline if no events.
     return this.events.emit(evt, packet);
   }
 
@@ -654,6 +655,7 @@ class Deva {
   describe: setup a new event listener in the system.
   ***************/
   listen(evt, callback) {
+    if (!this.events) return this._messages.offline; // return offline if no events.
     this.action('listen', evt);
     this.intent('good', `listen:${evt}`);
 
@@ -674,6 +676,7 @@ class Deva {
   describe:
   ***************/
   once(evt, callback) {
+    if (!this.events) return this._messages.offline; // return offline if no events.
     this.action('once', evt);
     this.intent('good', `once:${evt}`);
     return this.events.once(evt, callback);
@@ -687,6 +690,7 @@ class Deva {
   describe: The ignore function allow the removal of events in the listener group.
   ***************/
   ignore(evt, callback) {
+    if (!this.events) return this._messages.offline; // return offline if no events.
     this.action('ignore', evt);
     this.intent('bad', `ignore:${evt}`);
     return this.events.removeListener(evt, callback);
