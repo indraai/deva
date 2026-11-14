@@ -1,7 +1,7 @@
 {
   "id": "31711622713594414221",
   "name": "@indra.ai/deva",
-  "version": "1.64.72",
+  "version": "1.64.73",
   "description": "Deva Core a Vedic-inspired Event Based Context Aware Feature, Zone, Action, and State Machine integrated Artificial Intelligence Framework",
   "main": "index.js",
   "license": "VLA:31711622713594414221 LICENSE.md",
