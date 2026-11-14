@@ -44,3 +44,4 @@ By the end, your project will look like this:
 
 {% assign first = guide.steps | first %}
 Open a terminal, pick a place for your project, and head to **[Step {{ first.step }}: {{ first.title }}]({{ first.permalink }})**.
+

@@ -243,3 +243,5 @@ That's the whole life of a Deva. Over these seven steps you wrote a client file 
 Every Deva is built from these same parts. License Deva is a good next one to read. It uses funcs for its database work and methods for its public commands, just as {{ guide.deva }} does. It also does something {{ guide.deva }} doesn't: in its own `onInit`, it compares the agent's VLA, the one in `info`, before it lets itself start. The client's VLA is still checked by the core at `init(client)`, exactly as it was for {{ guide.deva }}.
 
 For the full list of options, events and functions in Deva Core, see the [Docs](/docs/).
+
+For troubleshooting please see [Troubleshooting](/guide/troubleshooting).

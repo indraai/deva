@@ -85,7 +85,7 @@ Your `package.json` should include these two entries. The version number may be 
 ```json
 "type": "module",
 "dependencies": {
-	"{{ guide.package }}": "^1.64.72"
+	"{{ guide.package }}": "^1.64.92"
 }
 ```
 
