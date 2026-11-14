@@ -77,8 +77,7 @@ Missing client settings don't stop the Deva. It fills them in with default messa
 |---|---|---|
 | `needs an import attribute of "type: json"` | An import of a JSON file is missing `with {type:'json'}`. | Add `with {type:'json'}` to the end of the import. See [Step {{ s4.step }}]({{ s4.permalink }}). |
 | `Cannot find module` for `agent.json` or `client.json` | The import path is wrong. | The files live in `data/`, so the imports should be `./data/agent.json` and `./data/client.json`. |
-| undefined instead of Hello World | vars: agent.vars is missing from new Deva. |
-| Cannot read properties of undefined (reading 'greeting') | agent is the wrapper (Agent) instead of Agent.DATA. | Add `vars: agent.vars,` after the `agent` block. See [Step {{ s4.step }}]({{ s4.permalink }}). |
+| `undefined` instead of `Hello World` | `vars: agent.vars` is missing from `new Deva()`. | Add `vars: agent.vars,` after the `agent` block. See [Step {{ s4.step }}]({{ s4.permalink }}). |
 | `TypeError: Cannot read properties of undefined (reading 'greeting')` | `agent` is the whole agent file instead of what's inside it, so `agent.vars` doesn't exist. | It should be `const agent = Agent.DATA;`. The same message in Step {{ s5.step }} has a different cause, listed in the next section. |
 
 ## Skills (Step {{ s5.step }})
