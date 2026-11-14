@@ -26,8 +26,7 @@ When Node.js stops with an error, it prints several lines. Here's a real one fro
 ```
 file:///home/you/hello-deva/node_modules/@indra.ai/deva/index.js:2119
 		const warning = this._agent.profile.warning || this._messages.warning; // agent or default warning
-																				^
-
+		                                    ^
 TypeError: Cannot read properties of undefined (reading 'warning')
     at Deva.uid (file:///home/you/hello-deva/node_modules/@indra.ai/deva/index.js:2119:39)
 ```
