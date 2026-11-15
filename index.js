@@ -1400,7 +1400,6 @@ class Deva {
 	describe:
 		The shutdown state function is triggered when the Deva is shutting down.
 		The return will check for a custom onShutdown function.
-		function.
 	***************/
 	shutdown(data, resolve) {
 		if (!this._active) return resolve(this._messages.offline);
