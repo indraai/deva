@@ -96,6 +96,9 @@
 		"clean": "🧼 Clean",
 		"dirty": "🧹 Dirty",
 		"consent": "✍️ Consent",
-		"check": "☑️ Check"
+		"check": "☑️ Check",
+		"goodness": "👍 Goodness",
+		"passion": "❤️‍🔥 Passion",
+		"ignorance": "🤥 Ignorance"
 	}
 }
