@@ -1408,16 +1408,12 @@ class Deva {
 		return this._invoke({key, data, resolve})
 	}
 
-
-	////////////////////////////
-
-
 	/**************
 	func: context
 	params:
 		- value: The context flag to set for the Deva that matches to this._contexts
 		- extra: Any extra text that is sent with the context value.
-	describe
+	describe: sets the context for the deva.
 	***************/
 	context(value=false, extra=false) {
 		if (!this._active) return this._messages.offline; // check the active status
@@ -1448,6 +1444,11 @@ class Deva {
 		}
 	}
 	
+	/**************
+	func: contexts
+	params: none
+	describe: returns a list of active contexts. 
+	***************/
 	contexts() {
 		if (!this._active) return this._messages.offline; // check the active status
 		const id = this.uid();
