@@ -56,7 +56,8 @@
 				"folder": "📁",
 				"file": "📝",
 				"deva_created": "✅ DEVA CREATED:",
-				"incomplete": "🛑 KEY AND NAME ARE REQUIRED. NO DEVA CREATED."
+				"incomplete": "🛑 KEY AND NAME ARE REQUIRED. NO DEVA CREATED.",
+				"exists": "🛑 A DEVA ALREADY EXISTS HERE. NO DEVA CREATED:"
 			},
 			"create": {
 				"files": [],

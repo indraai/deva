@@ -128,6 +128,10 @@ const DevaBuddy = new Deva({
 			const { copy_from, copy_to } = this.vars.paths;
 			if (!copy_from) return console.log('no files to copy from');
 			if (!copy_to) return console.log('no files to copy to');
+			
+			// stop when the Deva folder is already there so Buddy never writes over existing work
+			if (this.lib.fs.existsSync(copy_to)) return this.prompt(`${this.vars.messages.exists} ${copy_to}`);
+			
 			console.log(this.vars.messages.que_heading);
 			console.log(`↪ fr: ${copy_from}`);
 			console.log(`↪ to: ${copy_to}`);
