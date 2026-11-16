@@ -35,7 +35,6 @@ const flash = `
 version: ${version}
 ::::::::::::::::::::::::::::::::::
 `
-console.log(flash);
 
 // Creates a new DEVA Buddy.
 const BUDDY = new Deva({
@@ -199,6 +198,10 @@ const BUDDY = new Deva({
 			});
 		},
 
+	},
+	onInit(data, resolve) {
+		console.log(flash);
+		return this.start(data, resolve);
 	},
 	onReady(data, resolve) {
 		this.prompt(this._messages.ready);
