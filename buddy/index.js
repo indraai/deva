@@ -99,9 +99,6 @@ const DevaBuddy = new Deva({
 					}
 					
 					else {
-												
-						this.log(this.info.VLA);
-						
 						const theyear = new Date().getFullYear();
 						const content = this.lib.fs.readFileSync(copy_from_file, 'utf8')
 														.replace(/::id::/g, this.uid().uid)
