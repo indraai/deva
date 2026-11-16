@@ -187,6 +187,8 @@ class Deva {
 
 				// set the assigned listeners for the agent.
 				for (let listener in this.listeners) { // loop over the listeners
+					const existing = this._bound.get(listener); // already on the bus from an earlier listen
+					if (existing) this.events.removeListener(listener, existing); // take the old wrapper off first
 					const handler = packet => this.listeners[listener](packet);
 					this._bound.set(listener, handler);
 					this.events.on(listener, handler);
