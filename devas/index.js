@@ -5,7 +5,10 @@
 // Distributed under VLA:31711622713594414221 LICENSE.md  
 // Sunday, November 1, 2026 - 10:04:59 PM PST
 
-const DEVAS = {  test: require('./test'),
+import test from './test/index.js';
+
+const DEVAS = {  
+	test,
 };
 
 export default DEVAS;

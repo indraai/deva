@@ -68,19 +68,6 @@ const DevaBuddy = new Deva({
 	modules: {},
 	func: {
 
-		addToIndex() {
-			if (this.vars.options.dir) return Promose.resolve(`📄 CUSTOM DEVA DIR. NO INDEX FILE.`);
-			const indexFile = this.lib.path.join(this.vars.paths.copy_to_base, 'index.js');
-			this.prompt(indexFile);
-			
-			if (!this.lib.fs.existsSync(indexFile)) return Promise.reject('NO INDEX FILE TO LOAD.');
-
-			const indexFileLoad = this.lib.fs.readFileSync(indexFile, 'utf8');
-
-			const indexFileUpadate = indexFileLoad.replace('};', `  ${this.vars.answers.key}: require('./${this.vars.answers.key}'),\n};`);
-			this.lib.fs.writeFileSync(indexFile, indexFileUpadate);
-			return Promise.resolve(`${this.vars.messages.index_updated} ${indexFile}`);
-		},
 		baseDevaDirectory() {
 			const { copy_to_base } = this.vars.paths;
 			const dir_exists = this.lib.fs.existsSync(copy_to_base);
@@ -106,8 +93,13 @@ const DevaBuddy = new Deva({
 					const filestat = this.lib.fs.statSync(copy_from_file);
 
 					if (filestat.isDirectory()) this.func.queFiles(copy_from_file, copy_to_file);
+
+					else if (this.lib.path.extname(item) === '.png') {
+						this.vars.create.files.push({copy_to_file, content: this.lib.fs.readFileSync(copy_from_file)});
+					}
+					
 					else {
-						
+												
 						this.log(this.info.VLA);
 						
 						const theyear = new Date().getFullYear();
@@ -141,13 +133,12 @@ const DevaBuddy = new Deva({
 			console.log(`↪ fr: ${copy_from}`);
 			console.log(`↪ to: ${copy_to}`);
 			this.func.queFiles(copy_from, copy_to).then(filesQued => {
-				console.log(filesQued);
+				this.prompt(filesQued);
 				return this.func.createDeva();
 			}).then(devaCreated => {
-				console.log(devaCreated);
-				return this.func.addToIndex();
-			}).then(indexAdded => {
-				console.log(indexAdded);
+				this.prompt(devaCreated);
+				const {key} = this.vars.answers;
+				this.prompt(`👉 Add ${key} to your Deva loader: import ${key} from './${key}/index.js';`);
 			}).catch(err => {
 				console.error('🛑 ERROR', err);
 			});

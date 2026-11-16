@@ -4,7 +4,7 @@
 	"copyright": "Copyright ©2026 Quinn Michaels. All rights reserved.",
 	"DATA": {
 		"agent": {
-			"id": "64077432721809236189",
+			"id": "52016091124527523410",
 			"key": "test",
 			"prompt": {
 				"emoji": "⊙",
@@ -23,7 +23,7 @@
 				}
 			},
 			"profile": {
-				"id": "64077432721809236189",
+				"id": "52016091124527523410",
 				"name": "test",
 				"title": "",
 				"subtitle": "",
@@ -44,7 +44,7 @@
 				"background": "/assets/background.png",
 				"owner": "Quinn Michaels",
 				"creator": "Quinn Michaels",
-				"created": "Monday, November 16, 2026 - 11:27:17 AM"
+				"created": "Monday, November 16, 2026 - 11:42:26 AM"
 			}
 		},
 		"vars": {
