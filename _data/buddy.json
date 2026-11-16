@@ -55,7 +55,8 @@
 				"index_updated": "✅ INDEX UPDATED:",
 				"folder": "📁",
 				"file": "📝",
-				"deva_created": "✅ DEVA CREATED:"
+				"deva_created": "✅ DEVA CREATED:",
+				"incomplete": "🛑 KEY AND NAME ARE REQUIRED. NO DEVA CREATED."
 			},
 			"create": {
 				"files": [],

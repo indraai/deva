@@ -168,15 +168,23 @@ const DevaBuddy = new Deva({
 				default: this.lib.path.join(process.cwd(), 'devas'),    // set the default path for the question
 			});
 		
-			// ask each question with readline and keep the default when the answer is blank
-			const rl = readline.createInterface({input: process.stdin, output: process.stdout});
+			// ask each question and keep the default when the answer is blank
+			// lines from a pipe wait in the line queue so bots can send all answers at once
+			const piped = !process.stdin.isTTY;
+			const rl = readline.createInterface({input: process.stdin, output: process.stdout, terminal: !piped});
+			const lines = rl[Symbol.asyncIterator]();
 			const answers = {};
 			for (const question of this.vars.questions) {
 				const def = question.default ? ` (${question.default})` : '';
-				const answer = await rl.question(`${question.message}${def}: `);
+				process.stdout.write(`${question.message}${def}: `);
+				const {value, done} = await lines.next();
+				const answer = done ? '' : value;
+				if (piped) process.stdout.write(`${answer}\n`);
 				answers[question.name] = answer.trim() || question.default || '';
 			}
 			rl.close();
+			// stop when the key or name is missing so incomplete pipes do not build a Deva
+		if (!answers.key || !answers.name) return this.prompt(this.vars.messages.incomplete);
 		
 			// set the options variable to load what the BUDDY was configured with.
 			this.vars.paths = {
