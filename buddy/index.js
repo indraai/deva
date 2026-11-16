@@ -112,7 +112,7 @@ const DevaBuddy = new Deva({
 														.replace(/::pronouns::/g, answers.pronouns)
 														.replace(/::vector::/g, answers.vector)
 														.replace(/::vla::/g, this.info().VLA.uid)
-														.replace(/::date::/g, this.lib.formatDate(Date.now(), 'long', true));
+														.replace(/::vla-data::/g, JSON.stringify(this.info().VLA)).replace(/::date::/g, this.lib.formatDate(Date.now(), 'long', true));
 
 						// PUSH THE NEWLY CREATED FILE TO THE CREATE FILES ARRAY VARIABLE
 						this.vars.create.files.push({copy_to_file, content});
