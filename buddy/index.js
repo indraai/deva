@@ -37,7 +37,7 @@ version: ${version}
 `
 
 // Creates a new DEVA Buddy.
-const BUDDY = new Deva({
+const DevaBuddy = new Deva({
 	agent,
 	utils: {
 		translate(input) {
@@ -52,10 +52,12 @@ const BUDDY = new Deva({
 	},
 	vars,
 	devas: {},
-	listeners: {},
-	modules: {
-		inquire,
+	listeners: {
+		'devacore:prompt'(packet) {
+			console.log(packet.text);
+		}
 	},
+	modules: {},
 	func: {
 
 		addToIndex() {
@@ -200,14 +202,14 @@ const BUDDY = new Deva({
 
 	},
 	onInit(data, resolve) {
-		console.log(flash);
+		this.prompt(flash);
 		return this.start(data, resolve);
 	},
 	onReady(data, resolve) {
 		this.prompt(this._messages.ready);
-		this.methods.inquire();                           // when buddy inits then run the inquire method.
-		// return resolve(data);
+		// this.methods.inquire();                           // when buddy inits then run the inquire method.
+		return resolve(data);
 	},
 });
 
-BUDDY.init(client);
+DevaBuddy.init(client);
