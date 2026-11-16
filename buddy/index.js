@@ -190,6 +190,8 @@ const DevaBuddy = new Deva({
 			rl.close();
 			// stop when the key or name is missing so incomplete pipes do not build a Deva
 		if (!answers.key || !answers.name) return this.prompt(this.vars.messages.incomplete);
+		// stop when the key is not a lowercase word so the folder and constant name stay valid
+		if (!/^[a-z][a-z0-9]*$/.test(answers.key)) return this.prompt(this.vars.messages.badkey);
 		
 			// set the options variable to load what the BUDDY was configured with.
 			this.vars.paths = {
