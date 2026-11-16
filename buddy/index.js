@@ -10,13 +10,10 @@ const {version} = pkg;
 
 import Buddy from '../_data/buddy.json' with {type: 'json'};
 const buddy = Buddy.DATA;
+const {agent, vars} = buddy;
 
 import Client from '../tests/client.json' with {type: 'json'};
 const client = Client.DATA;
-
-import Agent from '../tests/agent.json' with {type: 'json'};
-const agent = Agent.DATA;
-const {profile, vars} = agent;
 
 import process from 'node:process';
 import {dirname} from 'node:path';
