@@ -1,0 +1,68 @@
+{
+	"name": "test Data File",
+	"describe": "The main Data file for test",
+	"copyright": "Copyright ©2026 Quinn Michaels. All rights reserved.",
+	"DATA": {
+		"agent": {
+			"id": "64077432721809236189",
+			"key": "test",
+			"prompt": {
+				"emoji": "⊙",
+				"text": "test",
+				"colors": {
+					"label": {
+						"R": 0,
+						"G": 150,
+						"B": 255
+					},
+					"text": {
+						"R": 101,
+						"G": 192,
+						"B": 255
+					}
+				}
+			},
+			"profile": {
+				"id": "64077432721809236189",
+				"name": "test",
+				"title": "",
+				"subtitle": "",
+				"describe": "test",
+				"vectors": "::vectors::",
+				"pronouns": "test",
+				"gender": "DEVA",
+				"style": "",
+				"voice": "alloy",
+				"system": "Deva.world",
+				"layout": "default",
+				"tweet": "",
+				"color": "#000000",
+				"bgcolor": "#ffffff",
+				"emoji": "/assets/emoji.png",
+				"avatar": "/assets/avatar.png",
+				"image": "/assets/imgae.png",
+				"background": "/assets/background.png",
+				"owner": "Quinn Michaels",
+				"creator": "Quinn Michaels",
+				"created": "Monday, November 16, 2026 - 11:27:17 AM"
+			}
+		},
+		"vars": {
+			"messages": {
+				"init": "🟠 INIT",
+				"start": "🔵 START",
+				"enter": "🟢 ENTER",
+				"stop": "🔴 STOP",
+				"exit": "🟡 EXIT",
+				"done": "🟣 DONE",
+				"error": "💣 ERROR!",
+				"ready": "⭐️ READY!"
+			},
+			"context": {
+				"uid": "test is creating a uid",
+				"status": "test is viewing the status",
+				"help": "test is viewing the help"
+			}
+		}
+	}
+}

@@ -71,6 +71,8 @@ const DevaBuddy = new Deva({
 		addToIndex() {
 			if (this.vars.options.dir) return Promose.resolve(`📄 CUSTOM DEVA DIR. NO INDEX FILE.`);
 			const indexFile = this.lib.path.join(this.vars.paths.copy_to_base, 'index.js');
+			this.prompt(indexFile);
+			
 			if (!this.lib.fs.existsSync(indexFile)) return Promise.reject('NO INDEX FILE TO LOAD.');
 
 			const indexFileLoad = this.lib.fs.readFileSync(indexFile, 'utf8');
@@ -105,6 +107,9 @@ const DevaBuddy = new Deva({
 
 					if (filestat.isDirectory()) this.func.queFiles(copy_from_file, copy_to_file);
 					else {
+						
+						this.log(this.info.VLA);
+						
 						const theyear = new Date().getFullYear();
 						const content = this.lib.fs.readFileSync(copy_from_file, 'utf8')
 														.replace(/::id::/g, this.uid().uid)
@@ -114,18 +119,9 @@ const DevaBuddy = new Deva({
 														.replace(/::key-upper::/g, answers.key.toUpperCase())
 														.replace(/::name::/g, answers.name)
 														.replace(/::describe::/g, answers.describe)
-														.replace(/::style::/g, answers.style)
-														.replace(/::emoji::/g, answers.emoji)
-														.replace(/::avatar::/g, answers.avatar)
-														.replace(/::background::/g, answers.background)
-														.replace(/::voice::/g, answers.voice)
 														.replace(/::gender::/g, answers.gender)
 														.replace(/::pronouns::/g, answers.pronouns)
-														.replace(/::city::/g, answers.city)
-														.replace(/::region::/g, answers.region)
-														.replace(/::nation::/g, answers.nation)
-														.replace(/::planet::/g, answers.planet)
-														.replace(/::system::/g, answers.system)
+														.replace(/::vla::/g, this.info().VLA.uid)
 														.replace(/::date::/g, this.lib.formatDate(Date.now(), 'long', true));
 
 						// PUSH THE NEWLY CREATED FILE TO THE CREATE FILES ARRAY VARIABLE

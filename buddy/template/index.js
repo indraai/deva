@@ -1,8 +1,12 @@
-// Copyright (c)::year:: ::copyright::
 // ::name::
+// Copyright ©::year:: ::owner::; All rights reserved.  
+// Owner Signature Required For Lawful Use.  
+// Distributed under VLA:::vla:: LICENSE.md
+// ::date::
 
 import Deva from '@indra.ai/deva';
-import pkg from './package.json' with {type:'json'};
+// make sure to correct for package location to match 
+import pkg from '../../package.json' with {type:'json'};
 
 import data from './data/index.json' with {type:'json'};
 const {agent,vars} = data.DATA;

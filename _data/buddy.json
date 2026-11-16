@@ -72,20 +72,14 @@
 				},
 				{
 					"type": "input",
+					"name": "vector",
+					"message": "Vector",
+					"default": ""
+				},
+				{
+					"type": "input",
 					"name": "name",
 					"message": "Name",
-					"default": ""
-				},
-				{
-					"type": "input",
-					"name": "title",
-					"message": "Title",
-					"default": ""
-				},
-				{
-					"type": "input",
-					"name": "subtitle",
-					"message": "Subtitle",
 					"default": ""
 				},
 				{
@@ -96,124 +90,15 @@
 				},
 				{
 					"type": "input",
-					"name": "tweet",
-					"message": "Tweet",
-					"default": ""
-				},
-				{
-					"type": "input",
-					"name": "hashtags",
-					"message": "Hashtags",
-					"default": ""
-				},
-				{
-					"type": "input",
-					"name": "style",
-					"message": "Style",
-					"default": "A Master Vedic Painter"
-				},
-				{
-					"type": "list",
 					"name": "pronouns",
 					"message": "Pronouns",
-					"choices": [
-						{
-							"name": "He, Him",
-							"value": "Male, Man, He, Him, Gentleman"
-						},
-						{
-							"name": "She, Her",
-							"value": "Female, Woman, She, Her, Lady"
-						},
-						{
-							"name": "They, Them",
-							"value": "They, Them, Their"
-						},
-						{
-							"name": "Other",
-							"value": "Other"
-						}
-					]
+					"default": ""
 				},
 				{
 					"type": "list",
 					"name": "gender",
 					"message": "Gender",
-					"choices": [
-						{
-							"name": "Deva",
-							"value": "DEVA"
-						},
-						{
-							"name": "Peva",
-							"value": "PEVA"
-						},
-						{
-							"name": "Male",
-							"value": "Male"
-						},
-						{
-							"name": "Female",
-							"value": "Female"
-						},
-						{
-							"name": "Neutral",
-							"value": "Neutral"
-						},
-						{
-							"name": "Other",
-							"value": "Other"
-						}
-					]
-				},
-				{
-					"type": "list",
-					"name": "voice",
-					"message": "Voice",
-					"choices": [
-						{
-							"name": "Alloy (F)",
-							"value": "alloy"
-						},
-						{
-							"name": "Ash (M)",
-							"value": "ash"
-						},
-						{
-							"name": "Choral (F)",
-							"value": "choral"
-						},
-						{
-							"name": "Echo (M)",
-							"value": "echo"
-						},
-						{
-							"name": "Fable (F-British)",
-							"value": "fable"
-						},
-						{
-							"name": "Onyx (M)",
-							"value": "onyx"
-						},
-						{
-							"name": "Nova (F)",
-							"value": "nova"
-						},
-						{
-							"name": "Sage (F)",
-							"value": "sage"
-						},
-						{
-							"name": "Shimmer (F)",
-							"value": "shimmer"
-						}
-					]
-				},
-				{
-					"type": "input",
-					"name": "system",
-					"message": "System",
-					"default": ""
+					"default": "DEVA"
 				},
 				{
 					"type": "input",
