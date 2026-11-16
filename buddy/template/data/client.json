@@ -1,6 +1,6 @@
 {
 	"name": "::name:: Client File",
-	"describe": "Stub client for testing ::name::. Replace with your own client file and add it to .gitignore.",
+	"describe": "Stub client for testing ::name::. Pass Client.DATA to init(), not the whole file. Replace with your own client file and add it to .gitignore.",
 	"copyright": "Copyright ©::year:: ::owner::. All rights reserved.",
 	"DATA": {
 		"id": "::id::",

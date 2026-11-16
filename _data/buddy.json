@@ -58,7 +58,8 @@
 				"deva_created": "✅ DEVA CREATED:",
 				"incomplete": "🛑 KEY AND NAME ARE REQUIRED. NO DEVA CREATED.",
 				"exists": "🛑 A DEVA ALREADY EXISTS HERE. NO DEVA CREATED:",
-				"badkey": "🛑 KEY MUST BE LOWERCASE LETTERS AND NUMBERS, STARTING WITH A LETTER. NO DEVA CREATED."			},
+				"badkey": "🛑 KEY MUST BE LOWERCASE LETTERS AND NUMBERS, STARTING WITH A LETTER. NO DEVA CREATED."
+			},
 			"create": {
 				"files": [],
 				"directories": []
