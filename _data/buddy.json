@@ -93,7 +93,7 @@
 					"type": "input",
 					"name": "pronouns",
 					"message": "Pronouns",
-					"default": ""
+					"default": "they/them"
 				},
 				{
 					"type": "list",
