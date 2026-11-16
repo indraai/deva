@@ -21,13 +21,7 @@ const info = {
 	name: pkg.name,
 	version: pkg.version,
 	author: pkg.author,
-	describe: pkg.description,
 	dir: __dirname,
-	url: pkg.homepage,
-	git: pkg.repository.url,
-	bugs: pkg.bugs.url,
-	license: pkg.license,
-	copyright: pkg.copyright,
 	VLA: pkg.VLA,
 };
 
