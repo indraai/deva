@@ -13,6 +13,7 @@ import states from './states.json' with {type:'json'};
 import intents from './intents.json' with {type:'json'};
 import beliefs from './beliefs.json' with {type:'json'};
 import msgs from './msgs.json' with {type:'json'};
+import buddy from './buddy.json' with {type:'json'};
 
 export default {
 	cmdChr: '/',
@@ -153,4 +154,5 @@ export default {
 	belief: 'vedic',
 	beliefs: beliefs.DATA,
 	messages: msgs.DATA,
+	buddy: buddy.DATA,
 }
