@@ -1,0 +1,27 @@
+{
+	"name": "::name:: Client File",
+	"describe": "Stub client for testing ::name::. Replace with your own client file and add it to .gitignore.",
+	"copyright": "Copyright ©::year:: ::owner::. All rights reserved.",
+	"DATA": {
+		"id": "::id::",
+		"key": "client",
+		"VLA": ::vla-data::,
+		"prompt": {
+			"emoji": "🧪",
+			"text": "client",
+			"colors": {
+				"label": {"R": 2, "G": 229, "B": 77},
+				"text": {"R": 2, "G": 229, "B": 77}
+			}
+		},
+		"profile": {
+			"id": "::id::",
+			"name": "::owner::",
+			"describe": "Test client for ::name::",
+			"lang": "en",
+			"locale": "en-US",
+			"currency": "USD"
+		},
+		"features": {}
+	}
+}
