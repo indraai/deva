@@ -107,7 +107,7 @@ const DevaBuddy = new Deva({
 					else {
 						const theyear = new Date().getFullYear();
 						const content = this.lib.fs.readFileSync(copy_from_file, 'utf8')
-														.replace(/::id::/g, this.lib.uid())
+														.replace(/::id::/g, this.uid().uid)
 														.replace(/::owner::/g, answers.owner)
 														.replace(/::key::/g, answers.key)
 														.replace(/::year::/g, theyear)

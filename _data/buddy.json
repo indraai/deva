@@ -167,12 +167,6 @@
 					]
 				},
 				{
-					"type": "input",
-					"name": "style",
-					"message": "Style",
-					"default": ""
-				},
-				{
 					"type": "list",
 					"name": "voice",
 					"message": "Voice",
