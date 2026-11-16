@@ -1,0 +1,68 @@
+{
+	"name": "::name:: Data File",
+	"describe": "The main Data file for ::name::",
+	"copyright": "Copyright ©::year:: ::copyright::. All rights reserved.",
+	"DATA": {
+		"agent": {
+			"id": "::id::",
+			"key": "::key::",
+			"prompt": {
+				"emoji": "⊙",
+				"text": "::key::",
+				"colors": {
+					"label": {
+						"R": 0,
+						"G": 150,
+						"B": 255
+					},
+					"text": {
+						"R": 101,
+						"G": 192,
+						"B": 255
+					}
+				}
+			},
+			"profile": {
+				"id": "::id::",
+				"name": "::name::",
+				"title": "::title::",
+				"subtitle": "::subtitle::",
+				"describe": "::describe::",
+				"tweet": "::tweet::",
+				"hashtags": "::hashtags::",
+				"pronouns": "::pronouns::",
+				"gender": "::gender::",
+				"style": "::style::",
+				"voice": "::voice::",
+				"system": "::system::",
+				"layout": "default",
+				"color": "var(--color-white)",
+				"bgcolor": "var(--color-darkest-grey)",
+				"emoji": "::emoji::",
+				"avatar": "::avatar::",
+				"image": "::image::",
+				"background": "::background::",
+				"owner": "::creator::",
+				"creator": "::creator::",
+				"created": "::date::"
+			}
+		},
+		"vars": {
+			"messages": {
+				"init": "🟠 INIT",
+				"start": "🔵 START",
+				"enter": "🟢 ENTER",
+				"stop": "🔴 STOP",
+				"exit": "🟡 EXIT",
+				"done": "🟣 DONE",
+				"error": "💣 ERROR!",
+				"ready": "⭐️ READY!"
+			},
+			"context": {
+				"uid": "::name:: is creating a uid",
+				"status": "::name:: is viewing the status",
+				"help": "::name:: is viewing the help"
+			}
+		}
+	}
+}

@@ -15,6 +15,8 @@ const {agent, vars} = buddy;
 import Client from '../tests/client.json' with {type: 'json'};
 const client = Client.DATA;
 
+import readline from 'node:readline/promises';
+
 import process from 'node:process';
 import {dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';    
@@ -172,40 +174,45 @@ const DevaBuddy = new Deva({
 	},
 
 	methods: {
-		inquire() {
-
+		async inquire() {	
 			// this sets up a custom directory question for the user which is not in the json data
 			this.vars.questions.push({                      // append directory to questions because of __dirname
 				type: 'input',                                // set the input type
 				name: 'directory',                            // set the name
 				message: 'DIRECTORY',                         // set the MESSAGE
-				default: this.lib.path.join(process.cwd(), 'src', 'devas'),    // set the default path for the question
+				default: this.lib.path.join(process.cwd(), 'devas'),    // set the default path for the question
 			});
-
-			// send the questions to inquirer to be presented to the user
-			this.modules.inquire.prompt(this.vars.questions).then(answers => {
-				// set the options variable to load what the BUDDY was configured with.
-				this.vars.paths = {
-					copy_from: this.lib.path.join(__dirname, 'template'),
-					copy_to: this.lib.path.join(answers.directory, answers.key),
-					copy_to_base: answers.directory,
-				},
-
-				console.log('::::::::::::::::::::::::::::');
-				console.log(this.vars.messages.heading);
-
-				for (let answer in answers) {
-					console.log(`↪ ${answer.toUpperCase()}: `) + answers[answer];
-				}
-
-				console.log('::::::::::::::::::::::::::::');
-
-				// now this is where we take the
-				this.vars.answers = answers;
-				this.func.que();
-			});
+		
+			// ask each question with readline and keep the default when the answer is blank
+			const rl = readline.createInterface({input: process.stdin, output: process.stdout});
+			const answers = {};
+			for (const question of this.vars.questions) {
+				const def = question.default ? ` (${question.default})` : '';
+				const answer = await rl.question(`${question.message}${def}: `);
+				answers[question.name] = answer.trim() || question.default || '';
+			}
+			rl.close();
+		
+			// set the options variable to load what the BUDDY was configured with.
+			this.vars.paths = {
+				copy_from: this.lib.path.join(__dirname, 'template'),
+				copy_to: this.lib.path.join(answers.directory, answers.key),
+				copy_to_base: answers.directory,
+			};
+	
+			this.prompt('::::::::::::::::::::::::::::');
+			this.prompt(this.vars.messages.heading);
+	
+			for (let answer in answers) {
+				this.prompt(`↪ ${answer.toUpperCase()}: ${answers[answer]}`);
+			}
+	
+			this.prompt('::::::::::::::::::::::::::::');
+	
+			// now this is where we take the
+			this.vars.answers = answers;
+			return this.func.que();
 		},
-
 	},
 	onInit(data, resolve) {
 		this.prompt(flash);
@@ -213,7 +220,7 @@ const DevaBuddy = new Deva({
 	},
 	onReady(data, resolve) {
 		this.prompt(this._messages.ready);
-		// this.methods.inquire();                           // when buddy inits then run the inquire method.
+		this.methods.inquire();                           // when buddy inits then run the inquire method.
 		return resolve(data);
 	},
 });

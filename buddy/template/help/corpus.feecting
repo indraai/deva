@@ -1,0 +1,13 @@
+// ::name:: Help
+// Copyright ©2000-2026 ::owner::; All rights reserved.  
+// Owner Signature Required For Lawful Use.  
+// Distributed under VLA:72443233535603396055 LICENSE.md
+// ::created::
+
+::BEGIN:MAIN
+# {{profile.name}}
+
+p: {{profile.describe}}
+
+copyright: {{profile.copyright}}
+::END:MAIN

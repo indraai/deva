@@ -1,0 +1,25 @@
+// ::name:: Help
+// Copyright ©2000-2026 ::owner::; All rights reserved.  
+// Owner Signature Required For Lawful Use.  
+// Distributed under VLA:72443233535603396055 LICENSE.md
+// ::created::
+
+::BEGIN:MAIN
+# {{profile.name}}
+
+img: {{profile.image}}
+
+{{profile}}
+
+talk: #::key:: help main:license
+
+::begin:hidden
+#color = {{profile.color}}
+#bgcolor = {{profile.bgcolor}}
+#bg = {{profile.background}}
+copyright: {{profile.copyright}}
+::end:hidden
+::END:MAIN
+
+::BEGIN:LICENSE
+::END:LICENSE
