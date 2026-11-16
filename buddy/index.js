@@ -113,6 +113,7 @@ const DevaBuddy = new Deva({
 														.replace(/::describe::/g, answers.describe)
 														.replace(/::gender::/g, answers.gender)
 														.replace(/::pronouns::/g, answers.pronouns)
+														.replace(/::vector::/g, answers.vector)
 														.replace(/::vla::/g, this.info().VLA.uid)
 														.replace(/::date::/g, this.lib.formatDate(Date.now(), 'long', true));
 
