@@ -38,6 +38,12 @@ version: ${version}
 
 // Creates a new DEVA Buddy.
 const DevaBuddy = new Deva({
+	info: {
+		id: pkg.id,
+		name: pkg.name,
+		version: pkg.version,
+		VLA: pkg.VLA,
+	},
 	agent,
 	utils: {
 		translate(input) {
