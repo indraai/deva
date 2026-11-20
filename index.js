@@ -1120,6 +1120,7 @@ class Deva {
 
 				return step('Client', client);
 			}).then(() => {
+				console.log('feature data', data.client);
 				return step('License');
 			}).then(() => {
 				return step('Error');
@@ -1145,6 +1146,7 @@ class Deva {
 			
 				// do the agent license check after the features load.
 				const agent_check = this.license_check(this._license.personal, this._info.VLA);
+				console.log('agent check', agent.key, this._license.personal, agent_check);
 				if (!agent_check?.id) {
 					this.prompt(agent_check); // set license invalid prompt
 					return this.stop().then(() => resolve(agent_check)); // stop then return the license check
