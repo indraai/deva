@@ -23,7 +23,11 @@
 			"currency": "USD"
 		},
 		"features": {
-			"::key::": ::vla-data::
+			"license": {
+				"concerns": [],
+				"global": [],
+				"::key::": ::vla-data::
+			}
 		}
 	}
 }
