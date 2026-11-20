@@ -1142,6 +1142,14 @@ class Deva {
 			}).then(() => {
 				return step('Done');
 			}).then(() => {
+			
+				// do the agent license check after the features load.
+				const agent_check = this.license_check(this._license.personal, this._info.VLA);
+				if (!agent_check?.id) {
+					this.prompt(agent_check); // set license invalid prompt
+					return this.stop().then(() => resolve(agent_check)); // stop then return the license check
+				}
+				
 				const hasOnInit = this.onInit && typeof this.onInit === 'function';
 				if (hasOnInit) {
 					this.action('func', `onInit:${data.id.uid}`); // action set to onfunc
