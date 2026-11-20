@@ -22,6 +22,8 @@
 			"locale": "en-US",
 			"currency": "USD"
 		},
-		"features": {}
+		"features": {
+			"::key::": ::vla-data::
+		}
 	}
 }
