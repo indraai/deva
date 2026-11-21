@@ -59,7 +59,7 @@ const hello = new Deva({
     profile: {name: 'Hello Deva'},
   },
   config: {hash: {}},     // optional: ready() writes this._config.hash[agent.key]
-  vars: {context: {}},    // required: context() looks up this.vars.context
+  vars: {context: {}},    // optional: context() labels come from this.vars.context
   listeners: {
     'devacore:error'(packet) {
       console.log('error:', packet.error.message);
@@ -108,7 +108,7 @@ Three things to know from this example:
 | `maxListeners` | Passed to `events.setMaxListeners`. Default `0` (unlimited). |
 | Lifecycle hooks | `onInit`, `onStart`, `onEnter`, `onDone`, `onReady`, `onFinish`, `onComplete`, `onStop`, `onClose`, `onLeave`, `onExit`, `onShutdown`, `onError`. |
 
-Any other top-level option is copied onto the instance, as long as it doesn't clash with an existing property.
+Any other top-level option is copied onto the instance, even over a method with the same name, which is how hooks like `onReady` are set. Names that have an underscore twin (`agent`, `info`, `client`) are kept, so don't give an option the name of a core method such as `talk` or `stop`.
 
 An option passed as `undefined` keeps its default, the same as leaving it out. `info` and `agent` are required.
 
@@ -344,7 +344,7 @@ These are the public methods.
 | `listen` / `once` / `ignore` | — | Manage listeners. |
 | `prompt(text)` | stamped data | Emits `devacore:prompt`. |
 | `feature`/`zone`/`action`/`state`/`intent`/`belief(value, extra?)` | data or `undefined` | Set and broadcast. |
-| `context(value, extra?)` | stamped data | Needs `vars.context`. |
+| `context(value, extra?)` | stamped data | Labels come from `vars.context`, falling back to the value. |
 | `features`/`zones`/`actions`/`states`/`intents`/`beliefs`/`contexts()` | stamped `{id, key, value, agent, client, created}` | Full lists. |
 | `agent()` / `client()` | hashed copy | |
 | `info()` / `core()` | stamped copy | |
