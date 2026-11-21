@@ -161,7 +161,7 @@ const DevaBuddy = new Deva({
 			this.func.writeVLA();
 			return Promise.resolve(`${this.vars.messages.deva_created} ${this.vars.answers.key} (${this.vars.answers.name}) `);
 		},
-			
+
 		// copy the core VLA into the project package.json that the new Deva reads with '../../package.json'
 		writeVLA() {
 			const pkg_file = this.lib.path.join(this.vars.paths.copy_to_base, '..', 'package.json');

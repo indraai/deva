@@ -27,11 +27,7 @@ npm install @indra.ai/deva
 
 Buddy needs no other packages.
 
-Then add a `VLA` to your project's `package.json`. Buddy doesn't change your package.json for you, but the Deva it builds reads its VLA from there and won't pass its license check without one. To copy the VLA from Deva Core, run:
-
-```bash
-npm pkg set VLA="$(node -p "JSON.stringify(JSON.parse(require('fs').readFileSync('node_modules/@indra.ai/deva/package.json')).VLA)")" --json
-```
+When Buddy builds a Deva, it copies the Deva Core VLA into your project's `package.json`, because the new Deva reads its VLA from there and won't pass its license check without one. If your `package.json` already has a `VLA`, Buddy keeps it.
 
 ## Run Buddy
 
@@ -75,6 +71,8 @@ Also skip JavaScript reserved words such as `class`, `default` or `import`. Budd
 The Name can be anything you like, including spaces and accented letters.
 
 ## A full run
+
+🪪 Added the Deva Core VLA to /home/you/my-devas/package.json
 
 Here's a real run that builds a Deva called **Hello Deva** with the key `hello`. Your paths, version and date will be your own.
 
