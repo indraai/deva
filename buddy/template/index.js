@@ -43,7 +43,7 @@ const ::key-upper:: = new Deva({
 		this.prompt(this.vars.messages.ready);
 		return resolve(data);
 	},
-	onError(data, err, reject) {
+	onError(err, data, reject) {
 		this.prompt(this.vars.messages.error);
 		return reject ? reject(err) : Promise.reject(err);
 	},
