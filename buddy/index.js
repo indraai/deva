@@ -158,9 +158,20 @@ const DevaBuddy = new Deva({
 					this.lib.fs.writeFileSync(file.copy_to_file, file.content)
 					console.log(`${this.vars.messages.file} ${file.copy_to_file}`);
 			});
+			this.func.writeVLA();
 			return Promise.resolve(`${this.vars.messages.deva_created} ${this.vars.answers.key} (${this.vars.answers.name}) `);
 		},
-
+			
+		// copy the core VLA into the project package.json that the new Deva reads with '../../package.json'
+		writeVLA() {
+			const pkg_file = this.lib.path.join(this.vars.paths.copy_to_base, '..', 'package.json');
+			if (!this.lib.fs.existsSync(pkg_file)) return this.prompt(`⚠️ No package.json at ${pkg_file}. Add the Deva Core VLA to it before you test.`);
+			const project = JSON.parse(this.lib.fs.readFileSync(pkg_file, 'utf8'));
+			if (project.VLA) return this.prompt(`🪪 Kept the VLA already in ${pkg_file}`);
+			project.VLA = this.info().VLA;
+			this.lib.fs.writeFileSync(pkg_file, `${JSON.stringify(project, null, 2)}\n`);
+			return this.prompt(`🪪 Added the Deva Core VLA to ${pkg_file}`);
+		},
 	},
 
 	methods: {
@@ -189,9 +200,9 @@ const DevaBuddy = new Deva({
 			}
 			rl.close();
 			// stop when the key or name is missing so incomplete pipes do not build a Deva
-		if (!answers.key || !answers.name) return this.prompt(this.vars.messages.incomplete);
-		// stop when the key is not a lowercase word so the folder and constant name stay valid
-		if (!/^[a-z][a-z0-9]*$/.test(answers.key)) return this.prompt(this.vars.messages.badkey);
+			if (!answers.key || !answers.name) return this.prompt(this.vars.messages.incomplete);
+			// stop when the key is not a lowercase word so the folder and constant name stay valid
+			if (!/^[a-z][a-z0-9]*$/.test(answers.key)) return this.prompt(this.vars.messages.badkey);
 		
 			// set the options variable to load what the BUDDY was configured with.
 			this.vars.paths = {
