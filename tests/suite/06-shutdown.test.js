@@ -141,3 +141,27 @@ test('stop clears vars and init restores them from the base without touching the
 	assert.deepEqual(deva.vars, {job: {count: 0}, list: []}, 'init restores vars from the base');
 	await deva.stop();
 });
+
+test('stop removes every listener this Deva put on the event bus', async () => {
+	const deva = build({listeners: {'single:ping'() {}}});
+	await deva.init(fresh());
+	deva.listen('single:extra', () => {});
+	const bus = deva.events;
+	assert.equal(bus.listenerCount('single:ping'), 1, 'init added the listeners option');
+	assert.equal(bus.listenerCount('single:extra'), 1, 'listen added its handler');
+	await deva.stop();
+	assert.deepEqual(bus.eventNames(), [], 'nothing left on the bus');
+	await deva.init(fresh());
+	const again = deva.events;
+	assert.equal(again.listenerCount('single:ping'), 1, 'a restart puts each listener back once');
+	await deva.stop();
+	assert.deepEqual(again.eventNames(), [], 'nothing left after the restart either');
+});
+
+test('after stop the Deva answers offline', async () => {
+	const deva = build();
+	await deva.init(fresh());
+	await deva.stop();
+	assert.equal(await deva.question('/hello'), deva._messages.offline);
+	assert.equal(await deva.stop(), deva._messages.offline, 'a second stop is offline');
+});

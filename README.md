@@ -320,7 +320,7 @@ This runs the assertion suite in `tests/suite/` with Node's built-in test runner
 | `03-hash.test.js` | The md5, sha256 and sha512 tiers | 10 |
 | `04-license.test.js` | `license_check` | 6 |
 | `05-messaging.test.js` | question, answer, ask and talk | 13 |
-| `06-shutdown.test.js` | `stop()` and the shutdown chain | 9 |
+| `06-shutdown.test.js` | `stop()` and the shutdown chain | 11 |
 | `07-help.test.js` | `help()` and feecting help files | 10 |
 | `08-error.test.js` | `err()` and the context lookups | 10 |
 | `09-ready-hash.test.js` | The `_binding` ready hash | 3 |
