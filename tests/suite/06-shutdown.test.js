@@ -111,3 +111,17 @@ test('stop() stops the child Devas first and leaves nothing on the bus', async (
 	assert.deepEqual(order, ['helper:stop', 'helper:shutdown', 'test:stop'], 'the child finishes before the parent starts');
 	assert.deepEqual(bus.eventNames(), [], 'nothing left on the bus');
 });
+
+test('a stopped Deva starts again with its listeners and config', async () => {
+	let heard = 0;
+	const deva = build({listeners: {'restart:ping'() { heard++; }}});
+	await deva.init(fresh());
+	await deva.stop();
+	const data = await deva.init(fresh());
+	assert.equal(typeof data.ready, 'number', 'the second init walks to ready');
+	assert.deepEqual(deva._config.hashes, ['md5', 'sha256', 'sha512'], '_config.hashes is rebuilt');
+	assert.equal(deva.events.listenerCount('restart:ping'), 1, 'the listener is back once');
+	deva.talk('restart:ping', {});
+	assert.equal(heard, 1, 'the listener hears the new bus');
+	await deva.stop();
+});

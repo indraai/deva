@@ -366,7 +366,10 @@ class Deva {
 		if (clear) {
 			this.state('loop', `${key}:clear:${data.id.uid}`);
 			for (let item in clear) {
-				if (item === 'listeners') this._removeListeners();
+				if (item === 'listeners') { 
+					this._removeListeners(); 
+					continue; // keep the listener definitions for a restart
+				} 
 				this[item] = this.lib.copy(clear[item]);
 			}      
 		}
@@ -1071,8 +1074,14 @@ class Deva {
 	init(client) {
 		// set client
 		return new Promise((resolve, reject) => {
-			if (!this._config) return resolve(this._messages.offline);
 
+			// a stopped Deva restarts: shutdown resets events, listeners and _config, so put the defaults back.
+			if (!this.events) this.events = new EventEmitter({}); // a child gets its parent's bus in _assignInherit
+			this._config.hashes = this._config.hashes || config.hashes;
+			this._config.ready_hash = this._config.ready_hash || config.ready_hash;
+			this._config.timeout = Object.assign({}, config.timeout, this._config.timeout);
+			this._config.hash = this._config.hash || {};			
+	
 			// manually set the core hashes to avoid stack overflow from calls
 			// this is for the early core hashing needed for uid generation.
 			this._core.md5 = this.hash(this._core, 'md5'); // md5 the core and created. 
@@ -1806,6 +1815,11 @@ class Deva {
 		this.state('load', key);
 		this.intent('good', `load:${key}`);
 		return new Promise((resolve, reject) => {
+			// a reloaded child gets the parent's bus back
+			this._inherit.forEach(inherit => { 
+				this.devas[key][inherit] = this[inherit]; 
+			}); 
+			
 			this.devas[key].init(client).then(deva => {
 				return resolve(deva)        
 			}).catch(err => {
