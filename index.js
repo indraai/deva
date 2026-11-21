@@ -41,7 +41,8 @@ class Deva {
 		this.lib = new lib({pkg}); // used for loading library functions    
 		this.utils = opts.utils || {}; // parse functions inside the deva
 		this.devas = opts.devas || {}; // Devas which are loaded
-		this._vars = opts.vars || {}; // Variables object
+		this._vars = opts.vars || {}; // local start Variables object
+		this.vars = this.lib.copy(this._vars); // Variables object
 		this.listeners = opts.listeners || {}; // local Listeners
 		this.modules = opts.modules || {}; // 3rd Party Modules
 		this.func = opts.func || {}; // local Functions
