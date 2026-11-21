@@ -145,6 +145,8 @@ Any other top-level option is copied onto the instance, as long as it doesn't cl
 
 `finish` and `complete` wrap every answer (see [Messaging](#messaging)).
 
+Leave out any option you don't use instead of passing it as `undefined`. An `undefined` value replaces the default, so `devas: undefined` makes `init()` fail and `methods: undefined` makes every `question()` fail.
+
 ### Shutdown: `stop()`
 
 `stop()` returns a Promise and runs `stop`, `close`, `leave`, `exit` and `shutdown`. `exit` clears the inherited feature data (`_license`, `_security`, and so on). `shutdown` removes listeners and pending asks, and clears `modules`, `vars`, `listeners`, `events`, `_config` and `_active`. After that, the Deva answers most calls with `⭕️ OFFLINE`. With no hooks defined, `await deva.stop()` resolves with the data object, whose `key` is `'shutdown'`.
@@ -224,7 +226,7 @@ Each call to `feature()`, `zone()`, `action()`, `state()`, `intent()` or `belief
 The plural methods return a stamped object whose `value` is the full list:
 
 | List | Method | Default | Source |
-|---|---|---|---|---|
+|---|---|---|---|
 | features | `features()` | — | `_data/features.json` |
 | zones | `zones()` | — | `_data/zones.json` |
 | actions | `actions()` | — | `_data/actions.json` |
