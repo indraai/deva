@@ -110,6 +110,8 @@ Three things to know from this example:
 
 Any other top-level option is copied onto the instance, as long as it doesn't clash with an existing property.
 
+An option passed as `undefined` keeps its default, the same as leaving it out. `info` and `agent` are required.
+
 ## Lifecycle
 
 ### Start-up: `init(client)`
@@ -144,8 +146,6 @@ Any other top-level option is copied onto the instance, as long as it doesn't cl
 `ready` also stores sha256 hashes of `vars`, `utils`, `listeners`, `modules`, `func` and `methods` in `config.hash[agent.key]`, and `init`s each child Deva in `devas`.
 
 `finish` and `complete` wrap every answer (see [Messaging](#messaging)).
-
-Leave out any option you don't use instead of passing it as `undefined`. An `undefined` value replaces the default, so `devas: undefined` makes `init()` fail and `methods: undefined` makes every `question()` fail.
 
 ### Shutdown: `stop()`
 
