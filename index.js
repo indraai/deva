@@ -1071,6 +1071,8 @@ class Deva {
 	init(client) {
 		// set client
 		return new Promise((resolve, reject) => {
+			if (!this._config) return resolve(this._messages.offline);
+
 			// manually set the core hashes to avoid stack overflow from calls
 			// this is for the early core hashing needed for uid generation.
 			this._core.md5 = this.hash(this._core, 'md5'); // md5 the core and created. 
