@@ -108,7 +108,7 @@ Three things to know from this example:
 | `maxListeners` | Passed to `events.setMaxListeners`. Default `0` (unlimited). |
 | Lifecycle hooks | `onInit`, `onStart`, `onEnter`, `onDone`, `onReady`, `onFinish`, `onComplete`, `onStop`, `onClose`, `onLeave`, `onExit`, `onShutdown`, `onError`. |
 
-Any other top-level option is copied onto the instance, even over a method with the same name, which is how hooks like `onReady` are set. Names that have an underscore twin (`agent`, `info`, `client`) are kept, so don't give an option the name of a core method such as `talk` or `stop`.
+Any other top-level option is copied onto the instance, which is how hooks like `onReady` are set. An option replaces a core method with the same name, and only `agent`, `info` and `client` are protected, so don't give an option the name of a core method such as `talk`, `stop` or `license`.
 
 An option passed as `undefined` keeps its default, the same as leaving it out. `info` and `agent` are required.
 
