@@ -113,30 +113,30 @@ export default {
 			prev_key: 'leave',
 			next_key: 'shutdown',
 			onfunc: 'onExit',
-			clear: [
-				'_license',
-				'_error',
-				'_log',
-				'_data',
-				'_report',
-				'_legal',
-				'_security',
-				'_support',
-				'_services',
-				'_systems'
-			]
+			clear: {
+				'_license': false,
+				'_error': false,
+				'_log': false,
+				'_data': false,
+				'_report': false,
+				'_legal': false,
+				'_security': false,
+				'_support': false,
+				'_services': false,
+				'_systems': false
+			}
 		},
 		shutdown: {
 			prev_key: 'exit',
 			next_key: false,
 			onfunc: 'onShutdown',
-			clear: [
-				'modules',
-				'listeners',
-				'events',
-				'_config',
-				'_active',
-			],
+			clear: {
+				'modules': {},
+				'listeners': {},
+				'events': false,
+				'_config': {},
+				'_active': false,
+			},
 		}
 	},
 	context: false,

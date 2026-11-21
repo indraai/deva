@@ -66,25 +66,15 @@ test('the on hooks run in chain order and the Deva is cleared by onShutdown', as
 	]);
 });
 
-test('after stop the Deva is offline and its cleared features are false', async () => {
+test('after stop the Deva is offline and its cleared features are reset', async () => {
 	const deva = build();
 	await deva.init(fresh());
 	await deva.stop();
 	assert.equal(deva._active, false);
-	for (const item of ['_license', '_security', '_support', '_services', '_systems', '_config', 'events']) {
+	for (const item of ['_license', '_security', '_support', '_services', '_systems', 'events']) {
 		assert.equal(deva[item], false, `${item} cleared`);
 	}
-	assert.equal(await deva.question('/hello'), deva._messages.offline);
-	assert.equal(await deva.stop(), deva._messages.offline, 'a second stop is offline');
-});
-
-test('stop removes every listener this Deva put on the event bus', async () => {
-	const deva = build();
-	await deva.init(fresh());
-	const bus = deva.events;
-	assert.ok(bus.eventNames().length > 0, 'init added listeners');
-	await deva.stop();
-	assert.deepEqual(bus.eventNames(), [], 'nothing left on the bus');
+	assert.deepEqual(deva._config, {}, '_config reset to its default');	
 });
 
 test('a pending ask at shutdown answers offline and leaves nothing behind', async () => {

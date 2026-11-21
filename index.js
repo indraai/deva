@@ -365,9 +365,9 @@ class Deva {
 
 		if (clear) {
 			this.state('loop', `${key}:clear:${data.id.uid}`);
-			for (let item of clear) {
+			for (let item in clear) {
 				if (item === 'listeners') this._removeListeners();
-				this[item] = false;
+				this[item] = this.lib.copy(clear[item]);
 			}      
 		}
 
