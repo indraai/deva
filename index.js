@@ -41,7 +41,7 @@ class Deva {
 		this.lib = new lib({pkg}); // used for loading library functions    
 		this.utils = opts.utils || {}; // parse functions inside the deva
 		this.devas = opts.devas || {}; // Devas which are loaded
-		this.vars = opts.vars || {}; // Variables object
+		this._vars = opts.vars || {}; // Variables object
 		this.listeners = opts.listeners || {}; // local Listeners
 		this.modules = opts.modules || {}; // 3rd Party Modules
 		this.func = opts.func || {}; // local Functions
@@ -1074,6 +1074,7 @@ class Deva {
 	init(client) {
 		// set client
 		return new Promise((resolve, reject) => {
+			this.vars = this.lib.copy(this._vars);
 
 			// a stopped Deva restarts: shutdown resets events, listeners and _config, so put the defaults back.
 			if (!this.events) this.events = new EventEmitter({}); // a child gets its parent's bus in _assignInherit
