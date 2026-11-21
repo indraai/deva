@@ -1756,7 +1756,7 @@ class Deva {
 	func: legal
 	params: none
 	describe: basic legal features available in a Deva.
-	usage: this.systems()
+	usage: this.legal()
 	***************/
 	legal() {
 		return this._getFeature('legal');
