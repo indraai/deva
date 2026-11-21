@@ -132,6 +132,7 @@ export default {
 			onfunc: 'onShutdown',
 			clear: {
 				'modules': {},
+				'vars': {},
 				'listeners': {},
 				'events': false,
 				'_config': {},

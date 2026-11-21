@@ -125,3 +125,19 @@ test('a stopped Deva starts again with its listeners and config', async () => {
 	assert.equal(heard, 1, 'the listener hears the new bus');
 	await deva.stop();
 });
+
+test('stop clears vars and init restores them from the base without touching the source', async () => {
+	const source = {job: {count: 0}, list: []}; // stands in for a cached agent.json import
+	const deva = build({vars: source});
+	const other = build({vars: source});
+	await deva.init(fresh());
+	deva.vars.job.count = 9;
+	deva.vars.list.push('a');
+	assert.deepEqual(source, {job: {count: 0}, list: []}, 'the source object is untouched');
+	assert.deepEqual(other.vars, {job: {count: 0}, list: []}, 'two Devas from one source do not share vars');
+	await deva.stop();
+	assert.deepEqual(deva.vars, {}, 'stop clears vars');
+	await deva.init(fresh());
+	assert.deepEqual(deva.vars, {job: {count: 0}, list: []}, 'init restores vars from the base');
+	await deva.stop();
+});
