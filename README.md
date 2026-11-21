@@ -98,10 +98,10 @@ Three things to know from this example:
 | `info` | Package-style info object (`id`, `name`, `version`, `dir`, `VLA`, ...). Returned by `info()`. `info.VLA.uid` goes into every `uid()`. |
 | `agent` | The agent profile: `id`, `key` (the Deva's name on the bus), `prompt`, `profile` (`name`, and optional `warning`, `notice`, `copyright`, `status`, `vectors`, `owner`, `creator`, `salute`). It can also carry custom `zones`, `actions`, `states`, `intents`, `beliefs` and `messages`, which are merged in without overwriting the core ones (keys already in config win), and then removed from the agent object. |
 | `config` | Local config. Needs a `hash` object. Can set `timeout.ask` in ms (default `30000`, `0` disables it). |
-| `vars` | Free-form variables on `this.vars`. `vars.context` maps context keys to display text. Must be plain JSON: `this.vars` is a deep copy made with `JSON.parse(JSON.stringify())`, so functions, `undefined` and `Map`/`Set` are dropped, a `Date` becomes a string, and a `BigInt` throws. `stop()` clears `this.vars` and `init()` copies it fresh from the original, so changes made while running do not survive a restart. Save anything that must persist to your own file. |
+| `vars` | Free-form variables on `this.vars`. `vars.context` maps context keys to display text. Must be plain JSON: `this.vars` is a deep copy made with `JSON.parse(JSON.stringify())`, so functions and `undefined` are dropped (`null` inside arrays), a `Map` or `Set` becomes `{}`, a `Date` becomes a string, and a `BigInt` throws. `stop()` clears `this.vars` and `init()` copies it fresh from the original, so changes made while running do not survive a restart. Save anything that must persist to your own file. |
 | `utils`, `func` | Your helper functions. Bound to the Deva at `init`. |
 | `methods` | Public commands, reachable by `question('/name ...')` or by another Deva's `#key name ...`. Bound at `init`. Each takes a packet and returns a Promise of a string or `{text, html, data}`. |
-| `listeners` | `{eventName: handler}`. Bound and registered on the event bus at `init`. |
+| `listeners` | `{eventName: handler}`. Bound and registered on the event bus at `init`. One handler per event name; a later `listen()` on the same name replaces it. |
 | `devas` | Child Deva instances. They inherit `events`, `lib` and `config` and are `init`'d during `ready`. |
 | `modules` | Third-party modules for your own use. Build them in `onReady` and close any clients, sockets or timers in `onStop`. `stop()` clears `modules` but does not close what they hold. |
 | `events` | An existing `EventEmitter` to share. Defaults to a new one. |
@@ -149,7 +149,7 @@ Any other top-level option is copied onto the instance, as long as it doesn't cl
 
 `stop()` returns a Promise and runs `stop`, `close`, `leave`, `exit` and `shutdown`. `exit` clears the inherited feature data (`_license`, `_security`, and so on). `shutdown` removes listeners and pending asks, and clears `modules`, `vars`, `listeners`, `events`, `_config` and `_active`. After that, the Deva answers most calls with `⭕️ OFFLINE`. With no hooks defined, `await deva.stop()` resolves with the data object, whose `key` is `'shutdown'`.
 
-A stopped Deva can be started again with `init(client)`. `vars` comes back from the original values passed to the constructor, and `onReady` runs again, so build modules there. A custom `onStop` must close what its modules hold and then continue the chain with `return this.close(data, resolve);`. Calling `resolve` directly skips the shutdown step, so `modules`, `vars` and `_active` are never cleared.
+A stopped Deva can be started again with `init(client)`. `vars` comes back from the original values passed to the constructor, and `onReady` runs again, so build modules there. A custom `onStop` must close what its modules hold and then continue the chain with `return this.close(data, resolve);`. Calling `resolve` directly skips `close`, `leave`, `exit` and `shutdown`, so nothing is cleared and the Deva stays active.
 
 ## Messaging
 
@@ -315,11 +315,14 @@ This runs the assertion suite in `tests/suite/` with Node's built-in test runner
 | `00-build.test.js` | Building a Deva | 1 |
 | `01-init.test.js` | `init()` order and failures | 5 |
 | `02-getters.test.js` | Getters and stamped copies | 31 |
-| `03-hash.test.js` | The md5, sha256 and sha512 tiers | 6 |
+| `03-hash.test.js` | The md5, sha256 and sha512 tiers | 10 |
 | `04-license.test.js` | `license_check` | 6 |
-| `05-messaging.test.js` | question, answer, ask and talk | 12 |
-| `06-shutdown.test.js` | `stop()` and the shutdown chain | 8 |
+| `05-messaging.test.js` | question, answer, ask and talk | 13 |
+| `06-shutdown.test.js` | `stop()` and the shutdown chain | 9 |
 | `07-help.test.js` | `help()` and feecting help files | 10 |
+| `08-error.test.js` | `err()` and the context lookups | 10 |
+| `09-ready-hash.test.js` | The `_binding` ready hash | 3 |
+| `10-vocabulary.test.js` | Vocabulary isolation | 1 |
 
 `tests/suite/_deva.js` builds a fresh test Deva from `tests/agent.json` and `tests/client.json`, and `tests/suite/help/` holds the sample `.feecting` files for the help tests. The full list with edge cases is at [deva.world/tests](https://deva.world/tests/).
 
@@ -336,7 +339,7 @@ These are the public methods.
 | `ask(packet)` | — | Answer side of `#` asks. Usually called for you. |
 | `stop()` | Promise | Runs the shutdown chain. |
 | `talk(evt, packet)` | boolean | Emit on the bus. |
-| `listeners` | `{eventName: handler}`. Bound and registered on the event bus at `init`. One handler per event name; a later `listen()` on the same name replaces it. |
+| `listen` / `once` / `ignore` | — | Manage listeners. |
 | `prompt(text)` | stamped data | Emits `devacore:prompt`. |
 | `feature`/`zone`/`action`/`state`/`intent`/`belief(value, extra?)` | data or `undefined` | Set and broadcast. |
 | `context(value, extra?)` | stamped data | Needs `vars.context`. |
