@@ -72,8 +72,6 @@ The Name can be anything you like, including spaces and accented letters.
 
 ## A full run
 
-🪪 Added the Deva Core VLA to /home/you/my-devas/package.json
-
 Here's a real run that builds a Deva called **Hello Deva** with the key `hello`. Your paths, version and date will be your own.
 
 ```

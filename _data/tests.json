@@ -49,7 +49,7 @@
 				"file": "06-shutdown.test.js",
 				"title": "Shutdown",
 				"describe": "stop() stops child Devas first, runs the full chain in order to onShutdown, clears features, answers pending asks offline and leaves nothing on the event bus.",
-				"count": 8
+				"count": 11
 			},
 			{
 				"file": "07-help.test.js",

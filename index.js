@@ -53,7 +53,7 @@ class Deva {
 			if (opts[opt] === undefined) continue; // an undefined option keeps its default
 			if (!this[opt] || !this[`_${opt}`]) this[opt] = opts[opt];
 		}
-		
+
 		this.cmdChr = config.cmdChr; // the trigger for local commands
 		this.askChr = config.askChr; // the trigger for ask other DEva features
 		this.container = config.container // set the container object
