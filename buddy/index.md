@@ -113,6 +113,7 @@ DIRECTORY (/home/you/my-devas/devas):
 📝 /home/you/my-devas/devas/hello/help/main.feecting
 📝 /home/you/my-devas/devas/hello/index.js
 📝 /home/you/my-devas/devas/hello/index.test.js
+🪪 Added the Deva Core VLA to /home/you/my-devas/package.json
 ✅ DEVA CREATED: hello (Hello Deva)
 👉 Add hello to your Deva loader: import hello from './hello/index.js';
 ```
