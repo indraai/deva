@@ -58,7 +58,7 @@ class Deva {
 		this.askChr = config.askChr; // the trigger for ask other DEva features
 		this.container = config.container // set the container object
 		this.box = config.box // set the box object
-		
+
 		this._inherit = config.inherit; // set inherit from config data.
 		this._bind = config.bind; // set the bind from the config data.
 		this._binding = new Map(); // set the binding map
@@ -82,7 +82,7 @@ class Deva {
 			}
 			delete this._agent.zones;
 		}
-		
+
 		this._action = config.action; // set the action from config data.
 		this._actions = {...config.actions}; // set the actions from config data.
 		// load any custom actions from the agent file
