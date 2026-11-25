@@ -8,4 +8,4 @@ image: /assets/banner.png
 
 {{ page.description}}
 
-{% include_relative README.md %}
+{% include_relative /README.md %}

@@ -1,0 +1,13 @@
+// ::name:: Corpus
+// Copyright ©::year:: ::owner::; All rights reserved.  
+// Owner Signature Required For Lawful Use.  
+// Distributed under VLA:::vla:: LICENSE.md
+// ::date::
+
+::BEGIN:MAIN
+# {{profile.name}}
+
+p: {{profile.describe}}
+
+copyright: {{profile.copyright}}
+::END:MAIN

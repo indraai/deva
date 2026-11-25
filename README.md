@@ -1,12 +1,10 @@
 # Deva
 
-[![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva)
-
-[![Tests](https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg)](https://github.com/indraai/deva/actions/workflows/test.yml)
+[![npm](https://img.shields.io/npm/v/@indra.ai/deva)](https://www.npmjs.com/package/@indra.ai/deva) [![Tests](https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg)](https://github.com/indraai/deva/actions/workflows/test.yml)
 
 **`@indra.ai/deva`**
 
-Deva is a Vedic-inspired, event-based, context-aware Feature, Zone, Action and State machine framework for building integrated artificial intelligence agents ("Devas") in Node.js. Every Deva is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it broadcasts each step as an event. Every packet it builds is stamped with cumulative md5, sha256 and sha512 hashes.
+Deva is a Vedic-based, event-driven, context-aware Feature, Zone, Action and State machine framework for building integrated artificial intelligence agents ("Devas") in Node.js. Every Deva is one `Deva` class instance on a shared event bus. As it works, it moves through named features, zones, actions, states, intents, beliefs and contexts, and it broadcasts each step as an event. Every packet it builds is stamped with cumulative md5, sha256 and sha512 hashes.
 
 > Deva is distributed under the **Vedic License Agreement (VLA)**. Read [License](#license) before you use it.
 
@@ -23,11 +21,12 @@ Deva is a Vedic-inspired, event-based, context-aware Feature, Zone, Action and S
 9. [The workflow: features, zones, actions, states, intents, beliefs, contexts](#the-workflow)
 10. [Events](#events)
 11. [Error handling](#error-handling)
-12. [Configuration files](#configuration-files)
-13. [Testing](#testing)
-14. [Method reference](#method-reference)
-15. [License](#license)
-16. [Links and author](#links-and-author)
+12. [Help](#help)
+13. [Configuration files](#configuration-files)
+14. [Testing](#testing)
+15. [Method reference](#method-reference)
+16. [License](#license)
+17. [Links and author](#links-and-author)
 
 ## Requirements
 
@@ -43,7 +42,7 @@ npm install @indra.ai/deva
 
 ## Quick start
 
-This is a minimal working Deva with one method. `client.json` is a client file shaped like [`tests/client.json`](tests/client.json). Its `DATA.VLA` must match the `VLA` block in Deva's `package.json`.
+This is a minimal working Deva with one method. `client.json` is a client file shaped like [`tests/client.json`](https://github.com/indraai/deva/tests/client.json). Its `DATA.VLA` must match the `VLA` block in Deva's `package.json`.
 
 ```javascript
 import Deva from '@indra.ai/deva';
@@ -59,8 +58,8 @@ const hello = new Deva({
     prompt: {emoji: '👋', text: 'hello'},
     profile: {name: 'Hello Deva'},
   },
-  config: {hash: {}},     // required: ready() writes this.config.hash[agent.key]
-  vars: {context: {}},    // required: context() looks up this.vars.context
+  config: {hash: {}},     // optional: ready() writes this._config.hash[agent.key]
+  vars: {context: {}},    // optional: context() labels come from this.vars.context
   listeners: {
     'devacore:error'(packet) {
       console.log('error:', packet.error.message);
@@ -87,7 +86,6 @@ Three things to know from this example:
 
 - Do your work from `onReady`, not after `await init()`. The `init()` promise resolves after `ready` has run.
 
-- **`info`, `config: {hash: {}}` and `vars.context` are effectively required.** Without them `ready()` or `context()` throws. The error handler then calls `context()` again, and the process ends in a stack overflow.
 - **Methods must return a Promise.** `answer()` calls `this.methods[method](packet).then(...)`.
 
 ## Constructor options
@@ -100,17 +98,19 @@ Three things to know from this example:
 | `info` | Package-style info object (`id`, `name`, `version`, `dir`, `VLA`, ...). Returned by `info()`. `info.VLA.uid` goes into every `uid()`. |
 | `agent` | The agent profile: `id`, `key` (the Deva's name on the bus), `prompt`, `profile` (`name`, and optional `warning`, `notice`, `copyright`, `status`, `vectors`, `owner`, `creator`, `salute`). It can also carry custom `zones`, `actions`, `states`, `intents`, `beliefs` and `messages`, which are merged in without overwriting the core ones (keys already in config win), and then removed from the agent object. |
 | `config` | Local config. Needs a `hash` object. Can set `timeout.ask` in ms (default `30000`, `0` disables it). |
-| `vars` | Free-form variables on `this.vars`. `vars.context` maps context keys to display text. |
+| `vars` | Free-form variables on `this.vars`. `vars.context` maps context keys to display text. Must be plain JSON: `this.vars` is a deep copy made with `JSON.parse(JSON.stringify())`, so functions and `undefined` are dropped (`null` inside arrays), a `Map` or `Set` becomes `{}`, a `Date` becomes a string, and a `BigInt` throws. `stop()` clears `this.vars` and `init()` copies it fresh from the original, so changes made while running do not survive a restart. Save anything that must persist to your own file. |
 | `utils`, `func` | Your helper functions. Bound to the Deva at `init`. |
 | `methods` | Public commands, reachable by `question('/name ...')` or by another Deva's `#key name ...`. Bound at `init`. Each takes a packet and returns a Promise of a string or `{text, html, data}`. |
-| `listeners` | `{eventName: handler}`. Bound and registered on the event bus at `init`. |
+| `listeners` | `{eventName: handler}`. Bound and registered on the event bus at `init`. One handler per event name; a later `listen()` on the same name replaces it. |
 | `devas` | Child Deva instances. They inherit `events`, `lib` and `config` and are `init`'d during `ready`. |
-| `modules` | Third-party modules for your own use. |
+| `modules` | Third-party modules for your own use. Build them in `onReady` and close any clients, sockets or timers in `onStop`. `stop()` clears `modules` but does not close what they hold. |
 | `events` | An existing `EventEmitter` to share. Defaults to a new one. |
 | `maxListeners` | Passed to `events.setMaxListeners`. Default `0` (unlimited). |
 | Lifecycle hooks | `onInit`, `onStart`, `onEnter`, `onDone`, `onReady`, `onFinish`, `onComplete`, `onStop`, `onClose`, `onLeave`, `onExit`, `onShutdown`, `onError`. |
 
-Any other top-level option is copied onto the instance, as long as it doesn't clash with an existing property.
+Any other top-level option is copied onto the instance, which is how hooks like `onReady` are set. An option replaces a core method with the same name, and only `agent`, `info` and `client` are protected, so don't give an option the name of a core method such as `talk`, `stop` or `license`.
+
+An option passed as `undefined` keeps its default, the same as leaving it out. `info` and `agent` are required.
 
 ## Lifecycle
 
@@ -149,7 +149,9 @@ Any other top-level option is copied onto the instance, as long as it doesn't cl
 
 ### Shutdown: `stop()`
 
-`stop()` returns a Promise and runs `stop`, `close`, `leave`, `exit` and `shutdown`. `exit` clears the inherited feature data (`_license`, `_security`, and so on). `shutdown` removes listeners and pending asks, and clears `modules`, `listeners`, `events`, `_config` and `_active`. After that, the Deva answers most calls with `⭕️ OFFLINE`. With no hooks defined, `await deva.stop()` resolves with the data object, whose `key` is `'shutdown'`.
+`stop()` returns a Promise and runs `stop`, `close`, `leave`, `exit` and `shutdown`. `exit` clears the inherited feature data (`_license`, `_security`, and so on). `shutdown` removes listeners and pending asks, and clears `modules`, `vars`, `listeners`, `events`, `_config` and `_active`. After that, the Deva answers most calls with `⭕️ OFFLINE`. With no hooks defined, `await deva.stop()` resolves with the data object, whose `key` is `'shutdown'`.
+
+A stopped Deva can be started again with `init(client)`. `vars` comes back from the original values passed to the constructor, and `onReady` runs again, so build modules there. A custom `onStop` must close what its modules hold and then continue the chain with `return this.close(data, resolve);`. Calling `resolve` directly skips `close`, `leave`, `exit` and `shutdown`, so nothing is cleared and the Deva stays active.
 
 ## Messaging
 
@@ -177,7 +179,7 @@ Tested: a parent Deva with `devas: {helper}` asked `#helper shout hi there` and 
 ### Events directly
 
 - `talk(evt, packet)` emits on the bus and returns `true` if anyone was listening.
-- `listen(evt, callback)`, `once(evt, callback)` and `ignore(evt, callback)` add, add-once and remove listeners.
+- `listen(evt, callback)`, `once(evt, callback)` and `ignore(evt, callback)` add, add-once and remove listeners. A Deva keeps one `listen` handler per event name: calling `listen()` for an event it already handles, including one set in the `listeners` option, replaces that handler instead of adding a second one. Other Devas on the same bus keep their own handlers. To run more than one function on an event, call them from a single handler.
 - `prompt(text)` emits a stamped `devacore:prompt` packet.
 
 ## The packet
@@ -224,7 +226,7 @@ Each call to `feature()`, `zone()`, `action()`, `state()`, `intent()` or `belief
 The plural methods return a stamped object whose `value` is the full list:
 
 | List | Method | Default | Source |
-|---|---|---|---|---|
+|---|---|---|---|
 | features | `features()` | — | `_data/features.json` |
 | zones | `zones()` | — | `_data/zones.json` |
 | actions | `actions()` | — | `_data/actions.json` |
@@ -250,6 +252,46 @@ All core events are listed in `_data/events.json` (25). The ones you'll usually 
 
 A method that rejects or throws ends up here. Most calls made while the Deva is inactive return or resolve `⭕️ OFFLINE` instead of throwing.
 
+## Help
+
+Every Deva can carry its own help, written in **feecting**, the language Devas use to talk to each other. The name stands for Functional Expressive Emergent Cognitive Technical Intelligent Neural Generator a Key Value Pair Line Label Function Method Event Listener Zone Feature Action State Procedural Asynchronous Vector Programming Language. A Deva's help system starts small and grows as the Deva grows.
+
+`help(msg, help_dir)` looks in the Deva's own folder and returns one section of a help file:
+
+- `help_dir` is the Deva's base directory, usually `__dirname` of the Deva's file. Help files live in `<help_dir>/help/`.
+- The first word of `msg` picks the file and the section, as `file:part`. The file defaults to `main`, and the part defaults to `MAIN` and is always matched in upper case.
+- A section is the text between `::BEGIN:<PART>` and `::END:<PART>` (the `container` markers in `_data/index.js`).
+
+```text
+my-deva/
+  index.js
+  help/
+    main.feecting
+    ask.feecting
+```
+
+```text
+::BEGIN:MAIN
+# My Deva
+p: What this Deva does and how to talk to it.
+::END:MAIN
+
+::BEGIN:ASK
+## Ask
+p: Use #key method text to ask another Deva.
+::END:ASK
+```
+
+| Call | Returns |
+|---|---|
+| `help('', __dirname)` or `help('main', __dirname)` | the `MAIN` section of `help/main.feecting` |
+| `help('main:ask', __dirname)` | the `ASK` section of `help/main.feecting` |
+| `help('ask', __dirname)` | the `MAIN` section of `help/ask.feecting` |
+| a file or section that doesn't exist | `⛔️ HELP NOT FOUND` (`_messages.help_not_found`) |
+| any call while the Deva is inactive | `⭕️ OFFLINE` |
+
+The section comes back as raw feecting text, with the surrounding newlines kept, so the Deva can pass it on to be parsed or shown. A found section sets the `valid` state and `good` intent. A missing file sets `invalid` and `bad` tagged `help:not:exists`, and a missing section sets them tagged `help:not:found`. Neither one raises an error. If `help_dir` isn't passed, the promise rejects with a `TypeError` from `path.join`.
+
 ## Configuration files
 
 | File | Contents |
@@ -268,7 +310,25 @@ Each JSON file has `id`, `title`, `copyright`, `VLA` and `DATA`, and the values 
 npm test
 ```
 
-This runs `node tests` (`tests/index.js`), which builds a Deva from `tests/agent.json` and `tests/client.json`, runs it through the lifecycle and a self-test method, and prints the log. **It passes as long as nothing throws. There are no assertions yet.** Real assertion tests are planned.
+This runs the assertion suite in `tests/suite/` with Node's built-in test runner (`node --test`), with no extra dependencies. GitHub Actions runs it on every push and pull request on Node 22 and 24, shown by the Tests badge at the top.
+
+| File | Covers | Tests |
+|---|---|---|
+| `00-build.test.js` | Building a Deva | 1 |
+| `01-init.test.js` | `init()` order and failures | 5 |
+| `02-getters.test.js` | Getters and stamped copies | 31 |
+| `03-hash.test.js` | The md5, sha256 and sha512 tiers | 10 |
+| `04-license.test.js` | `license_check` | 6 |
+| `05-messaging.test.js` | question, answer, ask and talk | 13 |
+| `06-shutdown.test.js` | `stop()` and the shutdown chain | 11 |
+| `07-help.test.js` | `help()` and feecting help files | 10 |
+| `08-error.test.js` | `err()` and the context lookups | 10 |
+| `09-ready-hash.test.js` | The `_binding` ready hash | 3 |
+| `10-vocabulary.test.js` | Vocabulary isolation | 1 |
+
+`tests/suite/_deva.js` builds a fresh test Deva from `tests/agent.json` and `tests/client.json`, and `tests/suite/help/` holds the sample `.feecting` files for the help tests. The full list with edge cases is at [deva.world/tests](https://deva.world/tests/).
+
+`npm run demo` runs the older `tests/index.js` walkthrough, which builds a Deva, runs it through the lifecycle and prints the log.
 
 ## Method reference
 
@@ -284,7 +344,7 @@ These are the public methods.
 | `listen` / `once` / `ignore` | — | Manage listeners. |
 | `prompt(text)` | stamped data | Emits `devacore:prompt`. |
 | `feature`/`zone`/`action`/`state`/`intent`/`belief(value, extra?)` | data or `undefined` | Set and broadcast. |
-| `context(value, extra?)` | stamped data | Needs `vars.context`. |
+| `context(value, extra?)` | stamped data | Labels come from `vars.context`, falling back to the value. |
 | `features`/`zones`/`actions`/`states`/`intents`/`beliefs`/`contexts()` | stamped `{id, key, value, agent, client, created}` | Full lists. |
 | `agent()` / `client()` | hashed copy | |
 | `info()` / `core()` | stamped copy | |
@@ -295,12 +355,13 @@ These are the public methods.
 | `license_check(personalVLA, packageVLA)` | stamped approval or `false` | |
 | `load(key, client)` / `unload(key)` | Promise | Init or stop a child Deva in `devas`. |
 | `err(err, packet, reject?)` | — | See [Error handling](#error-handling). |
+| `help(msg, help_dir)` | Promise of feecting text | See [Help](#help). |
 
-Not covered here because they weren't exercised for this README: `help(msg, help_dir)` (reads `<help_dir>/help/<file>.feecting` sections between `::BEGIN:<PART>` and `::END:<PART>`; feecting is Quinn Michaels' own language), `sign(packet)`, `machine()`, and the `lib` helpers (`this.lib.copy`, `formatDate`, and others).
+Not covered here because they weren't exercised for this README: `sign(packet)`, `machine()`, and the `lib` helpers (`this.lib.copy`, `formatDate`, and others).
 
 ## License
 
-Deva is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `31711622713594414221`, owned by Quinn Michaels, through License Deva. The full text is in [LICENSE.md](LICENSE.md). It states, among other things, that:
+Deva is distributed under the **Vedic License Agreement**, version 1.4.2, VLA `31711622713594414221`, owned by Quinn Michaels, through License Deva. The full text is in [LICENSE.md](https://github.com/indraai/deva/blob/main/LICENSE.md). It states, among other things, that:
 
 - by accessing or using the Software, you agree to its terms;
 - the Software is the sole proprietary property of the Owner;

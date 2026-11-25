@@ -66,25 +66,15 @@ test('the on hooks run in chain order and the Deva is cleared by onShutdown', as
 	]);
 });
 
-test('after stop the Deva is offline and its cleared features are false', async () => {
+test('after stop the Deva is offline and its cleared features are reset', async () => {
 	const deva = build();
 	await deva.init(fresh());
 	await deva.stop();
 	assert.equal(deva._active, false);
-	for (const item of ['_license', '_security', '_support', '_services', '_systems', '_config', 'events']) {
+	for (const item of ['_license', '_security', '_support', '_services', '_systems', 'events']) {
 		assert.equal(deva[item], false, `${item} cleared`);
 	}
-	assert.equal(await deva.question('/hello'), deva._messages.offline);
-	assert.equal(await deva.stop(), deva._messages.offline, 'a second stop is offline');
-});
-
-test('stop removes every listener this Deva put on the event bus', async () => {
-	const deva = build();
-	await deva.init(fresh());
-	const bus = deva.events;
-	assert.ok(bus.eventNames().length > 0, 'init added listeners');
-	await deva.stop();
-	assert.deepEqual(bus.eventNames(), [], 'nothing left on the bus');
+	assert.deepEqual(deva._config, {}, '_config reset to its default');	
 });
 
 test('a pending ask at shutdown answers offline and leaves nothing behind', async () => {
@@ -120,4 +110,58 @@ test('stop() stops the child Devas first and leaves nothing on the bus', async (
 	assert.equal(helper._active, false, 'the child is offline');
 	assert.deepEqual(order, ['helper:stop', 'helper:shutdown', 'test:stop'], 'the child finishes before the parent starts');
 	assert.deepEqual(bus.eventNames(), [], 'nothing left on the bus');
+});
+
+test('a stopped Deva starts again with its listeners and config', async () => {
+	let heard = 0;
+	const deva = build({listeners: {'restart:ping'() { heard++; }}});
+	await deva.init(fresh());
+	await deva.stop();
+	const data = await deva.init(fresh());
+	assert.equal(typeof data.ready, 'number', 'the second init walks to ready');
+	assert.deepEqual(deva._config.hashes, ['md5', 'sha256', 'sha512'], '_config.hashes is rebuilt');
+	assert.equal(deva.events.listenerCount('restart:ping'), 1, 'the listener is back once');
+	deva.talk('restart:ping', {});
+	assert.equal(heard, 1, 'the listener hears the new bus');
+	await deva.stop();
+});
+
+test('stop clears vars and init restores them from the base without touching the source', async () => {
+	const source = {job: {count: 0}, list: []}; // stands in for a cached agent.json import
+	const deva = build({vars: source});
+	const other = build({vars: source});
+	await deva.init(fresh());
+	deva.vars.job.count = 9;
+	deva.vars.list.push('a');
+	assert.deepEqual(source, {job: {count: 0}, list: []}, 'the source object is untouched');
+	assert.deepEqual(other.vars, {job: {count: 0}, list: []}, 'two Devas from one source do not share vars');
+	await deva.stop();
+	assert.deepEqual(deva.vars, {}, 'stop clears vars');
+	await deva.init(fresh());
+	assert.deepEqual(deva.vars, {job: {count: 0}, list: []}, 'init restores vars from the base');
+	await deva.stop();
+});
+
+test('stop removes every listener this Deva put on the event bus', async () => {
+	const deva = build({listeners: {'single:ping'() {}}});
+	await deva.init(fresh());
+	deva.listen('single:extra', () => {});
+	const bus = deva.events;
+	assert.equal(bus.listenerCount('single:ping'), 1, 'init added the listeners option');
+	assert.equal(bus.listenerCount('single:extra'), 1, 'listen added its handler');
+	await deva.stop();
+	assert.deepEqual(bus.eventNames(), [], 'nothing left on the bus');
+	await deva.init(fresh());
+	const again = deva.events;
+	assert.equal(again.listenerCount('single:ping'), 1, 'a restart puts each listener back once');
+	await deva.stop();
+	assert.deepEqual(again.eventNames(), [], 'nothing left after the restart either');
+});
+
+test('after stop the Deva answers offline', async () => {
+	const deva = build();
+	await deva.init(fresh());
+	await deva.stop();
+	assert.equal(await deva.question('/hello'), deva._messages.offline);
+	assert.equal(await deva.stop(), deva._messages.offline, 'a second stop is offline');
 });

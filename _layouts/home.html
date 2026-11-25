@@ -1,0 +1,49 @@
+---
+layout: default
+---
+{%- assign tests = site.data.tests.DATA -%}
+{%- assign total = 0 -%}
+{%- for suite in tests.suites -%}{%- assign total = total | plus: suite.count -%}{%- endfor -%}
+<div class="home">
+	<section class="hero">
+		<img class="hero-logo" src="{{ '/assets/deva.png' | relative_url }}" alt="Deva Core" width="180" height="180">
+		<div class="hero-text">
+			<p class="hero-eyebrow">{{ site.tagline }}</p>
+			<h1 class="hero-title">{{ page.headline | default: page.title }}</h1>
+			<p class="hero-lead">{{ page.description }}</p>
+			<div class="hero-actions">
+				<a class="btn btn-primary" href="{{ '/docs/#quick-start' | relative_url }}">Quick start</a>
+				<a class="btn" href="https://github.com/indraai/deva">View on GitHub</a>
+				<a class="btn btn-ghost" href="{{ '/vla/' | relative_url }}">Licensing</a>
+			</div>
+			<div class="hero-install"><code>npm install @indra.ai/deva</code></div>
+			<p class="hero-badges">
+				<a href="https://www.npmjs.com/package/@indra.ai/deva"><img src="https://img.shields.io/npm/v/@indra.ai/deva?color=ff5c8a" alt="npm version"></a>
+				<a href="https://github.com/indraai/deva/actions/workflows/test.yml"><img src="https://github.com/indraai/deva/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
+			</p>
+		</div>
+	</section>
+
+	<section class="stats" aria-label="At a glance">
+		<div class="stat"><span class="stat-num">{{ total }}</span><span class="stat-label">tests in {{ tests.suites | size }} suites</span></div>
+		<div class="stat"><span class="stat-num">0</span><span class="stat-label">runtime dependencies</span></div>
+		<div class="stat"><span class="stat-num">3</span><span class="stat-label">hash tiers per packet</span></div>
+		<div class="stat"><span class="stat-num">{{ site.data.events.DATA | size }}</span><span class="stat-label">lifecycle events</span></div>
+	</section>
+
+	{%- if page.features %}
+	<section class="cards">
+		{%- for card in page.features %}
+		<a class="card" href="{{ card.url | relative_url }}">
+			<h3>{{ card.title }}</h3>
+			<p>{{ card.text }}</p>
+			<span class="card-more">{{ card.link | default: "Read more" }} &rarr;</span>
+		</a>
+		{%- endfor %}
+	</section>
+	{%- endif %}
+
+	<div class="home-content">
+		{{ content }}
+	</div>
+</div>

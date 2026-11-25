@@ -1,0 +1,115 @@
+{
+	"id": 41314822285864353682,
+	"name": "Deva Buddy Data File",
+	"describe": "The main Data Buddy Data file for building New Devas",
+	"copyright": "Copyright ©2000-2026 Quinn Michaels. All rights reserved.",
+	"DATA": {
+		"agent": {
+			"id": 6047734400443,
+			"key": "buddy",
+			"prompt": {
+				"emoji": "⊙",
+				"text": "buddy",
+				"colors": {
+					"label": {
+						"R": 0,
+						"G": 150,
+						"B": 255
+					},
+					"text": {
+						"R": 101,
+						"G": 192,
+						"B": 255
+					}
+				}
+			},
+			"voice": {
+				"speech": "Alex",
+				"speed": 1
+			},
+			"profile": {
+				"name": "Deva Buddy",
+				"describe": "Deva Buddy creator.",
+				"emoji": "",
+				"avatar": "",
+				"background": "",
+				"gender": "N"
+			}
+		},
+		"vars": {
+			"options": false,
+			"cmd": false,
+			"comp": {},
+			"template": "deva",
+			"paths": {
+				"copy_index": "",
+				"copy_from": "",
+				"copy_to": "",
+				"copy_to_base": ""
+			},
+			"messages": {
+				"heading": "👽 DEVA",
+				"que_heading": "📁 QUE FILES",
+				"success": "Holla!!! A NEW DEVA WAS CREATED",
+				"que_complete": "✅ QUE FILES COMPLETE",
+				"index_updated": "✅ INDEX UPDATED:",
+				"folder": "📁",
+				"file": "📝",
+				"deva_created": "✅ DEVA CREATED:",
+				"incomplete": "🛑 KEY AND NAME ARE REQUIRED. NO DEVA CREATED.",
+				"exists": "🛑 A DEVA ALREADY EXISTS HERE. NO DEVA CREATED:",
+				"badkey": "🛑 KEY MUST BE LOWERCASE LETTERS AND NUMBERS, STARTING WITH A LETTER. NO DEVA CREATED."
+			},
+			"create": {
+				"files": [],
+				"directories": []
+			},
+			"items": [],
+			"answers": false,
+			"questions": [
+				{
+					"type": "input",
+					"name": "key",
+					"message": "Key",
+					"default": ""
+				},
+				{
+					"type": "input",
+					"name": "vector",
+					"message": "Vector",
+					"default": ""
+				},
+				{
+					"type": "input",
+					"name": "name",
+					"message": "Name",
+					"default": ""
+				},
+				{
+					"type": "input",
+					"name": "describe",
+					"message": "Describe",
+					"default": ""
+				},
+				{
+					"type": "input",
+					"name": "pronouns",
+					"message": "Pronouns",
+					"default": "they/them"
+				},
+				{
+					"type": "list",
+					"name": "gender",
+					"message": "Gender",
+					"default": "DEVA"
+				},
+				{
+					"type": "input",
+					"name": "owner",
+					"message": "Owner",
+					"default": "Quinn Michaels"
+				}
+			]
+		}
+	}
+}

@@ -1,4 +1,13 @@
 private/
+
+# Jekyll excludes
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+.bundle/
+vendor/
+
 .DS_Store
 
 # Logs

@@ -71,3 +71,29 @@ test('changing one field breaks every tier', () => {
 	const tampered = {...stamped, key: `${stamped.key}x`};
 	assert.throws(() => verifyTiers(tampered, 'tampered'), /md5/);
 });
+
+test('_stamp() matches a manual cumulative hash of the same data', () => {
+	const data = {id: {uid: 'stamp-test'}, text: 'deva', n: 108};
+	const manual = {...data};
+	for (const t of TIERS) manual[t] = digest(manual, t);
+	const stamped = deva._stamp({...data}, 'stamp-test', 'stamp-test');
+	for (const t of TIERS) assert.equal(stamped[t], manual[t], t);
+	verifyTiers(stamped, '_stamp()');
+});
+test('_unstamp() then _stamp() gives back the same hashes', () => {
+	const stamped = deva._stamp({id: {uid: 'restamp'}, text: 'again'});
+	const first = {...stamped};
+	const again = deva._stamp(deva._unstamp({...stamped}));
+	for (const t of TIERS) assert.equal(again[t], first[t], t);
+});
+test('_stamp() without _unstamp() first hashes the old tiers in and changes them', () => {
+	const stamped = deva._stamp({id: {uid: 'double'}, text: 'twice'});
+	const first = {...stamped};
+	const twice = deva._stamp({...stamped});
+	for (const t of TIERS) assert.notEqual(twice[t], first[t], t);
+});
+test('_unstamp() removes every tier and leaves the data', () => {
+	const bare = deva._unstamp(deva._stamp({id: {uid: 'bare'}, text: 'clean'}));
+	for (const t of TIERS) assert.equal(t in bare, false, t);
+	assert.deepEqual(bare, {id: {uid: 'bare'}, text: 'clean'});
+});

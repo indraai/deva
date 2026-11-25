@@ -1,0 +1,25 @@
+// ::name:: Help
+// Copyright ©::year:: ::owner::; All rights reserved.  
+// Owner Signature Required For Lawful Use.  
+// Distributed under VLA:::vla:: LICENSE.md
+// ::date::
+
+::BEGIN:MAIN
+# {{profile.name}}
+
+img: {{profile.image}}
+
+{{profile}}
+
+talk: #::key:: help main:license
+
+::begin:hidden
+#color = {{profile.color}}
+#bgcolor = {{profile.bgcolor}}
+#bg = {{profile.background}}
+copyright: {{profile.copyright}}
+::end:hidden
+::END:MAIN
+
+::BEGIN:LICENSE
+::END:LICENSE

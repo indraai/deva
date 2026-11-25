@@ -1,0 +1,69 @@
+{
+	"name": "::name:: Data File",
+	"describe": "The main Data file for ::name::",
+	"copyright": "Copyright ©::year:: ::owner::. All rights reserved.",
+	"DATA": {
+		"agent": {
+			"id": "::id::",
+			"key": "::key::",
+			"prompt": {
+				"emoji": "⊙",
+				"text": "::key::",
+				"colors": {
+					"label": {
+						"R": 0,
+						"G": 150,
+						"B": 255
+					},
+					"text": {
+						"R": 101,
+						"G": 192,
+						"B": 255
+					}
+				}
+			},
+			"profile": {
+				"id": "::id::",
+				"name": "::name::",
+				"title": "",
+				"subtitle": "",
+				"describe": "::describe::",
+				"vector": "::vector::",
+				"vectors": "",
+				"pronouns": "::pronouns::",
+				"gender": "::gender::",
+				"style": "",
+				"voice": "alloy",
+				"system": "Deva.world",
+				"layout": "default",
+				"tweet": "",
+				"color": "#000000",
+				"bgcolor": "#ffffff",
+				"emoji": "/assets/emoji.png",
+				"avatar": "/assets/avatar.png",
+				"image": "/assets/image.png",
+				"background": "/assets/background.png",
+				"owner": "::owner::",
+				"creator": "::owner::",
+				"created": "::date::"
+			}
+		},
+		"vars": {
+			"messages": {
+				"init": "🟠 INIT",
+				"start": "🔵 START",
+				"enter": "🟢 ENTER",
+				"stop": "🔴 STOP",
+				"exit": "🟡 EXIT",
+				"done": "🟣 DONE",
+				"error": "💣 ERROR!",
+				"ready": "⭐️ READY!"
+			},
+			"context": {
+				"uid": "::name:: is creating a uid",
+				"status": "::name:: is viewing the status",
+				"help": "::name:: is viewing the help"
+			}
+		}
+	}
+}

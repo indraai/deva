@@ -119,4 +119,33 @@ test.describe('after init', () => {
 		assert.equal(deva._pending.size, 0, 'timeout cleans up the pending ask');
 		deva.events.removeListener('silent:ask', silent);
 	});
+
+	test('a late answer after the ask timeout is dropped and the caller keeps the timeout', async () => {
+		let late = false; // the packet the slow target answers with.
+		let closed = false; // the a:false close packet release() sends.
+		const slow = packet => {
+			const evt = `slow:ask:${packet.id.uid}`;
+			deva.events.once(evt, p => { closed = p; }); // catch the close packet.
+			setTimeout(() => {
+				late = {...packet, a: {text: 'too late'}};
+				deva.events.emit(evt, late);
+			}, 300); // answer after the 200ms ask timeout.
+		};
+		deva.events.on('slow:ask', slow);
+
+		let calls = 0;
+		const result = await deva.question('#slow shout hi').then(r => { calls++; return r; });
+		assert.equal(result, deva._messages.asktimeout);
+		assert.equal(deva._pending.size, 0, 'timeout cleans up the pending ask');
+
+		// the close packet is a copy marked a:false.
+		assert.equal(closed.a, false, 'release() sends a:false');
+
+		// wait past the late answer and check nothing picked it up.
+		await new Promise(r => setTimeout(r, 200));
+		assert.ok(late, 'the slow target did answer late');
+		assert.equal(calls, 1, 'the caller resolved exactly once');
+		assert.equal(deva.events.listenerCount(`slow:ask:${late.id.uid}`), 0, 'no listener left for the late answer');
+		deva.events.removeListener('slow:ask', slow);
+	});
 });

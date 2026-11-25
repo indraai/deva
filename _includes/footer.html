@@ -1,9 +1,38 @@
-<div class="site-footer">
+<footer class="site-footer" role="contentinfo">
 	<div class="wrapper">
-		<div class="footer-col-wrapper">
-			<div class="footer-col footer-col-1">
-				<p>Copyright &copy;2000-2026 Quinn Michaels; All rights reserved.</p>	
+		<div class="footer-grid">
+			<div class="footer-brand">
+				<p class="footer-title">Deva Core</p>
+				<p>{{ site.tagline }}</p>
+				<p class="footer-small">Distributed under the <a href="{{ '/vla/' | relative_url }}">Vedic License Agreement</a>, VLA <code>31711622713594414221</code>.</p>
+			</div>
+			<div>
+				<p class="footer-title">Project</p>
+				<ul>
+					<li><a href="{{ '/docs/' | relative_url }}">Documentation</a></li>
+					<li><a href="{{ '/tests/' | relative_url }}">Tests</a></li>
+					<li><a href="https://github.com/indraai/deva">GitHub</a></li>
+					<li><a href="https://www.npmjs.com/package/@indra.ai/deva">npm</a></li>
+				</ul>
+			</div>
+			<div>
+				<p class="footer-title">Contact</p>
+				<ul>
+					<li><a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a></li>
+					<li><a href="https://indra.ai">indra.ai</a></li>
+					{%- for link in site.social.links %}
+					{%- assign host = link | split: "//" | last | split: "/" | first | remove: "www." | split: "." | first -%}
+					{%- case host -%}
+						{%- when "github" -%}{%- assign label = "GitHub" -%}
+						{%- when "x" -%}{%- assign label = "X" -%}
+						{%- when "youtube" -%}{%- assign label = "YouTube" -%}
+						{%- else -%}{%- assign label = host | capitalize -%}
+					{%- endcase %}
+					<li><a href="{{ link }}" rel="me">{{ label }}</a></li>
+					{%- endfor %}
+				</ul>
 			</div>
 		</div>
+		<p class="footer-small footer-copy">Copyright &copy;2000-2026 Quinn Michaels; All rights reserved.</p>
 	</div>
-</div>
+</footer>

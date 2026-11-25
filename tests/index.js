@@ -63,7 +63,7 @@ const DevaTest = new Deva({
 			console.log(`👔  prompt: ${packet.text}`);
 		},
 		'devacore:question'(packet) {
-			console.log(`🙋‍♂️️  question: ${packet.text}`);
+			console.log(`🙋‍♂️️  question: ${packet.q.text}`);
 		},
 		'devacore:start'(packet) {
 			console.log(`🟢    start: ${packet.text}`);
@@ -167,10 +167,10 @@ const DevaTest = new Deva({
 				`::END:SIGN:${license_check.id.uid}`,
 				'::::',
 			];
-			return {
+			return Promise.resolve({
 				text: data.join('\n'),
 				data,
-			};
+			});
 		}
 	},
 	methods: {

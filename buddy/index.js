@@ -1,0 +1,239 @@
+#!/usr/bin/env node
+"use strict";
+
+// Copyright (c)2025 Quinn Michaels
+// Distributed under the MIT software license, see the accompanying
+// file LICENSE.md or http://www.opensource.org/licenses/mit-license.php.
+import Deva from '../index.js';
+import pkg from '../package.json' with {type: 'json'};
+const {version} = pkg;
+
+import Buddy from '../_data/buddy.json' with {type: 'json'};
+const buddy = Buddy.DATA;
+const {agent, vars} = buddy;
+
+import Client from '../tests/client.json' with {type: 'json'};
+const client = Client.DATA;
+
+import readline from 'node:readline/promises';
+
+import process from 'node:process';
+import {dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';    
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const flash = `
+::::::::::::::::::::::::::::::::::
+
+██████╗ ███████╗██╗   ██╗ █████╗
+██╔══██╗██╔════╝██║   ██║██╔══██╗
+██║  ██║█████╗  ╚██╗ ██╔╝███████║
+██║  ██║██╔══╝   ╚████╔╝ ██╔══██║
+██████╔╝███████╗  ╚██╔╝  ██║  ██║
+╚═════╝ ╚══════╝   ╚═╝   ╚═╝  ╚═╝
+
+::::::::::::::::::::::::::::::::::
+version: ${version}
+::::::::::::::::::::::::::::::::::
+`
+
+// Creates a new DEVA Buddy.
+const DevaBuddy = new Deva({
+	info: {
+		id: pkg.id,
+		name: pkg.name,
+		version: pkg.version,
+		VLA: pkg.VLA,
+	},
+	agent,
+	utils: {
+		translate(input) {
+		return input.trim();
+		},
+		parse(input) {
+			return input.trim();
+		},  
+		process(input) {
+			return input.trim();
+		}  
+	},
+	vars,
+	devas: {},
+	listeners: {
+		'devacore:prompt'(packet) {
+			console.log(packet.text);
+		}
+	},
+	modules: {},
+	func: {
+
+		baseDevaDirectory() {
+			const { copy_to_base } = this.vars.paths;
+			const dir_exists = this.lib.fs.existsSync(copy_to_base);
+			if (!dir_exists) {
+				this.lib.fs.mkdirSync(copy_to_base);
+			}
+			return dir_exists;
+		},
+
+		queFiles(copy_from, copy_to) {
+			const { answers, create } = this.vars;
+			this.vars.create.directories.push(copy_to);
+
+			return new Promise((resolve, reject) => {
+
+				const items = this.lib.fs.readdirSync(copy_from);
+				if (!items) return reject('NO ITEMS');
+
+				items.forEach(item => {
+					const copy_from_file = this.lib.path.resolve(copy_from, item);
+					const copy_to_file = this.lib.path.join(copy_to, item);
+
+					const filestat = this.lib.fs.statSync(copy_from_file);
+
+					if (filestat.isDirectory()) this.func.queFiles(copy_from_file, copy_to_file);
+
+					else if (this.lib.path.extname(item) === '.png') {
+						this.vars.create.files.push({copy_to_file, content: this.lib.fs.readFileSync(copy_from_file)});
+					}
+					
+					else {
+						const theyear = new Date().getFullYear();
+						const content = this.lib.fs.readFileSync(copy_from_file, 'utf8')
+														.replace(/::id::/g, this.uid().uid)
+														.replace(/::owner::/g, answers.owner)
+														.replace(/::key::/g, answers.key)
+														.replace(/::year::/g, theyear)
+														.replace(/::key-upper::/g, answers.key.toUpperCase())
+														.replace(/::name::/g, answers.name)
+														.replace(/::describe::/g, answers.describe)
+														.replace(/::gender::/g, answers.gender)
+														.replace(/::pronouns::/g, answers.pronouns)
+														.replace(/::vector::/g, answers.vector)
+														.replace(/::vla::/g, this.info().VLA.uid)
+														.replace(/::vla-data::/g, JSON.stringify(this.info().VLA))
+														.replace(/::date::/g, this.lib.formatDate(Date.now(), 'long', true));
+
+						// PUSH THE NEWLY CREATED FILE TO THE CREATE FILES ARRAY VARIABLE
+						this.vars.create.files.push({copy_to_file, content});
+
+						return resolve(this.vars.messages.que_complete);
+					}
+				});
+
+			});
+		},
+		que() {
+			const { copy_from, copy_to } = this.vars.paths;
+			if (!copy_from) return console.log('no files to copy from');
+			if (!copy_to) return console.log('no files to copy to');
+			
+			// stop when the Deva folder is already there so Buddy never writes over existing work
+			if (this.lib.fs.existsSync(copy_to)) return this.prompt(`${this.vars.messages.exists} ${copy_to}`);
+			
+			console.log(this.vars.messages.que_heading);
+			console.log(`↪ fr: ${copy_from}`);
+			console.log(`↪ to: ${copy_to}`);
+			this.func.queFiles(copy_from, copy_to).then(filesQued => {
+				this.prompt(filesQued);
+				return this.func.createDeva();
+			}).then(devaCreated => {
+				this.prompt(devaCreated);
+				const {key} = this.vars.answers;
+				this.prompt(`👉 Add ${key} to your Deva loader: import ${key} from './${key}/index.js';`);
+			}).catch(err => {
+				console.error('🛑 ERROR', err);
+			});
+		},
+
+		createDeva() {
+			this.func.baseDevaDirectory();
+			const {files,directories} = this.vars.create;
+			directories.forEach(dir => {
+				console.log(`${this.vars.messages.folder} ${dir}`);
+				this.lib.fs.mkdirSync(dir);
+			});
+			files.forEach(file => {
+					this.lib.fs.writeFileSync(file.copy_to_file, file.content)
+					console.log(`${this.vars.messages.file} ${file.copy_to_file}`);
+			});
+			this.func.writeVLA();
+			return Promise.resolve(`${this.vars.messages.deva_created} ${this.vars.answers.key} (${this.vars.answers.name}) `);
+		},
+
+		// copy the core VLA into the project package.json that the new Deva reads with '../../package.json'
+		writeVLA() {
+			const pkg_file = this.lib.path.join(this.vars.paths.copy_to_base, '..', 'package.json');
+			if (!this.lib.fs.existsSync(pkg_file)) return this.prompt(`⚠️ No package.json at ${pkg_file}. Add the Deva Core VLA to it before you test.`);
+			const project = JSON.parse(this.lib.fs.readFileSync(pkg_file, 'utf8'));
+			if (project.VLA) return this.prompt(`🪪 Kept the VLA already in ${pkg_file}`);
+			project.VLA = this.info().VLA;
+			this.lib.fs.writeFileSync(pkg_file, `${JSON.stringify(project, null, 2)}\n`);
+			return this.prompt(`🪪 Added the Deva Core VLA to ${pkg_file}`);
+		},
+	},
+
+	methods: {
+		async inquire() {	
+			// this sets up a custom directory question for the user which is not in the json data
+			this.vars.questions.push({                      // append directory to questions because of __dirname
+				type: 'input',                                // set the input type
+				name: 'directory',                            // set the name
+				message: 'DIRECTORY',                         // set the MESSAGE
+				default: this.lib.path.join(process.cwd(), 'devas'),    // set the default path for the question
+			});
+		
+			// ask each question and keep the default when the answer is blank
+			// lines from a pipe wait in the line queue so bots can send all answers at once
+			const piped = !process.stdin.isTTY;
+			const rl = readline.createInterface({input: process.stdin, output: process.stdout, terminal: !piped});
+			const lines = rl[Symbol.asyncIterator]();
+			const answers = {};
+			for (const question of this.vars.questions) {
+				const def = question.default ? ` (${question.default})` : '';
+				process.stdout.write(`${question.message}${def}: `);
+				const {value, done} = await lines.next();
+				const answer = done ? '' : value;
+				if (piped) process.stdout.write(`${answer}\n`);
+				answers[question.name] = answer.trim() || question.default || '';
+			}
+			rl.close();
+			// stop when the key or name is missing so incomplete pipes do not build a Deva
+			if (!answers.key || !answers.name) return this.prompt(this.vars.messages.incomplete);
+			// stop when the key is not a lowercase word so the folder and constant name stay valid
+			if (!/^[a-z][a-z0-9]*$/.test(answers.key)) return this.prompt(this.vars.messages.badkey);
+		
+			// set the options variable to load what the BUDDY was configured with.
+			this.vars.paths = {
+				copy_from: this.lib.path.join(__dirname, 'template'),
+				copy_to: this.lib.path.join(answers.directory, answers.key),
+				copy_to_base: answers.directory,
+			};
+	
+			this.prompt('::::::::::::::::::::::::::::');
+			this.prompt(this.vars.messages.heading);
+	
+			for (let answer in answers) {
+				this.prompt(`↪ ${answer.toUpperCase()}: ${answers[answer]}`);
+			}
+	
+			this.prompt('::::::::::::::::::::::::::::');
+	
+			// now this is where we take the
+			this.vars.answers = answers;
+			return this.func.que();
+		},
+	},
+	onInit(data, resolve) {
+		this.prompt(flash);
+		return this.start(data, resolve);
+	},
+	onReady(data, resolve) {
+		this.prompt(this._messages.ready);
+		this.methods.inquire();                           // when buddy inits then run the inquire method.
+		return resolve(data);
+	},
+});
+
+DevaBuddy.init(client);

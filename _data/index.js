@@ -13,6 +13,7 @@ import states from './states.json' with {type:'json'};
 import intents from './intents.json' with {type:'json'};
 import beliefs from './beliefs.json' with {type:'json'};
 import msgs from './msgs.json' with {type:'json'};
+import buddy from './buddy.json' with {type:'json'};
 
 export default {
 	cmdChr: '/',
@@ -109,33 +110,34 @@ export default {
 			clear: false,
 		},
 		exit: {
-			prev_key: 'stop',
+			prev_key: 'leave',
 			next_key: 'shutdown',
 			onfunc: 'onExit',
-			clear: [
-				'_license',
-				'_error',
-				'_log',
-				'_data',
-				'_report',
-				'_legal',
-				'_security',
-				'_support',
-				'_services',
-				'_systems'
-			]
+			clear: {
+				'_license': false,
+				'_error': false,
+				'_log': false,
+				'_data': false,
+				'_report': false,
+				'_legal': false,
+				'_security': false,
+				'_support': false,
+				'_services': false,
+				'_systems': false
+			}
 		},
 		shutdown: {
 			prev_key: 'exit',
 			next_key: false,
 			onfunc: 'onShutdown',
-			clear: [
-				'modules',
-				'listeners',
-				'events',
-				'_config',
-				'_active',
-			],
+			clear: {
+				'modules': {},
+				'vars': {},
+				'listeners': {},
+				'events': false,
+				'_config': {},
+				'_active': false,
+			},
 		}
 	},
 	context: false,
@@ -153,4 +155,5 @@ export default {
 	belief: 'vedic',
 	beliefs: beliefs.DATA,
 	messages: msgs.DATA,
+	buddy: buddy.DATA,
 }
